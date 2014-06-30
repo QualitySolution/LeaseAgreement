@@ -61,13 +61,12 @@ public partial class MainWindow : Gtk.Window
 
 	void UpdatePlaces()
 	{
-		MainClass.StatusMessage("Получаем таблицу c местами...");
+		logger.Info("Получаем таблицу c местами...");
 		TreeIter iter;
 		
-		string sql = "SELECT places.*, place_types.name as type, contracts.lessee_id as lessee_id, lessees.name as lessee, contact_persons.name as contact," +
-			"contact_persons.telephones as telephones, organizations.name as organization FROM places " +
+		string sql = "SELECT places.*, place_types.name as type, contracts.lessee_id as lessee_id, lessees.name as lessee, " +
+			"organizations.name as organization FROM places " +
 				"LEFT JOIN place_types ON places.type_id = place_types.id " +
-				"LEFT JOIN contact_persons ON places.contact_person_id = contact_persons.id " +
 				"LEFT JOIN organizations ON places.org_id = organizations.id " +
 				"LEFT JOIN contracts ON places.type_id = contracts.place_type_id AND places.place_no = contracts.place_no AND " +
 				"((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
@@ -101,8 +100,8 @@ public partial class MainWindow : Gtk.Window
 				                            rdr ["area"].ToString (),
 				                            rdr ["lessee"].ToString (),
 				                              DBWorks.GetInt (rdr, "lessee_id", -1),
-				                            rdr ["contact"].ToString (),
-				                              DBWorks.GetInt (rdr, "contact_person_id", -1),
+				                              "",
+				                              -1,
 				                            rdr ["telephones"].ToString (),
 				                            rdr ["organization"].ToString (),
 				                              DBWorks.GetInt (rdr, "org_id", -1),
@@ -110,7 +109,7 @@ public partial class MainWindow : Gtk.Window
 				                             );
 			}
 		}
-		MainClass.StatusMessage("Ok");
+		logger.Info("Ok");
 		
 		bool isSelect = treeviewPlaces.Selection.CountSelectedRows() == 1;
 		buttonOpen.Sensitive = isSelect;

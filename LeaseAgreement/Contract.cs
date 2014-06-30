@@ -269,7 +269,7 @@ namespace LeaseAgreement
 			ContractId = Id;
 			TreeIter iter;
 			
-			MainClass.StatusMessage("Запрос договора ID:" + Id +"...");
+			logger.Info("Запрос договора ID:{0}...", Id);
 			string sql = "SELECT contracts.*, lessees.name as lessee, places.area FROM contracts " +
 				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
 				"LEFT JOIN places ON places.type_id = contracts.place_type_id AND places.place_no = contracts.place_no " +
@@ -370,12 +370,11 @@ namespace LeaseAgreement
 				rdr.Close();
 				CalculateServiceSum();
 
-				MainClass.StatusMessage("Ok");
+				logger.Info("Ok");
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.ToString());
-				MainClass.StatusMessage("Ошибка получения информации о договоре!");
+				logger.ErrorException("Ошибка получения информации о договоре!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
 
@@ -469,7 +468,7 @@ namespace LeaseAgreement
 			TreeIter iter;
 			if(NewContract && comboPlaceNo.ActiveText != null)
 			{
-				MainClass.StatusMessage("Запрос информации о месте...");
+				logger.Info("Запрос информации о месте...");
 				string sql = "SELECT org_id, area FROM places " +
 					"WHERE type_id = @type_id AND place_no = @place_no";
 				try
@@ -515,12 +514,11 @@ namespace LeaseAgreement
 						}
 					}
 					rdr.Close();
-					MainClass.StatusMessage("Ok");
+					logger.Info("Ok");
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine(ex.ToString());
-					MainClass.StatusMessage("Ошибка получения места!");
+					logger.ErrorException("Ошибка получения места!", ex);
 					QSMain.ErrorMessage(this,ex);
 				}				
 			}
@@ -549,7 +547,7 @@ namespace LeaseAgreement
 		{
 			TreeIter iter;
 
-			MainClass.StatusMessage("Запись договора...");
+			logger.Info("Запись договора...");
 			try 
 			{
 				// Проверка номера договора на дубликат
@@ -565,7 +563,7 @@ namespace LeaseAgreement
 
 				if( Count > 0)
 				{
-					MainClass.StatusMessage("Договор уже существует!");
+					logger.Warn("Договор уже существует!");
 					MessageDialog md = new MessageDialog( this, DialogFlags.Modal,
                           MessageType.Error, 
                           ButtonsType.Ok,"ошибка");
@@ -599,7 +597,7 @@ namespace LeaseAgreement
 				{
 					if(rdr.GetInt32("id") == ContractId)
 						continue;
-					MainClass.StatusMessage("Место уже занято!");
+					logger.Warn("Место уже занято!");
 					MessageDialog md = new MessageDialog( this, DialogFlags.Modal,
 					                                     MessageType.Error, 
 					                                     ButtonsType.Ok,"ошибка");
@@ -716,7 +714,7 @@ namespace LeaseAgreement
 				//Корректная смена арендатора
 				if(!NewContract && OrigLesseeId != LesseeId && !LesseeisNull)
 				{
-					MainClass.StatusMessage("Арендатор изменился...");
+					logger.Info("Арендатор изменился...");
 					sql = "SELECT COUNT(*) FROM credit_slips WHERE contract_id = @contract AND lessee_id = @old_lessee";
 					cmd = new MySqlCommand(sql, QSMain.connectionDB);
 					cmd.Parameters.AddWithValue("@contract", ContractId);
@@ -735,7 +733,7 @@ namespace LeaseAgreement
 
 						if(result == (int) ResponseType.Yes)
 						{
-							MainClass.StatusMessage("Меняем арендатора в приходных ордерах...");
+							logger.Info("Меняем арендатора в приходных ордерах...");
 							sql = "UPDATE credit_slips SET lessee_id = @lessee_id " +
 								"WHERE contract_id = @contract AND lessee_id = @old_lessee ";
 							cmd = new MySqlCommand(sql, QSMain.connectionDB);
@@ -747,13 +745,12 @@ namespace LeaseAgreement
 					}
 				}
 
-				MainClass.StatusMessage("Ok");
+				logger.Info("Ok");
 				Respond (ResponseType.Ok);
 			} 
 			catch (Exception ex) 
 			{
-				Console.WriteLine(ex.ToString());
-				MainClass.StatusMessage("Ошибка записи договора!");
+				logger.ErrorException("Ошибка записи договора!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
 

@@ -4,11 +4,13 @@ using Gtk;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
+using NLog;
 
 namespace LeaseAgreement
 {
 	public partial class lessee : Gtk.Dialog
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		public bool NewLessee;
 		int Lesseeid, Goods_id;
 		bool GoodsNull;
@@ -49,7 +51,7 @@ namespace LeaseAgreement
 			Lesseeid = id;
 			NewLessee = false;
 			
-			MainClass.StatusMessage(String.Format("Запрос арендатора №{0}...", id));
+			logger.Info("Запрос арендатора №{0}...", id);
 			string sql = "SELECT lessees.*, goods.name as goods FROM lessees LEFT JOIN goods ON lessees.goods_id = goods.id WHERE lessees.id = @id";
 			try
 			{
@@ -83,13 +85,12 @@ namespace LeaseAgreement
 				textviewComments.Buffer.Text = rdr["comments"].ToString();
 				
 				rdr.Close();
-				MainClass.StatusMessage("Ok");
+				logger.Info("Ok");
 				this.Title = entryName.Text;
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.ToString());
-				MainClass.StatusMessage("Ошибка получения информации о арендаторе!");
+				logger.ErrorException("Ошибка получения информации о арендаторе!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
 			TestCanSave();
@@ -119,7 +120,7 @@ namespace LeaseAgreement
 					"wholesaler = @wholesaler, retail = @retail, goods_id = @goods_id, comments = @comments " +
 					"WHERE id = @id";
 			}
-			MainClass.StatusMessage("Запись арендатора...");
+			logger.Info("Запись арендатора...");
 			try 
 			{
 				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
@@ -140,13 +141,12 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@comments", DBWorks.ValueOrNull (textviewComments.Buffer.Text == "", textviewComments.Buffer.Text));
 				
 				cmd.ExecuteNonQuery();
-				MainClass.StatusMessage("Ok");
+				logger.Info("Ok");
 				Respond (ResponseType.Ok);
 			} 
 			catch (Exception ex) 
 			{
-				Console.WriteLine(ex.ToString());
-				MainClass.StatusMessage("Ошибка записи арендатора!");
+				logger.ErrorException("Ошибка записи арендатора!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
 		}
@@ -158,7 +158,7 @@ namespace LeaseAgreement
 		
 		void UpdateContracts()
 		{
-	        MainClass.StatusMessage("Получаем таблицу договоров...");
+			logger.Info("Получаем таблицу договоров...");
 			
 			string sql = "SELECT contracts.*, place_types.name as type, contact_persons.name as contact, " +
 				"places.contact_person_id as contact_id, places.area as area FROM contracts " +
@@ -211,7 +211,7 @@ namespace LeaseAgreement
 	   		}
 			rdr.Close();
 			
-			MainClass.StatusMessage("Ok");
+			logger.Info("Ok");
 		}
 		
 		protected void OntreeviewContractsPopupMenu (object o, Gtk.PopupMenuArgs args)

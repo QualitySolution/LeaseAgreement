@@ -23,7 +23,7 @@ namespace LeaseAgreement
 			//Настраиваем вывод сообщений в строку состояния
 			NLog.Targets.MethodCallTarget statusTarget = new NLog.Targets.MethodCallTarget ();
 			statusTarget.Name = "Status Bar";
-			statusTarget.ClassName = "MainClass, LeaseAgreement";
+			statusTarget.ClassName = typeof(MainClass).AssemblyQualifiedName;
 			statusTarget.MethodName = "StatusMessage";
 			statusTarget.Parameters.Add (new NLog.Targets.MethodCallParameter ("${message}"));
 			NLog.Config.SimpleConfigurator.ConfigureForTargetLogging (statusTarget, LogLevel.Info);
@@ -437,7 +437,7 @@ namespace LeaseAgreement
 		{   //Заполняем комбобокс Номерами мест
 			try
 	        {
-				MainClass.StatusMessage("Запрос номеров мест...");
+				logger.Info("Запрос номеров мест...");
 				int count = 0;
 				string sql = "SELECT place_no FROM places " +
 					"WHERE type_id = @type_id";
@@ -454,12 +454,11 @@ namespace LeaseAgreement
 				if(count == 1)
 					combo.Active = 0;
 
-				MainClass.StatusMessage("Ok");
+				logger.Info("Ok");
 	       	}
 	       	catch (Exception ex)
 	       	{
-	           	Console.WriteLine(ex.ToString());
-				MainClass.StatusMessage("Ошибка получения номеров мест!");
+				logger.ErrorException("Ошибка получения номеров мест!", ex);
 	       	}
 		}
 

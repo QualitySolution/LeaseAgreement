@@ -4,10 +4,11 @@ using MySql.Data.MySqlClient;
 using LeaseAgreement;
 using QSProjectsLib;
 using QSSupportLib;
+using NLog;
 
 public partial class MainWindow : Gtk.Window
 {
-	
+	private static Logger logger = LogManager.GetCurrentClassLogger();
 	AccelGroup grup;
 	
 	public MainWindow () : base(Gtk.WindowType.Toplevel)

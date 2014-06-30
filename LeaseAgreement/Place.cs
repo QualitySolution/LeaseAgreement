@@ -4,11 +4,13 @@ using Gtk;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
+using NLog;
 
 namespace LeaseAgreement
 {
 	public partial class Place : Gtk.Dialog
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool NewPlace;
 		string PlaceNumber;
 		int lessee_id, contact_id, type_id, ContractId;
@@ -65,7 +67,7 @@ namespace LeaseAgreement
 			buttonNewContract.Sensitive = true;
 			TreeIter iter;
 			
-			MainClass.StatusMessage("Запрос сдаваемого места...");
+			logger.Info("Запрос сдаваемого места...");
 			string sql = "SELECT places.*, place_types.name as type, stead.name as stead, " +
 			 	"organizations.name as organization FROM places " +
 				"LEFT JOIN place_types ON places.type_id = place_types.id " +
@@ -92,7 +94,7 @@ namespace LeaseAgreement
 			}
 			FillCurrentContract ();
 
-			MainClass.StatusMessage("Ok");
+			logger.Info("Ok");
 			this.Title = "Место " + comboPType.ActiveText + " - " + place;
 			TestCanSave();
 			UpdateHistory();
@@ -170,7 +172,7 @@ namespace LeaseAgreement
 		{
 			string sql;
 			TreeIter iter;
-			MainClass.StatusMessage("Запись места...");
+			logger.Info("Запись места...");
 			if(NewPlace)
 			{
 				sql = "INSERT INTO places (type_id, place_no, area, contact_person_id, org_id, comments) " +
@@ -210,7 +212,7 @@ namespace LeaseAgreement
 				
 				cmd.ExecuteNonQuery();
 				
-				MainClass.StatusMessage("Ok");
+				logger.Info("Ok");
 				Respond (ResponseType.Ok);
 				
 			} 
@@ -229,7 +231,7 @@ namespace LeaseAgreement
 				}
 				else
 				{
-					MainClass.StatusMessage("Ошибка записи места!");
+					logger.ErrorException("Ошибка записи места!", ex);
 					QSMain.ErrorMessage(this,ex);
 				}
 			}
@@ -237,7 +239,7 @@ namespace LeaseAgreement
 		
 		void UpdateHistory()
 		{
-	        MainClass.StatusMessage("Получаем историю места...");
+			logger.Info("Получаем историю места...");
 			TreeIter iter;
 			
 			string sql = "SELECT contracts.*, lessees.name as lessee FROM contracts " +
@@ -273,7 +275,7 @@ namespace LeaseAgreement
 				                             rdr["comments"].ToString());
 	   		}
 			rdr.Close();
-			MainClass.StatusMessage("Ok");
+			logger.Info("Ok");
 		}
 		
 		[GLib.ConnectBefore]
