@@ -20,20 +20,8 @@ namespace LeaseAgreement
 			{
 				QSMain.ErrorMessage(MainWin, (Exception) e.ExceptionObject);
 			};
-			//Настраиваем вывод сообщений в строку состояния
-			NLog.Targets.MethodCallTarget statusTarget = new NLog.Targets.MethodCallTarget ();
-			statusTarget.Name = "Status Bar";
-			statusTarget.ClassName = typeof(MainClass).AssemblyQualifiedName;
-			statusTarget.MethodName = "StatusMessage";
-			statusTarget.Parameters.Add (new NLog.Targets.MethodCallParameter ("${message}"));
-			NLog.Config.SimpleConfigurator.ConfigureForTargetLogging (statusTarget, LogLevel.Info);
 
 			CreateProjectParam();
-			//Настраиваем общую билиотеку
-			QSMain.NewStatusText += delegate(object sender, QSProjectsLib.QSMain.NewStatusTextEventArgs e) 
-			{
-				StatusMessage (e.NewText);
-			};
 			// Создаем окно входа
 			Login LoginDialog = new QSProjectsLib.Login ();
 			LoginDialog.Logo = Gdk.Pixbuf.LoadFromResource ("LeaseAgreement.icons.logo.png");
