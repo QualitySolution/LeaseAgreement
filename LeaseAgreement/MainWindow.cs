@@ -268,14 +268,14 @@ public partial class MainWindow : Gtk.Window
 	protected virtual void OnAction12Activated (object sender, System.EventArgs e)
 	{
 		AboutDialog dialog = new AboutDialog ();
-		dialog.ProgramName = "QS: База Арендаторов";
+		dialog.ProgramName = "QS: Договора аренды";
 
 		Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 		dialog.Version = version.ToString (version.Revision == 0 ? 3 : 4);
 		
-		dialog.Logo = Gdk.Pixbuf.LoadFromResource ("bazar.icons.logo.png");
+		dialog.Logo = Gdk.Pixbuf.LoadFromResource ("LeaseAgreement.icons.logo.png");
 		
-		dialog.Comments = "Программа позволяет вести учет арендаторов, кассы и т.п. " +
+		dialog.Comments = "Программа позволяет управлять договорами аренды." +
 			"\nРазработана на MonoDevelop с использованием открытых технологий Mono, GTK#, MySQL." +
 			"\nТелефон тех. поддержки +7(812)575-79-44";
 		
