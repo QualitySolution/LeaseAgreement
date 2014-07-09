@@ -234,7 +234,7 @@ public partial class MainWindow : Gtk.Window
 	protected void OnAction15Activated (object sender, EventArgs e)
 	{
 		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
+		winref.SetMode(false,false,true,true,true);
 		winref.FillList("organizations","Организация", "Организации");
 		winref.Show();
 		winref.Run();
@@ -446,6 +446,14 @@ public partial class MainWindow : Gtk.Window
 			LesseeEdit.Show();
 			Result = (ResponseType)LesseeEdit.Run();
 			LesseeEdit.Destroy();
+			break;
+		case "organizations":
+			Organization OrgEdit = new Organization();
+			if(!e.NewItem)
+				OrgEdit.Fill(e.ItemId);
+			OrgEdit.Show();
+			Result = (ResponseType)OrgEdit.Run();
+			OrgEdit.Destroy();
 			break;
 		default:
 			Result = ResponseType.None;

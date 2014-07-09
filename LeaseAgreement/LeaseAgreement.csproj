@@ -79,6 +79,8 @@
     <Compile Include="gtk-gui\LeaseAgreement.Place.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.lessee.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.Contract.cs" />
+    <Compile Include="Organization.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.Organization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
