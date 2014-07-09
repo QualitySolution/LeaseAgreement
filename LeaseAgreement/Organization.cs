@@ -56,7 +56,7 @@ namespace LeaseAgreement
 			}
 			catch (Exception ex)
 			{
-				logger.ErrorException("Ошибка получения информации о арендаторе!", ex);
+				logger.ErrorException("Ошибка получения информации о организации!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
 			TestCanSave();
@@ -87,7 +87,7 @@ namespace LeaseAgreement
 					"account = @account, bank = @bank, cor_account = @cor_account, address = @address, jur_address = @jur_address " +
 					"WHERE id = @id";
 			}
-			logger.Info("Запись оргинизации...");
+			logger.Info("Запись организации...");
 			try 
 			{
 				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
@@ -107,8 +107,8 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@account", DBWorks.ValueOrNull (entryAccount.Text != "", entryAccount.Text));
 				cmd.Parameters.AddWithValue("@bank", DBWorks.ValueOrNull (entryBank.Text != "", entryBank.Text));
 				cmd.Parameters.AddWithValue("@cor_account", DBWorks.ValueOrNull (entryCorAccount.Text != "", entryCorAccount.Text));
-				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (textviewAddress.Buffer.Text == "", textviewAddress.Buffer.Text));
-				cmd.Parameters.AddWithValue("@jur_address", DBWorks.ValueOrNull (textviewJurAddress.Buffer.Text == "", textviewJurAddress.Buffer.Text));
+				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (textviewAddress.Buffer.Text != "", textviewAddress.Buffer.Text));
+				cmd.Parameters.AddWithValue("@jur_address", DBWorks.ValueOrNull (textviewJurAddress.Buffer.Text != "", textviewJurAddress.Buffer.Text));
 
 				cmd.ExecuteNonQuery();
 				logger.Info("Ok");

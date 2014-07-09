@@ -185,28 +185,6 @@ public partial class MainWindow : Gtk.Window
 		winref.Show();
 		winref.Run();
 		winref.Destroy();
-		
-	}
-	
-	protected virtual void OnAction6Activated (object sender, System.EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
-		winref.FillList("goods","Группа товаров", "Группы товаров");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-
-	}
-	
-	protected virtual void OnAction5Activated (object sender, System.EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
-		winref.FillList("classes","Тип события", "Типы событий");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
 	}
 	
 	protected virtual void OnAction10Activated (object sender, System.EventArgs e)
@@ -217,20 +195,8 @@ public partial class MainWindow : Gtk.Window
 		winref.Show();
 		winref.Run();
 		winref.Destroy();
-
 	}
 	
-	protected virtual void OnAction3Activated (object sender, System.EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(false,false,true,true,true);
-		winref.FillList("contact_persons","Контактное лицо", "Контактные лица");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-
-	}
-
 	protected void OnAction15Activated (object sender, EventArgs e)
 	{
 		Reference winref = new Reference();
@@ -333,36 +299,6 @@ public partial class MainWindow : Gtk.Window
 		winDelete.Destroy();
 	}
 	
-	protected void OnAction17Activated (object sender, EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(false,false,true,true,true);
-		winref.FillList("services","Услуга", "Услуги");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-	}
-
-	protected void OnAction18Activated (object sender, EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
-		winref.FillList("units","Единица", "Единицы измерения");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-	}
-
-	protected void OnAction19Activated (object sender, EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(false,false,true,true,true);
-		winref.FillList("cash","Касса", "Кассы");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-	}	
-
 	protected void OnAction20Activated (object sender, EventArgs e)
 	{
 		Dialog HistoryDialog = new Dialog("История версий программы", this, Gtk.DialogFlags.DestroyWithParent);
@@ -384,53 +320,13 @@ public partial class MainWindow : Gtk.Window
 		HistoryDialog.Run ();
 		HistoryDialog.Destroy ();
 	}	
-
-	protected void OnAction24Activated (object sender, EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
-		winref.FillList("expense_items","Статья расхода", "Статьи расходов");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-	}	
-
-	protected void OnAction25Activated (object sender, EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
-		winref.FillList("income_items","Статья дохода", "Статьи доходов");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-	}	
-
-	protected void OnAction21Activated (object sender, EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
-		winref.FillList("contractors","Контрагент", "Контрагенты");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
-	}
-	
+		
 	protected void OnUsersActionActivated (object sender, EventArgs e)
 	{
 		Users winUsers = new Users();
 		winUsers.Show();
 		winUsers.Run();
 		winUsers.Destroy();
-	}
-
-	protected void OnAction27Activated (object sender, EventArgs e)
-	{
-		Reference winref = new Reference();
-		winref.SetMode(true,false,true,true,true);
-		winref.FillList("employees","Сотрудник", "Сотрудники");
-		winref.Show();
-		winref.Run();
-		winref.Destroy();
 	}
 
 	protected void OnRunReferenceItemDialog(object sender, Reference.RunReferenceItemDlgEventArgs e)
@@ -454,6 +350,14 @@ public partial class MainWindow : Gtk.Window
 			OrgEdit.Show();
 			Result = (ResponseType)OrgEdit.Run();
 			OrgEdit.Destroy();
+			break;
+		case "stead":
+			Stead SteadEdit = new Stead();
+			if(!e.NewItem)
+				SteadEdit.Fill(e.ItemId);
+			SteadEdit.Show();
+			Result = (ResponseType)SteadEdit.Run();
+			SteadEdit.Destroy();
 			break;
 		default:
 			Result = ResponseType.None;
@@ -483,7 +387,7 @@ public partial class MainWindow : Gtk.Window
 	
 	protected void OnAction36Activated (object sender, EventArgs e)
 	{
-		System.Diagnostics.Process.Start ("http://bazar.qsolution.ru");
+		System.Diagnostics.Process.Start ("http://qsolution.ru");
 	}
 	
 	protected void OnAction37Activated (object sender, EventArgs e)
@@ -508,17 +412,11 @@ public partial class MainWindow : Gtk.Window
 		}
 	}
 
-	protected void OnAction39Activated (object sender, EventArgs e)
-	{
-		string param = "";
-		ViewReportExt.Run ("Contracts", param);
-	}
-
-	protected void OnAction41Activated(object sender, EventArgs e)
+	protected void OnAction40Activated(object sender, EventArgs e)
 	{
 		Reference winref = new Reference();
 		winref.SetMode(false,false,true,true,true);
-		winref.FillList("meter_types","Тип счётчика", "Типы счётчиков");
+		winref.FillList("stead", "земельный участок", "Земельные участки");
 		winref.Show();
 		winref.Run();
 		winref.Destroy();
