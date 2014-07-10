@@ -122,7 +122,7 @@ public partial class MainWindow : Gtk.Window
 			treeviewLessees.Selection.GetSelected(out iter);
 			itemid = Convert.ToInt32(LesseesSort.GetValue(iter, (int)LesseesCol.id));
 			lessee winLessee = new lessee();
-			winLessee.LesseeFill(itemid);
+			winLessee.Fill(itemid);
 			winLessee.Show();
 			result = (ResponseType)winLessee.Run();
 			winLessee.Destroy();
@@ -158,7 +158,6 @@ public partial class MainWindow : Gtk.Window
 		break;
 		case 1:
 			lessee winLessee = new lessee();
-			winLessee.NewLessee = true;
 			winLessee.Show();
 			winLessee.Run();
 			winLessee.Destroy();
@@ -336,9 +335,8 @@ public partial class MainWindow : Gtk.Window
 		{
 		case "lessees":
 			lessee LesseeEdit = new lessee();
-			LesseeEdit.NewLessee = e.NewItem;
 			if(!e.NewItem)
-				LesseeEdit.LesseeFill(e.ItemId);
+				LesseeEdit.Fill(e.ItemId);
 			LesseeEdit.Show();
 			Result = (ResponseType)LesseeEdit.Run();
 			LesseeEdit.Destroy();

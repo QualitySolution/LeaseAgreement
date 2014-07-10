@@ -317,7 +317,7 @@ namespace LeaseAgreement
 			treeviewHistory.Selection.GetSelected(out iter);
 			itemid = Convert.ToInt32(HistoryStore.GetValue(iter,5));
 			lessee winLessee = new lessee();
-			winLessee.LesseeFill(itemid);
+			winLessee.Fill(itemid);
 			winLessee.Show();
 			winLessee.Run();
 			winLessee.Destroy();
@@ -327,7 +327,7 @@ namespace LeaseAgreement
 		protected void OnButtonLesseeClicked (object sender, EventArgs e)
 		{
 			lessee winLessee = new lessee();
-			winLessee.LesseeFill(lessee_id);
+			winLessee.Fill(lessee_id);
 			winLessee.Show();
 			winLessee.Run();
 			winLessee.Destroy();

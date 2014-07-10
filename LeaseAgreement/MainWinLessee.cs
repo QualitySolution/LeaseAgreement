@@ -15,23 +15,16 @@ public partial class MainWindow : Gtk.Window
 		name,
 		boss,
 		inn,
-		goods_text,
-		wholesaler,
-		retail
 	}
 
 	void PrepareLessee()
 	{
 		//Создаем таблицу "Арендаторы"
-		LesseesListStore = new Gtk.ListStore (typeof (int),typeof (string), typeof (string),
-		                                      typeof (string), typeof (string), typeof (bool), typeof (bool));
+		LesseesListStore = new Gtk.ListStore (typeof (int),typeof (string), typeof (string), typeof (string));
 		
 		treeviewLessees.AppendColumn("Код", new Gtk.CellRendererText (), "text", (int)LesseesCol.id);
 		treeviewLessees.AppendColumn("Название", new Gtk.CellRendererText (), "text", (int)LesseesCol.name);
 		treeviewLessees.AppendColumn("Директор", new Gtk.CellRendererText (), "text", (int)LesseesCol.boss);
-		treeviewLessees.AppendColumn("Товары", new Gtk.CellRendererText (), "text", (int)LesseesCol.goods_text);
-		treeviewLessees.AppendColumn("Опт", new Gtk.CellRendererToggle (), "active", (int)LesseesCol.wholesaler);
-		treeviewLessees.AppendColumn("Розница", new Gtk.CellRendererToggle (), "active", (int)LesseesCol.retail);
 
 		Lesseesfilter = new Gtk.TreeModelFilter (LesseesListStore, null);
 		Lesseesfilter.VisibleFunc = new Gtk.TreeModelFilterVisibleFunc (FilterTreeLessees);
@@ -40,7 +33,6 @@ public partial class MainWindow : Gtk.Window
 		treeviewLessees.Columns [0].SortColumnId = (int)LesseesCol.id;
 		treeviewLessees.Columns [1].SortColumnId = (int)LesseesCol.name;
 		treeviewLessees.Columns [2].SortColumnId = (int)LesseesCol.boss;
-		treeviewLessees.Columns [3].SortColumnId = (int)LesseesCol.goods_text;
 		treeviewLessees.ShowAll();
 	}
 
@@ -48,8 +40,7 @@ public partial class MainWindow : Gtk.Window
 	{
 		logger.Info("Получаем таблицу арендаторов...");
 
-		string sql = "SELECT lessees.*, goods.name as goods FROM lessees";
-		sql += " LEFT JOIN goods ON lessees.goods_id = goods.id ";
+		string sql = "SELECT lessees.* FROM lessees"; 
 		MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 		
 		using(MySqlDataReader rdr = cmd.ExecuteReader()) 
@@ -59,11 +50,9 @@ public partial class MainWindow : Gtk.Window
 			{
 				LesseesListStore.AppendValues (rdr.GetInt32 ("id"),
 				                             rdr ["name"].ToString (),
-				                             rdr ["FIO_dir"].ToString (),
-				                             rdr ["INN"].ToString (),
-				                             rdr ["goods"].ToString (),
-				                             (bool)rdr ["wholesaler"],
-				                             (bool)rdr ["retail"]);
+				                               rdr ["signatory_FIO"].ToString (),
+				                             rdr ["INN"].ToString ()
+				                             );
 			}
 		}
 		logger.Info("Ok");

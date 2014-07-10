@@ -247,7 +247,7 @@ public partial class MainWindow : Gtk.Window
 		treeviewPlaces.Selection.GetSelected(out iter);
 		itemid = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.lessee_id));
 		lessee winLessee = new lessee();
-		winLessee.LesseeFill(itemid);
+		winLessee.Fill(itemid);
 		winLessee.Show();
 		result = winLessee.Run();
 		winLessee.Destroy();
