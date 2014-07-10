@@ -302,7 +302,7 @@ namespace LeaseAgreement
 			treeviewHistory.Selection.GetSelected(out iter);
 			itemid = (int) HistoryStore.GetValue(iter,0);
 			Contract winContract = new Contract();
-			winContract.ContractFill(itemid);
+			winContract.Fill(itemid);
 			winContract.Show();
 			winContract.Run();
 			winContract.Destroy();
@@ -337,7 +337,7 @@ namespace LeaseAgreement
 		protected void OnButtonContractClicked (object sender, EventArgs e)
 		{
 			Contract winContract = new Contract();
-			winContract.ContractFill(ContractId);
+			winContract.Fill(ContractId);
 			winContract.Show();
 			winContract.Run();
 			winContract.Destroy();
@@ -347,7 +347,6 @@ namespace LeaseAgreement
 		protected void OnButtonNewContractClicked (object sender, EventArgs e)
 		{
 			Contract winContract = new Contract();
-			winContract.NewContract = true;
 			winContract.Show();
 			winContract.SetPlace (type_id, PlaceNumber);
 			winContract.Run();

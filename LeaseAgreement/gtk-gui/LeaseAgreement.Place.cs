@@ -80,7 +80,6 @@ namespace LeaseAgreement
 			this.GtkAlignment2.LeftPadding = ((uint)(12));
 			// Container child GtkAlignment2.Gtk.Container+ContainerChild
 			this.table2 = new global::Gtk.Table (((uint)(5)), ((uint)(2)), false);
-			this.table2.Name = "table2";
 			this.table2.RowSpacing = ((uint)(6));
 			this.table2.ColumnSpacing = ((uint)(6));
 			this.table2.BorderWidth = ((uint)(3));
