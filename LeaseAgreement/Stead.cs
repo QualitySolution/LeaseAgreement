@@ -34,6 +34,7 @@ namespace LeaseAgreement
 
 					labelId.Text = rdr["id"].ToString();
 					entryName.Text = rdr["name"].ToString();
+					entryCadastral.Text = rdr["cadastral"].ToString();
 					entryContractNo.Text = rdr["contract_no"].ToString();
 					dateContractDate.Date = DBWorks.GetDateTime (rdr, "contract_date", default(DateTime));
 					entryOwner.Text = rdr["contractor"].ToString();
@@ -61,12 +62,12 @@ namespace LeaseAgreement
 			string sql;
 			if(NewItem)
 			{
-				sql = "INSERT INTO stead (name, contract_no, contract_date, contractor, address) " +
-					"VALUES (@name, @contract_no, @contract_date, @contractor, @address)";
+				sql = "INSERT INTO stead (name, cadastral, contract_no, contract_date, contractor, address) " +
+					"VALUES (@name, @cadastral, @contract_no, @contract_date, @contractor, @address)";
 			}
 			else
 			{
-				sql = "UPDATE stead SET name = @name, contract_no = @contract_no, contract_date = @contract_date, " +
+				sql = "UPDATE stead SET name = @name, cadastral = @cadastral, contract_no = @contract_no, contract_date = @contract_date, " +
 					"contractor = @contractor, address = @address " +
 					"WHERE id = @id";
 			}
@@ -77,6 +78,7 @@ namespace LeaseAgreement
 
 				cmd.Parameters.AddWithValue("@id", ItemId);
 				cmd.Parameters.AddWithValue("@name", entryName.Text);
+				cmd.Parameters.AddWithValue("@cadastral", DBWorks.ValueOrNull (entryCadastral.Text != "", entryCadastral.Text));
 				cmd.Parameters.AddWithValue("@contract_no", DBWorks.ValueOrNull (entryContractNo.Text != "", entryContractNo.Text));
 				cmd.Parameters.AddWithValue("@contract_date", DBWorks.ValueOrNull (!dateContractDate.IsEmpty, dateContractDate.Date));
 				cmd.Parameters.AddWithValue("@contractor", DBWorks.ValueOrNull (entryOwner.Text != "", entryOwner.Text));
