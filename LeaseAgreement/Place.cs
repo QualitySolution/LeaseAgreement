@@ -11,10 +11,9 @@ namespace LeaseAgreement
 	public partial class Place : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
-		private bool NewPlace;
+		private bool newItem;
 		string PlaceNumber;
-		int lessee_id, contact_id, type_id, ContractId;
-		bool contactNull = true;
+		int lessee_id, type_id, ContractId;
 
 		Gtk.ListStore HistoryStore;
 		
@@ -26,8 +25,7 @@ namespace LeaseAgreement
 			ComboWorks.ComboFillReference(comboPType,"place_types", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboOrg, "organizations", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboStead, "stead", ComboWorks.ListMode.WithNo);
-			contactNull = true;
-			NewPlace = New;
+			newItem = New;
 
 			grup = new AccelGroup ();
 			this.AddAccelGroup(grup);
@@ -56,11 +54,11 @@ namespace LeaseAgreement
 			treeviewHistory.ShowAll();
 		}
 
-		public void PlaceFill(int type, string place)
+		public void Fill(int type, string place)
 		{
 			type_id = type;
 			PlaceNumber = place;
-			NewPlace = false;
+			newItem = false;
 			buttonOk.Sensitive = true;
 			comboPType.Sensitive = false;
 			entryNumber.Sensitive = false;
@@ -77,16 +75,15 @@ namespace LeaseAgreement
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 			cmd.Parameters.AddWithValue("@type_id", type_id);
 			cmd.Parameters.AddWithValue("@place", PlaceNumber);
-			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
+			{
 				rdr.Read ();
 
+				entryName.Text = rdr ["name"].ToString ();
 				ListStoreWorks.SearchListStore ((ListStore)comboPType.Model, int.Parse (rdr ["type_id"].ToString ()), out iter);
 				comboPType.SetActiveIter (iter);
-				if (rdr ["org_id"] != DBNull.Value)
-					ListStoreWorks.SearchListStore ((ListStore)comboOrg.Model, int.Parse (rdr ["org_id"].ToString ()), out iter);
-				else
-					ListStoreWorks.SearchListStore ((ListStore)comboOrg.Model, -1, out iter);
-				comboOrg.SetActiveIter (iter);
+				ComboWorks.SetActiveItem (comboOrg, DBWorks.GetInt(rdr, "org_id", -1));
+				ComboWorks.SetActiveItem (comboStead, DBWorks.GetInt(rdr, "stead_id", -1));
 				entryNumber.Text = rdr ["place_no"].ToString ();
 				if (rdr ["area"] != DBNull.Value)
 					spinArea.Value = Convert.ToDouble (rdr ["area"].ToString ());
@@ -113,42 +110,37 @@ namespace LeaseAgreement
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 			cmd.Parameters.AddWithValue("@type", type_id);
 			cmd.Parameters.AddWithValue("@place", PlaceNumber);
-			MySqlDataReader rdr = cmd.ExecuteReader();
-					
-			if(rdr.Read())
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
 			{
-				if( rdr["contract_id"] != DBNull.Value)
-				{
-					ContractId = rdr.GetInt32 ("contract_id");
-					labelContractNumber.Text = rdr["contr_number"].ToString();
-					if(rdr["cancel_date"] == DBNull.Value)
-						labelContractDates.Text = DateTime.Parse (rdr["start_date"].ToString ()).ToShortDateString() +
-							" - " + DateTime.Parse (rdr["end_date"].ToString ()).ToShortDateString();
-					else
-						labelContractDates.Text = DateTime.Parse (rdr["start_date"].ToString ()).ToShortDateString() +
-							" - " + DateTime.Parse (rdr["cancel_date"].ToString ()).ToShortDateString() + "(досрочно)";
-					buttonContract.Sensitive = true;
-				}
-				if( rdr["contr_lessee_id"] != DBNull.Value)
-				{
-					lessee_id = rdr.GetInt32("contr_lessee_id");
-					labelLessee.Text = rdr["lessee"].ToString();
-					labelLessee.TooltipText = rdr["lessee"].ToString() + "\n" + rdr["l_comments"].ToString();
-					buttonLessee.Sensitive = true;
+				if (rdr.Read ()) {
+					if (rdr ["contract_id"] != DBNull.Value) {
+						ContractId = rdr.GetInt32 ("contract_id");
+						labelContractNumber.Text = rdr ["contr_number"].ToString ();
+						if (rdr ["cancel_date"] == DBNull.Value)
+							labelContractDates.Text = DateTime.Parse (rdr ["start_date"].ToString ()).ToShortDateString () +
+							" - " + DateTime.Parse (rdr ["end_date"].ToString ()).ToShortDateString ();
+						else
+							labelContractDates.Text = DateTime.Parse (rdr ["start_date"].ToString ()).ToShortDateString () +
+							" - " + DateTime.Parse (rdr ["cancel_date"].ToString ()).ToShortDateString () + "(досрочно)";
+						buttonContract.Sensitive = true;
+					}
+					if (rdr ["contr_lessee_id"] != DBNull.Value) {
+						lessee_id = rdr.GetInt32 ("contr_lessee_id");
+						labelLessee.Text = rdr ["lessee"].ToString ();
+						labelLessee.TooltipText = rdr ["lessee"].ToString () + "\n" + rdr ["l_comments"].ToString ();
+						buttonLessee.Sensitive = true;
+					}
+				} else {
+					ContractId = -1;
+					labelContractNumber.Text = "Нет активного договора";
+					labelContractDates.Text = String.Empty;
+					buttonContract.Sensitive = false;
+					lessee_id = 0;
+					labelLessee.LabelProp = "<span background=\"green\">Свободно</span>";
+					labelLessee.TooltipText = String.Empty;
+					buttonLessee.Sensitive = false;
 				}
 			}
-			else
-			{
-				ContractId = -1;
-				labelContractNumber.Text = "Нет активного договора";
-				labelContractDates.Text = String.Empty;
-				buttonContract.Sensitive = false;
-				lessee_id = 0;
-				labelLessee.LabelProp = "<span background=\"green\">Свободно</span>";
-				labelLessee.TooltipText = String.Empty;
-				buttonLessee.Sensitive = false;
-			}
-			rdr.Close ();
 		}
 		
 		protected virtual void OnEntryNumberChanged (object sender, System.EventArgs e)
@@ -173,14 +165,14 @@ namespace LeaseAgreement
 			string sql;
 			TreeIter iter;
 			logger.Info("Запись места...");
-			if(NewPlace)
+			if(newItem)
 			{
-				sql = "INSERT INTO places (type_id, place_no, area, contact_person_id, org_id, comments) " +
-					"VALUES (@type_id, @place_no, @area, @contact, @org, @comments)";
+				sql = "INSERT INTO places (type_id, place_no, name, area, stead_id, org_id, comments) " +
+					"VALUES (@type_id, @place_no, @name, @area, @stead_id, @org, @comments)";
 			}
 			else
 			{
-				sql = "UPDATE places SET area = @area, contact_person_id = @contact, " +
+				sql = "UPDATE places SET name = @name, area = @area, stead_id = @stead_id, " +
 					"org_id = @org, comments = @comments " +
 					"WHERE type_id = @type_id and place_no = @place_no";
 			}
@@ -193,6 +185,7 @@ namespace LeaseAgreement
 					cmd.Parameters.AddWithValue("@type_id",comboPType.Model.GetValue(iter,1));
 				}	
 				cmd.Parameters.AddWithValue("@place_no", entryNumber.Text);
+				cmd.Parameters.AddWithValue("@name", DBWorks.ValueOrNull (entryName.Text != "", entryName.Text));
 				if(comboOrg.GetActiveIter(out iter) && (int)comboOrg.Model.GetValue(iter,1) != -1)
 					cmd.Parameters.AddWithValue("@org",comboOrg.Model.GetValue(iter,1));
 				else
@@ -205,11 +198,8 @@ namespace LeaseAgreement
 					cmd.Parameters.AddWithValue("@comments", DBNull.Value);
 				else
 					cmd.Parameters.AddWithValue("@comments", textviewComments.Buffer.Text);
-				if(contactNull)
-					cmd.Parameters.AddWithValue("@contact",DBNull.Value);
-				else
-					cmd.Parameters.AddWithValue("@contact",contact_id);
-				
+				cmd.Parameters.AddWithValue("@stead_id", ComboWorks.GetActiveIdOrNull (comboStead));
+
 				cmd.ExecuteNonQuery();
 				
 				logger.Info("Ok");
@@ -364,11 +354,6 @@ namespace LeaseAgreement
 			winContract.Destroy();
 			FillCurrentContract ();
 		}
-
-		protected void OnNotebookMainSwitchPage(object o, SwitchPageArgs args)
-		{
-		}
-			
 	}
 }
 

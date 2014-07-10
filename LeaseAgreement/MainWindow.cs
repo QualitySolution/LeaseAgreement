@@ -111,7 +111,7 @@ public partial class MainWindow : Gtk.Window
 			place = PlaceSort.GetValue(iter, (int)PlaceCol.place_no).ToString ();
 			type = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.type_place_id));
 			Place winPlace = new Place(false);
-			winPlace.PlaceFill(type,place);
+			winPlace.Fill(type,place);
 			winPlace.Show();
 			result = (ResponseType)winPlace.Run();
 			winPlace.Destroy();

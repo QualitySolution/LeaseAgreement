@@ -264,7 +264,7 @@ namespace LeaseAgreement
 			type = Convert.ToInt32(ContractsListStore.GetValue(iter,5));
 			place = (string)ContractsListStore.GetValue(iter,6);
 			Place winPlace = new Place(false);
-			winPlace.PlaceFill(type, place);
+			winPlace.Fill(type, place);
 			winPlace.Show();
 			winPlace.Run();
 			winPlace.Destroy();

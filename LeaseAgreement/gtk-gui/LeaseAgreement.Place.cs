@@ -510,7 +510,6 @@ namespace LeaseAgreement
 			this.buttonContract.Clicked += new global::System.EventHandler (this.OnButtonContractClicked);
 			this.buttonLessee.Clicked += new global::System.EventHandler (this.OnButtonLesseeClicked);
 			this.buttonNewContract.Clicked += new global::System.EventHandler (this.OnButtonNewContractClicked);
-			this.notebookMain.SwitchPage += new global::Gtk.SwitchPageHandler (this.OnNotebookMainSwitchPage);
 			this.treeviewHistory.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnTreeviewHistoryButtonPressEvent);
 			this.treeviewHistory.PopupMenu += new global::Gtk.PopupMenuHandler (this.OnTreeviewHistoryPopupMenu);
 			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkClicked);

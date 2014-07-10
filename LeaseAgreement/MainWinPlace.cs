@@ -17,9 +17,6 @@ public partial class MainWindow : Gtk.Window
 		area_text,
 		lessee,
 		lessee_id,
-		contact,
-		contact_id,
-		contact_phones,
 		org,
 		org_id,
 		area
@@ -33,15 +30,13 @@ public partial class MainWindow : Gtk.Window
 
 		//Создаем таблицу "Места"
 		PlacesListStore = new Gtk.ListStore (typeof (int), typeof (string),typeof (string), typeof (string),
-		                                     typeof (string), typeof (int),typeof (string), typeof (int),
-		                                     typeof (string), typeof (string), typeof (int), typeof (double));
+		                                     typeof (string), typeof (int), 
+		                                     typeof (string), typeof (int), typeof (double));
 
 		treeviewPlaces.AppendColumn ("Тип", new Gtk.CellRendererText (), "text", (int)PlaceCol.type_place);
 		treeviewPlaces.AppendColumn ("Номер", new Gtk.CellRendererText (), "text", (int)PlaceCol.place_no);
 		treeviewPlaces.AppendColumn ("Площадь", new Gtk.CellRendererText (), "text", (int)PlaceCol.area_text);
 		treeviewPlaces.AppendColumn ("Арендатор", new Gtk.CellRendererText (), "text", (int)PlaceCol.lessee);
-		treeviewPlaces.AppendColumn ("Контактное лицо", new Gtk.CellRendererText (), "text", (int)PlaceCol.contact);
-		treeviewPlaces.AppendColumn ("Телефоны К.Л.", new Gtk.CellRendererText (), "text", (int)PlaceCol.contact_phones);
 		treeviewPlaces.AppendColumn ("Организация", new Gtk.CellRendererText (), "text", (int)PlaceCol.org);
 		
 		Placefilter = new Gtk.TreeModelFilter (PlacesListStore, null);
@@ -53,9 +48,7 @@ public partial class MainWindow : Gtk.Window
 		treeviewPlaces.Columns [1].SortColumnId = (int)PlaceCol.place_no;
 		treeviewPlaces.Columns [2].SortColumnId = (int)PlaceCol.area;
 		treeviewPlaces.Columns [3].SortColumnId = (int)PlaceCol.lessee;
-		treeviewPlaces.Columns [4].SortColumnId = (int)PlaceCol.contact;
-		treeviewPlaces.Columns [5].SortColumnId = (int)PlaceCol.contact_phones;
-		treeviewPlaces.Columns [6].SortColumnId = (int)PlaceCol.org;
+		treeviewPlaces.Columns [4].SortColumnId = (int)PlaceCol.org;
 		treeviewPlaces.ShowAll();
 	}
 
@@ -100,9 +93,6 @@ public partial class MainWindow : Gtk.Window
 				                            rdr ["area"].ToString (),
 				                            rdr ["lessee"].ToString (),
 				                              DBWorks.GetInt (rdr, "lessee_id", -1),
-				                              "",
-				                              -1,
-				                            rdr ["telephones"].ToString (),
 				                            rdr ["organization"].ToString (),
 				                              DBWorks.GetInt (rdr, "org_id", -1),
 				                              DBWorks.GetDouble (rdr, "area", 0)
@@ -124,11 +114,10 @@ public partial class MainWindow : Gtk.Window
 
 	private bool FilterTreePlace (Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
-		if (entryPlaceNum.Text == "" && entryPlaceLess.Text == "" && entryPlaceContact.Text == "")
+		if (entryPlaceNum.Text == "" && entryPlaceLess.Text == "")
 			return true;
 		bool filterNum = true;
 		bool filterLes = true;
-		bool filterCont = true;
 		string cellvalue;
 		
 		if(model.GetValue (iter, 1) == null)
@@ -144,13 +133,8 @@ public partial class MainWindow : Gtk.Window
 			cellvalue  = model.GetValue (iter, (int)PlaceCol.lessee).ToString();
 			filterLes = cellvalue.IndexOf (entryPlaceLess.Text, StringComparison.CurrentCultureIgnoreCase) > -1;
 		}
-		if (entryPlaceContact.Text != "" && model.GetValue (iter, (int)PlaceCol.contact) != null)
-		{
-			cellvalue  = model.GetValue (iter, (int)PlaceCol.contact).ToString();
-			filterCont = cellvalue.IndexOf (entryPlaceContact.Text, StringComparison.CurrentCultureIgnoreCase) > -1;
-		}
-		
-		return (filterNum && filterLes && filterCont);
+
+		return (filterNum && filterLes);
 	}
 
 	private int PlaceNumberSortFunction(TreeModel model, TreeIter a, TreeIter b) 
@@ -201,24 +185,17 @@ public partial class MainWindow : Gtk.Window
 		entryPlaceLess.Text = "";
 	}
 	
-	protected virtual void OnButton238Clicked (object sender, System.EventArgs e)
-	{
-		entryPlaceContact.Text = "";
-	}
-
 	[GLib.ConnectBefore]
 	protected void OnTreeviewPlacesPopupMenu (object o, Gtk.PopupMenuArgs args)
 	{
 		bool ItemSelected = treeviewPlaces.Selection.CountSelectedRows() == 1;
 		TreeIter iter;
 		bool setLessee = false;
-		bool setContact = false;
 		
 		if(ItemSelected)
 		{
 			treeviewPlaces.Selection.GetSelected(out iter);
 			setLessee = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.lessee_id)) > 0;
-			setContact = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.contact_id)) > 0;
 		}
 		Gtk.Menu popupBox = new Gtk.Menu();
 		Gtk.MenuItem MenuItemOpenPlace = new MenuItem("Открыть торговое место");
@@ -252,7 +229,7 @@ public partial class MainWindow : Gtk.Window
 		place = PlaceSort.GetValue(iter, (int)PlaceCol.place_no).ToString ();
 		type = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.type_place_id));
 		Place winPlace = new Place(false);
-		winPlace.PlaceFill(type, place);
+		winPlace.Fill(type, place);
 		winPlace.Show();
 		result = winPlace.Run();
 		winPlace.Destroy();
