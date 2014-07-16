@@ -4,7 +4,7 @@
 public partial class MainWindow
 {
 	private global::Gtk.UIManager UIManager;
-	private global::Gtk.Action ActionFileMenu;
+	private global::Gtk.Action Action41;
 	private global::Gtk.Action Action;
 	private global::Gtk.Action Action10;
 	private global::Gtk.Action Action7;
@@ -18,6 +18,7 @@ public partial class MainWindow
 	private global::Gtk.Action helpAction;
 	private global::Gtk.Action Action36;
 	private global::Gtk.Action Action40;
+	private global::Gtk.Action propertiesAction;
 	private global::Gtk.VBox vbox1;
 	private global::Gtk.MenuBar menubar1;
 	private global::Gtk.Notebook notebookMain;
@@ -98,9 +99,9 @@ public partial class MainWindow
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager ();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
-		this.ActionFileMenu = new global::Gtk.Action ("ActionFileMenu", global::Mono.Unix.Catalog.GetString ("_Файл"), null, null);
-		this.ActionFileMenu.ShortLabel = global::Mono.Unix.Catalog.GetString ("Файл");
-		w1.Add (this.ActionFileMenu, null);
+		this.Action41 = new global::Gtk.Action ("Action41", global::Mono.Unix.Catalog.GetString ("_База"), null, null);
+		this.Action41.ShortLabel = global::Mono.Unix.Catalog.GetString ("Файл");
+		w1.Add (this.Action41, null);
 		this.Action = new global::Gtk.Action ("Action", global::Mono.Unix.Catalog.GetString ("_Справочники"), null, null);
 		this.Action.ShortLabel = global::Mono.Unix.Catalog.GetString ("_Справочники");
 		w1.Add (this.Action, null);
@@ -140,6 +141,9 @@ public partial class MainWindow
 		this.Action40 = new global::Gtk.Action ("Action40", global::Mono.Unix.Catalog.GetString ("Земельные участки"), null, null);
 		this.Action40.ShortLabel = global::Mono.Unix.Catalog.GetString ("Земельные участки");
 		w1.Add (this.Action40, null);
+		this.propertiesAction = new global::Gtk.Action ("propertiesAction", global::Mono.Unix.Catalog.GetString ("Настраиваемые поля"), null, "gtk-properties");
+		this.propertiesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Настраиваемые поля");
+		w1.Add (this.propertiesAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -151,7 +155,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='ActionFileMenu' action='ActionFileMenu'><menuitem name='dialogAuthenticationAction' action='dialogAuthenticationAction'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action' action='Action'><menuitem name='Action15' action='Action15'/><menuitem name='Action40' action='Action40'/><separator/><menuitem name='Action10' action='Action10'/><separator/><menuitem name='Action7' action='Action7'/></menu><menu name='Action34' action='Action34'><menuitem name='helpAction' action='helpAction'/><menuitem name='Action36' action='Action36'/><menuitem name='Action26' action='Action26'/><separator/><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action41' action='Action41'><menuitem name='dialogAuthenticationAction' action='dialogAuthenticationAction'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='propertiesAction' action='propertiesAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action' action='Action'><menuitem name='Action15' action='Action15'/><menuitem name='Action40' action='Action40'/><separator/><menuitem name='Action10' action='Action10'/><separator/><menuitem name='Action7' action='Action7'/></menu><menu name='Action34' action='Action34'><menuitem name='helpAction' action='helpAction'/><menuitem name='Action36' action='Action36'/><menuitem name='Action26' action='Action26'/><separator/><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -895,6 +899,7 @@ public partial class MainWindow
 		this.helpAction.Activated += new global::System.EventHandler (this.OnHelpActionActivated);
 		this.Action36.Activated += new global::System.EventHandler (this.OnAction36Activated);
 		this.Action40.Activated += new global::System.EventHandler (this.OnAction40Activated);
+		this.propertiesAction.Activated += new global::System.EventHandler (this.OnPropertiesActionActivated);
 		this.notebookMain.SwitchPage += new global::Gtk.SwitchPageHandler (this.OnNotebookMainSwitchPage);
 		this.comboPlaceType.Changed += new global::System.EventHandler (this.OnComboPlaceTypeChanged);
 		this.entryPlaceNum.Changed += new global::System.EventHandler (this.OnEntryPlaceNumChanged);

@@ -21,9 +21,36 @@ namespace LeaseAgreement
 		{
 			this.Build ();
 
+			//Исправляем табы
+			Gtk.Image img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.user-home.png");
+			Gtk.Label textLable = new Label ("Главное");
+			Gtk.VBox box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (hboxInfo, box);
+
+			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.folder.png");
+			textLable = new Label ("Дополнительно");
+			box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (customContracts, box);
+
+			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.mail-attachment.png");
+			textLable = new Label ("Файлы");
+			box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			//notebookMain.SetTabLabel (customContracts, box);
+
 			ComboWorks.ComboFillReference(comboOrg, "organizations", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboPlaceT,"place_types", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboContractType, "contract_patterns", ComboWorks.ListMode.WithNo);
+
+			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 		}
 
 		public void Fill(int Id)
@@ -89,6 +116,7 @@ namespace LeaseAgreement
 					ListStoreWorks.SearchListStore((ListStore)comboPlaceNo.Model, DBPlaceNo.ToString(), out iter);
 					comboPlaceNo.SetActiveIter(iter);
 				}
+				customContracts.LoadDataFromDB(Id);
 				this.Title = "Договор №" + entryNumber.Text;
 				logger.Info("Ok");
 			}
@@ -232,11 +260,12 @@ namespace LeaseAgreement
 			TreeIter iter;
 
 			logger.Info("Запись договора...");
+			MySqlTransaction trans = (MySqlTransaction)QSMain.ConnectionDB.BeginTransaction ();
 			try 
 			{
 				// Проверка номера договора на дубликат
 				string sql = "SELECT COUNT(*) AS cnt FROM contracts WHERE number = @number AND sign_date = @sign_date AND id <> @id ";
-				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
+				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 				cmd.Parameters.AddWithValue("@number", entryNumber.Text);
 				cmd.Parameters.AddWithValue("@id", ContractId);
 				if(datepickerSign.IsEmpty)
@@ -255,13 +284,14 @@ namespace LeaseAgreement
 					md.Text = String.Format ("Договор с номером {0} от {1:d}, уже существует в базе данных!",  entryNumber.Text, datepickerSign.Date);
 					md.Run ();
 					md.Destroy();
+					trans.Rollback ();
 					return;
 				}
 				// Проверка не занято ли место другим арендатором
 				sql = "SELECT id, number, start_date AS start, IFNULL(cancel_date,end_date) AS end FROM contracts " +
 					"WHERE place_type_id = @type_id AND place_no = @place_no AND " +
 						"!(@start > DATE(IFNULL(cancel_date,end_date)) OR @end < start_date)" ;
-				cmd = new MySqlCommand(sql, QSMain.connectionDB);
+				cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 				if(comboPlaceT.GetActiveIter(out iter))
 				{
 					cmd.Parameters.AddWithValue("@type_id", comboPlaceT.Model.GetValue(iter,1));
@@ -293,6 +323,7 @@ namespace LeaseAgreement
 					md.Run ();
 					md.Destroy();
 					rdr.Close();
+					trans.Rollback ();
 					return;
 				}
 				rdr.Close();
@@ -312,7 +343,7 @@ namespace LeaseAgreement
 						"WHERE id = @id";
 				}
 
-				cmd = new MySqlCommand(sql, QSMain.connectionDB);
+				cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 
 				cmd.Parameters.AddWithValue("@id", ContractId);
 				cmd.Parameters.AddWithValue("@number", entryNumber.Text);
@@ -351,14 +382,18 @@ namespace LeaseAgreement
 				
 				cmd.ExecuteNonQuery();
 				if(NewContract)
+				{
 					ContractId = (int) cmd.LastInsertedId;
+					customContracts.ObjectId = ContractId;
+				}
+				customContracts.SaveToDB(trans);
 
 				//Корректная смена арендатора
 				if(!NewContract && OrigLesseeId != LesseeId && !LesseeisNull)
 				{
 					logger.Info("Арендатор изменился...");
 					sql = "SELECT COUNT(*) FROM credit_slips WHERE contract_id = @contract AND lessee_id = @old_lessee";
-					cmd = new MySqlCommand(sql, QSMain.connectionDB);
+					cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 					cmd.Parameters.AddWithValue("@contract", ContractId);
 					cmd.Parameters.AddWithValue("@old_lessee", OrigLesseeId);
 					long rowcount = (long) cmd.ExecuteScalar();
@@ -378,7 +413,7 @@ namespace LeaseAgreement
 							logger.Info("Меняем арендатора в приходных ордерах...");
 							sql = "UPDATE credit_slips SET lessee_id = @lessee_id " +
 								"WHERE contract_id = @contract AND lessee_id = @old_lessee ";
-							cmd = new MySqlCommand(sql, QSMain.connectionDB);
+							cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 							cmd.Parameters.AddWithValue("@contract", ContractId);
 							cmd.Parameters.AddWithValue("@old_lessee", OrigLesseeId);
 							cmd.Parameters.AddWithValue("@lessee_id", LesseeId);
@@ -387,11 +422,13 @@ namespace LeaseAgreement
 					}
 				}
 
+				trans.Commit ();
 				logger.Info("Ok");
 				Respond (ResponseType.Ok);
 			} 
 			catch (Exception ex) 
 			{
+				trans.Rollback ();
 				logger.ErrorException("Ошибка записи договора!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}

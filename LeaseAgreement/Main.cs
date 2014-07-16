@@ -57,8 +57,13 @@ namespace LeaseAgreement
 		{
 			QSMain.AdminFieldName = "admin";
 			QSMain.ProjectPermission = new Dictionary<string, UserPermission>();
-			QSMain.ProjectPermission.Add ("edit_slips", new UserPermission("edit_slips", "Изменение кассы задним числом",
-			                                                             "Пользователь может изменять или добавлять кассовые документы задним числом."));
+			//QSMain.ProjectPermission.Add ("edit_slips", new UserPermission("edit_slips", "Изменение кассы задним числом",
+			//                                                             "Пользователь может изменять или добавлять кассовые документы задним числом."));
+			QSCustomFields.CFMain.Tables = new List<QSCustomFields.CFTable> {
+				new QSCustomFields.CFTable("lessees", "Арендатор"),
+				new QSCustomFields.CFTable("contracts", "Договор"),
+				new QSCustomFields.CFTable("places", "Место"),
+			};
 
 			QSMain.User = new UserInfo();
 			
@@ -415,6 +420,11 @@ namespace LeaseAgreement
 			                             new TableInfo.ClearDependenceItem ("WHERE user_id = @id", "", "@id", "user_id"));
 			Tables.Add ("users", PrepareTable);
 
+		}
+
+		public static void CreateDatabaseParam()
+		{
+			QSCustomFields.CFMain.LoadTablesFields ();
 		}
 
 		public static void MinorDBVersionChange()

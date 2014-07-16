@@ -45,6 +45,7 @@ public partial class MainWindow : Gtk.Window
 		MainSupport.TestVersion(this); //Проверяем версию базы
 		QSMain.CheckServer (this); // Проверяем настройки сервера
 		MainClass.MinorDBVersionChange (); // При необходимости корректируем базу.
+		MainClass.CreateDatabaseParam ();
 
 		if(QSMain.User.Login == "root")
 		{
@@ -417,6 +418,12 @@ public partial class MainWindow : Gtk.Window
 		winref.Show();
 		winref.Run();
 		winref.Destroy();
+	}
+
+	protected void OnPropertiesActionActivated(object sender, EventArgs e)
+	{
+		QSCustomFields.CFSettings WinSettings = new QSCustomFields.CFSettings ();
+		WinSettings.Show ();
 	}
 
 }
