@@ -4,72 +4,148 @@ namespace LeaseAgreement
 {
 	public partial class lessee
 	{
-		private global::Gtk.VBox vbox2;
-		private global::Gtk.Table table3;
+		private global::Gtk.Notebook notebookMain;
+		
+		private global::Gtk.Table tableInfo;
+		
 		private global::Gtk.Frame frame1;
+		
 		private global::Gtk.Alignment GtkAlignment2;
+		
 		private global::Gtk.Table table1;
+		
 		private global::Gtk.Entry entryEmail;
+		
 		private global::Gtk.Entry entryFullName;
+		
 		private global::Gtk.Entry entryINN;
+		
 		private global::Gtk.Entry entryKPP;
+		
 		private global::Gtk.Entry entryName;
+		
 		private global::Gtk.Entry entryOGRN;
+		
 		private global::Gtk.Entry entryPhone;
+		
 		private global::Gtk.Label label1;
+		
 		private global::Gtk.Label label10;
+		
 		private global::Gtk.Label label11;
+		
 		private global::Gtk.Label label12;
+		
 		private global::Gtk.Label label13;
+		
 		private global::Gtk.Label label2;
-		private global::Gtk.Label label4;
+		
 		private global::Gtk.Label label5;
-		private global::Gtk.Label labelID;
-		private global::Gtk.Label GtkLabel2;
-		private global::Gtk.Frame frame3;
-		private global::Gtk.Alignment GtkAlignment;
-		private global::Gtk.Table table4;
-		private global::Gtk.ScrolledWindow GtkScrolledWindow2;
-		private global::Gtk.TextView textviewAddress;
-		private global::Gtk.ScrolledWindow GtkScrolledWindow3;
-		private global::Gtk.TextView textviewJurAddress;
-		private global::Gtk.Label label14;
-		private global::Gtk.Label label3;
-		private global::Gtk.Label GtkLabel;
-		private global::Gtk.Frame frame4;
-		private global::Gtk.Alignment GtkAlignment5;
-		private global::Gtk.ScrolledWindow GtkScrolledWindow;
-		private global::Gtk.TextView textviewComments;
-		private global::Gtk.Label GtkLabel7;
-		private global::Gtk.VBox vbox4;
-		private global::Gtk.Frame frame2;
-		private global::Gtk.Alignment GtkAlignment3;
-		private global::Gtk.Table table2;
-		private global::Gtk.Entry entryBaseOf;
-		private global::Gtk.Entry entryFIO;
-		private global::Gtk.Entry entryPost;
-		private global::Gtk.Label label6;
-		private global::Gtk.Label label7;
-		private global::Gtk.Label label9;
-		private global::Gtk.Label GtkLabel6;
-		private global::Gtk.Frame frame5;
-		private global::Gtk.Alignment GtkAlignment1;
-		private global::Gtk.Table table5;
-		private global::Gtk.Entry entryAccount;
-		private global::Gtk.Entry entryBank;
-		private global::Gtk.Entry entryBIK;
-		private global::Gtk.Entry entryCorAccount;
-		private global::Gtk.Label label15;
-		private global::Gtk.Label label16;
-		private global::Gtk.Label label17;
-		private global::Gtk.Label label18;
-		private global::Gtk.Label GtkLabel1;
-		private global::Gtk.HBox hbox4;
+		
 		private global::Gtk.Label label8;
+		
+		private global::Gtk.Label labelID;
+		
+		private global::Gtk.Label GtkLabel8;
+		
+		private global::Gtk.Frame frame3;
+		
+		private global::Gtk.Alignment GtkAlignment;
+		
+		private global::Gtk.Table table4;
+		
+		private global::Gtk.ScrolledWindow GtkScrolledWindow2;
+		
+		private global::Gtk.TextView textviewAddress;
+		
+		private global::Gtk.ScrolledWindow GtkScrolledWindow3;
+		
+		private global::Gtk.TextView textviewJurAddress;
+		
+		private global::Gtk.Label label14;
+		
+		private global::Gtk.Label label4;
+		
+		private global::Gtk.Label GtkLabel2;
+		
+		private global::Gtk.Frame frame4;
+		
+		private global::Gtk.Alignment GtkAlignment5;
+		
+		private global::Gtk.ScrolledWindow GtkScrolledWindow;
+		
+		private global::Gtk.TextView textviewComments;
+		
+		private global::Gtk.Label GtkLabel7;
+		
+		private global::Gtk.VBox vbox4;
+		
+		private global::Gtk.Frame frame2;
+		
+		private global::Gtk.Alignment GtkAlignment3;
+		
+		private global::Gtk.Table table2;
+		
+		private global::Gtk.Entry entryBaseOf;
+		
+		private global::Gtk.Entry entryFIO;
+		
+		private global::Gtk.Entry entryPost;
+		
+		private global::Gtk.Label label6;
+		
+		private global::Gtk.Label label7;
+		
+		private global::Gtk.Label label9;
+		
+		private global::Gtk.Label GtkLabel6;
+		
+		private global::Gtk.Frame frame5;
+		
+		private global::Gtk.Alignment GtkAlignment1;
+		
+		private global::Gtk.Table table5;
+		
+		private global::Gtk.Entry entryAccount;
+		
+		private global::Gtk.Entry entryBank;
+		
+		private global::Gtk.Entry entryBIK;
+		
+		private global::Gtk.Entry entryCorAccount;
+		
+		private global::Gtk.Label label15;
+		
+		private global::Gtk.Label label16;
+		
+		private global::Gtk.Label label17;
+		
+		private global::Gtk.Label label18;
+		
+		private global::Gtk.Label GtkLabel1;
+		
+		private global::Gtk.Label label19;
+		
+		private global::QSCustomFields.CustomFields customLessee;
+		
+		private global::Gtk.Label label3;
+		
+		private global::Gtk.VBox vboxContracts;
+		
+		private global::Gtk.HBox hbox4;
+		
+		private global::Gtk.Label label21;
+		
 		private global::Gtk.CheckButton checkActiveContracts;
+		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+		
 		private global::Gtk.TreeView treeviewContracts;
+		
+		private global::Gtk.Label label20;
+		
 		private global::Gtk.Button buttonCancel;
+		
 		private global::Gtk.Button buttonOk;
 
 		protected virtual void Build ()
@@ -84,15 +160,17 @@ namespace LeaseAgreement
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.vbox2 = new global::Gtk.VBox ();
-			this.vbox2.Name = "vbox2";
-			this.vbox2.Spacing = 6;
-			// Container child vbox2.Gtk.Box+BoxChild
-			this.table3 = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
-			this.table3.Name = "table3";
-			this.table3.RowSpacing = ((uint)(6));
-			this.table3.ColumnSpacing = ((uint)(6));
-			// Container child table3.Gtk.Table+TableChild
+			this.notebookMain = new global::Gtk.Notebook ();
+			this.notebookMain.CanFocus = true;
+			this.notebookMain.Name = "notebookMain";
+			this.notebookMain.CurrentPage = 2;
+			this.notebookMain.TabPos = ((global::Gtk.PositionType)(0));
+			// Container child notebookMain.Gtk.Notebook+NotebookChild
+			this.tableInfo = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
+			this.tableInfo.Name = "tableInfo";
+			this.tableInfo.RowSpacing = ((uint)(6));
+			this.tableInfo.ColumnSpacing = ((uint)(6));
+			// Container child tableInfo.Gtk.Table+TableChild
 			this.frame1 = new global::Gtk.Frame ();
 			this.frame1.Name = "frame1";
 			this.frame1.BorderWidth = ((uint)(3));
@@ -272,25 +350,25 @@ namespace LeaseAgreement
 			w14.XOptions = ((global::Gtk.AttachOptions)(4));
 			w14.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.label4 = new global::Gtk.Label ();
-			this.label4.Name = "label4";
-			this.label4.Xalign = 1F;
-			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("ИНН:");
-			this.table1.Add (this.label4);
-			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.table1 [this.label4]));
-			w15.TopAttach = ((uint)(5));
-			w15.BottomAttach = ((uint)(6));
-			w15.XOptions = ((global::Gtk.AttachOptions)(4));
-			w15.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table1.Gtk.Table+TableChild
 			this.label5 = new global::Gtk.Label ();
 			this.label5.Name = "label5";
 			this.label5.Xalign = 1F;
 			this.label5.LabelProp = global::Mono.Unix.Catalog.GetString ("ОГРН:");
 			this.table1.Add (this.label5);
-			global::Gtk.Table.TableChild w16 = ((global::Gtk.Table.TableChild)(this.table1 [this.label5]));
-			w16.TopAttach = ((uint)(7));
-			w16.BottomAttach = ((uint)(8));
+			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.table1 [this.label5]));
+			w15.TopAttach = ((uint)(7));
+			w15.BottomAttach = ((uint)(8));
+			w15.XOptions = ((global::Gtk.AttachOptions)(4));
+			w15.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
+			this.label8 = new global::Gtk.Label ();
+			this.label8.Name = "label8";
+			this.label8.Xalign = 1F;
+			this.label8.LabelProp = global::Mono.Unix.Catalog.GetString ("ИНН:");
+			this.table1.Add (this.label8);
+			global::Gtk.Table.TableChild w16 = ((global::Gtk.Table.TableChild)(this.table1 [this.label8]));
+			w16.TopAttach = ((uint)(5));
+			w16.BottomAttach = ((uint)(6));
 			w16.XOptions = ((global::Gtk.AttachOptions)(4));
 			w16.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
@@ -306,15 +384,15 @@ namespace LeaseAgreement
 			w17.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.GtkAlignment2.Add (this.table1);
 			this.frame1.Add (this.GtkAlignment2);
-			this.GtkLabel2 = new global::Gtk.Label ();
-			this.GtkLabel2.Name = "GtkLabel2";
-			this.GtkLabel2.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Арендатор</b>");
-			this.GtkLabel2.UseMarkup = true;
-			this.frame1.LabelWidget = this.GtkLabel2;
-			this.table3.Add (this.frame1);
-			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.table3 [this.frame1]));
+			this.GtkLabel8 = new global::Gtk.Label ();
+			this.GtkLabel8.Name = "GtkLabel8";
+			this.GtkLabel8.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Арендатор</b>");
+			this.GtkLabel8.UseMarkup = true;
+			this.frame1.LabelWidget = this.GtkLabel8;
+			this.tableInfo.Add (this.frame1);
+			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.tableInfo [this.frame1]));
 			w20.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			// Container child tableInfo.Gtk.Table+TableChild
 			this.frame3 = new global::Gtk.Frame ();
 			this.frame3.Name = "frame3";
 			// Container child frame3.Gtk.Container+ContainerChild
@@ -367,31 +445,31 @@ namespace LeaseAgreement
 			w25.XOptions = ((global::Gtk.AttachOptions)(4));
 			w25.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table4.Gtk.Table+TableChild
-			this.label3 = new global::Gtk.Label ();
-			this.label3.Name = "label3";
-			this.label3.Xalign = 1F;
-			this.label3.Yalign = 0F;
-			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Юр. адрес:");
-			this.table4.Add (this.label3);
-			global::Gtk.Table.TableChild w26 = ((global::Gtk.Table.TableChild)(this.table4 [this.label3]));
+			this.label4 = new global::Gtk.Label ();
+			this.label4.Name = "label4";
+			this.label4.Xalign = 1F;
+			this.label4.Yalign = 0F;
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Юр. адрес:");
+			this.table4.Add (this.label4);
+			global::Gtk.Table.TableChild w26 = ((global::Gtk.Table.TableChild)(this.table4 [this.label4]));
 			w26.TopAttach = ((uint)(1));
 			w26.BottomAttach = ((uint)(2));
 			w26.XOptions = ((global::Gtk.AttachOptions)(4));
 			w26.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.GtkAlignment.Add (this.table4);
 			this.frame3.Add (this.GtkAlignment);
-			this.GtkLabel = new global::Gtk.Label ();
-			this.GtkLabel.Name = "GtkLabel";
-			this.GtkLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Адреса</b>");
-			this.GtkLabel.UseMarkup = true;
-			this.frame3.LabelWidget = this.GtkLabel;
-			this.table3.Add (this.frame3);
-			global::Gtk.Table.TableChild w29 = ((global::Gtk.Table.TableChild)(this.table3 [this.frame3]));
+			this.GtkLabel2 = new global::Gtk.Label ();
+			this.GtkLabel2.Name = "GtkLabel2";
+			this.GtkLabel2.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Адреса</b>");
+			this.GtkLabel2.UseMarkup = true;
+			this.frame3.LabelWidget = this.GtkLabel2;
+			this.tableInfo.Add (this.frame3);
+			global::Gtk.Table.TableChild w29 = ((global::Gtk.Table.TableChild)(this.tableInfo [this.frame3]));
 			w29.TopAttach = ((uint)(1));
 			w29.BottomAttach = ((uint)(2));
 			w29.XOptions = ((global::Gtk.AttachOptions)(4));
 			w29.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			// Container child tableInfo.Gtk.Table+TableChild
 			this.frame4 = new global::Gtk.Frame ();
 			this.frame4.Name = "frame4";
 			this.frame4.BorderWidth = ((uint)(3));
@@ -417,15 +495,15 @@ namespace LeaseAgreement
 			this.GtkLabel7.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Комментарии</b>");
 			this.GtkLabel7.UseMarkup = true;
 			this.frame4.LabelWidget = this.GtkLabel7;
-			this.table3.Add (this.frame4);
-			global::Gtk.Table.TableChild w33 = ((global::Gtk.Table.TableChild)(this.table3 [this.frame4]));
+			this.tableInfo.Add (this.frame4);
+			global::Gtk.Table.TableChild w33 = ((global::Gtk.Table.TableChild)(this.tableInfo [this.frame4]));
 			w33.TopAttach = ((uint)(1));
 			w33.BottomAttach = ((uint)(2));
 			w33.LeftAttach = ((uint)(1));
 			w33.RightAttach = ((uint)(2));
 			w33.XOptions = ((global::Gtk.AttachOptions)(4));
 			w33.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			// Container child tableInfo.Gtk.Table+TableChild
 			this.vbox4 = new global::Gtk.VBox ();
 			this.vbox4.Name = "vbox4";
 			this.vbox4.Spacing = 6;
@@ -440,6 +518,7 @@ namespace LeaseAgreement
 			this.GtkAlignment3.LeftPadding = ((uint)(12));
 			// Container child GtkAlignment3.Gtk.Container+ContainerChild
 			this.table2 = new global::Gtk.Table (((uint)(3)), ((uint)(2)), false);
+			this.table2.Name = "table2";
 			this.table2.RowSpacing = ((uint)(6));
 			this.table2.ColumnSpacing = ((uint)(6));
 			this.table2.BorderWidth = ((uint)(3));
@@ -645,29 +724,49 @@ namespace LeaseAgreement
 			w53.Position = 1;
 			w53.Expand = false;
 			w53.Fill = false;
-			this.table3.Add (this.vbox4);
-			global::Gtk.Table.TableChild w54 = ((global::Gtk.Table.TableChild)(this.table3 [this.vbox4]));
+			this.tableInfo.Add (this.vbox4);
+			global::Gtk.Table.TableChild w54 = ((global::Gtk.Table.TableChild)(this.tableInfo [this.vbox4]));
 			w54.LeftAttach = ((uint)(1));
 			w54.RightAttach = ((uint)(2));
-			this.vbox2.Add (this.table3);
-			global::Gtk.Box.BoxChild w55 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.table3]));
-			w55.Position = 0;
-			w55.Expand = false;
-			w55.Fill = false;
-			// Container child vbox2.Gtk.Box+BoxChild
+			this.notebookMain.Add (this.tableInfo);
+			// Notebook tab
+			this.label19 = new global::Gtk.Label ();
+			this.label19.Name = "label19";
+			this.label19.LabelProp = global::Mono.Unix.Catalog.GetString ("Основное");
+			this.notebookMain.SetTabLabel (this.tableInfo, this.label19);
+			this.label19.ShowAll ();
+			// Container child notebookMain.Gtk.Notebook+NotebookChild
+			this.customLessee = new global::QSCustomFields.CustomFields ();
+			this.customLessee.Events = ((global::Gdk.EventMask)(256));
+			this.customLessee.Name = "customLessee";
+			this.customLessee.ObjectId = 0;
+			this.notebookMain.Add (this.customLessee);
+			global::Gtk.Notebook.NotebookChild w56 = ((global::Gtk.Notebook.NotebookChild)(this.notebookMain [this.customLessee]));
+			w56.Position = 1;
+			// Notebook tab
+			this.label3 = new global::Gtk.Label ();
+			this.label3.Name = "label3";
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Дополнительно");
+			this.notebookMain.SetTabLabel (this.customLessee, this.label3);
+			this.label3.ShowAll ();
+			// Container child notebookMain.Gtk.Notebook+NotebookChild
+			this.vboxContracts = new global::Gtk.VBox ();
+			this.vboxContracts.Name = "vboxContracts";
+			this.vboxContracts.Spacing = 6;
+			// Container child vboxContracts.Gtk.Box+BoxChild
 			this.hbox4 = new global::Gtk.HBox ();
 			this.hbox4.Name = "hbox4";
 			this.hbox4.Spacing = 6;
 			// Container child hbox4.Gtk.Box+BoxChild
-			this.label8 = new global::Gtk.Label ();
-			this.label8.Name = "label8";
-			this.label8.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Договора</b>");
-			this.label8.UseMarkup = true;
-			this.hbox4.Add (this.label8);
-			global::Gtk.Box.BoxChild w56 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.label8]));
-			w56.Position = 0;
-			w56.Expand = false;
-			w56.Fill = false;
+			this.label21 = new global::Gtk.Label ();
+			this.label21.Name = "label21";
+			this.label21.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Договора</b>");
+			this.label21.UseMarkup = true;
+			this.hbox4.Add (this.label21);
+			global::Gtk.Box.BoxChild w57 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.label21]));
+			w57.Position = 0;
+			w57.Expand = false;
+			w57.Fill = false;
 			// Container child hbox4.Gtk.Box+BoxChild
 			this.checkActiveContracts = new global::Gtk.CheckButton ();
 			this.checkActiveContracts.CanFocus = true;
@@ -677,14 +776,14 @@ namespace LeaseAgreement
 			this.checkActiveContracts.DrawIndicator = true;
 			this.checkActiveContracts.UseUnderline = true;
 			this.hbox4.Add (this.checkActiveContracts);
-			global::Gtk.Box.BoxChild w57 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.checkActiveContracts]));
-			w57.Position = 1;
-			this.vbox2.Add (this.hbox4);
-			global::Gtk.Box.BoxChild w58 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox4]));
+			global::Gtk.Box.BoxChild w58 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.checkActiveContracts]));
 			w58.Position = 1;
-			w58.Expand = false;
-			w58.Fill = false;
-			// Container child vbox2.Gtk.Box+BoxChild
+			this.vboxContracts.Add (this.hbox4);
+			global::Gtk.Box.BoxChild w59 = ((global::Gtk.Box.BoxChild)(this.vboxContracts [this.hbox4]));
+			w59.Position = 0;
+			w59.Expand = false;
+			w59.Fill = false;
+			// Container child vboxContracts.Gtk.Box+BoxChild
 			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
 			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
@@ -693,52 +792,57 @@ namespace LeaseAgreement
 			this.treeviewContracts.CanFocus = true;
 			this.treeviewContracts.Name = "treeviewContracts";
 			this.GtkScrolledWindow1.Add (this.treeviewContracts);
-			this.vbox2.Add (this.GtkScrolledWindow1);
-			global::Gtk.Box.BoxChild w60 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow1]));
-			w60.Position = 2;
-			w1.Add (this.vbox2);
-			global::Gtk.Box.BoxChild w61 = ((global::Gtk.Box.BoxChild)(w1 [this.vbox2]));
-			w61.Position = 0;
+			this.vboxContracts.Add (this.GtkScrolledWindow1);
+			global::Gtk.Box.BoxChild w61 = ((global::Gtk.Box.BoxChild)(this.vboxContracts [this.GtkScrolledWindow1]));
+			w61.Position = 1;
+			this.notebookMain.Add (this.vboxContracts);
+			global::Gtk.Notebook.NotebookChild w62 = ((global::Gtk.Notebook.NotebookChild)(this.notebookMain [this.vboxContracts]));
+			w62.Position = 2;
+			// Notebook tab
+			this.label20 = new global::Gtk.Label ();
+			this.label20.Name = "label20";
+			this.label20.LabelProp = global::Mono.Unix.Catalog.GetString ("Договора");
+			this.notebookMain.SetTabLabel (this.vboxContracts, this.label20);
+			this.label20.ShowAll ();
+			w1.Add (this.notebookMain);
+			global::Gtk.Box.BoxChild w63 = ((global::Gtk.Box.BoxChild)(w1 [this.notebookMain]));
+			w63.Position = 0;
 			// Internal child LeaseAgreement.lessee.ActionArea
-			global::Gtk.HButtonBox w62 = this.ActionArea;
-			w62.Name = "dialog1_ActionArea";
-			w62.Spacing = 10;
-			w62.BorderWidth = ((uint)(5));
-			w62.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w64 = this.ActionArea;
+			w64.Name = "dialog1_ActionArea";
+			w64.Spacing = 10;
+			w64.BorderWidth = ((uint)(5));
+			w64.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
 			this.buttonCancel.CanFocus = true;
 			this.buttonCancel.Name = "buttonCancel";
+			this.buttonCancel.UseStock = true;
 			this.buttonCancel.UseUnderline = true;
-			this.buttonCancel.Label = global::Mono.Unix.Catalog.GetString ("О_тменить");
-			global::Gtk.Image w63 = new global::Gtk.Image ();
-			w63.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
-			this.buttonCancel.Image = w63;
+			this.buttonCancel.Label = "gtk-cancel";
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w64 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w62 [this.buttonCancel]));
-			w64.Expand = false;
-			w64.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w65 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w64 [this.buttonCancel]));
+			w65.Expand = false;
+			w65.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.CanDefault = true;
 			this.buttonOk.CanFocus = true;
 			this.buttonOk.Name = "buttonOk";
+			this.buttonOk.UseStock = true;
 			this.buttonOk.UseUnderline = true;
-			this.buttonOk.Label = global::Mono.Unix.Catalog.GetString ("_OK");
-			global::Gtk.Image w65 = new global::Gtk.Image ();
-			w65.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Menu);
-			this.buttonOk.Image = w65;
-			w62.Add (this.buttonOk);
-			global::Gtk.ButtonBox.ButtonBoxChild w66 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w62 [this.buttonOk]));
+			this.buttonOk.Label = "gtk-ok";
+			w64.Add (this.buttonOk);
+			global::Gtk.ButtonBox.ButtonBoxChild w66 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w64 [this.buttonOk]));
 			w66.Position = 1;
 			w66.Expand = false;
 			w66.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 806;
-			this.DefaultHeight = 733;
+			this.DefaultWidth = 798;
+			this.DefaultHeight = 535;
 			this.Show ();
 			this.entryName.Changed += new global::System.EventHandler (this.OnEntryNameChanged);
 			this.checkActiveContracts.Toggled += new global::System.EventHandler (this.OnCheckActiveContractsToggled);

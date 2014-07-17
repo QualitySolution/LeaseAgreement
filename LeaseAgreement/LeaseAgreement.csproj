@@ -64,6 +64,7 @@
     <EmbeddedResource Include="icons\folder.png" />
     <EmbeddedResource Include="icons\mail-attachment.png" />
     <EmbeddedResource Include="icons\user-home.png" />
+    <EmbeddedResource Include="icons\ru_contract.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />

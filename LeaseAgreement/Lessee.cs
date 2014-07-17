@@ -22,6 +22,31 @@ namespace LeaseAgreement
 		{
 			this.Build ();
 
+			//Исправляем табы
+			Gtk.Image img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.user-home.png");
+			Gtk.Label textLable = new Label ("Основное");
+			Gtk.VBox box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (tableInfo, box);
+
+			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.folder.png");
+			textLable = new Label ("Дополнительно");
+			box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (customLessee, box);
+
+			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.ru_contract.png");
+			textLable = new Label ("Договора");
+			box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (vboxContracts, box);
+
 			grup = new AccelGroup ();
 			this.AddAccelGroup(grup);
 									
@@ -35,10 +60,12 @@ namespace LeaseAgreement
 			treeviewContracts.AppendColumn ("Договор", new Gtk.CellRendererText (), "text", 4);
 			treeviewContracts.AppendColumn ("Место", new Gtk.CellRendererText (), "text", 7);
 			treeviewContracts.AppendColumn ("Площадь", new Gtk.CellRendererText (), "text", 8);
-			treeviewContracts.AppendColumn ("Расторгнут", new Gtk.CellRendererText (), "text", 11);
+			treeviewContracts.AppendColumn ("Расторгнут", new Gtk.CellRendererText (), "text", 9);
 			
 			treeviewContracts.Model = ContractsListStore;
 			treeviewContracts.ShowAll();
+
+			customLessee.UsedTable = QSCustomFields.CFMain.GetTableByName ("lessees");
 		}
 		
 		public void Fill(int id)
@@ -77,6 +104,8 @@ namespace LeaseAgreement
 					textviewJurAddress.Buffer.Text = rdr["jur_address"].ToString();
 					textviewComments.Buffer.Text = rdr["comments"].ToString();
 				}
+				customLessee.LoadDataFromDB(id);
+
 				logger.Info("Ok");
 				this.Title = entryName.Text;
 			}
@@ -114,9 +143,10 @@ namespace LeaseAgreement
 					"WHERE id = @id";
 			}
 			logger.Info("Запись арендатора...");
+			MySqlTransaction trans = QSMain.connectionDB.BeginTransaction ();
 			try 
 			{
-				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
+				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 				
 				cmd.Parameters.AddWithValue("@id", itemId);
 				cmd.Parameters.AddWithValue("@name", entryName.Text);
@@ -138,11 +168,15 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@comments", DBWorks.ValueOrNull (textviewComments.Buffer.Text != "", textviewComments.Buffer.Text));
 				
 				cmd.ExecuteNonQuery();
+
+				customLessee.SaveToDB (trans);
+				trans.Commit ();
 				logger.Info("Ok");
 				Respond (ResponseType.Ok);
 			} 
 			catch (Exception ex) 
 			{
+				trans.Rollback ();
 				logger.ErrorException("Ошибка записи арендатора!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
