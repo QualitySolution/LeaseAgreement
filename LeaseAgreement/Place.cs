@@ -12,6 +12,7 @@ namespace LeaseAgreement
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool newItem;
+		private int itemId;
 		string PlaceNumber;
 		int lessee_id, type_id, ContractId;
 
@@ -52,6 +53,8 @@ namespace LeaseAgreement
 			
 			treeviewHistory.Model = HistoryStore;
 			treeviewHistory.ShowAll();
+
+			customPlace.UsedTable = QSCustomFields.CFMain.GetTableByName ("places");
 		}
 
 		public void Fill(int type, string place)
@@ -79,6 +82,7 @@ namespace LeaseAgreement
 			{
 				rdr.Read ();
 
+				itemId = rdr.GetInt32 ("id");
 				entryName.Text = rdr ["name"].ToString ();
 				ListStoreWorks.SearchListStore ((ListStore)comboPType.Model, int.Parse (rdr ["type_id"].ToString ()), out iter);
 				comboPType.SetActiveIter (iter);
@@ -90,7 +94,7 @@ namespace LeaseAgreement
 				textviewComments.Buffer.Text = rdr ["comments"].ToString ();
 			}
 			FillCurrentContract ();
-
+			customPlace.LoadDataFromDB (itemId);
 			logger.Info("Ok");
 			this.Title = "Место " + comboPType.ActiveText + " - " + place;
 			TestCanSave();
@@ -165,6 +169,7 @@ namespace LeaseAgreement
 			string sql;
 			TreeIter iter;
 			logger.Info("Запись места...");
+			MySqlTransaction trans = (MySqlTransaction)QSMain.ConnectionDB.BeginTransaction ();
 			if(newItem)
 			{
 				sql = "INSERT INTO places (type_id, place_no, name, area, stead_id, org_id, comments) " +
@@ -178,7 +183,7 @@ namespace LeaseAgreement
 			}
 			try 
 			{
-				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
+				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 				
 				if(comboPType.GetActiveIter(out iter))
 				{
@@ -201,14 +206,15 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@stead_id", ComboWorks.GetActiveIdOrNull (comboStead));
 
 				cmd.ExecuteNonQuery();
-				
+
+				trans.Commit ();
 				logger.Info("Ok");
 				Respond (ResponseType.Ok);
 				
 			} 
 			catch (MySqlException ex) 
 			{
-				Console.WriteLine(ex.ToString());
+				trans.Rollback ();
 				if(ex.Number == 1062)
 				{
 					MessageDialog md = new MessageDialog( this, DialogFlags.Modal,
