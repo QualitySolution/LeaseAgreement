@@ -82,6 +82,8 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Label label3;
 		
+		private global::QSAttachment.Attachment attachmentFiles;
+		
 		private global::Gtk.Label label4;
 		
 		private global::Gtk.Button buttonCancel;
@@ -107,7 +109,7 @@ namespace LeaseAgreement
 			this.notebookMain = new global::Gtk.Notebook ();
 			this.notebookMain.CanFocus = true;
 			this.notebookMain.Name = "notebookMain";
-			this.notebookMain.CurrentPage = 1;
+			this.notebookMain.CurrentPage = 2;
 			this.notebookMain.TabPos = ((global::Gtk.PositionType)(0));
 			// Container child notebookMain.Gtk.Notebook+NotebookChild
 			this.hboxInfo = new global::Gtk.HBox ();
@@ -476,14 +478,18 @@ namespace LeaseAgreement
 			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Дополнительно");
 			this.notebookMain.SetTabLabel (this.customContracts, this.label3);
 			this.label3.ShowAll ();
+			// Container child notebookMain.Gtk.Notebook+NotebookChild
+			this.attachmentFiles = new global::QSAttachment.Attachment ();
+			this.attachmentFiles.Events = ((global::Gdk.EventMask)(256));
+			this.attachmentFiles.Name = "attachmentFiles";
+			this.notebookMain.Add (this.attachmentFiles);
+			global::Gtk.Notebook.NotebookChild w39 = ((global::Gtk.Notebook.NotebookChild)(this.notebookMain [this.attachmentFiles]));
+			w39.Position = 2;
 			// Notebook tab
-			global::Gtk.Label w39 = new global::Gtk.Label ();
-			w39.Visible = true;
-			this.notebookMain.Add (w39);
 			this.label4 = new global::Gtk.Label ();
 			this.label4.Name = "label4";
 			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Файлы");
-			this.notebookMain.SetTabLabel (w39, this.label4);
+			this.notebookMain.SetTabLabel (this.attachmentFiles, this.label4);
 			this.label4.ShowAll ();
 			w2.Add (this.notebookMain);
 			global::Gtk.Box.BoxChild w40 = ((global::Gtk.Box.BoxChild)(w2 [this.notebookMain]));

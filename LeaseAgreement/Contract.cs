@@ -44,13 +44,14 @@ namespace LeaseAgreement
 			box.Add (img);
 			box.Add (textLable);
 			box.ShowAll ();
-			//notebookMain.SetTabLabel (customContracts, box);
+			notebookMain.SetTabLabel (attachmentFiles, box);
 
 			ComboWorks.ComboFillReference(comboOrg, "organizations", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboPlaceT,"place_types", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboContractType, "contract_patterns", ComboWorks.ListMode.WithNo);
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
+			attachmentFiles.AttachToTable = "contracts";
 		}
 
 		public void Fill(int Id)
@@ -117,6 +118,9 @@ namespace LeaseAgreement
 					comboPlaceNo.SetActiveIter(iter);
 				}
 				customContracts.LoadDataFromDB(Id);
+				attachmentFiles.ItemId = Id;
+				attachmentFiles.UpdateFileList ();
+
 				this.Title = "Договор №" + entryNumber.Text;
 				logger.Info("Ok");
 			}
@@ -385,8 +389,10 @@ namespace LeaseAgreement
 				{
 					ContractId = (int) cmd.LastInsertedId;
 					customContracts.ObjectId = ContractId;
+					attachmentFiles.ItemId = ContractId;
 				}
 				customContracts.SaveToDB(trans);
+				attachmentFiles.SaveChanges(trans);
 
 				//Корректная смена арендатора
 				if(!NewContract && OrigLesseeId != LesseeId && !LesseeisNull)

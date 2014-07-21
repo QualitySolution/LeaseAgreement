@@ -4,93 +4,181 @@
 public partial class MainWindow
 {
 	private global::Gtk.UIManager UIManager;
+	
 	private global::Gtk.Action Action41;
+	
 	private global::Gtk.Action Action;
+	
 	private global::Gtk.Action Action10;
+	
 	private global::Gtk.Action Action7;
+	
 	private global::Gtk.Action quitAction;
+	
 	private global::Gtk.Action Action34;
+	
 	private global::Gtk.Action aboutAction;
+	
 	private global::Gtk.Action dialogAuthenticationAction;
+	
 	private global::Gtk.Action Action15;
+	
 	private global::Gtk.Action Action26;
+	
 	private global::Gtk.Action UsersAction;
+	
 	private global::Gtk.Action helpAction;
+	
 	private global::Gtk.Action Action36;
+	
 	private global::Gtk.Action Action40;
+	
 	private global::Gtk.Action propertiesAction;
+	
 	private global::Gtk.VBox vbox1;
+	
 	private global::Gtk.MenuBar menubar1;
+	
 	private global::Gtk.Notebook notebookMain;
+	
 	private global::Gtk.VBox vbox2;
+	
 	private global::Gtk.HBox hbox8;
+	
 	private global::Gtk.Table table3;
+	
 	private global::Gtk.ComboBox comboPlaceOrg;
+	
 	private global::Gtk.HBox hbox1;
+	
 	private global::Gtk.ComboBox comboPlaceType;
+	
 	private global::Gtk.Label label19;
+	
 	private global::Gtk.Entry entryPlaceNum;
+	
 	private global::Gtk.Button buttonCleanTabPPlaceNo;
+	
 	private global::Gtk.Label label22;
+	
 	private global::Gtk.Label label3;
+	
 	private global::Gtk.Table table6;
+	
 	private global::Gtk.HBox hbox19;
+	
 	private global::Gtk.Entry entryPlaceLess;
+	
 	private global::Gtk.Button buttonCleanTabPLessee;
+	
 	private global::Gtk.Label label20;
+	
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
+	
 	private global::Gtk.TreeView treeviewPlaces;
+	
 	private global::Gtk.Label label1;
+	
 	private global::Gtk.VBox vbox3;
+	
 	private global::Gtk.HBox hbox3;
+	
 	private global::Gtk.Table table1;
+	
 	private global::Gtk.Button button233;
+	
 	private global::Gtk.Button button234;
+	
 	private global::Gtk.Button button235;
+	
 	private global::Gtk.Entry entryFilterFIO;
+	
 	private global::Gtk.Entry entryFilterINN;
+	
 	private global::Gtk.Entry entryFilterName;
+	
 	private global::Gtk.Label label4;
+	
 	private global::Gtk.Label label5;
+	
 	private global::Gtk.Label label6;
+	
 	private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+	
 	private global::Gtk.TreeView treeviewLessees;
+	
 	private global::Gtk.Label label2;
+	
 	private global::Gtk.VBox vbox8;
+	
 	private global::Gtk.HBox hbox9;
+	
 	private global::Gtk.Table table4;
+	
 	private global::Gtk.ComboBox comboContractOrg;
+	
 	private global::Gtk.HBox hbox10;
+	
 	private global::Gtk.ComboBox comboContractPlaceT;
+	
 	private global::Gtk.Label label30;
+	
 	private global::Gtk.Entry entryContractPlaceN;
+	
 	private global::Gtk.Button buttonContractClearPlace;
+	
 	private global::Gtk.HBox hbox11;
+	
 	private global::Gtk.Entry entryContractLessee;
+	
 	private global::Gtk.Button buttonContractClearLessee;
+	
 	private global::Gtk.HBox hbox12;
+	
 	private global::Gtk.Entry entryContractNumber;
+	
 	private global::Gtk.Button buttonContractClearNumber;
+	
 	private global::Gtk.Label label26;
+	
 	private global::Gtk.Label label27;
+	
 	private global::Gtk.Label label28;
+	
 	private global::Gtk.Label label29;
+	
 	private global::Gtk.VBox vbox9;
+	
 	private global::Gtk.CheckButton checkActiveContracts;
+	
 	private global::Gtk.CheckButton check30daysContracts;
+	
 	private global::Gtk.HBox hbox28;
+	
 	private global::Gtk.ScrolledWindow GtkScrolledWindow3;
+	
 	private global::Gtk.TreeView treeviewContract;
+	
 	private global::Gtk.Label label15;
+	
 	private global::Gtk.HBox hbox17;
+	
 	private global::Gtk.Button buttonOpen;
+	
 	private global::Gtk.Button buttonAdd;
+	
 	private global::Gtk.Button buttonDel;
+	
 	private global::Gtk.VSeparator vseparator2;
+	
 	private global::Gtk.Button buttonRefreshTable;
+	
 	private global::Gtk.Statusbar statusbar1;
+	
 	private global::Gtk.Label labelUser;
+	
 	private global::Gtk.Label labelStatus;
+	
 	private global::Gtk.Label labelSum;
 
 	protected virtual void Build ()
@@ -147,7 +235,7 @@ public partial class MainWindow
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
-		this.Title = global::Mono.Unix.Catalog.GetString ("QS: База арендаторов");
+		this.Title = global::Mono.Unix.Catalog.GetString ("QS: Договора аренды");
 		this.Icon = global::Gdk.Pixbuf.LoadFromResource ("LeaseAgreement.icons.logo.ico");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(1));
 		// Container child MainWindow.Gtk.Container+ContainerChild

@@ -121,5 +121,9 @@
       <Project>{6F734571-AD4F-4D8A-8CF0-1D94394889A3}</Project>
       <Name>QSCustomFields</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\QSProjects\Modules\QSAttachment\QSAttachment.csproj">
+      <Project>{AED7339A-4A71-4063-9C67-0D54821230A3}</Project>
+      <Name>QSAttachment</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
