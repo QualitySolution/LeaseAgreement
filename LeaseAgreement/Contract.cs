@@ -48,7 +48,7 @@ namespace LeaseAgreement
 
 			ComboWorks.ComboFillReference(comboOrg, "organizations", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboPlaceT,"place_types", ComboWorks.ListMode.WithNo);
-			ComboWorks.ComboFillReference(comboContractType, "contract_patterns", ComboWorks.ListMode.WithNo);
+			ComboWorks.ComboFillReference(comboContractType, "contract_types", ComboWorks.ListMode.WithNo);
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 			attachmentFiles.AttachToTable = "contracts";
@@ -77,7 +77,8 @@ namespace LeaseAgreement
 					rdr.Read();
 					
 					entryNumber.Text = rdr["number"].ToString();
-					ComboWorks.SetActiveItem (comboContractType, DBWorks.GetInt (rdr, "pattern_id", -1));
+					checkDraft.Active = rdr.GetBoolean ("draft");
+					ComboWorks.SetActiveItem (comboContractType, DBWorks.GetInt (rdr, "contract_type_id", -1));
 					if(rdr["lessee_id"] != DBNull.Value)
 					{
 						LesseeId = Convert.ToInt32(rdr["lessee_id"].ToString());
@@ -291,68 +292,71 @@ namespace LeaseAgreement
 					trans.Rollback ();
 					return;
 				}
-				// Проверка не занято ли место другим арендатором
-				sql = "SELECT id, number, start_date AS start, IFNULL(cancel_date,end_date) AS end FROM contracts " +
-					"WHERE place_type_id = @type_id AND place_no = @place_no AND " +
-						"!(@start > DATE(IFNULL(cancel_date,end_date)) OR @end < start_date)" ;
-				cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
-				if(comboPlaceT.GetActiveIter(out iter))
-				{
-					cmd.Parameters.AddWithValue("@type_id", comboPlaceT.Model.GetValue(iter,1));
-				}
-				if(comboPlaceNo.GetActiveIter(out iter))
-				{
-					cmd.Parameters.AddWithValue("@place_no", comboPlaceNo.Model.GetValue(iter,0));
-				}	
-				cmd.Parameters.AddWithValue("@start", datepickerStart.Date);
-				if(datepickerCancel.IsEmpty)
-					cmd.Parameters.AddWithValue("@end", datepickerEnd.Date);
-				else
-					cmd.Parameters.AddWithValue("@end", datepickerCancel.Date);
-				MySqlDataReader rdr = cmd.ExecuteReader();
+				if(!checkDraft.Active)
+				{// Проверка не занято ли место другим арендатором
+					sql = "SELECT id, number, start_date AS start, IFNULL(cancel_date,end_date) AS end FROM contracts " +
+						"WHERE place_type_id = @type_id AND place_no = @place_no AND " +
+							"!(@start > DATE(IFNULL(cancel_date,end_date)) OR @end < start_date)" ;
+					cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
+					if(comboPlaceT.GetActiveIter(out iter))
+					{
+						cmd.Parameters.AddWithValue("@type_id", comboPlaceT.Model.GetValue(iter,1));
+					}
+					if(comboPlaceNo.GetActiveIter(out iter))
+					{
+						cmd.Parameters.AddWithValue("@place_no", comboPlaceNo.Model.GetValue(iter,0));
+					}	
+					cmd.Parameters.AddWithValue("@start", datepickerStart.Date);
+					if(datepickerCancel.IsEmpty)
+						cmd.Parameters.AddWithValue("@end", datepickerEnd.Date);
+					else
+						cmd.Parameters.AddWithValue("@end", datepickerCancel.Date);
+					MySqlDataReader rdr = cmd.ExecuteReader();
 
-				while(rdr.Read())
-				{
-					if(rdr.GetInt32("id") == ContractId)
-						continue;
-					logger.Warn("Место уже занято!");
-					MessageDialog md = new MessageDialog( this, DialogFlags.Modal,
-					                                     MessageType.Error, 
-					                                     ButtonsType.Ok,"ошибка");
-					md.UseMarkup = false;
-					md.Text = "Период действия договора пересекается с договором №" + rdr["number"].ToString () + 
-						", по которому это место уже сдается в аренду с " + rdr.GetDateTime ("start").ToShortDateString() +
-							" по " + rdr.GetDateTime ("end").ToShortDateString() + ". \n Вы должны, либо изменить даты " +
-							"аренды в текущем договоре, либо досрочно расторгнуть предыдущий договор на это место.";
-					md.Run ();
-					md.Destroy();
+					while(rdr.Read())
+					{
+						if(rdr.GetInt32("id") == ContractId)
+							continue;
+						logger.Warn("Место уже занято!");
+						MessageDialog md = new MessageDialog( this, DialogFlags.Modal,
+						                                     MessageType.Error, 
+						                                     ButtonsType.Ok,"ошибка");
+						md.UseMarkup = false;
+						md.Text = "Период действия договора пересекается с договором №" + rdr["number"].ToString () + 
+							", по которому это место уже сдается в аренду с " + rdr.GetDateTime ("start").ToShortDateString() +
+								" по " + rdr.GetDateTime ("end").ToShortDateString() + ". \n Вы должны, либо изменить даты " +
+								"аренды в текущем договоре, либо досрочно расторгнуть предыдущий договор на это место.";
+						md.Run ();
+						md.Destroy();
+						rdr.Close();
+						trans.Rollback ();
+						return;
+					}
 					rdr.Close();
-					trans.Rollback ();
-					return;
 				}
-				rdr.Close();
 				// записываем
 				if(NewContract)
 				{
-					sql = "INSERT INTO contracts (number, lessee_id, org_id, place_type_id, place_no, sign_date, " +
-						"start_date, end_date, pattern_id, cancel_date, comments) " +
-							"VALUES (@number, @lessee_id, @org_id, @place_type_id, @place_no, @sign_date, " +
-						"@start_date, @end_date, @pattern_id, @cancel_date, @comments)";
+					sql = "INSERT INTO contracts (number, draft, lessee_id, org_id, place_type_id, place_no, sign_date, " +
+						"start_date, end_date, contract_type_id, cancel_date, comments) " +
+						"VALUES (@number, @draft, @lessee_id, @org_id, @place_type_id, @place_no, @sign_date, " +
+						"@start_date, @end_date, @contract_type_id, @cancel_date, @comments)";
 				}
 				else
 				{
-					sql = "UPDATE contracts SET number = @number, lessee_id = @lessee_id, org_id = @org_id, " +
+					sql = "UPDATE contracts SET number = @number, draft = @draft, lessee_id = @lessee_id, org_id = @org_id, " +
 						"place_type_id = @place_type_id, place_no = @place_no, sign_date = @sign_date, start_date = @start_date, " +
-						"end_date = @end_date, pattern_id = @pattern_id, cancel_date = @cancel_date, comments = @comments " +
+						"end_date = @end_date, contract_type_id = @contract_type_id, cancel_date = @cancel_date, comments = @comments " +
 						"WHERE id = @id";
 				}
 
 				cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 
 				cmd.Parameters.AddWithValue("@id", ContractId);
+				cmd.Parameters.AddWithValue("@draft", ContractId);
 				cmd.Parameters.AddWithValue("@number", entryNumber.Text);
 				cmd.Parameters.AddWithValue("@lessee_id", LesseeId);
-				cmd.Parameters.AddWithValue("@pattern_id", ComboWorks.GetActiveIdOrNull (comboContractType));
+				cmd.Parameters.AddWithValue("@contract_type_id", ComboWorks.GetActiveIdOrNull (comboContractType));
 				if(comboOrg.GetActiveIter(out iter) && (int)comboOrg.Model.GetValue(iter,1) != -1)
 					cmd.Parameters.AddWithValue("@org_id",comboOrg.Model.GetValue(iter,1));
 				else
