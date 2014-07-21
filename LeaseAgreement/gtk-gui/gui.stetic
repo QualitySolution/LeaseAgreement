@@ -43,7 +43,7 @@
         <property name="StockId">gtk-quit</property>
         <signal name="Activated" handler="OnQuitActionActivated" />
       </action>
-      <action id="Action34">
+      <action id="Action42">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Справка</property>
         <property name="ShortLabel" translatable="yes">Справка</property>
@@ -71,6 +71,7 @@
       <action id="Action26">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">История версий</property>
+        <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">История версий</property>
         <signal name="Activated" handler="OnAction20Activated" />
       </action>
@@ -84,6 +85,7 @@
       <action id="helpAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Документация</property>
+        <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">Документация</property>
         <property name="StockId">gtk-help</property>
         <signal name="Activated" handler="OnHelpActionActivated" />
@@ -137,7 +139,7 @@
                 <node type="Separator" />
                 <node type="Menuitem" action="Action7" />
               </node>
-              <node type="Menu" action="Action34">
+              <node type="Menu" action="Action42">
                 <node type="Menuitem" action="helpAction" />
                 <node type="Menuitem" action="Action36" />
                 <node type="Menuitem" action="Action26" />
@@ -3232,6 +3234,7 @@
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <signal name="Changed" handler="OnComboOrgChanged" />
                       </widget>
                       <packing>
                         <property name="TopAttach">4</property>
@@ -3280,6 +3283,8 @@
                         <property name="IsEditable">True</property>
                         <property name="MaxLength">15</property>
                         <property name="InvisibleChar">•</property>
+                        <signal name="Changed" handler="OnEntryNumberChanged" />
+                        <signal name="Activated" handler="OnEntryActivated" />
                       </widget>
                       <packing>
                         <property name="LeftAttach">1</property>
@@ -3320,6 +3325,7 @@
                             <property name="Icon">stock:gtk-open Menu</property>
                             <property name="Label" translatable="yes" />
                             <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnButtonLesseeOpenClicked" />
                           </widget>
                           <packing>
                             <property name="Position">1</property>
@@ -3337,6 +3343,7 @@
                             <property name="Icon">stock:gtk-edit Menu</property>
                             <property name="Label" translatable="yes" />
                             <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnButtonLesseeEditClicked" />
                           </widget>
                           <packing>
                             <property name="Position">2</property>
@@ -3371,6 +3378,7 @@
                             <property name="MemberName" />
                             <property name="IsTextCombo">False</property>
                             <property name="Items" translatable="yes" />
+                            <signal name="Changed" handler="OnComboPlaceTChanged" />
                           </widget>
                           <packing>
                             <property name="Position">0</property>
@@ -3396,6 +3404,7 @@
                             <property name="MemberName" />
                             <property name="IsTextCombo">True</property>
                             <property name="Items" translatable="yes" />
+                            <signal name="Changed" handler="OnComboPlaceNoChanged" />
                           </widget>
                           <packing>
                             <property name="Position">2</property>
@@ -3602,6 +3611,7 @@
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
+                            <signal name="DateChanged" handler="OnDatepickerCancelDateChanged" />
                           </widget>
                           <packing>
                             <property name="TopAttach">2</property>
@@ -3625,6 +3635,7 @@
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
+                            <signal name="DateChanged" handler="OnDatepickerEndDateChanged" />
                           </widget>
                           <packing>
                             <property name="TopAttach">1</property>
@@ -3648,6 +3659,7 @@
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
+                            <signal name="DateChanged" handler="OnDatepickerStartDateChanged" />
                           </widget>
                           <packing>
                             <property name="LeftAttach">1</property>
@@ -3869,6 +3881,7 @@
             <property name="Label" translatable="yes">_OK</property>
             <property name="UseUnderline">True</property>
             <property name="ResponseId">-1</property>
+            <signal name="Clicked" handler="OnButtonOkClicked" />
           </widget>
           <packing>
             <property name="Position">1</property>
@@ -4759,6 +4772,7 @@
   </widget>
   <widget class="Gtk.Dialog" id="LeaseAgreement.Stead" design-size="480 288">
     <property name="MemberName" />
+    <property name="Title" translatable="yes">Новый земельный участок</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
@@ -5064,7 +5078,7 @@
             <child>
               <widget class="Gtk.Label" id="labelId">
                 <property name="MemberName" />
-                <property name="LabelProp" translatable="yes">label26</property>
+                <property name="LabelProp" translatable="yes">не определен</property>
               </widget>
               <packing>
                 <property name="LeftAttach">1</property>

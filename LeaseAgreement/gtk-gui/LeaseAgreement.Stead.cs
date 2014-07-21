@@ -5,24 +5,43 @@ namespace LeaseAgreement
 	public partial class Stead
 	{
 		private global::Gtk.Table table2;
+		
 		private global::Gtk.Entry entryCadastral;
+		
 		private global::Gtk.Entry entryName;
+		
 		private global::Gtk.Entry entryOwner;
+		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
+		
 		private global::Gtk.TextView textviewAddress;
+		
 		private global::Gtk.HBox hbox1;
+		
 		private global::Gtk.Label label27;
+		
 		private global::Gtk.Entry entryContractNo;
+		
 		private global::Gtk.Label label28;
+		
 		private global::QSWidgetLib.DatePicker dateContractDate;
+		
 		private global::Gtk.Label label1;
+		
 		private global::Gtk.Label label21;
+		
 		private global::Gtk.Label label22;
+		
 		private global::Gtk.Label label23;
+		
 		private global::Gtk.Label label24;
+		
 		private global::Gtk.Label label25;
+		
 		private global::Gtk.Label labelId;
+		
 		private global::Gtk.Button buttonCancel;
+		
 		private global::Gtk.Button buttonOk;
 
 		protected virtual void Build ()
@@ -30,6 +49,7 @@ namespace LeaseAgreement
 			global::Stetic.Gui.Initialize (this);
 			// Widget LeaseAgreement.Stead
 			this.Name = "LeaseAgreement.Stead";
+			this.Title = global::Mono.Unix.Catalog.GetString ("Новый земельный участок");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.Stead.VBox
 			global::Gtk.VBox w1 = this.VBox;
@@ -216,7 +236,7 @@ namespace LeaseAgreement
 			// Container child table2.Gtk.Table+TableChild
 			this.labelId = new global::Gtk.Label ();
 			this.labelId.Name = "labelId";
-			this.labelId.LabelProp = global::Mono.Unix.Catalog.GetString ("label26");
+			this.labelId.LabelProp = global::Mono.Unix.Catalog.GetString ("не определен");
 			this.table2.Add (this.labelId);
 			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.table2 [this.labelId]));
 			w18.LeftAttach = ((uint)(1));

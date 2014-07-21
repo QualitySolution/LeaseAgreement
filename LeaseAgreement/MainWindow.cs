@@ -388,11 +388,6 @@ public partial class MainWindow : Gtk.Window
 		System.Diagnostics.Process.Start ("http://qsolution.ru");
 	}
 	
-	protected void OnAction37Activated (object sender, EventArgs e)
-	{
-		System.Diagnostics.Process.Start ("https://groups.google.com/forum/?fromgroups#!forum/bazarsoft");
-	}
-
 	protected void OnButtonRefreshTableClicked (object sender, EventArgs e)
 	{
 		switch (notebookMain.CurrentPage) {

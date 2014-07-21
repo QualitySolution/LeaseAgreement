@@ -566,6 +566,17 @@ namespace LeaseAgreement
 			this.DefaultWidth = 850;
 			this.DefaultHeight = 383;
 			this.Show ();
+			this.comboPlaceT.Changed += new global::System.EventHandler (this.OnComboPlaceTChanged);
+			this.comboPlaceNo.Changed += new global::System.EventHandler (this.OnComboPlaceNoChanged);
+			this.buttonLesseeOpen.Clicked += new global::System.EventHandler (this.OnButtonLesseeOpenClicked);
+			this.buttonLesseeEdit.Clicked += new global::System.EventHandler (this.OnButtonLesseeEditClicked);
+			this.entryNumber.Changed += new global::System.EventHandler (this.OnEntryNumberChanged);
+			this.entryNumber.Activated += new global::System.EventHandler (this.OnEntryActivated);
+			this.comboOrg.Changed += new global::System.EventHandler (this.OnComboOrgChanged);
+			this.datepickerStart.DateChanged += new global::System.EventHandler (this.OnDatepickerStartDateChanged);
+			this.datepickerEnd.DateChanged += new global::System.EventHandler (this.OnDatepickerEndDateChanged);
+			this.datepickerCancel.DateChanged += new global::System.EventHandler (this.OnDatepickerCancelDateChanged);
+			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkClicked);
 		}
 	}
 }
