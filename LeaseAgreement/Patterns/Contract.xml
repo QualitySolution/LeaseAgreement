@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<DocPattern>
+	<Fields>
+		<PatternField>
+			<Name>Договор.Номер</Name>
+			<DBTable>contracts</DBTable>
+			<DBColumn>number</DBColumn>
+		</PatternField>
+		<PatternField>
+			<Name>Место.Номер</Name>
+			<DBTable>contracts</DBTable>
+			<DBColumn>place_no</DBColumn>
+		</PatternField>
+		<PatternField>
+			<Name>Договор.ДатаПодписания</Name>
+			<DBTable>contracts</DBTable>
+			<DBColumn>sign_date</DBColumn>
+		</PatternField>
+		<PatternField>
+			<Name>Договор.ДатаНачала</Name>
+			<DBTable>contracts</DBTable>
+			<DBColumn>start_date</DBColumn>
+		</PatternField>
+		<PatternField>
+			<Name>Договор.ДатаОкончания</Name>
+			<DBTable>contracts</DBTable>
+			<DBColumn>end_date</DBColumn>
+		</PatternField>
+		<PatternField>
+			<Name>Договор.ДатаРасторжения</Name>
+			<DBTable>contracts</DBTable>
+			<DBColumn>cancel_date</DBColumn>
+		</PatternField>
+		<PatternField>
+			<Name>Договор.Комментарии</Name>
+			<DBTable>contracts</DBTable>
+			<DBColumn>cancel_date</DBColumn>
+		</PatternField>
+	</Fields>
+</DocPattern>

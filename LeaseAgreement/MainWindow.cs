@@ -357,6 +357,14 @@ public partial class MainWindow : Gtk.Window
 			Result = (ResponseType)SteadEdit.Run();
 			SteadEdit.Destroy();
 			break;
+		case "contract_types":
+			ContractType contractTypeEdit = new ContractType();
+			if(!e.NewItem)
+				contractTypeEdit.Fill(e.ItemId);
+			contractTypeEdit.Show();
+			Result = (ResponseType)contractTypeEdit.Run();
+			contractTypeEdit.Destroy();
+			break;
 		default:
 			Result = ResponseType.None;
 			break;
@@ -421,4 +429,13 @@ public partial class MainWindow : Gtk.Window
 		WinSettings.Show ();
 	}
 
+	protected void OnAction43Activated(object sender, EventArgs e)
+	{
+		Reference winref = new Reference();
+		winref.SetMode(false,false,true,true,true);
+		winref.FillList("contract_types", "тип договора", "Типы договоров");
+		winref.Show();
+		winref.Run();
+		winref.Destroy();
+	}
 }

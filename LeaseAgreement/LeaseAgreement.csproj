@@ -54,6 +54,9 @@
     <Reference Include="NLog">
       <HintPath>..\..\QSProjects\lib\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -65,6 +68,8 @@
     <EmbeddedResource Include="icons\mail-attachment.png" />
     <EmbeddedResource Include="icons\user-home.png" />
     <EmbeddedResource Include="icons\ru_contract.png" />
+    <EmbeddedResource Include="Patterns\Contract.xml" />
+    <EmbeddedResource Include="Patterns\empty.odt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
@@ -87,6 +92,10 @@
     <Compile Include="gtk-gui\LeaseAgreement.Organization.cs" />
     <Compile Include="Stead.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.Stead.cs" />
+    <Compile Include="ContractType.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.ContractType.cs" />
+    <Compile Include="OdtWorks.cs" />
+    <Compile Include="DocPattern.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -98,6 +107,7 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="icons\" />
+    <Folder Include="Patterns\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
