@@ -69,7 +69,7 @@ namespace LeaseAgreement
 				}
 
 				logger.Info ("Загружаем список шаблонов {0}", entryName.Text);
-				sql = "SELECT id, name, size, pattern FROM doc_patterns WHERE contract_type_id = @contract_type_id AND document_id IS NULL ";
+				sql = "SELECT id, name, size, pattern FROM doc_patterns WHERE contract_type_id = @contract_type_id ";
 				cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
 				cmd.Parameters.AddWithValue("@contract_type_id", ItemId);
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
@@ -128,9 +128,10 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@name", entryName.Text);
 
 				cmd.ExecuteNonQuery();
+				if(NewItem)
+					ItemId = (int)cmd.LastInsertedId;
 
 				logger.Info("Записывем изменения списке шаблонов...");
-
 				foreach(object[] row in PatternsStore)
 				{
 					if ((int)row [(int)PatternsCol.id] > 0)
@@ -175,13 +176,14 @@ namespace LeaseAgreement
 
 				if (deletedItems.Count > 0) 
 				{
-					logger.Info ("Удаляем удаленные файлы на сервере...");
-					DBWorks.SQLHelper sqld = new DBWorks.SQLHelper ("DELETE FORM doc_patterns WHERE id IN ");
+					logger.Info ("Удаляем удаленные шаблоны на сервере...");
+					DBWorks.SQLHelper sqld = new DBWorks.SQLHelper ("DELETE FROM doc_patterns WHERE id IN ");
 					sqld.QuoteMode = DBWorks.QuoteType.SingleQuotes;
 					sqld.StartNewList ("(", ", ");
 					deletedItems.ForEach (delegate(int obj) {
 						sqld.AddAsList (obj.ToString ());
 					});
+					sqld.Add (")");
 					cmd = new MySqlCommand(sqld.Text, (MySqlConnection)QSMain.ConnectionDB, trans);
 					cmd.ExecuteNonQuery ();
 				}
@@ -313,6 +315,16 @@ namespace LeaseAgreement
 			System.IO.File.WriteAllBytes (TempFilePath, file);
 			logger.Info("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start(TempFilePath);
+		}
+
+		protected void OnTreeviewPatternsCursorChanged(object sender, EventArgs e)
+		{
+			buttonOpen.Sensitive = buttonDel.Sensitive = treeviewPatterns.Selection.CountSelectedRows () == 1;
+		}
+
+		protected void OnTreeviewPatternsRowActivated(object o, RowActivatedArgs args)
+		{
+			buttonOpen.Click ();
 		}
 
 	}

@@ -3176,7 +3176,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">0</property>
+            <property name="CurrentPage">2</property>
             <property name="TabPos">Left</property>
             <child>
               <widget class="Gtk.HBox" id="hboxInfo">
@@ -3219,6 +3219,7 @@
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <signal name="Changed" handler="OnComboContractTypeChanged" />
                       </widget>
                       <packing>
                         <property name="TopAttach">2</property>
@@ -3829,9 +3830,106 @@
               </packing>
             </child>
             <child>
-              <widget class="QSAttachment.Attachment" id="attachmentFiles">
+              <widget class="Gtk.VBox" id="vboxDocs">
                 <property name="MemberName" />
-                <property name="Events">ButtonPressMask</property>
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Label" id="label16">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Печатные формы документов для договора.</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
+                    <property name="MemberName" />
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TreeView" id="treeviewDocs">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <signal name="CursorChanged" handler="OnTreeviewDocsCursorChanged" />
+                        <signal name="RowActivated" handler="OnTreeviewDocsRowActivated" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.HBox" id="hbox8">
+                    <property name="MemberName" />
+                    <property name="Spacing">6</property>
+                    <child>
+                      <widget class="Gtk.Button" id="buttonPrint">
+                        <property name="MemberName" />
+                        <property name="Sensitive">False</property>
+                        <property name="CanFocus">True</property>
+                        <property name="Type">TextAndIcon</property>
+                        <property name="Icon">stock:gtk-print Menu</property>
+                        <property name="Label" translatable="yes">Распечатать</property>
+                        <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnButtonPrintClicked" />
+                      </widget>
+                      <packing>
+                        <property name="Position">0</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Button" id="buttonEdit">
+                        <property name="MemberName" />
+                        <property name="Sensitive">False</property>
+                        <property name="Tooltip" translatable="yes">Редактировать шаблон только для этого договора.</property>
+                        <property name="CanFocus">True</property>
+                        <property name="Type">TextAndIcon</property>
+                        <property name="Icon">stock:gtk-edit Menu</property>
+                        <property name="Label" translatable="yes">Редактировать</property>
+                        <property name="UseUnderline">True</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">1</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Button" id="buttonRemove">
+                        <property name="MemberName" />
+                        <property name="Sensitive">False</property>
+                        <property name="CanFocus">True</property>
+                        <property name="Type">TextAndIcon</property>
+                        <property name="Icon">stock:gtk-revert-to-saved Menu</property>
+                        <property name="Label" translatable="yes">Вернуть шаблон</property>
+                        <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnButtonRemoveClicked" />
+                      </widget>
+                      <packing>
+                        <property name="Position">2</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">2</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
               </widget>
               <packing>
                 <property name="Position">2</property>
@@ -3839,6 +3937,24 @@
             </child>
             <child>
               <widget class="Gtk.Label" id="label4">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Документы</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="QSAttachment.Attachment" id="attachmentFiles">
+                <property name="MemberName" />
+                <property name="Events">ButtonPressMask</property>
+              </widget>
+              <packing>
+                <property name="Position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="label15">
                 <property name="MemberName" />
                 <property name="LabelProp" translatable="yes">Файлы</property>
               </widget>
@@ -5283,6 +5399,8 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>
+                <signal name="CursorChanged" handler="OnTreeviewPatternsCursorChanged" />
+                <signal name="RowActivated" handler="OnTreeviewPatternsRowActivated" />
               </widget>
             </child>
           </widget>
@@ -5335,6 +5453,7 @@
             <child>
               <widget class="Gtk.Button" id="buttonOpen">
                 <property name="MemberName" />
+                <property name="Sensitive">False</property>
                 <property name="Tooltip" translatable="yes">Открытие шаблона в текстовом процессоре.</property>
                 <property name="CanFocus">True</property>
                 <property name="Type">TextAndIcon</property>
@@ -5353,6 +5472,7 @@
             <child>
               <widget class="Gtk.Button" id="buttonDel">
                 <property name="MemberName" />
+                <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
                 <property name="Type">TextAndIcon</property>
                 <property name="Icon">stock:gtk-delete Menu</property>

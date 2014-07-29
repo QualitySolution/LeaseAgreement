@@ -159,6 +159,7 @@ namespace LeaseAgreement
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.buttonOpen = new global::Gtk.Button ();
 			this.buttonOpen.TooltipMarkup = "Открытие шаблона в текстовом процессоре.";
+			this.buttonOpen.Sensitive = false;
 			this.buttonOpen.CanFocus = true;
 			this.buttonOpen.Name = "buttonOpen";
 			this.buttonOpen.UseUnderline = true;
@@ -173,6 +174,7 @@ namespace LeaseAgreement
 			w15.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.buttonDel = new global::Gtk.Button ();
+			this.buttonDel.Sensitive = false;
 			this.buttonDel.CanFocus = true;
 			this.buttonDel.Name = "buttonDel";
 			this.buttonDel.UseUnderline = true;
@@ -228,6 +230,8 @@ namespace LeaseAgreement
 			this.DefaultHeight = 300;
 			this.Show ();
 			this.entryName.Changed += new global::System.EventHandler (this.OnEntryNameChanged);
+			this.treeviewPatterns.CursorChanged += new global::System.EventHandler (this.OnTreeviewPatternsCursorChanged);
+			this.treeviewPatterns.RowActivated += new global::Gtk.RowActivatedHandler (this.OnTreeviewPatternsRowActivated);
 			this.buttonNew.Clicked += new global::System.EventHandler (this.OnButtonNewClicked);
 			this.buttonFromDoc.Clicked += new global::System.EventHandler (this.OnButtonFromDocClicked);
 			this.buttonOpen.Clicked += new global::System.EventHandler (this.OnButtonOpenClicked);

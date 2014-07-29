@@ -86,9 +86,27 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Label label3;
 		
-		private global::QSAttachment.Attachment attachmentFiles;
+		private global::Gtk.VBox vboxDocs;
+		
+		private global::Gtk.Label label16;
+		
+		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+		
+		private global::Gtk.TreeView treeviewDocs;
+		
+		private global::Gtk.HBox hbox8;
+		
+		private global::Gtk.Button buttonPrint;
+		
+		private global::Gtk.Button buttonEdit;
+		
+		private global::Gtk.Button buttonRemove;
 		
 		private global::Gtk.Label label4;
+		
+		private global::QSAttachment.Attachment attachmentFiles;
+		
+		private global::Gtk.Label label15;
 		
 		private global::Gtk.Button buttonCancel;
 		
@@ -113,7 +131,7 @@ namespace LeaseAgreement
 			this.notebookMain = new global::Gtk.Notebook ();
 			this.notebookMain.CanFocus = true;
 			this.notebookMain.Name = "notebookMain";
-			this.notebookMain.CurrentPage = 0;
+			this.notebookMain.CurrentPage = 2;
 			this.notebookMain.TabPos = ((global::Gtk.PositionType)(0));
 			// Container child notebookMain.Gtk.Notebook+NotebookChild
 			this.hboxInfo = new global::Gtk.HBox ();
@@ -509,27 +527,116 @@ namespace LeaseAgreement
 			this.notebookMain.SetTabLabel (this.customContracts, this.label3);
 			this.label3.ShowAll ();
 			// Container child notebookMain.Gtk.Notebook+NotebookChild
+			this.vboxDocs = new global::Gtk.VBox ();
+			this.vboxDocs.Name = "vboxDocs";
+			this.vboxDocs.Spacing = 6;
+			// Container child vboxDocs.Gtk.Box+BoxChild
+			this.label16 = new global::Gtk.Label ();
+			this.label16.Name = "label16";
+			this.label16.LabelProp = global::Mono.Unix.Catalog.GetString ("Печатные формы документов для договора.");
+			this.vboxDocs.Add (this.label16);
+			global::Gtk.Box.BoxChild w41 = ((global::Gtk.Box.BoxChild)(this.vboxDocs [this.label16]));
+			w41.Position = 0;
+			w41.Expand = false;
+			w41.Fill = false;
+			// Container child vboxDocs.Gtk.Box+BoxChild
+			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow ();
+			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
+			this.treeviewDocs = new global::Gtk.TreeView ();
+			this.treeviewDocs.CanFocus = true;
+			this.treeviewDocs.Name = "treeviewDocs";
+			this.GtkScrolledWindow1.Add (this.treeviewDocs);
+			this.vboxDocs.Add (this.GtkScrolledWindow1);
+			global::Gtk.Box.BoxChild w43 = ((global::Gtk.Box.BoxChild)(this.vboxDocs [this.GtkScrolledWindow1]));
+			w43.Position = 1;
+			// Container child vboxDocs.Gtk.Box+BoxChild
+			this.hbox8 = new global::Gtk.HBox ();
+			this.hbox8.Name = "hbox8";
+			this.hbox8.Spacing = 6;
+			// Container child hbox8.Gtk.Box+BoxChild
+			this.buttonPrint = new global::Gtk.Button ();
+			this.buttonPrint.Sensitive = false;
+			this.buttonPrint.CanFocus = true;
+			this.buttonPrint.Name = "buttonPrint";
+			this.buttonPrint.UseUnderline = true;
+			this.buttonPrint.Label = global::Mono.Unix.Catalog.GetString ("Распечатать");
+			global::Gtk.Image w44 = new global::Gtk.Image ();
+			w44.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-print", global::Gtk.IconSize.Menu);
+			this.buttonPrint.Image = w44;
+			this.hbox8.Add (this.buttonPrint);
+			global::Gtk.Box.BoxChild w45 = ((global::Gtk.Box.BoxChild)(this.hbox8 [this.buttonPrint]));
+			w45.Position = 0;
+			w45.Expand = false;
+			w45.Fill = false;
+			// Container child hbox8.Gtk.Box+BoxChild
+			this.buttonEdit = new global::Gtk.Button ();
+			this.buttonEdit.TooltipMarkup = "Редактировать шаблон только для этого договора.";
+			this.buttonEdit.Sensitive = false;
+			this.buttonEdit.CanFocus = true;
+			this.buttonEdit.Name = "buttonEdit";
+			this.buttonEdit.UseUnderline = true;
+			this.buttonEdit.Label = global::Mono.Unix.Catalog.GetString ("Редактировать");
+			global::Gtk.Image w46 = new global::Gtk.Image ();
+			w46.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-edit", global::Gtk.IconSize.Menu);
+			this.buttonEdit.Image = w46;
+			this.hbox8.Add (this.buttonEdit);
+			global::Gtk.Box.BoxChild w47 = ((global::Gtk.Box.BoxChild)(this.hbox8 [this.buttonEdit]));
+			w47.Position = 1;
+			w47.Expand = false;
+			w47.Fill = false;
+			// Container child hbox8.Gtk.Box+BoxChild
+			this.buttonRemove = new global::Gtk.Button ();
+			this.buttonRemove.Sensitive = false;
+			this.buttonRemove.CanFocus = true;
+			this.buttonRemove.Name = "buttonRemove";
+			this.buttonRemove.UseUnderline = true;
+			this.buttonRemove.Label = global::Mono.Unix.Catalog.GetString ("Вернуть шаблон");
+			global::Gtk.Image w48 = new global::Gtk.Image ();
+			w48.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-revert-to-saved", global::Gtk.IconSize.Menu);
+			this.buttonRemove.Image = w48;
+			this.hbox8.Add (this.buttonRemove);
+			global::Gtk.Box.BoxChild w49 = ((global::Gtk.Box.BoxChild)(this.hbox8 [this.buttonRemove]));
+			w49.Position = 2;
+			w49.Expand = false;
+			w49.Fill = false;
+			this.vboxDocs.Add (this.hbox8);
+			global::Gtk.Box.BoxChild w50 = ((global::Gtk.Box.BoxChild)(this.vboxDocs [this.hbox8]));
+			w50.Position = 2;
+			w50.Expand = false;
+			w50.Fill = false;
+			this.notebookMain.Add (this.vboxDocs);
+			global::Gtk.Notebook.NotebookChild w51 = ((global::Gtk.Notebook.NotebookChild)(this.notebookMain [this.vboxDocs]));
+			w51.Position = 2;
+			// Notebook tab
+			this.label4 = new global::Gtk.Label ();
+			this.label4.Name = "label4";
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Документы");
+			this.notebookMain.SetTabLabel (this.vboxDocs, this.label4);
+			this.label4.ShowAll ();
+			// Container child notebookMain.Gtk.Notebook+NotebookChild
 			this.attachmentFiles = new global::QSAttachment.Attachment ();
 			this.attachmentFiles.Events = ((global::Gdk.EventMask)(256));
 			this.attachmentFiles.Name = "attachmentFiles";
 			this.notebookMain.Add (this.attachmentFiles);
-			global::Gtk.Notebook.NotebookChild w41 = ((global::Gtk.Notebook.NotebookChild)(this.notebookMain [this.attachmentFiles]));
-			w41.Position = 2;
+			global::Gtk.Notebook.NotebookChild w52 = ((global::Gtk.Notebook.NotebookChild)(this.notebookMain [this.attachmentFiles]));
+			w52.Position = 3;
 			// Notebook tab
-			this.label4 = new global::Gtk.Label ();
-			this.label4.Name = "label4";
-			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Файлы");
-			this.notebookMain.SetTabLabel (this.attachmentFiles, this.label4);
-			this.label4.ShowAll ();
+			this.label15 = new global::Gtk.Label ();
+			this.label15.Name = "label15";
+			this.label15.LabelProp = global::Mono.Unix.Catalog.GetString ("Файлы");
+			this.notebookMain.SetTabLabel (this.attachmentFiles, this.label15);
+			this.label15.ShowAll ();
 			w2.Add (this.notebookMain);
-			global::Gtk.Box.BoxChild w42 = ((global::Gtk.Box.BoxChild)(w2 [this.notebookMain]));
-			w42.Position = 0;
+			global::Gtk.Box.BoxChild w53 = ((global::Gtk.Box.BoxChild)(w2 [this.notebookMain]));
+			w53.Position = 0;
 			// Internal child LeaseAgreement.Contract.ActionArea
-			global::Gtk.HButtonBox w43 = this.ActionArea;
-			w43.Name = "dialog1_ActionArea";
-			w43.Spacing = 10;
-			w43.BorderWidth = ((uint)(5));
-			w43.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w54 = this.ActionArea;
+			w54.Name = "dialog1_ActionArea";
+			w54.Spacing = 10;
+			w54.BorderWidth = ((uint)(5));
+			w54.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
@@ -537,13 +644,13 @@ namespace LeaseAgreement
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = global::Mono.Unix.Catalog.GetString ("О_тменить");
-			global::Gtk.Image w44 = new global::Gtk.Image ();
-			w44.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
-			this.buttonCancel.Image = w44;
+			global::Gtk.Image w55 = new global::Gtk.Image ();
+			w55.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
+			this.buttonCancel.Image = w55;
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w45 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w43 [this.buttonCancel]));
-			w45.Expand = false;
-			w45.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w56 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w54 [this.buttonCancel]));
+			w56.Expand = false;
+			w56.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.Sensitive = false;
@@ -552,14 +659,14 @@ namespace LeaseAgreement
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = global::Mono.Unix.Catalog.GetString ("_OK");
-			global::Gtk.Image w46 = new global::Gtk.Image ();
-			w46.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Menu);
-			this.buttonOk.Image = w46;
-			w43.Add (this.buttonOk);
-			global::Gtk.ButtonBox.ButtonBoxChild w47 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w43 [this.buttonOk]));
-			w47.Position = 1;
-			w47.Expand = false;
-			w47.Fill = false;
+			global::Gtk.Image w57 = new global::Gtk.Image ();
+			w57.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Menu);
+			this.buttonOk.Image = w57;
+			w54.Add (this.buttonOk);
+			global::Gtk.ButtonBox.ButtonBoxChild w58 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w54 [this.buttonOk]));
+			w58.Position = 1;
+			w58.Expand = false;
+			w58.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
@@ -573,9 +680,14 @@ namespace LeaseAgreement
 			this.entryNumber.Changed += new global::System.EventHandler (this.OnEntryNumberChanged);
 			this.entryNumber.Activated += new global::System.EventHandler (this.OnEntryActivated);
 			this.comboOrg.Changed += new global::System.EventHandler (this.OnComboOrgChanged);
+			this.comboContractType.Changed += new global::System.EventHandler (this.OnComboContractTypeChanged);
 			this.datepickerStart.DateChanged += new global::System.EventHandler (this.OnDatepickerStartDateChanged);
 			this.datepickerEnd.DateChanged += new global::System.EventHandler (this.OnDatepickerEndDateChanged);
 			this.datepickerCancel.DateChanged += new global::System.EventHandler (this.OnDatepickerCancelDateChanged);
+			this.treeviewDocs.CursorChanged += new global::System.EventHandler (this.OnTreeviewDocsCursorChanged);
+			this.treeviewDocs.RowActivated += new global::Gtk.RowActivatedHandler (this.OnTreeviewDocsRowActivated);
+			this.buttonPrint.Clicked += new global::System.EventHandler (this.OnButtonPrintClicked);
+			this.buttonRemove.Clicked += new global::System.EventHandler (this.OnButtonRemoveClicked);
 			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkClicked);
 		}
 	}

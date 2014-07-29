@@ -70,6 +70,7 @@
     <EmbeddedResource Include="icons\ru_contract.png" />
     <EmbeddedResource Include="Patterns\Contract.xml" />
     <EmbeddedResource Include="Patterns\empty.odt" />
+    <EmbeddedResource Include="icons\document-open.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />

@@ -3,18 +3,32 @@ using System.IO;
 using System.Xml;
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Zip;
+using NLog;
 
 namespace LeaseAgreement
 {
 
 	public class OdtWorks
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		public DocPattern DocInfo;
 		private ZipFile odtZip;
 		private MemoryStream OdtStream;
 
+		public OdtWorks (byte[] odtfile)
+		{
+			ZipConstants.DefaultCodePage = System.Text.Encoding.UTF8.CodePage;
+			using (MemoryStream odtInStream = new MemoryStream (odtfile)) {
+				byte[] buffer = new byte[4096];
+				OdtStream = new MemoryStream ();
+				ICSharpCode.SharpZipLib.Core.StreamUtils.Copy(odtInStream, OdtStream, buffer);
+			}
+			odtZip = new ZipFile (OdtStream);
+		}
+
 		public OdtWorks (Stream odtInStream)
 		{
+			ZipConstants.DefaultCodePage = System.Text.Encoding.UTF8.CodePage;
 			byte[] buffer = new byte[4096];
 			OdtStream = new MemoryStream ();
 			ICSharpCode.SharpZipLib.Core.StreamUtils.Copy(odtInStream, OdtStream, buffer);
@@ -24,6 +38,7 @@ namespace LeaseAgreement
 
 		public OdtWorks (string odtFileName)
 		{
+			ZipConstants.DefaultCodePage = System.Text.Encoding.UTF8.CodePage;
 			using (FileStream fs = new FileStream (odtFileName, FileMode.Open, FileAccess.Read)) {
 				byte[] buffer = new byte[4096];
 				OdtStream = new MemoryStream ();
@@ -77,9 +92,37 @@ namespace LeaseAgreement
 				fieldsDels.AppendChild (newFieldNode);
 			}
 
+			UpdateContentXML (content);
+		}
+
+		public void FillValues()
+		{
+			logger.Info ("Заполняем поля документа...");
+			XmlDocument content = GetContentXML ();
+			XmlNamespaceManager nsMgr = new XmlNamespaceManager(content.NameTable);
+			nsMgr.AddNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+			nsMgr.AddNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+
+			foreach(XmlNode node in content.SelectNodes ("/office:document-content/office:body/office:text/text:user-field-decls/text:user-field-decl", nsMgr))
+			{
+				string fieldName = node.Attributes ["text:name"].Value;
+				PatternField field = DocInfo.Fields.Find (f => f.Name == fieldName);
+				if (field == null)
+				{
+					logger.Warn ("Поле {0} не найдено, поэтому пропущено.");
+					continue;
+				}
+					
+				node.Attributes ["office:string-value"].Value = field.value.ToString ();
+			}
+
+			UpdateContentXML (content);
+		}
+
+		private void UpdateContentXML(XmlDocument content)
+		{
 			using( MemoryStream outContentStream = new MemoryStream ()) {
 				content.Save (outContentStream);
-				ZipConstants.DefaultCodePage=0;
 				odtZip.BeginUpdate ();
 
 				StreamStaticDataSource sds = new StreamStaticDataSource ();

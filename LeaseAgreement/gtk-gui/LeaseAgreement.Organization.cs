@@ -5,45 +5,85 @@ namespace LeaseAgreement
 	public partial class Organization
 	{
 		private global::Gtk.Table table1;
+		
 		private global::Gtk.Entry entryAccount;
+		
 		private global::Gtk.Entry entryBank;
+		
 		private global::Gtk.Entry entryBaseOf;
+		
 		private global::Gtk.Entry entryBIK;
+		
 		private global::Gtk.Entry entryCorAccount;
+		
 		private global::Gtk.Entry entryEmail;
+		
 		private global::Gtk.Entry entryFIO;
+		
 		private global::Gtk.Entry entryFullName;
+		
 		private global::Gtk.Entry entryINN;
+		
 		private global::Gtk.Entry entryKPP;
+		
 		private global::Gtk.Entry entryName;
+		
 		private global::Gtk.Entry entryOGRN;
+		
 		private global::Gtk.Entry entryPhone;
+		
 		private global::Gtk.Entry entryPost;
+		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
+		
 		private global::Gtk.TextView textviewAddress;
+		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+		
 		private global::Gtk.TextView textviewJurAddress;
+		
 		private global::Gtk.Label label1;
+		
 		private global::Gtk.Label label10;
+		
 		private global::Gtk.Label label11;
+		
 		private global::Gtk.Label label12;
+		
 		private global::Gtk.Label label13;
+		
 		private global::Gtk.Label label14;
+		
 		private global::Gtk.Label label15;
+		
 		private global::Gtk.Label label16;
+		
 		private global::Gtk.Label label17;
+		
 		private global::Gtk.Label label18;
+		
 		private global::Gtk.Label label19;
+		
 		private global::Gtk.Label label2;
+		
 		private global::Gtk.Label label20;
+		
 		private global::Gtk.Label label3;
+		
 		private global::Gtk.Label label5;
+		
 		private global::Gtk.Label label6;
+		
 		private global::Gtk.Label label7;
+		
 		private global::Gtk.Label label8;
+		
 		private global::Gtk.Label label9;
+		
 		private global::Gtk.Label labelId;
+		
 		private global::Gtk.Button buttonCancel;
+		
 		private global::Gtk.Button buttonOk;
 
 		protected virtual void Build ()

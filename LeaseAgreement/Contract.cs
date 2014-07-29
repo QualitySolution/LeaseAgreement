@@ -11,15 +11,29 @@ namespace LeaseAgreement
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool NewContract = true;
+		private ListStore DocPatterns;
+		private List<int> deletedDocItems;
 
 		int LesseeId; 
 		int ContractId = -1;
 		int OrigLesseeId = -1;
 		bool LesseeisNull = true;
 
+		enum DocPatternCol{
+			patternId,
+			docId,
+			name,
+			isDocPattern,
+			size,
+			file,
+			fileChanged
+		}
+
 		public Contract ()
 		{
 			this.Build ();
+			deletedDocItems = new List<int> ();
+			DocPatterns = new ListStore (typeof(int), typeof(int), typeof(string), typeof(bool), typeof(int), typeof(byte[]), typeof(bool));
 
 			//Исправляем табы
 			Gtk.Image img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.user-home.png");
@@ -38,6 +52,14 @@ namespace LeaseAgreement
 			box.ShowAll ();
 			notebookMain.SetTabLabel (customContracts, box);
 
+			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.document-open.png");
+			textLable = new Label ("Документы");
+			box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (vboxDocs, box);
+
 			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.mail-attachment.png");
 			textLable = new Label ("Файлы");
 			box = new VBox ();
@@ -52,6 +74,23 @@ namespace LeaseAgreement
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 			attachmentFiles.AttachToTable = "contracts";
+
+			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();
+			ColumnName.Title = "Название документа";
+			Gtk.CellRendererText CellName = new Gtk.CellRendererText ();
+			CellName.Editable = true;
+			CellName.Edited += OnNameColumnEdited;
+			ColumnName.MaxWidth = 500;
+			ColumnName.PackStart (CellName, true);
+			ColumnName.AddAttribute(CellName, "text", (int)DocPatternCol.name);
+			ColumnName.AddAttribute(CellName, "editable", (int)DocPatternCol.isDocPattern);
+
+			treeviewDocs.AppendColumn(ColumnName);
+			treeviewDocs.AppendColumn("Размер шаблона", new Gtk.CellRendererText (), RenderSizeColumn);
+
+			treeviewDocs.Model = DocPatterns;
+			treeviewDocs.ShowAll ();
+
 		}
 
 		public void Fill(int Id)
@@ -71,6 +110,7 @@ namespace LeaseAgreement
 				
 				cmd.Parameters.AddWithValue("@id", Id);
 				object DBPlaceT, DBPlaceNo;
+				int dbContractTypeId;
 
 				using(MySqlDataReader rdr = cmd.ExecuteReader())
 				{
@@ -78,7 +118,6 @@ namespace LeaseAgreement
 					
 					entryNumber.Text = rdr["number"].ToString();
 					checkDraft.Active = rdr.GetBoolean ("draft");
-					ComboWorks.SetActiveItem (comboContractType, DBWorks.GetInt (rdr, "contract_type_id", -1));
 					if(rdr["lessee_id"] != DBNull.Value)
 					{
 						LesseeId = Convert.ToInt32(rdr["lessee_id"].ToString());
@@ -107,6 +146,7 @@ namespace LeaseAgreement
 					//запоминаем переменные что бы освободить соединение
 					DBPlaceT = rdr["place_type_id"];
 					DBPlaceNo = rdr["place_no"];
+					dbContractTypeId = DBWorks.GetInt (rdr, "contract_type_id", -1);
 				}
 				if(DBPlaceT != DBNull.Value)
 					ListStoreWorks.SearchListStore((ListStore)comboPlaceT.Model, int.Parse(DBPlaceT.ToString()), out iter);
@@ -118,6 +158,30 @@ namespace LeaseAgreement
 					ListStoreWorks.SearchListStore((ListStore)comboPlaceNo.Model, DBPlaceNo.ToString(), out iter);
 					comboPlaceNo.SetActiveIter(iter);
 				}
+
+				logger.Info("Загружаем исправленные шаблоны...");
+				sql = "SELECT id, pattern_id, name, size, pattern FROM contract_docs WHERE contract_id = @contract_id ";
+				cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+				cmd.Parameters.AddWithValue("@contract_id", ContractId);
+				using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
+				{
+					while(rdr.Read ())
+					{
+						byte[] file = new byte[rdr.GetInt64("size")];
+						rdr.GetBytes(rdr.GetOrdinal("pattern"), 0, file, 0, rdr.GetInt32("size"));
+
+						DocPatterns.AppendValues(DBWorks.GetInt (rdr, "pattern_id", -1),
+						                         rdr.GetInt32("id"),
+						                     rdr.GetString("name"),
+						                         true,
+						                     rdr.GetInt32("size"),
+						                     file,
+						                     false
+						                    );
+					}
+				}
+				ComboWorks.SetActiveItem (comboContractType, dbContractTypeId);
+
 				customContracts.LoadDataFromDB(Id);
 				attachmentFiles.ItemId = Id;
 				attachmentFiles.UpdateFileList ();
@@ -156,6 +220,27 @@ namespace LeaseAgreement
 
 			buttonLesseeOpen.Sensitive = Lesseeok;
 			buttonOk.Sensitive = Numberok && Orgok && Placeok && Lesseeok && DatesCorrectok;
+		}
+
+		private void RenderSizeColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+		{
+			int size = (int) model.GetValue (iter, (int)DocPatternCol.size);
+
+			(cell as Gtk.CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((ulong)size) : "";
+		}
+
+		void OnNameColumnEdited (object o, EditedArgs args)
+		{
+			TreeIter iter;
+			if (!DocPatterns.GetIterFromString (out iter, args.Path))
+				return;
+			if(args.NewText == null)
+			{
+				logger.Warn("newtext is empty");
+				return;
+			}
+
+			DocPatterns.SetValue(iter, (int)DocPatternCol.name, args.NewText);
 		}
 
 		protected bool TestCorrectDates(bool DisplayMessage)
@@ -398,6 +483,67 @@ namespace LeaseAgreement
 				customContracts.SaveToDB(trans);
 				attachmentFiles.SaveChanges(trans);
 
+				logger.Info ("Записываем измененные шаблоны");
+
+				foreach(object[] row in DocPatterns)
+				{
+					if(!(bool)row[(int)DocPatternCol.isDocPattern])
+						continue;
+					if ((int)row [(int)DocPatternCol.docId] > 0)
+						sql = String.Format ("UPDATE contract_docs SET name = @name {0} WHERE id = @id", 
+						                     (bool)row [(int)DocPatternCol.fileChanged] ? ", size = @size, pattern = @pattern" : "");
+					else
+						sql = "INSERT INTO contract_docs (name, pattern_id, contract_id, size, pattern) " +
+							"VALUES (@name, @pattern_id, @contract_id, @size, @pattern)";
+					cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
+					cmd.Parameters.AddWithValue ("@name", row [(int)DocPatternCol.name]);
+					cmd.Parameters.AddWithValue ("@contract_id", ContractId);
+					cmd.Parameters.AddWithValue ("@pattern_id", row [(int)DocPatternCol.patternId]);
+					cmd.Parameters.AddWithValue ("@id", row [(int)DocPatternCol.docId]);
+					if((bool)row [(int)DocPatternCol.fileChanged])
+					{
+						byte[] file = (byte[])row [(int)DocPatternCol.file];
+						cmd.Parameters.AddWithValue ("@size", file.LongLength);
+						cmd.Parameters.AddWithValue ("@pattern", file);
+					}
+					try
+					{
+						cmd.ExecuteNonQuery ();
+					}
+					catch(MySqlException ex)
+					{
+						if (ex.Number == 1153) {
+							logger.WarnException ("Превышен максимальный размер пакета для передачи на сервер.", ex);
+							string Text = "Превышен максимальный размер пакета для передачи на сервер базы данных. " +
+								"Некоторые файлы превысили ограничение и не будут записаны в базу данных. " +
+								"Это значение настраивается на сервере, по умолчанию для MySQL оно равняется 1Мб. " +
+								"Максимальный размер файла поддерживаемый программой составляет 16Мб, мы рекомендуем " +
+								"установить в настройках сервера параметр <b>max_allowed_packet=16M</b>. Подробнее о настройке здесь " +
+								"http://dev.mysql.com/doc/refman/5.6/en/packet-too-large.html";
+							MessageDialog md = new MessageDialog ((Gtk.Window)this.Toplevel, DialogFlags.Modal,
+							                                      MessageType.Error, 
+							                                      ButtonsType.Ok, Text);
+							md.Run ();
+							md.Destroy ();
+						} else
+							throw ex;
+					}
+				}
+
+				if (deletedDocItems.Count > 0) 
+				{
+					logger.Info ("Удаляем удаленные документы на сервере...");
+					DBWorks.SQLHelper sqld = new DBWorks.SQLHelper ("DELETE FROM contract_docs WHERE id IN ");
+					sqld.QuoteMode = DBWorks.QuoteType.SingleQuotes;
+					sqld.StartNewList ("(", ", ");
+					deletedDocItems.ForEach (delegate(int obj) {
+						sqld.AddAsList (obj.ToString ());
+					});
+					sqld.Add (")");
+					cmd = new MySqlCommand(sqld.Text, (MySqlConnection)QSMain.ConnectionDB, trans);
+					cmd.ExecuteNonQuery ();
+				}
+
 				//Корректная смена арендатора
 				if(!NewContract && OrigLesseeId != LesseeId && !LesseeisNull)
 				{
@@ -493,5 +639,113 @@ namespace LeaseAgreement
 			this.ChildFocus (DirectionType.TabForward);
 		}
 			
+		protected void OnComboContractTypeChanged(object sender, EventArgs e)
+		{
+			UpdateDefaultPatterns ();
+		}
+
+		private void UpdateDefaultPatterns()
+		{
+			TreeIter iter;
+			if(DocPatterns.GetIterFirst(out iter))
+			{
+				do
+				{
+					if(!(bool)DocPatterns.GetValue (iter, (int)DocPatternCol.isDocPattern))
+					{
+						DocPatterns.Remove(ref iter);
+					}
+				}
+				while(DocPatterns.IterNext(ref iter));
+			}
+
+			int typeId = ComboWorks.GetActiveId (comboContractType);
+			if (typeId < 1)
+				return;
+			logger.Info ("Загружаем шаблоны документов для типа {0}", comboContractType.ActiveText);
+			string sql = "SELECT id, name, size, pattern FROM doc_patterns WHERE contract_type_id = @contract_type_id ";
+			try
+			{
+				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+				cmd.Parameters.AddWithValue("@contract_type_id", typeId);
+				using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
+				{
+					while(rdr.Read ())
+					{
+						if(ListStoreWorks.SearchListStore (DocPatterns, rdr["id"], (int)DocPatternCol.patternId, out iter))
+							continue;
+						byte[] file = new byte[rdr.GetInt64("size")];
+						rdr.GetBytes(rdr.GetOrdinal("pattern"), 0, file, 0, rdr.GetInt32("size"));
+
+						DocPatterns.AppendValues(rdr.GetInt32("id"),
+						                         -1,
+						                               rdr.GetString("name"),
+						                         false,
+						                               rdr.GetInt32("size"),
+						                               file,
+						                               false
+						                              );
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				logger.ErrorException("Чтения шаблонов для типа договора!", ex);
+				QSMain.ErrorMessage(this,ex);
+			}
+		}
+
+		protected void OnButtonPrintClicked(object sender, EventArgs e)
+		{
+			TreeIter iter;
+			treeviewDocs.Selection.GetSelected (out iter);
+
+			logger.Info("Заполняем файл данными...");
+			byte[] file = (byte[])DocPatterns.GetValue (iter, (int)DocPatternCol.file);
+			OdtWorks odt = new OdtWorks(file);
+			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
+			odt.DocInfo.LoadValuesFromDB (ContractId);
+			odt.FillValues ();
+			file = odt.GetArray ();
+			odt.Close ();
+
+			logger.Info("Сохраняем временный файл...");
+			string TempFilePath = System.IO.Path.Combine (System.IO.Path.GetTempPath (), (string)DocPatterns.GetValue (iter, (int)DocPatternCol.name) + ".odt" );
+			System.IO.File.WriteAllBytes (TempFilePath, file);
+			logger.Info("Открываем файл во внешнем приложении...");
+			System.Diagnostics.Process.Start(TempFilePath);
+		}
+
+		protected void OnButtonRemoveClicked(object sender, EventArgs e)
+		{
+			TreeIter iter;
+			treeviewDocs.Selection.GetSelected (out iter);
+
+			if((int)DocPatterns.GetValue (iter, (int)DocPatternCol.docId) > 0)
+			{
+				deletedDocItems.Add ((int)DocPatterns.GetValue (iter, (int)DocPatternCol.docId));
+			}
+			DocPatterns.Remove (ref iter);
+			UpdateDefaultPatterns ();
+		}
+
+		protected void OnTreeviewDocsCursorChanged(object sender, EventArgs e)
+		{
+			bool selected = treeviewDocs.Selection.CountSelectedRows () == 1;
+			buttonPrint.Sensitive = buttonEdit.Sensitive = selected;
+
+			if (selected) {
+				TreeIter iter;
+				treeviewDocs.Selection.GetSelected (out iter);
+				buttonRemove.Sensitive = (bool)DocPatterns.GetValue (iter, (int)DocPatternCol.isDocPattern);
+			} else
+				buttonRemove.Sensitive = false;
+		}
+
+		protected void OnTreeviewDocsRowActivated(object o, RowActivatedArgs args)
+		{
+			buttonPrint.Click ();
+		}
+
 	}
 }
