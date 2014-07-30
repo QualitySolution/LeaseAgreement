@@ -3896,6 +3896,7 @@
                         <property name="Icon">stock:gtk-edit Menu</property>
                         <property name="Label" translatable="yes">Редактировать</property>
                         <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnButtonEditClicked" />
                       </widget>
                       <packing>
                         <property name="Position">1</property>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using NLog;
 using MySql.Data.MySqlClient;
@@ -11,6 +12,7 @@ namespace LeaseAgreement
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private List<int> deletedItems;
+		private List<FileSystemWatcher> watchers;
 		private bool NewItem = true;
 		int ItemId;
 		private ListStore PatternsStore;
@@ -28,6 +30,7 @@ namespace LeaseAgreement
 			this.Build ();
 
 			deletedItems = new List<int> ();
+			watchers = new List<FileSystemWatcher> ();
 			PatternsStore = new ListStore (typeof(int), typeof(string), typeof(int), typeof(byte[]), typeof(bool));
 
 			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();
@@ -43,6 +46,7 @@ namespace LeaseAgreement
 
 			treeviewPatterns.AppendColumn(ColumnName);
 			treeviewPatterns.AppendColumn("Размер шаблона", new Gtk.CellRendererText (), RenderSizeColumn);
+			treeviewPatterns.AppendColumn("", new Gtk.CellRendererText (), RenderFileChangedColumn);
 
 			treeviewPatterns.Model = PatternsStore;
 			treeviewPatterns.ShowAll ();
@@ -212,6 +216,13 @@ namespace LeaseAgreement
 			(cell as Gtk.CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((ulong)size) : "";
 		}
 
+		private void RenderFileChangedColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+		{
+			bool changed = (bool) model.GetValue (iter, (int)PatternsCol.fileChanged);
+
+			(cell as Gtk.CellRendererText).Text = changed ? "изменен" : "";
+		}
+
 		void OnNameColumnEdited (object o, EditedArgs args)
 		{
 			TreeIter iter;
@@ -311,10 +322,21 @@ namespace LeaseAgreement
 			logger.Info("Сохраняем временный файл...");
 			byte[] file = (byte[])PatternsStore.GetValue (iter, (int)PatternsCol.file);
 
-			string TempFilePath = System.IO.Path.Combine (System.IO.Path.GetTempPath (), (string)PatternsStore.GetValue (iter, (int)PatternsCol.name) + ".odt" );
-			System.IO.File.WriteAllBytes (TempFilePath, file);
+			string tempDir = System.IO.Path.GetTempPath ();
+			string tempFile = (string)PatternsStore.GetValue (iter, (int)PatternsCol.name) + ".odt";
+			string tempFilePath = System.IO.Path.Combine (tempDir, tempFile);
+			//Если уже есть наблюдатель на файл удаляем его.
+			foreach(FileSystemWatcher watcher in watchers.FindAll (w => w.Filter == tempFile))
+			{
+				watcher.EnableRaisingEvents = false;
+				watcher.Dispose ();
+				watchers.Remove (watcher);
+			}
+
+			System.IO.File.WriteAllBytes (tempFilePath, file);
 			logger.Info("Открываем файл во внешнем приложении...");
-			System.Diagnostics.Process.Start(TempFilePath);
+			System.Diagnostics.Process.Start(tempFilePath);
+			MakeWatcher (tempDir, tempFile);
 		}
 
 		protected void OnTreeviewPatternsCursorChanged(object sender, EventArgs e)
@@ -326,7 +348,33 @@ namespace LeaseAgreement
 		{
 			buttonOpen.Click ();
 		}
+			
+		private void MakeWatcher(string path, string filename)
+		{
+			FileSystemWatcher watcher = new FileSystemWatcher();
+			watcher.Path = path;
+			watcher.NotifyFilter = NotifyFilters.LastWrite;
+			watcher.Filter = filename;
 
+			watcher.Changed += OnFileChangedByUser;
+
+			watcher.EnableRaisingEvents = true;
+			watchers.Add (watcher);
+		}
+
+		private void OnFileChangedByUser(object source, FileSystemEventArgs e)
+		{
+			logger.Info ("Файл <{0}> изменен, обновляем...", e.Name);
+			string name = System.IO.Path.GetFileNameWithoutExtension (e.FullPath);
+			byte[] file = File.ReadAllBytes (e.FullPath);
+			TreeIter iter;
+			if(ListStoreWorks.SearchListStore (PatternsStore, name, (int)PatternsCol.name, out iter))
+			{
+				PatternsStore.SetValue (iter, (int)PatternsCol.size, file.Length);
+				PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
+				PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
+			}
+		}
 	}
 }
 

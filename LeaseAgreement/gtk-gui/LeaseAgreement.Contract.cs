@@ -687,6 +687,7 @@ namespace LeaseAgreement
 			this.treeviewDocs.CursorChanged += new global::System.EventHandler (this.OnTreeviewDocsCursorChanged);
 			this.treeviewDocs.RowActivated += new global::Gtk.RowActivatedHandler (this.OnTreeviewDocsRowActivated);
 			this.buttonPrint.Clicked += new global::System.EventHandler (this.OnButtonPrintClicked);
+			this.buttonEdit.Clicked += new global::System.EventHandler (this.OnButtonEditClicked);
 			this.buttonRemove.Clicked += new global::System.EventHandler (this.OnButtonRemoveClicked);
 			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkClicked);
 		}
