@@ -65,6 +65,7 @@ namespace LeaseAgreement
 			this.entryCadastral.CanFocus = true;
 			this.entryCadastral.Name = "entryCadastral";
 			this.entryCadastral.IsEditable = true;
+			this.entryCadastral.MaxLength = 20;
 			this.entryCadastral.InvisibleChar = '●';
 			this.table2.Add (this.entryCadastral);
 			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table2 [this.entryCadastral]));
