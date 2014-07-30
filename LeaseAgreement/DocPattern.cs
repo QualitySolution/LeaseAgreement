@@ -50,7 +50,7 @@ namespace LeaseAgreement
 				if (!TryAddLeftJoinForTable (field.DBTable, sql, AppendTables))
 					throw new InvalidDataException ("Не найдена последовательность Join-ов для добавления таблицы " + field.DBTable);
 			}
-			sql.Add ("WHERE {0} = @id", RootIdColumn);
+			sql.Add ("WHERE {0}.{1} = @id", RootTable, RootIdColumn);
 			// Заполняем поля
 			MySqlCommand cmd = new MySqlCommand (sql.Text, (MySqlConnection)QSMain.ConnectionDB);
 			cmd.Parameters.AddWithValue ("@id", id);
