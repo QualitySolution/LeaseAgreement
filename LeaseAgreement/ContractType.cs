@@ -247,6 +247,7 @@ namespace LeaseAgreement
 				deletedItems.Add ((int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
 			}
 			PatternsStore.Remove (ref iter);
+			OnTreeviewPatternsCursorChanged (null, EventArgs.Empty);
 		}
 
 		protected void OnButtonNewClicked(object sender, EventArgs e)

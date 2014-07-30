@@ -711,6 +711,7 @@ namespace LeaseAgreement
 				logger.ErrorException("Чтения шаблонов для типа договора!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
+			OnTreeviewDocsCursorChanged (treeviewDocs, EventArgs.Empty);
 		}
 
 		protected void OnButtonPrintClicked(object sender, EventArgs e)
