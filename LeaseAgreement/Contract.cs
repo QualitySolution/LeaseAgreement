@@ -456,7 +456,7 @@ namespace LeaseAgreement
 				cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 
 				cmd.Parameters.AddWithValue("@id", ContractId);
-				cmd.Parameters.AddWithValue("@draft", ContractId);
+				cmd.Parameters.AddWithValue("@draft", checkDraft.Active);
 				cmd.Parameters.AddWithValue("@number", entryNumber.Text);
 				cmd.Parameters.AddWithValue("@lessee_id", LesseeId);
 				cmd.Parameters.AddWithValue("@contract_type_id", ComboWorks.GetActiveIdOrNull (comboContractType));
