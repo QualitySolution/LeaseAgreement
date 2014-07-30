@@ -71,6 +71,10 @@
     <EmbeddedResource Include="Patterns\Contract.xml" />
     <EmbeddedResource Include="Patterns\empty.odt" />
     <EmbeddedResource Include="icons\document-open.png" />
+    <EmbeddedResource Include="icons\state-archive.png" />
+    <EmbeddedResource Include="icons\state-draft.png" />
+    <EmbeddedResource Include="icons\state-now.png" />
+    <EmbeddedResource Include="icons\state-soon.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />

@@ -9,6 +9,7 @@ public partial class MainWindow : Gtk.Window
 	Gtk.ListStore ContractListStore;
 	Gtk.TreeModelFilter Contractfilter;
 	Gtk.TreeModelSort ContractSort;
+	Gdk.Pixbuf stateNow, stateSoon, stateDraft, stateArchive;
 
 	private enum ContractCol{
 		id,
@@ -21,7 +22,8 @@ public partial class MainWindow : Gtk.Window
 		place_text,
 		lessee_id,
 		lessee,
-		end_date
+		end_date,
+		state_pixbuf
 	}
 
 	void PrepareContract()
@@ -29,6 +31,12 @@ public partial class MainWindow : Gtk.Window
 		//Заполняем комбобокс
 		ComboWorks.ComboFillReference(comboContractOrg, "organizations", ComboWorks.ListMode.WithAll);
 		ComboWorks.ComboFillReference(comboContractPlaceT,"place_types", ComboWorks.ListMode.WithAll);
+
+		//Иконки статусов
+		stateNow = new Gdk.Pixbuf(System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.state-now.png");
+		stateSoon = new Gdk.Pixbuf(System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.state-soon.png");
+		stateDraft = new Gdk.Pixbuf(System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.state-draft.png");
+		stateArchive = new Gdk.Pixbuf(System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.state-archive.png");
 		
 		//Создаем таблицу "Договора"
 		ContractListStore = new Gtk.ListStore (typeof (int), 	//0 - ID
@@ -41,10 +49,11 @@ public partial class MainWindow : Gtk.Window
 		                                       typeof (string), //7 - place
 		                                       typeof (int), 	//8 - id leesse
 		                                       typeof (string),	//9 - lesse
-		                                       typeof (DateTime)	//10 - end date
+		                                       typeof (DateTime),	//10 - end date
+		                                       typeof (Gdk.Pixbuf)
 		                                       );
 		
-		treeviewContract.AppendColumn("Актив.", new Gtk.CellRendererToggle (), "active", (int)ContractCol.active);
+		treeviewContract.AppendColumn("Статус", new Gtk.CellRendererPixbuf (), "pixbuf", (int)ContractCol.state_pixbuf);
 		treeviewContract.AppendColumn("Номер", new Gtk.CellRendererText (), "text", (int)ContractCol.number);
 		treeviewContract.AppendColumn("Организация", new Gtk.CellRendererText (), "text", (int)ContractCol.org);
 		treeviewContract.AppendColumn("Место", new Gtk.CellRendererText (), "text", (int)ContractCol.place_no);
@@ -72,38 +81,35 @@ public partial class MainWindow : Gtk.Window
 
 		TreeIter iter;
 		
-		string sql = "SELECT contracts.*, place_types.name as type, lessees.name as lessee, organizations.name as organization FROM contracts " +
+		DBWorks.SQLHelper sql = new DBWorks.SQLHelper("SELECT contracts.*, place_types.name as type, lessees.name as lessee, organizations.name as organization FROM contracts " +
 				"LEFT JOIN place_types ON contracts.place_type_id = place_types.id " +
 				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
-				"LEFT JOIN organizations ON contracts.org_id = organizations.id";
-		bool WhereExist = false;
+		                                              "LEFT JOIN organizations ON contracts.org_id = organizations.id" );
+		sql.StartNewList (" WHERE ", " AND ");
 		if(comboContractPlaceT.GetActiveIter(out iter) && comboContractPlaceT.Active != 0)
 		{
-			sql += " WHERE contracts.place_type_id = '" + comboContractPlaceT.Model.GetValue(iter,1) + "' ";
-			WhereExist = true;
+			sql.AddAsList ("contracts.place_type_id = '" + comboContractPlaceT.Model.GetValue(iter,1) + "' ");
 		}
 		if(comboContractOrg.GetActiveIter(out iter) && comboContractOrg.Active != 0)
 		{
-			if(!WhereExist) 
-				sql += " WHERE";
-			else
-				sql += " AND";
-			sql += " contracts.org_id = '" + comboContractOrg.Model.GetValue(iter,1) + "' ";
-			WhereExist = true;
+			sql.AddAsList (" contracts.org_id = '" + comboContractOrg.Model.GetValue(iter,1) + "' ");
 		}
-		if(checkActiveContracts.Active)
-		{
-			if(!WhereExist) 
-				sql += " WHERE";
-			else
-				sql += " AND";
-			sql += " ((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
-				"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date))";
-			if(check30daysContracts.Active)
-				sql += " AND contracts.end_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)";
-			WhereExist = true;
-		}
-		MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
+
+		if(comboContractState.Active == 1)
+			sql.AddAsList ("((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
+			               "OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date)) AND draft = 'FALSE'");
+		if(comboContractState.Active == 2)
+			sql.AddAsList ("contracts.end_date < CURDATE() AND draft = '0'");
+		if(comboContractState.Active == 3)
+			sql.AddAsList ("draft = '1'");
+		if(comboContractState.Active == 4)
+			sql.AddAsList ("(contracts.end_date >= CURDATE() OR draft = '1')");
+
+		if(check30daysContracts.Active)
+			sql.AddAsList ("contracts.end_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)");
+
+		logger.Debug (sql.Text);
+		MySqlCommand cmd = new MySqlCommand(sql.Text, (MySqlConnection)QSMain.ConnectionDB);
 		
 		MySqlDataReader rdr = cmd.ExecuteReader();
 		int lessee_id;
@@ -133,6 +139,15 @@ public partial class MainWindow : Gtk.Window
 				active = ((DateTime)rdr["start_date"] <= DateTime.Now.Date && (DateTime)rdr["end_date"] >= DateTime.Now.Date);
 				endDate = rdr.GetDateTime ("end_date");
 			}
+			Gdk.Pixbuf stateIcon;
+			if (rdr.GetBoolean ("draft"))
+				stateIcon = stateDraft;
+			else if (endDate < DateTime.Today)
+				stateIcon = stateArchive;
+			else if (rdr.GetDateTime ("start_date") > DateTime.Today)
+				stateIcon = stateSoon;
+			else
+				stateIcon = stateNow;
 			ContractListStore.AppendValues(rdr.GetInt32 ("id"),
 											active,
 			                             rdr["number"].ToString(),
@@ -143,7 +158,9 @@ public partial class MainWindow : Gtk.Window
 			                             rdr["type"].ToString() + " - " + rdr["place_no"].ToString(),
 			                             lessee_id,
 			                             rdr["lessee"].ToString(),
-			                             endDate);
+			                               endDate,
+			                               stateIcon
+			                              );
 		}
 		rdr.Close();
 		
@@ -273,13 +290,11 @@ public partial class MainWindow : Gtk.Window
 
 	protected void OnCheck30daysContractsToggled (object sender, EventArgs e)
 	{
-		bool Active30days = check30daysContracts.Active;
-		bool CheckActived = checkActiveContracts.Active;
-		checkActiveContracts.Sensitive = !Active30days;
-		if(Active30days)
-			checkActiveContracts.Active = true;
-		if(CheckActived == checkActiveContracts.Active) //Чтобы не запрашивать обновление дважды
-			UpdateContract ();
+		UpdateContract ();
 	}
 
+	protected void OnComboContractStateChanged(object sender, EventArgs e)
+	{
+		UpdateContract ();
+	}
 }
