@@ -366,14 +366,32 @@ namespace LeaseAgreement
 		private void OnFileChangedByUser(object source, FileSystemEventArgs e)
 		{
 			logger.Info ("Файл <{0}> изменен, обновляем...", e.Name);
-			string name = System.IO.Path.GetFileNameWithoutExtension (e.FullPath);
-			byte[] file = File.ReadAllBytes (e.FullPath);
-			TreeIter iter;
-			if(ListStoreWorks.SearchListStore (PatternsStore, name, (int)PatternsCol.name, out iter))
+			try
 			{
-				PatternsStore.SetValue (iter, (int)PatternsCol.size, file.Length);
-				PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
-				PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
+
+				string name = System.IO.Path.GetFileNameWithoutExtension (e.FullPath);
+
+				byte[] file;
+				using (FileStream fs = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				{
+					using (MemoryStream ms = new MemoryStream())
+					{
+						fs.CopyTo(ms);
+						file = ms.ToArray();
+					}
+				}
+
+				TreeIter iter;
+				if(ListStoreWorks.SearchListStore (PatternsStore, name, (int)PatternsCol.name, out iter))
+				{
+					PatternsStore.SetValue (iter, (int)PatternsCol.size, file.Length);
+					PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
+					PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
+				}
+			}
+			catch(Exception ex)
+			{
+				logger.WarnException("Ошибка при чтении файла!", ex);
 			}
 		}
 	}

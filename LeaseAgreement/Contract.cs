@@ -815,15 +815,32 @@ namespace LeaseAgreement
 		private void OnFileChangedByUser(object source, FileSystemEventArgs e)
 		{
 			logger.Info ("Файл <{0}> изменен, обновляем...", e.Name);
-			string name = System.IO.Path.GetFileNameWithoutExtension (e.FullPath);
-			byte[] file = File.ReadAllBytes (e.FullPath);
-			TreeIter iter;
-			if(ListStoreWorks.SearchListStore (DocPatterns, name, (int)DocPatternCol.name, out iter))
+			try
 			{
-				DocPatterns.SetValue (iter, (int)DocPatternCol.size, file.Length);
-				DocPatterns.SetValue (iter, (int)DocPatternCol.file, file);
-				DocPatterns.SetValue (iter, (int)DocPatternCol.fileChanged, true);
-				DocPatterns.SetValue (iter, (int)DocPatternCol.isDocPattern, true);
+				string name = System.IO.Path.GetFileNameWithoutExtension (e.FullPath);
+
+				byte[] file;
+				using (FileStream fs = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				{
+					using (MemoryStream ms = new MemoryStream())
+					{
+						fs.CopyTo(ms);
+						file = ms.ToArray();
+					}
+				}
+
+				TreeIter iter;
+				if(ListStoreWorks.SearchListStore (DocPatterns, name, (int)DocPatternCol.name, out iter))
+				{
+					DocPatterns.SetValue (iter, (int)DocPatternCol.size, file.Length);
+					DocPatterns.SetValue (iter, (int)DocPatternCol.file, file);
+					DocPatterns.SetValue (iter, (int)DocPatternCol.fileChanged, true);
+					DocPatterns.SetValue (iter, (int)DocPatternCol.isDocPattern, true);
+				}
+			}
+			catch(Exception ex)
+			{
+				logger.WarnException("Ошибка при чтении файла!", ex);
 			}
 		}
 
