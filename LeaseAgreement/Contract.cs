@@ -731,6 +731,7 @@ namespace LeaseAgreement
 			byte[] file = (byte[])DocPatterns.GetValue (iter, (int)DocPatternCol.file);
 			OdtWorks odt = new OdtWorks(file);
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
+			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 			odt.DocInfo.LoadValuesFromDB (ContractId);
 			odt.FillValues ();
 			file = odt.GetArray ();
@@ -783,6 +784,7 @@ namespace LeaseAgreement
 			byte[] file = (byte[])DocPatterns.GetValue (iter, (int)DocPatternCol.file);
 			OdtWorks odt = new OdtWorks(file);
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
+			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 			odt.UpdateFields ();
 			odt.DocInfo.LoadValuesFromDB (ContractId);
 			odt.FillValues ();

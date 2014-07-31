@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.IO;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
+using QSCustomFields;
 
 namespace LeaseAgreement
 {
@@ -28,6 +29,26 @@ namespace LeaseAgreement
 				pattern = (DocPattern)serializer.Deserialize(stream);
 			}
 			return pattern;
+		}
+
+		public void AppedCustomFields(List<CFTable> cfTables)
+		{
+			foreach(CFTable table in cfTables)
+			{
+				int insertIndex = Fields.FindLastIndex (f => f.DBTable == table.DBName);
+				if (insertIndex < 0)
+					continue;
+
+				foreach(CFFieldInfo info in table.Fields)
+				{
+					insertIndex++;
+					string newFieldName = String.Format ("{0}.{1}", 
+					                                     StringWorks.StringToPascalCase (table.Title), 
+					                                     StringWorks.StringToPascalCase (info.Name));
+					PatternField newField = new PatternField (newFieldName, table.DBName, info.ColumnName);
+					Fields.Insert (insertIndex, newField);
+				}
+			}
 		}
 
 		public void LoadValuesFromDB (int id)

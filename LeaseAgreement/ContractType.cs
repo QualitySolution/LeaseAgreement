@@ -50,6 +50,8 @@ namespace LeaseAgreement
 
 			treeviewPatterns.Model = PatternsStore;
 			treeviewPatterns.ShowAll ();
+
+			TestCanSave ();
 		}
 
 		public void Fill(int id)
@@ -258,6 +260,7 @@ namespace LeaseAgreement
 				odt = new OdtWorks (stream);
 			}
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
+			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 			odt.UpdateFields();
 			byte[] file = odt.GetArray ();
 
@@ -299,6 +302,7 @@ namespace LeaseAgreement
 				OdtWorks odt;
 				odt = new OdtWorks (Chooser.Filename);
 				odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
+				odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 				odt.UpdateFields();
 				byte[] file = odt.GetArray ();
 	
@@ -322,6 +326,13 @@ namespace LeaseAgreement
 
 			logger.Info("Сохраняем временный файл...");
 			byte[] file = (byte[])PatternsStore.GetValue (iter, (int)PatternsCol.file);
+			OdtWorks odt;
+			odt = new OdtWorks (file);
+			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
+			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
+			odt.UpdateFields();
+			file = odt.GetArray ();
+			odt.Close ();
 
 			string tempDir = System.IO.Path.GetTempPath ();
 			string tempFile = (string)PatternsStore.GetValue (iter, (int)PatternsCol.name) + ".odt";
