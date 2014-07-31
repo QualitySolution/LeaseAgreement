@@ -33,6 +33,11 @@
 			<DependsOn>places</DependsOn>
 			<OnStatment>places.stead_id = stead.id</OnStatment>
 		</PatternTable>
+		<PatternTable>
+			<DBTable>users</DBTable>
+			<DependsOn>contracts</DependsOn>
+			<OnStatment>contracts.responsible_id = users.id</OnStatment>
+		</PatternTable>
 	</Tables>
 	<Fields>
 		<PatternField>
@@ -41,9 +46,9 @@
 			<DBColumn>number</DBColumn>
 		</PatternField>
 		<PatternField>
-			<Name>Место.Номер</Name>
-			<DBTable>contracts</DBTable>
-			<DBColumn>place_no</DBColumn>
+			<Name>Договор.Ответственный</Name>
+			<DBTable>users</DBTable>
+			<DBColumn>name</DBColumn>
 		</PatternField>
 		<PatternField>
 			<Name>Договор.ДатаПодписания</Name>
