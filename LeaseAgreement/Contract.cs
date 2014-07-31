@@ -74,6 +74,7 @@ namespace LeaseAgreement
 			ComboWorks.ComboFillReference(comboOrg, "organizations", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboPlaceT,"place_types", ComboWorks.ListMode.WithNo);
 			ComboWorks.ComboFillReference(comboContractType, "contract_types", ComboWorks.ListMode.WithNo);
+			ComboWorks.ComboFillReference(comboCategory, "contract_category", ComboWorks.ListMode.WithNo);
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 			attachmentFiles.AttachToTable = "contracts";
@@ -122,6 +123,7 @@ namespace LeaseAgreement
 					
 					entryNumber.Text = rdr["number"].ToString();
 					checkDraft.Active = rdr.GetBoolean ("draft");
+					ComboWorks.SetActiveItem (comboCategory, DBWorks.GetInt (rdr, "category_id", -1));
 					if(rdr["lessee_id"] != DBNull.Value)
 					{
 						LesseeId = Convert.ToInt32(rdr["lessee_id"].ToString());
@@ -441,15 +443,15 @@ namespace LeaseAgreement
 				if(NewContract)
 				{
 					sql = "INSERT INTO contracts (number, draft, lessee_id, org_id, place_type_id, place_no, sign_date, " +
-						"start_date, end_date, contract_type_id, cancel_date, comments) " +
+						"start_date, end_date, contract_type_id, category_id, cancel_date, comments) " +
 						"VALUES (@number, @draft, @lessee_id, @org_id, @place_type_id, @place_no, @sign_date, " +
-						"@start_date, @end_date, @contract_type_id, @cancel_date, @comments)";
+						"@start_date, @end_date, @contract_type_id, @category_id, @cancel_date, @comments)";
 				}
 				else
 				{
 					sql = "UPDATE contracts SET number = @number, draft = @draft, lessee_id = @lessee_id, org_id = @org_id, " +
 						"place_type_id = @place_type_id, place_no = @place_no, sign_date = @sign_date, start_date = @start_date, " +
-						"end_date = @end_date, contract_type_id = @contract_type_id, cancel_date = @cancel_date, comments = @comments " +
+						"end_date = @end_date, contract_type_id = @contract_type_id, category_id = @category_id, cancel_date = @cancel_date, comments = @comments " +
 						"WHERE id = @id";
 				}
 
@@ -460,6 +462,7 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@number", entryNumber.Text);
 				cmd.Parameters.AddWithValue("@lessee_id", LesseeId);
 				cmd.Parameters.AddWithValue("@contract_type_id", ComboWorks.GetActiveIdOrNull (comboContractType));
+				cmd.Parameters.AddWithValue("@category_id", ComboWorks.GetActiveIdOrNull (comboCategory));
 				if(comboOrg.GetActiveIter(out iter) && (int)comboOrg.Model.GetValue(iter,1) != -1)
 					cmd.Parameters.AddWithValue("@org_id",comboOrg.Model.GetValue(iter,1));
 				else

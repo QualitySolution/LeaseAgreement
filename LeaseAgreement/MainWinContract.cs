@@ -31,6 +31,7 @@ public partial class MainWindow : Gtk.Window
 		//Заполняем комбобокс
 		ComboWorks.ComboFillReference(comboContractOrg, "organizations", ComboWorks.ListMode.WithAll);
 		ComboWorks.ComboFillReference(comboContractPlaceT,"place_types", ComboWorks.ListMode.WithAll);
+		ComboWorks.ComboFillReference(comboContractCategory,"contract_category", ComboWorks.ListMode.WithAll);
 
 		//Иконки статусов
 		stateNow = new Gdk.Pixbuf(System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.state-now.png");
@@ -94,6 +95,8 @@ public partial class MainWindow : Gtk.Window
 		{
 			sql.AddAsList (" contracts.org_id = '" + comboContractOrg.Model.GetValue(iter,1) + "' ");
 		}
+		if(ComboWorks.GetActiveId (comboContractCategory) > 0)
+			sql.AddAsList ("contracts.category_id = '{0}'", ComboWorks.GetActiveId (comboContractCategory));
 
 		if(comboContractState.Active == 1)
 			sql.AddAsList ("((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
@@ -294,6 +297,11 @@ public partial class MainWindow : Gtk.Window
 	}
 
 	protected void OnComboContractStateChanged(object sender, EventArgs e)
+	{
+		UpdateContract ();
+	}
+
+	protected void OnComboContractCategoryChanged(object sender, EventArgs e)
 	{
 		UpdateContract ();
 	}

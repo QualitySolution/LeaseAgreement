@@ -383,6 +383,9 @@ public partial class MainWindow : Gtk.Window
 			ComboWorks.ComboFillReference(comboPlaceOrg,"organizations", ComboWorks.ListMode.WithAll);
 			ComboWorks.ComboFillReference(comboContractOrg, "organizations", ComboWorks.ListMode.WithAll);
 			break;
+		case "contract_category":
+			ComboWorks.ComboFillReference(comboContractCategory,"contract_category", ComboWorks.ListMode.WithAll);
+			break;
 		} 
 	}
 
@@ -438,4 +441,16 @@ public partial class MainWindow : Gtk.Window
 		winref.Run();
 		winref.Destroy();
 	}
+		
+	protected void OnAction44Activated(object sender, EventArgs e)
+	{
+		Reference winref = new Reference();
+		winref.SetMode(true,false,true,true,true);
+		winref.FillList("contract_category","категория", "Категории договоров");
+		winref.Show();
+		winref.Run();
+		winref.Destroy();
+	}
+
+
 }
