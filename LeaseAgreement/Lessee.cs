@@ -162,7 +162,7 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@account", DBWorks.ValueOrNull (entryAccount.Text != "", entryAccount.Text));
 				cmd.Parameters.AddWithValue("@bik", DBWorks.ValueOrNull (entryBIK.Text != "", entryBIK.Text));
 				cmd.Parameters.AddWithValue("@bank", DBWorks.ValueOrNull (entryBank.Text != "", entryBank.Text));
-				cmd.Parameters.AddWithValue("@cor_account", DBWorks.ValueOrNull (entryBaseOf.Text != "", entryBaseOf.Text));
+				cmd.Parameters.AddWithValue("@cor_account", DBWorks.ValueOrNull (entryCorAccount.Text != "", entryCorAccount.Text));
 				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (textviewAddress.Buffer.Text != "", textviewAddress.Buffer.Text));
 				cmd.Parameters.AddWithValue("@jur_address", DBWorks.ValueOrNull (textviewJurAddress.Buffer.Text != "", textviewJurAddress.Buffer.Text));
 				cmd.Parameters.AddWithValue("@comments", DBWorks.ValueOrNull (textviewComments.Buffer.Text != "", textviewComments.Buffer.Text));
