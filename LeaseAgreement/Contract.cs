@@ -370,6 +370,14 @@ namespace LeaseAgreement
 
 		protected void OnButtonOkClicked (object sender, EventArgs e)
 		{
+			if(SaveContract ())
+			{
+				Respond (ResponseType.Ok);
+			}
+		}
+
+		private bool SaveContract()
+		{
 			TreeIter iter;
 
 			logger.Info("Запись договора...");
@@ -398,7 +406,7 @@ namespace LeaseAgreement
 					md.Run ();
 					md.Destroy();
 					trans.Rollback ();
-					return;
+					return false;
 				}
 				if(!checkDraft.Active)
 				{// Проверка не занято ли место другим арендатором
@@ -438,7 +446,7 @@ namespace LeaseAgreement
 						md.Destroy();
 						rdr.Close();
 						trans.Rollback ();
-						return;
+						return false;
 					}
 					rdr.Close();
 				}
@@ -511,49 +519,58 @@ namespace LeaseAgreement
 
 				logger.Info ("Записываем измененные шаблоны");
 
-				foreach(object[] row in DocPatterns)
+				if(DocPatterns.GetIterFirst (out iter))
 				{
-					if(!(bool)row[(int)DocPatternCol.isDocPattern])
-						continue;
-					if ((int)row [(int)DocPatternCol.docId] > 0)
-						sql = String.Format ("UPDATE contract_docs SET name = @name {0} WHERE id = @id", 
-						                     (bool)row [(int)DocPatternCol.fileChanged] ? ", size = @size, pattern = @pattern" : "");
-					else
-						sql = "INSERT INTO contract_docs (name, pattern_id, contract_id, size, pattern) " +
-							"VALUES (@name, @pattern_id, @contract_id, @size, @pattern)";
-					cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
-					cmd.Parameters.AddWithValue ("@name", row [(int)DocPatternCol.name]);
-					cmd.Parameters.AddWithValue ("@contract_id", ContractId);
-					cmd.Parameters.AddWithValue ("@pattern_id", row [(int)DocPatternCol.patternId]);
-					cmd.Parameters.AddWithValue ("@id", row [(int)DocPatternCol.docId]);
-					if((bool)row [(int)DocPatternCol.fileChanged])
+					do
 					{
-						byte[] file = (byte[])row [(int)DocPatternCol.file];
-						cmd.Parameters.AddWithValue ("@size", file.LongLength);
-						cmd.Parameters.AddWithValue ("@pattern", file);
-					}
-					try
-					{
-						cmd.ExecuteNonQuery ();
-					}
-					catch(MySqlException ex)
-					{
-						if (ex.Number == 1153) {
-							logger.WarnException ("Превышен максимальный размер пакета для передачи на сервер.", ex);
-							string Text = "Превышен максимальный размер пакета для передачи на сервер базы данных. " +
-								"Некоторые файлы превысили ограничение и не будут записаны в базу данных. " +
-								"Это значение настраивается на сервере, по умолчанию для MySQL оно равняется 1Мб. " +
-								"Максимальный размер файла поддерживаемый программой составляет 16Мб, мы рекомендуем " +
-								"установить в настройках сервера параметр <b>max_allowed_packet=16M</b>. Подробнее о настройке здесь " +
-								"http://dev.mysql.com/doc/refman/5.6/en/packet-too-large.html";
-							MessageDialog md = new MessageDialog ((Gtk.Window)this.Toplevel, DialogFlags.Modal,
-							                                      MessageType.Error, 
-							                                      ButtonsType.Ok, Text);
-							md.Run ();
-							md.Destroy ();
-						} else
-							throw ex;
-					}
+						if(!(bool)DocPatterns.GetValue (iter, (int)DocPatternCol.isDocPattern))
+							continue;
+						if ((int)DocPatterns.GetValue (iter, (int)DocPatternCol.docId) > 0)
+							sql = String.Format ("UPDATE contract_docs SET name = @name {0} WHERE id = @id", 
+							                     (bool)DocPatterns.GetValue (iter, (int)DocPatternCol.fileChanged) ? ", size = @size, pattern = @pattern" : "");
+						else
+							sql = "INSERT INTO contract_docs (name, pattern_id, contract_id, size, pattern) " +
+								"VALUES (@name, @pattern_id, @contract_id, @size, @pattern)";
+						cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
+						cmd.Parameters.AddWithValue ("@name", DocPatterns.GetValue (iter, (int)DocPatternCol.name));
+						cmd.Parameters.AddWithValue ("@contract_id", ContractId);
+						cmd.Parameters.AddWithValue ("@pattern_id", DocPatterns.GetValue (iter, (int)DocPatternCol.patternId));
+						cmd.Parameters.AddWithValue ("@id", DocPatterns.GetValue (iter, (int)DocPatternCol.docId));
+						if((bool)DocPatterns.GetValue (iter, (int)DocPatternCol.fileChanged))
+						{
+							byte[] file = (byte[])DocPatterns.GetValue (iter, (int)DocPatternCol.file);
+							cmd.Parameters.AddWithValue ("@size", file.LongLength);
+							cmd.Parameters.AddWithValue ("@pattern", file);
+						}
+						try
+						{
+							cmd.ExecuteNonQuery ();
+							if ((int)DocPatterns.GetValue (iter, (int)DocPatternCol.docId) > 0)
+							{
+								int lastDocId = (int)cmd.LastInsertedId;
+								DocPatterns.SetValue (iter, (int)DocPatternCol.docId, lastDocId);
+							}
+							DocPatterns.SetValue (iter, (int)DocPatternCol.fileChanged, false);
+						}
+						catch(MySqlException ex)
+						{
+							if (ex.Number == 1153) {
+								logger.WarnException ("Превышен максимальный размер пакета для передачи на сервер.", ex);
+								string Text = "Превышен максимальный размер пакета для передачи на сервер базы данных. " +
+									"Некоторые файлы превысили ограничение и не будут записаны в базу данных. " +
+									"Это значение настраивается на сервере, по умолчанию для MySQL оно равняется 1Мб. " +
+									"Максимальный размер файла поддерживаемый программой составляет 16Мб, мы рекомендуем " +
+									"установить в настройках сервера параметр <b>max_allowed_packet=16M</b>. Подробнее о настройке здесь " +
+									"http://dev.mysql.com/doc/refman/5.6/en/packet-too-large.html";
+								MessageDialog md = new MessageDialog ((Gtk.Window)this.Toplevel, DialogFlags.Modal,
+								                                      MessageType.Error, 
+								                                      ButtonsType.Ok, Text);
+								md.Run ();
+								md.Destroy ();
+							} else
+								throw ex;
+						}
+					} while(DocPatterns.IterNext (ref iter));
 				}
 
 				if (deletedDocItems.Count > 0) 
@@ -568,6 +585,7 @@ namespace LeaseAgreement
 					sqld.Add (")");
 					cmd = new MySqlCommand(sqld.Text, (MySqlConnection)QSMain.ConnectionDB, trans);
 					cmd.ExecuteNonQuery ();
+					deletedDocItems.Clear ();
 				}
 
 				//Корректная смена арендатора
@@ -604,9 +622,10 @@ namespace LeaseAgreement
 					}
 				}
 
+				NewContract = false;
 				trans.Commit ();
 				logger.Info("Ok");
-				Respond (ResponseType.Ok);
+				return true;
 			} 
 			catch (Exception ex) 
 			{
@@ -614,6 +633,7 @@ namespace LeaseAgreement
 				logger.ErrorException("Ошибка записи договора!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
+			return false;
 		}
 
 		protected void OnDatepickerStartDateChanged (object sender, EventArgs e)
@@ -724,6 +744,8 @@ namespace LeaseAgreement
 
 		protected void OnButtonPrintClicked(object sender, EventArgs e)
 		{
+			if (!SaveIfNeed ())
+				return;
 			TreeIter iter;
 			treeviewDocs.Selection.GetSelected (out iter);
 
@@ -742,6 +764,33 @@ namespace LeaseAgreement
 			System.IO.File.WriteAllBytes (TempFilePath, file);
 			logger.Info("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start(TempFilePath);
+		}
+
+		private bool SaveIfNeed()
+		{
+			if (!NewContract) 
+				return SaveContract ();
+
+			MessageDialog md = new MessageDialog (this, DialogFlags.Modal,
+			                                      MessageType.Question, 
+			                                      ButtonsType.YesNo, 
+			                                      "Для использования шаблонов необходимо сохранить договор. Сохранить сейчас?");
+			int result = md.Run ();
+			md.Destroy ();
+
+			if (result == (int)ResponseType.Yes) {
+				if (!buttonOk.Sensitive) {
+					md = new MessageDialog (this, DialogFlags.Modal,
+					                        MessageType.Error, 
+					                        ButtonsType.Ok, 
+					                        "Для сохранения, не все условия выполнены!");
+					md.Run ();
+					md.Destroy ();
+					return false;
+				}
+				return SaveContract ();
+			}
+			return false;
 		}
 
 		protected void OnButtonRemoveClicked(object sender, EventArgs e)
@@ -777,6 +826,8 @@ namespace LeaseAgreement
 
 		protected void OnButtonEditClicked(object sender, EventArgs e)
 		{
+			if (!SaveIfNeed ())
+				return;
 			TreeIter iter;
 			treeviewDocs.Selection.GetSelected (out iter);
 
