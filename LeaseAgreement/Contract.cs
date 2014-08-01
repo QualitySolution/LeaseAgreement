@@ -588,40 +588,6 @@ namespace LeaseAgreement
 					deletedDocItems.Clear ();
 				}
 
-				//Корректная смена арендатора
-				if(!NewContract && OrigLesseeId != LesseeId && !LesseeisNull)
-				{
-					logger.Info("Арендатор изменился...");
-					sql = "SELECT COUNT(*) FROM credit_slips WHERE contract_id = @contract AND lessee_id = @old_lessee";
-					cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
-					cmd.Parameters.AddWithValue("@contract", ContractId);
-					cmd.Parameters.AddWithValue("@old_lessee", OrigLesseeId);
-					long rowcount = (long) cmd.ExecuteScalar();
-					if( rowcount > 0)
-					{
-						MessageDialog md = new MessageDialog( this, DialogFlags.Modal,
-						                                     MessageType.Warning, 
-						                                     ButtonsType.YesNo, "Предупреждение");
-						md.UseMarkup = false;
-						md.Text = String.Format("У договора изменился арендатор, но поэтому договору уже " +
-							"было создано {0} приходных ордеров. Заменить арендатора в приходных ордерах?", rowcount);
-						int result = md.Run ();
-						md.Destroy();
-
-						if(result == (int) ResponseType.Yes)
-						{
-							logger.Info("Меняем арендатора в приходных ордерах...");
-							sql = "UPDATE credit_slips SET lessee_id = @lessee_id " +
-								"WHERE contract_id = @contract AND lessee_id = @old_lessee ";
-							cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
-							cmd.Parameters.AddWithValue("@contract", ContractId);
-							cmd.Parameters.AddWithValue("@old_lessee", OrigLesseeId);
-							cmd.Parameters.AddWithValue("@lessee_id", LesseeId);
-							cmd.ExecuteNonQuery();
-						}
-					}
-				}
-
 				NewContract = false;
 				trans.Commit ();
 				logger.Info("Ok");
