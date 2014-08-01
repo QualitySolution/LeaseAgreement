@@ -102,11 +102,11 @@ public partial class MainWindow : Gtk.Window
 			sql.AddAsList ("((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
 			               "OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date)) AND draft = 'FALSE'");
 		if(comboContractState.Active == 2)
-			sql.AddAsList ("contracts.end_date < CURDATE() AND draft = '0'");
+			sql.AddAsList ("IFNULL(contracts.cancel_date, contracts.end_date) < CURDATE() AND draft = '0'");
 		if(comboContractState.Active == 3)
 			sql.AddAsList ("draft = '1'");
 		if(comboContractState.Active == 4)
-			sql.AddAsList ("(contracts.end_date >= CURDATE() OR draft = '1')");
+			sql.AddAsList ("(IFNULL(contracts.cancel_date, contracts.end_date) >= CURDATE() OR draft = '1')");
 
 		if(check30daysContracts.Active)
 			sql.AddAsList ("contracts.end_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)");
