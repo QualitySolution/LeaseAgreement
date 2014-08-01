@@ -543,7 +543,7 @@ namespace LeaseAgreement
 						try
 						{
 							cmd.ExecuteNonQuery ();
-							if ((int)DocPatterns.GetValue (iter, (int)DocPatternCol.docId) > 0)
+							if ((int)DocPatterns.GetValue (iter, (int)DocPatternCol.docId) <= 0)
 							{
 								int lastDocId = (int)cmd.LastInsertedId;
 								DocPatterns.SetValue (iter, (int)DocPatternCol.docId, lastDocId);
