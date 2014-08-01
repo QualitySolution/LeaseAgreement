@@ -194,7 +194,7 @@ namespace LeaseAgreement
 			string sql = "SELECT contracts.*, place_types.name as type, places.area as area FROM contracts " +
 				"LEFT JOIN place_types ON contracts.place_type_id = place_types.id " +
 				"LEFT JOIN places ON places.type_id = contracts.place_type_id AND places.place_no = contracts.place_no " +
-				"WHERE contracts.lessee_id = @lessee";
+				"WHERE contracts.lessee_id = @lessee AND contracts.draft = '0'";
 			if(checkActiveContracts.Active)
 				sql += " AND ((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
 					"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date)) ";

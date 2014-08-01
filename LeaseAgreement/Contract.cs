@@ -18,7 +18,6 @@ namespace LeaseAgreement
 
 		int LesseeId; 
 		int ContractId = -1;
-		int OrigLesseeId = -1;
 		bool LesseeisNull = true;
 
 		enum DocPatternCol{
@@ -130,7 +129,6 @@ namespace LeaseAgreement
 					if(rdr["lessee_id"] != DBNull.Value)
 					{
 						LesseeId = Convert.ToInt32(rdr["lessee_id"].ToString());
-						OrigLesseeId = LesseeId;
 						entryLessee.Text = rdr["lessee"].ToString();
 						entryLessee.TooltipText = rdr["lessee"].ToString();
 						LesseeisNull = false;
@@ -385,7 +383,7 @@ namespace LeaseAgreement
 			try 
 			{
 				// Проверка номера договора на дубликат
-				string sql = "SELECT COUNT(*) AS cnt FROM contracts WHERE number = @number AND sign_date = @sign_date AND id <> @id ";
+				string sql = "SELECT COUNT(*) AS cnt FROM contracts WHERE number = @number AND sign_date = @sign_date AND id <> @id AND draft = '0' ";
 				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 				cmd.Parameters.AddWithValue("@number", entryNumber.Text);
 				cmd.Parameters.AddWithValue("@id", ContractId);
@@ -411,8 +409,8 @@ namespace LeaseAgreement
 				if(!checkDraft.Active)
 				{// Проверка не занято ли место другим арендатором
 					sql = "SELECT id, number, start_date AS start, IFNULL(cancel_date,end_date) AS end FROM contracts " +
-						"WHERE place_type_id = @type_id AND place_no = @place_no AND " +
-							"!(@start > DATE(IFNULL(cancel_date,end_date)) OR @end < start_date)" ;
+						"WHERE place_type_id = @type_id AND place_no = @place_no AND draft = '0' AND" +
+						"!(@start > DATE(IFNULL(cancel_date,end_date)) OR @end < start_date)" ;
 					cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 					if(comboPlaceT.GetActiveIter(out iter))
 					{
