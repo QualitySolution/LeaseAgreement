@@ -112,8 +112,10 @@ namespace LeaseAgreement
 					logger.Warn ("Поле {0} не найдено, поэтому пропущено.");
 					continue;
 				}
-					
-				node.Attributes ["office:string-value"].Value = field.value.ToString ();
+				if(field.Type == PatternFieldType.FDate)
+					node.Attributes ["office:string-value"].Value = field.value != DBNull.Value ? ((DateTime)field.value).ToLongDateString () : "";
+				else
+					node.Attributes ["office:string-value"].Value = field.value.ToString ();
 			}
 
 			UpdateContentXML (content);

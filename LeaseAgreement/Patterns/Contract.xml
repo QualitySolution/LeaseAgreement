@@ -54,26 +54,30 @@
 			<Name>Договор.ДатаПодписания</Name>
 			<DBTable>contracts</DBTable>
 			<DBColumn>sign_date</DBColumn>
+			<Type>FDate</Type>
 		</PatternField>
 		<PatternField>
 			<Name>Договор.ДатаНачала</Name>
 			<DBTable>contracts</DBTable>
 			<DBColumn>start_date</DBColumn>
+			<Type>FDate</Type>
 		</PatternField>
 		<PatternField>
 			<Name>Договор.ДатаОкончания</Name>
 			<DBTable>contracts</DBTable>
 			<DBColumn>end_date</DBColumn>
+			<Type>FDate</Type>
 		</PatternField>
 		<PatternField>
 			<Name>Договор.ДатаРасторжения</Name>
 			<DBTable>contracts</DBTable>
 			<DBColumn>cancel_date</DBColumn>
+			<Type>FDate</Type>
 		</PatternField>
 		<PatternField>
 			<Name>Договор.Комментарии</Name>
 			<DBTable>contracts</DBTable>
-			<DBColumn>cancel_date</DBColumn>
+			<DBColumn>comments</DBColumn>
 		</PatternField>
 		<PatternField>
 			<Name>Организация.Название</Name>
@@ -284,6 +288,7 @@
 			<Name>Участок.ДатаДоговора</Name>
 			<DBTable>stead</DBTable>
 			<DBColumn>contract_date</DBColumn>
+			<Type>FDate</Type>
 		</PatternField>
 		<PatternField>
 			<Name>Участок.Контрагент</Name>

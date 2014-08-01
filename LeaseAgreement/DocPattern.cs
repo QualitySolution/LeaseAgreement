@@ -106,6 +106,7 @@ namespace LeaseAgreement
 		public string Name;
 		public string DBTable;
 		public string DBColumn;
+		public PatternFieldType Type;
 		[XmlIgnore]
 		public object value;
 
@@ -132,6 +133,11 @@ namespace LeaseAgreement
 		{
 
 		}
+	}
+
+	public enum PatternFieldType{
+		FString,
+		FDate
 	}
 }
 
