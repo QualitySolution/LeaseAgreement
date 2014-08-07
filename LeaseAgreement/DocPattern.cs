@@ -5,11 +5,13 @@ using System.IO;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
 using QSCustomFields;
+using NLog;
 
 namespace LeaseAgreement
 {
 	public class DocPattern
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		public string RootTable;
 		public string RootIdColumn;
 		public List<PatternField> Fields;
@@ -45,7 +47,19 @@ namespace LeaseAgreement
 					string newFieldName = String.Format ("{0}.{1}", 
 					                                     StringWorks.StringToPascalCase (table.Title), 
 					                                     StringWorks.StringToPascalCase (info.Name));
-					PatternField newField = new PatternField (newFieldName, table.DBName, info.ColumnName);
+					PatternFieldType newFieldType;
+					switch (info.FieldType) {
+					case FieldTypes.TString:
+						newFieldType = PatternFieldType.FString;
+						break;
+					case FieldTypes.TCurrency:
+						newFieldType = PatternFieldType.FCurrency;
+						break;
+					default:
+						logger.Warn ("Не найдено соответствие для типа поля {0}, поле будет пропущено.", info.FieldType.ToString ());
+						continue;
+					}
+					PatternField newField = new PatternField (newFieldName, table.DBName, info.ColumnName, newFieldType);
 					Fields.Insert (insertIndex, newField);
 				}
 			}
@@ -72,7 +86,8 @@ namespace LeaseAgreement
 					throw new InvalidDataException ("Не найдена последовательность Join-ов для добавления таблицы " + field.DBTable);
 			}
 			sql.Add ("WHERE {0}.{1} = @id", RootTable, RootIdColumn);
-			// Заполняем поля
+
+			// Заполняем поля данными
 			MySqlCommand cmd = new MySqlCommand (sql.Text, (MySqlConnection)QSMain.ConnectionDB);
 			cmd.Parameters.AddWithValue ("@id", id);
 
@@ -115,11 +130,12 @@ namespace LeaseAgreement
 
 		}
 
-		public PatternField(string name, string dbtable, string dbcolumn)
+		public PatternField(string name, string dbtable, string dbcolumn, PatternFieldType type)
 		{
 			Name = name;
 			DBTable = dbtable;
 			DBColumn = dbcolumn;
+			Type = type;
 		}
 	}
 
@@ -137,7 +153,8 @@ namespace LeaseAgreement
 
 	public enum PatternFieldType{
 		FString,
-		FDate
+		FDate,
+		FCurrency
 	}
 }
 

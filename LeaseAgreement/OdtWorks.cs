@@ -4,6 +4,7 @@ using System.Xml;
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Zip;
 using NLog;
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {
@@ -82,14 +83,40 @@ namespace LeaseAgreement
 
 			foreach(PatternField field in DocInfo.Fields)
 			{
-				if (existFilds.Contains (field.Name))
-					continue;
 
-				XmlElement newFieldNode = content.CreateElement("text", "user-field-decl", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-				newFieldNode.SetAttribute ("value-type","urn:oasis:names:tc:opendocument:xmlns:office:1.0", "string");
-				newFieldNode.SetAttribute ("string-value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "");
-				newFieldNode.SetAttribute ("name", "urn:oasis:names:tc:opendocument:xmlns:text:1.0", field.Name);
-				fieldsDels.AppendChild (newFieldNode);
+				if (field.Type == PatternFieldType.FString || field.Type == PatternFieldType.FDate) {
+
+					if (existFilds.Contains (field.Name))
+						continue;
+
+					XmlElement newFieldNode = content.CreateElement ("text", "user-field-decl", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+					newFieldNode.SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "string");
+					newFieldNode.SetAttribute ("string-value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "");
+					newFieldNode.SetAttribute ("name", "urn:oasis:names:tc:opendocument:xmlns:text:1.0", field.Name);
+					fieldsDels.AppendChild (newFieldNode);
+				}
+				else if(field.Type == PatternFieldType.FCurrency)
+				{
+					if (!existFilds.Contains (field.Name + ".Число")) 
+					{
+						XmlElement newFieldNode = content.CreateElement ("text", "user-field-decl", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+						newFieldNode.SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "currency");
+						newFieldNode.SetAttribute ("value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "0");
+						string curr = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
+						newFieldNode.SetAttribute ("currency", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", curr);
+						newFieldNode.SetAttribute ("name", "urn:oasis:names:tc:opendocument:xmlns:text:1.0", field.Name + ".Число");
+						fieldsDels.AppendChild (newFieldNode);
+					}
+					if (!existFilds.Contains (field.Name + ".Пропись")) 
+					{
+						XmlElement newFieldNode = content.CreateElement ("text", "user-field-decl", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+						newFieldNode.SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "string");
+						newFieldNode.SetAttribute ("string-value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "");
+						newFieldNode.SetAttribute ("name", "urn:oasis:names:tc:opendocument:xmlns:text:1.0", field.Name + ".Пропись");
+						fieldsDels.AppendChild (newFieldNode);
+					}
+
+				}
 			}
 
 			UpdateContentXML (content);
@@ -106,14 +133,24 @@ namespace LeaseAgreement
 			foreach(XmlNode node in content.SelectNodes ("/office:document-content/office:body/office:text/text:user-field-decls/text:user-field-decl", nsMgr))
 			{
 				string fieldName = node.Attributes ["text:name"].Value;
-				PatternField field = DocInfo.Fields.Find (f => f.Name == fieldName);
+				PatternField field = DocInfo.Fields.Find (f =>  fieldName.StartsWith (f.Name));
 				if (field == null)
 				{
-					logger.Warn ("Поле {0} не найдено, поэтому пропущено.");
+					logger.Warn ("Поле {0} не найдено, поэтому пропущено.", fieldName);
 					continue;
 				}
-				if(field.Type == PatternFieldType.FDate)
+				if (field.Type == PatternFieldType.FDate)
 					node.Attributes ["office:string-value"].Value = field.value != DBNull.Value ? ((DateTime)field.value).ToLongDateString () : "";
+				else if (field.Type == PatternFieldType.FCurrency) 
+				{
+					if(fieldName.Replace (field.Name, "") == ".Число")
+						node.Attributes ["office:value"].Value = XmlConvert.ToString((decimal)field.value);
+					if (fieldName.Replace (field.Name, "") == ".Пропись") 
+					{
+						string val = RusNumber.Str ((int)(decimal)field.value, true, "рубль", "рубля", "рублей");
+						node.Attributes ["office:string-value"].Value = val;
+					}
+				}
 				else
 					node.Attributes ["office:string-value"].Value = field.value.ToString ();
 			}
