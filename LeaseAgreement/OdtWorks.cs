@@ -84,7 +84,7 @@ namespace LeaseAgreement
 			foreach(PatternField field in DocInfo.Fields)
 			{
 
-				if (field.Type == PatternFieldType.FString || field.Type == PatternFieldType.FDate) {
+				if (field.Type == PatternFieldType.FString) {
 
 					if (existFilds.Contains (field.Name))
 						continue;
@@ -92,6 +92,19 @@ namespace LeaseAgreement
 					XmlElement newFieldNode = content.CreateElement ("text", "user-field-decl", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 					newFieldNode.SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "string");
 					newFieldNode.SetAttribute ("string-value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "");
+					newFieldNode.SetAttribute ("name", "urn:oasis:names:tc:opendocument:xmlns:text:1.0", field.Name);
+					fieldsDels.AppendChild (newFieldNode);
+				}
+				else if (field.Type == PatternFieldType.FDate) {
+
+					if (existFilds.Contains (field.Name))
+						continue;
+
+					XmlElement newFieldNode = content.CreateElement ("text", "user-field-decl", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+					newFieldNode.SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "string");
+					newFieldNode.SetAttribute ("string-value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "");
+					//newFieldNode.SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "date");
+					//newFieldNode.SetAttribute ("date-value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "");
 					newFieldNode.SetAttribute ("name", "urn:oasis:names:tc:opendocument:xmlns:text:1.0", field.Name);
 					fieldsDels.AppendChild (newFieldNode);
 				}
@@ -139,8 +152,9 @@ namespace LeaseAgreement
 					logger.Warn ("Поле {0} не найдено, поэтому пропущено.", fieldName);
 					continue;
 				}
-				if (field.Type == PatternFieldType.FDate)
+				if (field.Type == PatternFieldType.FDate) // && node.Attributes ["office:date-value"] != null)
 					node.Attributes ["office:string-value"].Value = field.value != DBNull.Value ? ((DateTime)field.value).ToLongDateString () : "";
+					//node.Attributes ["office:date-value"].Value = field.value != DBNull.Value ? XmlConvert.ToString ((DateTime)field.value, XmlDateTimeSerializationMode.Unspecified) : "";
 				else if (field.Type == PatternFieldType.FCurrency) 
 				{
 					if(fieldName.Replace (field.Name, "") == ".Число")
