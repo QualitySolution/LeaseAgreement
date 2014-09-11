@@ -2731,6 +2731,7 @@
                                   <widget class="Gtk.Entry" id="entryBaseOf">
                                     <property name="MemberName" />
                                     <property name="CanFocus">True</property>
+                                    <property name="Text" translatable="yes">Устава</property>
                                     <property name="IsEditable">True</property>
                                     <property name="InvisibleChar">●</property>
                                   </widget>
@@ -2773,6 +2774,7 @@
                                   <widget class="Gtk.Entry" id="entryPost">
                                     <property name="MemberName" />
                                     <property name="CanFocus">True</property>
+                                    <property name="Text" translatable="yes">Генерального директора</property>
                                     <property name="IsEditable">True</property>
                                     <property name="InvisibleChar">●</property>
                                   </widget>
@@ -2813,7 +2815,7 @@
                                   <widget class="Gtk.Label" id="label7">
                                     <property name="MemberName" />
                                     <property name="Xalign">1</property>
-                                    <property name="LabelProp" translatable="yes">Должность:</property>
+                                    <property name="LabelProp" translatable="yes">В лице:</property>
                                   </widget>
                                   <packing>
                                     <property name="TopAttach">1</property>
@@ -4270,6 +4272,7 @@
               <widget class="Gtk.Entry" id="entryBaseOf">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="Text" translatable="yes">Устава</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
               </widget>
@@ -4527,6 +4530,7 @@
               <widget class="Gtk.Entry" id="entryPost">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="Text" translatable="yes">Генерального директора</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
               </widget>
@@ -4708,7 +4712,7 @@
               <widget class="Gtk.Label" id="label14">
                 <property name="MemberName" />
                 <property name="Xalign">1</property>
-                <property name="LabelProp" translatable="yes">должность:</property>
+                <property name="LabelProp" translatable="yes">в лице:</property>
               </widget>
               <packing>
                 <property name="TopAttach">2</property>

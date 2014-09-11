@@ -135,6 +135,7 @@ namespace LeaseAgreement
 			this.entryBaseOf = new global::Gtk.Entry ();
 			this.entryBaseOf.CanFocus = true;
 			this.entryBaseOf.Name = "entryBaseOf";
+			this.entryBaseOf.Text = global::Mono.Unix.Catalog.GetString ("Устава");
 			this.entryBaseOf.IsEditable = true;
 			this.entryBaseOf.InvisibleChar = '●';
 			this.table1.Add (this.entryBaseOf);
@@ -292,6 +293,7 @@ namespace LeaseAgreement
 			this.entryPost = new global::Gtk.Entry ();
 			this.entryPost.CanFocus = true;
 			this.entryPost.Name = "entryPost";
+			this.entryPost.Text = global::Mono.Unix.Catalog.GetString ("Генерального директора");
 			this.entryPost.IsEditable = true;
 			this.entryPost.InvisibleChar = '●';
 			this.table1.Add (this.entryPost);
@@ -395,7 +397,7 @@ namespace LeaseAgreement
 			this.label14 = new global::Gtk.Label ();
 			this.label14.Name = "label14";
 			this.label14.Xalign = 1F;
-			this.label14.LabelProp = global::Mono.Unix.Catalog.GetString ("должность:");
+			this.label14.LabelProp = global::Mono.Unix.Catalog.GetString ("в лице:");
 			this.table1.Add (this.label14);
 			global::Gtk.Table.TableChild w25 = ((global::Gtk.Table.TableChild)(this.table1 [this.label14]));
 			w25.TopAttach = ((uint)(2));
