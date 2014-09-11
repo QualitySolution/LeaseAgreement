@@ -227,7 +227,6 @@ public partial class MainWindow
 		this.Action15.ShortLabel = global::Mono.Unix.Catalog.GetString ("Организации");
 		w1.Add (this.Action15, null);
 		this.Action26 = new global::Gtk.Action ("Action26", global::Mono.Unix.Catalog.GetString ("История версий"), null, null);
-		this.Action26.Sensitive = false;
 		this.Action26.ShortLabel = global::Mono.Unix.Catalog.GetString ("История версий");
 		w1.Add (this.Action26, null);
 		this.UsersAction = new global::Gtk.Action ("UsersAction", global::Mono.Unix.Catalog.GetString ("Пользователи"), null, "gtk-properties");

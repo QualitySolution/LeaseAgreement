@@ -71,7 +71,6 @@
       <action id="Action26">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">История версий</property>
-        <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">История версий</property>
         <signal name="Activated" handler="OnAction20Activated" />
       </action>
