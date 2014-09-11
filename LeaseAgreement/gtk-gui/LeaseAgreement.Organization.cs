@@ -26,7 +26,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Entry entryKPP;
 		
-		private global::Gtk.Entry entryName;
+		private global::QSWidgetLib.CompanyName entryName;
 		
 		private global::Gtk.Entry entryOGRN;
 		
@@ -246,7 +246,7 @@ namespace LeaseAgreement
 			w11.XOptions = ((global::Gtk.AttachOptions)(4));
 			w11.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.entryName = new global::Gtk.Entry ();
+			this.entryName = new global::QSWidgetLib.CompanyName ();
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;

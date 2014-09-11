@@ -14,6 +14,7 @@ namespace LeaseAgreement
 		public Organization ()
 		{
 			this.Build ();
+			entryName.FullNameEntry = entryFullName;
 		}
 
 		public void Fill(int id)

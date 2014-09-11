@@ -21,6 +21,7 @@ namespace LeaseAgreement
 		public lessee ()
 		{
 			this.Build ();
+			entryName.FullNameEntry = entryFullName;
 
 			//Исправляем табы
 			Gtk.Image img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.user-home.png");

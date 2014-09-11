@@ -2114,7 +2114,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">2</property>
+            <property name="CurrentPage">0</property>
             <property name="TabPos">Left</property>
             <child>
               <widget class="Gtk.Table" id="tableInfo">
@@ -2176,10 +2176,9 @@
                                 <property name="BottomAttach">3</property>
                                 <property name="LeftAttach">1</property>
                                 <property name="RightAttach">2</property>
-                                <property name="AutoSize">True</property>
-                                <property name="XOptions">Fill</property>
+                                <property name="AutoSize">False</property>
                                 <property name="YOptions">Fill</property>
-                                <property name="XExpand">False</property>
+                                <property name="XExpand">True</property>
                                 <property name="XFill">True</property>
                                 <property name="XShrink">False</property>
                                 <property name="YExpand">False</property>
@@ -2236,7 +2235,7 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="Gtk.Entry" id="entryName">
+                              <widget class="QSWidgetLib.CompanyName" id="entryName">
                                 <property name="MemberName" />
                                 <property name="CanFocus">True</property>
                                 <property name="IsEditable">True</property>
@@ -2249,8 +2248,9 @@
                                 <property name="LeftAttach">1</property>
                                 <property name="RightAttach">2</property>
                                 <property name="AutoSize">False</property>
+                                <property name="XOptions">Fill</property>
                                 <property name="YOptions">Fill</property>
-                                <property name="XExpand">True</property>
+                                <property name="XExpand">False</property>
                                 <property name="XFill">True</property>
                                 <property name="XShrink">False</property>
                                 <property name="YExpand">False</property>
@@ -4453,7 +4453,7 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryName">
+              <widget class="QSWidgetLib.CompanyName" id="entryName">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>

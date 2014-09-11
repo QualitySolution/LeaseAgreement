@@ -22,7 +22,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Entry entryKPP;
 		
-		private global::Gtk.Entry entryName;
+		private global::QSWidgetLib.CompanyName entryName;
 		
 		private global::Gtk.Entry entryOGRN;
 		
@@ -163,7 +163,7 @@ namespace LeaseAgreement
 			this.notebookMain = new global::Gtk.Notebook ();
 			this.notebookMain.CanFocus = true;
 			this.notebookMain.Name = "notebookMain";
-			this.notebookMain.CurrentPage = 2;
+			this.notebookMain.CurrentPage = 0;
 			this.notebookMain.TabPos = ((global::Gtk.PositionType)(0));
 			// Container child notebookMain.Gtk.Notebook+NotebookChild
 			this.tableInfo = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
@@ -210,7 +210,6 @@ namespace LeaseAgreement
 			w3.BottomAttach = ((uint)(3));
 			w3.LeftAttach = ((uint)(1));
 			w3.RightAttach = ((uint)(2));
-			w3.XOptions = ((global::Gtk.AttachOptions)(4));
 			w3.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.entryINN = new global::Gtk.Entry ();
@@ -243,7 +242,7 @@ namespace LeaseAgreement
 			w5.XOptions = ((global::Gtk.AttachOptions)(4));
 			w5.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.entryName = new global::Gtk.Entry ();
+			this.entryName = new global::QSWidgetLib.CompanyName ();
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;
@@ -254,6 +253,7 @@ namespace LeaseAgreement
 			w6.BottomAttach = ((uint)(2));
 			w6.LeftAttach = ((uint)(1));
 			w6.RightAttach = ((uint)(2));
+			w6.XOptions = ((global::Gtk.AttachOptions)(4));
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.entryOGRN = new global::Gtk.Entry ();
