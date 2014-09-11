@@ -15,6 +15,18 @@ namespace LeaseAgreement
 		{
 			this.Build ();
 			entryName.FullNameEntry = entryFullName;
+
+			entryPost.Completion = new Gtk.EntryCompletion ();
+			entryPost.Completion.Model = ListStoreWorks.CreateWithUniqueValue ("organizations", "signatory_post");
+			entryPost.Completion.TextColumn = 0;
+
+			entryBaseOf.Completion = new Gtk.EntryCompletion ();
+			entryBaseOf.Completion.Model = ListStoreWorks.CreateWithUniqueValue ("organizations", "basis_of");
+			entryBaseOf.Completion.TextColumn = 0;
+
+			entryBank.Completion = new Gtk.EntryCompletion ();
+			entryBank.Completion.Model = ListStoreWorks.CreateWithUniqueValue ("organizations", "bank");
+			entryBank.Completion.TextColumn = 0;
 		}
 
 		public void Fill(int id)
