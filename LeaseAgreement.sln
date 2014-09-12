@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QSCustomFields", "..\QSProj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QSAttachment", "..\QSProjects\Modules\QSAttachment\QSAttachment.csproj", "{AED7339A-4A71-4063-9C67-0D54821230A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QSScan", "..\QSProjects\QSScan\QSScan.csproj", "{DB2EEB00-FF15-4AF8-887D-E3261C31B173}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -39,6 +41,10 @@ Global
 		{AED7339A-4A71-4063-9C67-0D54821230A3}.Debug|x86.Build.0 = Debug|Any CPU
 		{AED7339A-4A71-4063-9C67-0D54821230A3}.Release|x86.ActiveCfg = Release|Any CPU
 		{AED7339A-4A71-4063-9C67-0D54821230A3}.Release|x86.Build.0 = Release|Any CPU
+		{DB2EEB00-FF15-4AF8-887D-E3261C31B173}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB2EEB00-FF15-4AF8-887D-E3261C31B173}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB2EEB00-FF15-4AF8-887D-E3261C31B173}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB2EEB00-FF15-4AF8-887D-E3261C31B173}.Release|x86.Build.0 = Release|Any CPU
 		{E756C2DD-AD5F-4B44-AC70-F8B0BAA0C7CB}.Debug|x86.ActiveCfg = Debug|x86
 		{E756C2DD-AD5F-4B44-AC70-F8B0BAA0C7CB}.Debug|x86.Build.0 = Debug|x86
 		{E756C2DD-AD5F-4B44-AC70-F8B0BAA0C7CB}.Release|x86.ActiveCfg = Release|x86
