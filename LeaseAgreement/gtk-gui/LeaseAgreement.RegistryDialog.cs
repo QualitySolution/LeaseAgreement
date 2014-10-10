@@ -19,6 +19,7 @@ namespace LeaseAgreement
 			global::Stetic.Gui.Initialize (this);
 			// Widget LeaseAgreement.RegistryDialog
 			this.Name = "LeaseAgreement.RegistryDialog";
+			this.Title = global::Mono.Unix.Catalog.GetString ("Реестр договоров");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.RegistryDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;

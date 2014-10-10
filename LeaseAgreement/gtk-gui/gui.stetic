@@ -5742,6 +5742,7 @@
   </widget>
   <widget class="Gtk.Dialog" id="LeaseAgreement.RegistryDialog" design-size="394 139">
     <property name="MemberName" />
+    <property name="Title" translatable="yes">Реестр договоров</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>

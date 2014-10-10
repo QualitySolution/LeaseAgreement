@@ -20,7 +20,7 @@ from LeaseAgreement.contracts
 left join LeaseAgreement.places on places.place_no = contracts.place_no
 left join LeaseAgreement.organizations on organizations.id = contracts.org_id
 left join LeaseAgreement.lessees on lessees.id = contracts.lessee_id
-where organizations.id = @org_id or @org_id = -1;</CommandText>
+where organizations.id = @org_id or @org_id = 0;</CommandText>
         <QueryParameters>
           <QueryParameter Name="org_id">
             <Value>=Parameters!org_id</Value>
@@ -100,7 +100,7 @@ where organizations.id = @org_id or @org_id = -1;</CommandText>
           <Textbox Name="Textbox14">
             <Height>13.06pt</Height>
             <Width>323.22pt</Width>
-            <Value>="Место: " + Fields!place_name.Value +"     Площадь: " + Fields!area.Value </Value>
+            <Value>="Место: " + Fields!place_name.Value +"     Площадь: " + Fields!area.Value  + " кв. м."</Value>
             <ZIndex>1</ZIndex>
             <Left>226.5pt</Left>
             <Top>7.9pt</Top>
@@ -203,7 +203,7 @@ where organizations.id = @org_id or @org_id = -1;</CommandText>
       <DataType>Integer</DataType>
       <DefaultValue>
         <Values>
-          <Value>-1</Value>
+          <Value>0</Value>
         </Values>
       </DefaultValue>
       <Nullable>false</Nullable>
