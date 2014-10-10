@@ -39,6 +39,10 @@ public partial class MainWindow
 	
 	private global::Gtk.Action Action44;
 	
+	private global::Gtk.Action Action45;
+	
+	private global::Gtk.Action Action46;
+	
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.MenuBar menubar1;
@@ -251,6 +255,12 @@ public partial class MainWindow
 		this.Action44 = new global::Gtk.Action ("Action44", global::Mono.Unix.Catalog.GetString ("Категории договоров"), null, null);
 		this.Action44.ShortLabel = global::Mono.Unix.Catalog.GetString ("Категории договоров");
 		w1.Add (this.Action44, null);
+		this.Action45 = new global::Gtk.Action ("Action45", global::Mono.Unix.Catalog.GetString ("Отчеты"), null, null);
+		this.Action45.ShortLabel = global::Mono.Unix.Catalog.GetString ("Отчеты");
+		w1.Add (this.Action45, null);
+		this.Action46 = new global::Gtk.Action ("Action46", global::Mono.Unix.Catalog.GetString ("Договоры"), null, null);
+		this.Action46.ShortLabel = global::Mono.Unix.Catalog.GetString ("Договоры");
+		w1.Add (this.Action46, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -262,7 +272,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action41' action='Action41'><menuitem name='dialogAuthenticationAction' action='dialogAuthenticationAction'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='propertiesAction' action='propertiesAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action' action='Action'><menuitem name='Action15' action='Action15'/><menuitem name='Action40' action='Action40'/><separator/><menuitem name='Action10' action='Action10'/><menuitem name='Action43' action='Action43'/><menuitem name='Action44' action='Action44'/><separator/><menuitem name='Action7' action='Action7'/></menu><menu name='Action42' action='Action42'><menuitem name='helpAction' action='helpAction'/><menuitem name='Action36' action='Action36'/><menuitem name='Action26' action='Action26'/><separator/><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action41' action='Action41'><menuitem name='dialogAuthenticationAction' action='dialogAuthenticationAction'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='propertiesAction' action='propertiesAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action' action='Action'><menuitem name='Action15' action='Action15'/><menuitem name='Action40' action='Action40'/><separator/><menuitem name='Action10' action='Action10'/><menuitem name='Action43' action='Action43'/><menuitem name='Action44' action='Action44'/><separator/><menuitem name='Action7' action='Action7'/></menu><menu name='Action45' action='Action45'><menuitem name='Action46' action='Action46'/></menu><menu name='Action42' action='Action42'><menuitem name='helpAction' action='helpAction'/><menuitem name='Action36' action='Action36'/><menuitem name='Action26' action='Action26'/><separator/><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -833,7 +843,7 @@ public partial class MainWindow
 		this.comboContractState.AppendText (global::Mono.Unix.Catalog.GetString ("Черновики"));
 		this.comboContractState.AppendText (global::Mono.Unix.Catalog.GetString ("Кроме архивных"));
 		this.comboContractState.Name = "comboContractState";
-		this.comboContractState.Active = 4;
+		this.comboContractState.Active = 0;
 		this.table2.Add (this.comboContractState);
 		global::Gtk.Table.TableChild w61 = ((global::Gtk.Table.TableChild)(this.table2 [this.comboContractState]));
 		w61.LeftAttach = ((uint)(1));
@@ -1054,6 +1064,7 @@ public partial class MainWindow
 		this.propertiesAction.Activated += new global::System.EventHandler (this.OnPropertiesActionActivated);
 		this.Action43.Activated += new global::System.EventHandler (this.OnAction43Activated);
 		this.Action44.Activated += new global::System.EventHandler (this.OnAction44Activated);
+		this.Action46.Activated += new global::System.EventHandler (this.OnAction46Activated);
 		this.notebookMain.SwitchPage += new global::Gtk.SwitchPageHandler (this.OnNotebookMainSwitchPage);
 		this.comboPlaceType.Changed += new global::System.EventHandler (this.OnComboPlaceTypeChanged);
 		this.entryPlaceNum.Changed += new global::System.EventHandler (this.OnEntryPlaceNumChanged);

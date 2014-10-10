@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <Description>
+  </Description>
+  <Author>
+  </Author>
+  <PageHeight>11.69in</PageHeight>
+  <PageWidth>8.27in</PageWidth>
+  <Width>7.5in</Width>
+  <TopMargin>.25in</TopMargin>
+  <LeftMargin>.25in</LeftMargin>
+  <RightMargin>.25in</RightMargin>
+  <BottomMargin>.25in</BottomMargin>
+  <DataSets>
+    <DataSet Name="Contracts">
+      <Query >
+        <DataSourceName>MySQL</DataSourceName>
+        <CommandText>select contracts.number, contracts.sign_date, places.name as place_name, places.area, organizations.name as org_name, lessees.name as less_name, lessees.address, lessees.INN, lessees.phone
+from LeaseAgreement.contracts
+left join LeaseAgreement.places on places.place_no = contracts.place_no
+left join LeaseAgreement.organizations on organizations.id = contracts.org_id
+left join LeaseAgreement.lessees on lessees.id = contracts.lessee_id
+where organizations.id = @org_id or @org_id = -1;</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="org_id">
+            <Value>=Parameters!org_id</Value>
+          </QueryParameter>
+        </QueryParameters>
+      </Query>
+      <Fields >
+        <Field Name="number">
+          <DataField>number</DataField>
+          <TypeName>System.String</TypeName>
+        </Field>
+        <Field Name="sign_date">
+          <DataField>sign_date</DataField>
+          <TypeName>System.DateTime</TypeName>
+        </Field>
+        <Field Name="place_name">
+          <DataField>place_name</DataField>
+          <TypeName>System.String</TypeName>
+        </Field>
+        <Field Name="area">
+          <DataField>area</DataField>
+          <TypeName>System.Double</TypeName>
+        </Field>
+        <Field Name="org_name">
+          <DataField>org_name</DataField>
+          <TypeName>System.String</TypeName>
+        </Field>
+        <Field Name="less_name">
+          <DataField>less_name</DataField>
+          <TypeName>System.String</TypeName>
+        </Field>
+        <Field Name="address">
+          <DataField>address</DataField>
+          <TypeName>System.String</TypeName>
+        </Field>
+        <Field Name="INN">
+          <DataField>INN</DataField>
+          <TypeName>System.String</TypeName>
+        </Field>
+        <Field Name="phone">
+          <DataField>phone</DataField>
+          <TypeName>System.String</TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <PageHeader>
+    <Height>0.0pt</Height>
+    <PrintOnFirstPage>false</PrintOnFirstPage>
+    <PrintOnLastPage>false</PrintOnLastPage>
+  </PageHeader>
+  <Body>
+    <Height>554.3pt</Height>
+    <Columns>1</Columns>
+    <ReportItems>
+      <List Name="List1">
+        <Height>67.24pt</Height>
+        <Width>576.16pt</Width>
+        <Left>0.8pt</Left>
+        <Top>35.0pt</Top>
+        <ReportItems>
+          <Textbox Name="Textbox5">
+            <Height>12.23pt</Height>
+            <Width>195.98pt</Width>
+            <Value>="Договор №" + Fields!number.Value  + " от " +  Format(Fields!sign_date.Value, "d")</Value>
+            <ZIndex>1</ZIndex>
+            <Left>9.40pt</Left>
+            <Top>8.30pt</Top>
+            <Style>
+              <BorderStyle />
+              <BorderColor />
+              <BorderWidth />
+              <FontWeight>Bold</FontWeight>
+            </Style>
+            <CanGrow>false</CanGrow>
+          </Textbox>
+          <Textbox Name="Textbox14">
+            <Height>13.06pt</Height>
+            <Width>323.22pt</Width>
+            <Value>="Место: " + Fields!place_name.Value +"     Площадь: " + Fields!area.Value </Value>
+            <ZIndex>1</ZIndex>
+            <Left>226.5pt</Left>
+            <Top>7.9pt</Top>
+            <Style>
+              <BorderStyle />
+              <BorderColor />
+              <BorderWidth />
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox23">
+            <Height>11.99pt</Height>
+            <Width>297.11pt</Width>
+            <Value>="Организация: " + Fields!org_name.Value</Value>
+            <ZIndex>1</ZIndex>
+            <Left>8.9pt</Left>
+            <Top>21.0pt</Top>
+            <Style>
+              <BorderStyle />
+              <BorderColor />
+              <BorderWidth />
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox32">
+            <Height>15.02pt</Height>
+            <Width>573.16pt</Width>
+            <Value>="Арендатор: " + Fields!less_name.Value + " ИНН: " + Fields!INN.Value</Value>
+            <ZIndex>1</ZIndex>
+            <Left>9.4pt</Left>
+            <Top>33.3pt</Top>
+            <Style>
+              <BorderStyle />
+              <BorderColor />
+              <BorderWidth />
+            </Style>
+            <CanGrow>false</CanGrow>
+          </Textbox>
+          <Textbox Name="Textbox1">
+            <Height>14.01pt</Height>
+            <Width>500.84pt</Width>
+            <Value>="Адрес: " + Fields!address.Value + " Телефон: " + Fields!phone.Value</Value>
+            <ZIndex>1</ZIndex>
+            <Left>9.9pt</Left>
+            <Top>46.0pt</Top>
+            <Style>
+              <BorderStyle />
+              <BorderColor />
+              <BorderWidth />
+            </Style>
+            <CanGrow>true</CanGrow>
+          </Textbox>
+          <Line Name="Line1">
+            <Height>-0.04pt</Height>
+            <Width>533.08pt</Width>
+            <Style>
+              <BorderStyle>
+                <Default>Solid</Default>
+              </BorderStyle>
+            </Style>
+            <Left>8.9pt</Left>
+            <Top>62.6pt</Top>
+          </Line>
+        </ReportItems>
+        <DataSetName>Contracts</DataSetName>
+      </List>
+      <Textbox Name="Textbox2">
+        <Height>30.10pt</Height>
+        <Width>227.84pt</Width>
+        <Value>Реестр договоров:</Value>
+        <ZIndex>1</ZIndex>
+        <Left>187.4pt</Left>
+        <Top>10.6pt</Top>
+        <Style>
+          <BorderStyle />
+          <BorderColor />
+          <BorderWidth />
+          <FontWeight>Bold</FontWeight>
+          <FontSize>18pt</FontSize>
+        </Style>
+      </Textbox>
+    </ReportItems>
+  </Body>
+  <PageFooter>
+    <Height>32.8pt</Height>
+    <PrintOnFirstPage>false</PrintOnFirstPage>
+    <PrintOnLastPage>false</PrintOnLastPage>
+  </PageFooter>
+  <DataSources>
+    <DataSource Name="MySQL">
+      <ConnectionProperties>
+        <DataProvider>MySQL.NET</DataProvider>
+        <ConnectString>server=192.168.1.35;user=admin;database=LeaseAgreement;port=3306;password=123;</ConnectString>
+        <IntegratedSecurity>false</IntegratedSecurity>
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+  <DataElementName>Report</DataElementName>
+  <DataElementStyle>AttributeNormal</DataElementStyle>
+  <ReportParameters >
+    <ReportParameter Name="org_id">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>-1</Value>
+        </Values>
+      </DefaultValue>
+      <Nullable>false</Nullable>
+      <AllowBlank>false</AllowBlank>
+      <MultiValue>false</MultiValue>
+      <Prompt>
+      </Prompt>
+    </ReportParameter>
+  </ReportParameters>
+</Report>

@@ -434,4 +434,11 @@ public partial class MainWindow : Gtk.Window
 	}
 
 
+	protected void OnAction46Activated (object sender, EventArgs e)
+	{
+		RegistryDialog dialog = new RegistryDialog ();
+		dialog.Show ();
+		dialog.Run ();
+		dialog.Destroy ();
+	}
 }

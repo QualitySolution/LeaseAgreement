@@ -101,6 +101,8 @@
     <Compile Include="gtk-gui\LeaseAgreement.ContractType.cs" />
     <Compile Include="OdtWorks.cs" />
     <Compile Include="DocPattern.cs" />
+    <Compile Include="RegistryDialog.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.RegistryDialog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -113,12 +115,16 @@
   <ItemGroup>
     <Folder Include="icons\" />
     <Folder Include="Patterns\" />
+    <Folder Include="Reports\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="changes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Contracts.rdl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
