@@ -127,7 +127,7 @@
       </action>
       <action id="Action46">
         <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Договоры</property>
+        <property name="Label" translatable="yes">Реестр договоров</property>
         <property name="ShortLabel" translatable="yes">Договоры</property>
         <signal name="Activated" handler="OnAction46Activated" />
       </action>
