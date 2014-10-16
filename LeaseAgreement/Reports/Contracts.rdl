@@ -15,7 +15,7 @@
     <DataSet Name="Contracts">
       <Query >
         <DataSourceName>MySQL</DataSourceName>
-        <CommandText>select contracts.number, contracts.sign_date, places.name as place_name, places.area, organizations.name as org_name, lessees.name as less_name, lessees.address, lessees.INN, lessees.phone
+        <CommandText>select contracts.number, contracts.start_date, contracts.end_date, places.name as place_name, places.area, organizations.name as org_name, lessees.name as less_name, lessees.address, lessees.INN, lessees.phone
 from LeaseAgreement.contracts
 left join LeaseAgreement.places on places.place_no = contracts.place_no
 left join LeaseAgreement.organizations on organizations.id = contracts.org_id
@@ -32,8 +32,8 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
           <DataField>number</DataField>
           <TypeName>System.String</TypeName>
         </Field>
-        <Field Name="sign_date">
-          <DataField>sign_date</DataField>
+        <Field Name="start_date">
+          <DataField>start_date</DataField>
           <TypeName>System.DateTime</TypeName>
         </Field>
         <Field Name="place_name">
@@ -64,6 +64,10 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
           <DataField>phone</DataField>
           <TypeName>System.String</TypeName>
         </Field>
+        <Field Name="end_date">
+          <DataField>end_date</DataField>
+          <TypeName>System.DateTime</TypeName>
+        </Field>
       </Fields>
     </DataSet>
   </DataSets>
@@ -76,95 +80,6 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
     <Height>554.3pt</Height>
     <Columns>1</Columns>
     <ReportItems>
-      <List Name="List1">
-        <Height>67.24pt</Height>
-        <Width>576.16pt</Width>
-        <Left>0.8pt</Left>
-        <Top>35.0pt</Top>
-        <ReportItems>
-          <Textbox Name="Textbox5">
-            <Height>12.23pt</Height>
-            <Width>195.98pt</Width>
-            <Value>="Договор №" + Fields!number.Value  + " от " +  Format(Fields!sign_date.Value, "d")</Value>
-            <ZIndex>1</ZIndex>
-            <Left>9.40pt</Left>
-            <Top>8.30pt</Top>
-            <Style>
-              <BorderStyle />
-              <BorderColor />
-              <BorderWidth />
-              <FontWeight>Bold</FontWeight>
-            </Style>
-            <CanGrow>false</CanGrow>
-          </Textbox>
-          <Textbox Name="Textbox14">
-            <Height>13.06pt</Height>
-            <Width>323.22pt</Width>
-            <Value>="Место: " + Fields!place_name.Value +"     Площадь: " + Fields!area.Value  + " кв. м."</Value>
-            <ZIndex>1</ZIndex>
-            <Left>226.5pt</Left>
-            <Top>7.9pt</Top>
-            <Style>
-              <BorderStyle />
-              <BorderColor />
-              <BorderWidth />
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox23">
-            <Height>11.99pt</Height>
-            <Width>297.11pt</Width>
-            <Value>="Организация: " + Fields!org_name.Value</Value>
-            <ZIndex>1</ZIndex>
-            <Left>8.9pt</Left>
-            <Top>21.0pt</Top>
-            <Style>
-              <BorderStyle />
-              <BorderColor />
-              <BorderWidth />
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox32">
-            <Height>15.02pt</Height>
-            <Width>573.16pt</Width>
-            <Value>="Арендатор: " + Fields!less_name.Value + " ИНН: " + Fields!INN.Value</Value>
-            <ZIndex>1</ZIndex>
-            <Left>9.4pt</Left>
-            <Top>33.3pt</Top>
-            <Style>
-              <BorderStyle />
-              <BorderColor />
-              <BorderWidth />
-            </Style>
-            <CanGrow>false</CanGrow>
-          </Textbox>
-          <Textbox Name="Textbox1">
-            <Height>14.01pt</Height>
-            <Width>500.84pt</Width>
-            <Value>="Адрес: " + Fields!address.Value + " Телефон: " + Fields!phone.Value</Value>
-            <ZIndex>1</ZIndex>
-            <Left>9.9pt</Left>
-            <Top>46.0pt</Top>
-            <Style>
-              <BorderStyle />
-              <BorderColor />
-              <BorderWidth />
-            </Style>
-            <CanGrow>true</CanGrow>
-          </Textbox>
-          <Line Name="Line1">
-            <Height>-0.04pt</Height>
-            <Width>533.08pt</Width>
-            <Style>
-              <BorderStyle>
-                <Default>Solid</Default>
-              </BorderStyle>
-            </Style>
-            <Left>8.9pt</Left>
-            <Top>62.6pt</Top>
-          </Line>
-        </ReportItems>
-        <DataSetName>Contracts</DataSetName>
-      </List>
       <Textbox Name="Textbox2">
         <Height>30.10pt</Height>
         <Width>227.84pt</Width>
@@ -180,6 +95,297 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
           <FontSize>18pt</FontSize>
         </Style>
       </Textbox>
+      <Table Name="Table1" >
+        <DataSetName>Contracts</DataSetName>
+        <NoRows>Query returned no rows!</NoRows>
+        <Style>
+          <BorderStyle>
+            <Default>Solid</Default>
+          </BorderStyle>
+        </Style>
+        <TableColumns>
+          <TableColumn>
+            <Width>59.1pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>29.3pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>79.2pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>64.3pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>61.0pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>70.6pt</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>202.5pt</Width>
+          </TableColumn>
+        </TableColumns>
+        <Header>
+          <TableRows>
+            <TableRow>
+              <Height>21.7pt</Height>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox1">
+                      <Value>Номер договора</Value>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox3">
+                      <Value>Кв. м.</Value>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox4">
+                      <Value>Арендатор</Value>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox5">
+                      <Value>Начало</Value>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox6">
+                      <Value>Окончание</Value>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox7">
+                      <Value>ИНН</Value>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox8">
+                      <Value>Контактная информация</Value>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+            </TableRow>
+          </TableRows>
+          <RepeatOnNewPage>true</RepeatOnNewPage>
+        </Header>
+        <Details>
+          <TableRows>
+            <TableRow>
+              <Height>29.0pt</Height>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox10">
+                      <Value>=Fields!number.Value</Value>
+                      <CanGrow>false</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                      <CanShrink>false</CanShrink>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox11">
+                      <Value>=Fields!area.Value</Value>
+                      <CanGrow>false</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                      <CanShrink>false</CanShrink>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox12">
+                      <Value>=Fields!less_name.Value</Value>
+                      <CanGrow>false</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                      <CanShrink>false</CanShrink>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox13">
+                      <Value>=Fields!start_date.Value</Value>
+                      <CanGrow>false</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                      <CanShrink>false</CanShrink>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox14">
+                      <Value>=Fields!end_date.Value</Value>
+                      <CanGrow>false</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                      <CanShrink>false</CanShrink>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox15">
+                      <Value>=Fields!INN.Value</Value>
+                      <CanGrow>false</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                      <CanShrink>false</CanShrink>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="Textbox16">
+                      <Value>=Fields!phone.Value + "\n" + Fields!address.Value</Value>
+                      <CanGrow>false</CanGrow>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                      <CanShrink>false</CanShrink>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+            </TableRow>
+          </TableRows>
+        </Details>
+        <Left>1.6pt</Left>
+        <Top>41.0pt</Top>
+      </Table>
     </ReportItems>
   </Body>
   <PageFooter>
@@ -198,7 +404,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
   </DataSources>
   <DataElementName>Report</DataElementName>
   <DataElementStyle>AttributeNormal</DataElementStyle>
-  <ReportParameters >
+  <ReportParameters>
     <ReportParameter Name="org_id">
       <DataType>Integer</DataType>
       <DefaultValue>
