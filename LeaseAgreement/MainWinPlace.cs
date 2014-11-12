@@ -55,7 +55,7 @@ public partial class MainWindow : Gtk.Window
 	void RenderAreaCellLayout (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
 		decimal area = (decimal) model.GetValue (iter, (int)PlaceCol.area);
-		(cell as Gtk.CellRendererText).Markup = String.Format("{0} м<sup>2</sup>", area);
+		(cell as Gtk.CellRendererText).Markup = area > 0 ? String.Format("{0} м<sup>2</sup>", area) : "";
 	}
 
 	private int AreaSortFunction(TreeModel model, TreeIter a, TreeIter b) 
