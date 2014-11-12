@@ -31,7 +31,7 @@ public partial class MainWindow : Gtk.Window
 		//Создаем таблицу "Места"
 		PlacesListStore = new Gtk.ListStore (typeof (int), typeof (string),typeof (string), typeof (string),
 		                                     typeof (string), typeof (int), 
-		                                     typeof (string), typeof (int), typeof (double));
+		                                     typeof (string), typeof (int), typeof (decimal));
 
 		treeviewPlaces.AppendColumn ("Тип", new Gtk.CellRendererText (), "text", (int)PlaceCol.type_place);
 		treeviewPlaces.AppendColumn ("Номер", new Gtk.CellRendererText (), "text", (int)PlaceCol.place_no);
@@ -95,7 +95,7 @@ public partial class MainWindow : Gtk.Window
 				                              DBWorks.GetInt (rdr, "lessee_id", -1),
 				                            rdr ["organization"].ToString (),
 				                              DBWorks.GetInt (rdr, "org_id", -1),
-				                              DBWorks.GetDouble (rdr, "area", 0)
+				                              DBWorks.GetDecimal (rdr, "area", 0)
 				                             );
 			}
 		}
@@ -264,15 +264,15 @@ public partial class MainWindow : Gtk.Window
 	
 	protected void CalculateAreaSum ()
 	{
-		double AreaSum = 0;
+		decimal AreaSum = 0;
 		TreeIter iter;
 		
 		if(Placefilter.GetIterFirst(out iter))
 		{
-			AreaSum = (double)Placefilter.GetValue(iter, (int)PlaceCol.area);
+			AreaSum = (decimal)Placefilter.GetValue(iter, (int)PlaceCol.area);
 			while (Placefilter.IterNext(ref iter)) 
 			{
-				AreaSum += (double)Placefilter.GetValue(iter, (int)PlaceCol.area);
+				AreaSum += (decimal)Placefilter.GetValue(iter, (int)PlaceCol.area);
 			}
 		}
 		labelSum.LabelProp = "Суммарная площадь: " + AreaSum.ToString() + " м<sup>2</sup>";
