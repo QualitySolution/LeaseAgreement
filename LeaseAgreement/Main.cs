@@ -13,6 +13,7 @@ namespace LeaseAgreement
 		public static Label StatusBarLabel;
 		public static MainWindow MainWin;
 
+		[STAThread]
 		public static void Main (string[] args)
 		{
 			Application.Init ();
