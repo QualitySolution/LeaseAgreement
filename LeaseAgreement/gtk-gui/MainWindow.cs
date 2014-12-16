@@ -183,6 +183,8 @@ public partial class MainWindow
 	
 	private global::Gtk.Button buttonAdd;
 	
+	private global::Gtk.Button buttonCopy;
+	
 	private global::Gtk.Button buttonDel;
 	
 	private global::Gtk.VSeparator vseparator2;
@@ -962,48 +964,62 @@ public partial class MainWindow
 		w76.Expand = false;
 		w76.Fill = false;
 		// Container child hbox17.Gtk.Box+BoxChild
+		this.buttonCopy = new global::Gtk.Button ();
+		this.buttonCopy.CanFocus = true;
+		this.buttonCopy.Name = "buttonCopy";
+		this.buttonCopy.UseUnderline = true;
+		this.buttonCopy.Label = global::Mono.Unix.Catalog.GetString ("Копировать");
+		global::Gtk.Image w77 = new global::Gtk.Image ();
+		w77.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-copy", global::Gtk.IconSize.Menu);
+		this.buttonCopy.Image = w77;
+		this.hbox17.Add (this.buttonCopy);
+		global::Gtk.Box.BoxChild w78 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.buttonCopy]));
+		w78.Position = 2;
+		w78.Expand = false;
+		w78.Fill = false;
+		// Container child hbox17.Gtk.Box+BoxChild
 		this.buttonDel = new global::Gtk.Button ();
 		this.buttonDel.Sensitive = false;
 		this.buttonDel.CanFocus = true;
 		this.buttonDel.Name = "buttonDel";
 		this.buttonDel.UseUnderline = true;
 		this.buttonDel.Label = global::Mono.Unix.Catalog.GetString ("_Удалить");
-		global::Gtk.Image w77 = new global::Gtk.Image ();
-		w77.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-delete", global::Gtk.IconSize.Menu);
-		this.buttonDel.Image = w77;
+		global::Gtk.Image w79 = new global::Gtk.Image ();
+		w79.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-delete", global::Gtk.IconSize.Menu);
+		this.buttonDel.Image = w79;
 		this.hbox17.Add (this.buttonDel);
-		global::Gtk.Box.BoxChild w78 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.buttonDel]));
-		w78.Position = 2;
-		w78.Expand = false;
-		w78.Fill = false;
+		global::Gtk.Box.BoxChild w80 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.buttonDel]));
+		w80.Position = 3;
+		w80.Expand = false;
+		w80.Fill = false;
 		// Container child hbox17.Gtk.Box+BoxChild
 		this.vseparator2 = new global::Gtk.VSeparator ();
 		this.vseparator2.Name = "vseparator2";
 		this.hbox17.Add (this.vseparator2);
-		global::Gtk.Box.BoxChild w79 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.vseparator2]));
-		w79.Position = 3;
-		w79.Expand = false;
-		w79.Fill = false;
+		global::Gtk.Box.BoxChild w81 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.vseparator2]));
+		w81.Position = 4;
+		w81.Expand = false;
+		w81.Fill = false;
 		// Container child hbox17.Gtk.Box+BoxChild
 		this.buttonRefreshTable = new global::Gtk.Button ();
 		this.buttonRefreshTable.CanFocus = true;
 		this.buttonRefreshTable.Name = "buttonRefreshTable";
 		this.buttonRefreshTable.UseUnderline = true;
 		this.buttonRefreshTable.Label = global::Mono.Unix.Catalog.GetString ("Обновить");
-		global::Gtk.Image w80 = new global::Gtk.Image ();
-		w80.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-refresh", global::Gtk.IconSize.Menu);
-		this.buttonRefreshTable.Image = w80;
+		global::Gtk.Image w82 = new global::Gtk.Image ();
+		w82.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-refresh", global::Gtk.IconSize.Menu);
+		this.buttonRefreshTable.Image = w82;
 		this.hbox17.Add (this.buttonRefreshTable);
-		global::Gtk.Box.BoxChild w81 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.buttonRefreshTable]));
-		w81.PackType = ((global::Gtk.PackType)(1));
-		w81.Position = 4;
-		w81.Expand = false;
-		w81.Fill = false;
+		global::Gtk.Box.BoxChild w83 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.buttonRefreshTable]));
+		w83.PackType = ((global::Gtk.PackType)(1));
+		w83.Position = 5;
+		w83.Expand = false;
+		w83.Fill = false;
 		this.vbox1.Add (this.hbox17);
-		global::Gtk.Box.BoxChild w82 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox17]));
-		w82.Position = 2;
-		w82.Expand = false;
-		w82.Fill = false;
+		global::Gtk.Box.BoxChild w84 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox17]));
+		w84.Position = 2;
+		w84.Expand = false;
+		w84.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.statusbar1 = new global::Gtk.Statusbar ();
 		this.statusbar1.Name = "statusbar1";
@@ -1014,40 +1030,41 @@ public partial class MainWindow
 		this.labelUser.Name = "labelUser";
 		this.labelUser.LabelProp = global::Mono.Unix.Catalog.GetString ("Пользователь");
 		this.statusbar1.Add (this.labelUser);
-		global::Gtk.Box.BoxChild w83 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelUser]));
-		w83.Position = 0;
-		w83.Expand = false;
-		w83.Fill = false;
+		global::Gtk.Box.BoxChild w85 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelUser]));
+		w85.Position = 0;
+		w85.Expand = false;
+		w85.Fill = false;
 		// Container child statusbar1.Gtk.Box+BoxChild
 		this.labelStatus = new global::Gtk.Label ();
 		this.labelStatus.Name = "labelStatus";
 		this.labelStatus.LabelProp = global::Mono.Unix.Catalog.GetString ("Ок");
 		this.statusbar1.Add (this.labelStatus);
-		global::Gtk.Box.BoxChild w84 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelStatus]));
-		w84.Position = 2;
-		w84.Expand = false;
-		w84.Fill = false;
+		global::Gtk.Box.BoxChild w86 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelStatus]));
+		w86.Position = 2;
+		w86.Expand = false;
+		w86.Fill = false;
 		// Container child statusbar1.Gtk.Box+BoxChild
 		this.labelSum = new global::Gtk.Label ();
 		this.labelSum.Name = "labelSum";
 		this.labelSum.LabelProp = global::Mono.Unix.Catalog.GetString ("Суммарная площадь: 0 м<sup>2</sup>");
 		this.labelSum.UseMarkup = true;
 		this.statusbar1.Add (this.labelSum);
-		global::Gtk.Box.BoxChild w85 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelSum]));
-		w85.Position = 3;
-		w85.Expand = false;
-		w85.Fill = false;
+		global::Gtk.Box.BoxChild w87 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelSum]));
+		w87.Position = 3;
+		w87.Expand = false;
+		w87.Fill = false;
 		this.vbox1.Add (this.statusbar1);
-		global::Gtk.Box.BoxChild w86 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.statusbar1]));
-		w86.Position = 3;
-		w86.Expand = false;
-		w86.Fill = false;
+		global::Gtk.Box.BoxChild w88 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.statusbar1]));
+		w88.Position = 3;
+		w88.Expand = false;
+		w88.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
 		this.DefaultWidth = 875;
 		this.DefaultHeight = 590;
+		this.buttonCopy.Hide ();
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.Action10.Activated += new global::System.EventHandler (this.OnAction10Activated);
@@ -1099,6 +1116,7 @@ public partial class MainWindow
 		this.treeviewContract.CursorChanged += new global::System.EventHandler (this.OnTreeviewContractCursorChanged);
 		this.buttonOpen.Clicked += new global::System.EventHandler (this.OnButtonViewClicked);
 		this.buttonAdd.Clicked += new global::System.EventHandler (this.OnButtonAddClicked);
+		this.buttonCopy.Clicked += new global::System.EventHandler (this.OnButtonCopyClicked);
 		this.buttonDel.Clicked += new global::System.EventHandler (this.OnButtonDelClicked);
 		this.buttonRefreshTable.Clicked += new global::System.EventHandler (this.OnButtonRefreshTableClicked);
 	}

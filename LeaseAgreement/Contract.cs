@@ -99,10 +99,11 @@ namespace LeaseAgreement
 
 		}
 
-		public void Fill(int Id)
+		public void Fill(int Id, bool copy = false)
 		{
-			NewContract = false;
-			ContractId = Id;
+			NewContract = copy;
+			if(!copy)
+				ContractId = Id;
 			TreeIter iter;
 			
 			logger.Info("Запрос договора ID:{0}...", Id);
@@ -125,7 +126,8 @@ namespace LeaseAgreement
 					entryNumber.Text = rdr["number"].ToString();
 					checkDraft.Active = rdr.GetBoolean ("draft");
 					ComboWorks.SetActiveItem (comboCategory, DBWorks.GetInt (rdr, "category_id", -1));
-					ComboWorks.SetActiveItem (comboResponsible, DBWorks.GetInt (rdr, "responsible_id", -1));
+					if(!copy)
+						ComboWorks.SetActiveItem (comboResponsible, DBWorks.GetInt (rdr, "responsible_id", -1));
 					if(rdr["lessee_id"] != DBNull.Value)
 					{
 						LesseeId = Convert.ToInt32(rdr["lessee_id"].ToString());
@@ -133,12 +135,17 @@ namespace LeaseAgreement
 						entryLessee.TooltipText = rdr["lessee"].ToString();
 						LesseeisNull = false;
 					}
-					if(rdr["sign_date"] != DBNull.Value)
-						datepickerSign.Date = DateTime.Parse( rdr["sign_date"].ToString());
-					datepickerStart.Date = DateTime.Parse(rdr["start_date"].ToString());
-					datepickerEnd.Date = DateTime.Parse(rdr["end_date"].ToString());
-					if(rdr["cancel_date"] != DBNull.Value)
-						datepickerCancel.Date = DateTime.Parse(rdr["cancel_date"].ToString());
+					if(copy)
+					{
+						datepickerStart.Date = rdr.GetDateTime ("end_date").AddDays (1);
+					}
+					else
+					{
+						datepickerSign.Date = DBWorks.GetDateTime (rdr, "sign_date", default(DateTime));
+						datepickerStart.Date = rdr.GetDateTime ("start_date");
+						datepickerEnd.Date = rdr.GetDateTime ("end_date");
+						datepickerCancel.Date = DBWorks.GetDateTime (rdr, "cancel_date", default(DateTime));
+					}
 					if(rdr["org_id"] != DBNull.Value)
 						ListStoreWorks.SearchListStore((ListStore)comboOrg.Model, int.Parse(rdr["org_id"].ToString()), out iter);
 					else
@@ -169,7 +176,7 @@ namespace LeaseAgreement
 				logger.Info("Загружаем исправленные шаблоны...");
 				sql = "SELECT id, pattern_id, name, size, pattern FROM contract_docs WHERE contract_id = @contract_id ";
 				cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
-				cmd.Parameters.AddWithValue("@contract_id", ContractId);
+				cmd.Parameters.AddWithValue("@contract_id", Id);
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
 				{
 					while(rdr.Read ())
@@ -178,12 +185,12 @@ namespace LeaseAgreement
 						rdr.GetBytes(rdr.GetOrdinal("pattern"), 0, file, 0, rdr.GetInt32("size"));
 
 						DocPatterns.AppendValues(DBWorks.GetInt (rdr, "pattern_id", -1),
-						                         rdr.GetInt32("id"),
+						                         copy ? -1 : rdr.GetInt32("id"),
 						                     rdr.GetString("name"),
 						                         true,
 						                     rdr.GetInt32("size"),
 						                     file,
-						                     false
+						                         copy
 						                    );
 					}
 				}
@@ -191,9 +198,12 @@ namespace LeaseAgreement
 
 				customContracts.LoadDataFromDB(Id);
 				attachmentFiles.ItemId = Id;
-				attachmentFiles.UpdateFileList ();
+				attachmentFiles.UpdateFileList (copy);
 
-				this.Title = "Договор №" + entryNumber.Text;
+				if(copy)
+					this.Title = "Копия договора №" + entryNumber.Text;
+				else
+					this.Title = "Договор №" + entryNumber.Text;
 				logger.Info("Ok");
 			}
 			catch (Exception ex)

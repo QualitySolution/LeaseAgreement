@@ -211,18 +211,21 @@ public partial class MainWindow : Gtk.Window
 		switch (notebookMain.CurrentPage) {
 		case 0:
 			UpdatePlaces ();
-			OnTreeviewPlacesCursorChanged(o, EventArgs.Empty);
+			OnTreeviewPlacesCursorChanged (o, EventArgs.Empty);
 			labelSum.Visible = true;
+			buttonCopy.Visible = false;
 			break;
 		case 1:
 			UpdateLessees();
 			OnTreeviewLesseesCursorChanged(o, EventArgs.Empty);
 			labelSum.Visible = false;
+			buttonCopy.Visible = false;
 			break;
 		case 2:
 			UpdateContract();
 			OnTreeviewContractCursorChanged(o, EventArgs.Empty);
 			labelSum.Visible = false;
+			buttonCopy.Visible = true;
 			break;
 		default:
 		break;
@@ -440,5 +443,28 @@ public partial class MainWindow : Gtk.Window
 		dialog.Show ();
 		dialog.Run ();
 		dialog.Destroy ();
+	}
+
+	protected void OnButtonCopyClicked (object sender, EventArgs e)
+	{
+		TreeIter iter;
+		int itemid;
+		ResponseType result;
+
+		switch (notebookMain.CurrentPage) {
+		case 2:
+			treeviewContract.Selection.GetSelected(out iter);
+			itemid = (int) ContractSort.GetValue(iter, (int)ContractCol.id);
+			Contract winContract = new Contract();
+			winContract.Fill(itemid, true);
+			winContract.Show();
+			result = (ResponseType)winContract.Run();
+			winContract.Destroy();
+			if(result == ResponseType.Ok)
+				UpdateContract();
+			break;
+		default:
+			break;
+		}
 	}
 }

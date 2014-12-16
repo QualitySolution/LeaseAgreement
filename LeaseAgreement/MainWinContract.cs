@@ -287,8 +287,7 @@ public partial class MainWindow : Gtk.Window
 	protected void OnTreeviewContractCursorChanged (object sender, EventArgs e)
 	{
 		bool isSelect = treeviewContract.Selection.CountSelectedRows() == 1;
-		buttonOpen.Sensitive = isSelect;
-		buttonDel.Sensitive = isSelect;
+		buttonOpen.Sensitive = buttonCopy.Sensitive = buttonDel.Sensitive = isSelect;
 	}
 
 	protected void OnCheck30daysContractsToggled (object sender, EventArgs e)
