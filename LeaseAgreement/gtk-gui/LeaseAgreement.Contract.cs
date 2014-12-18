@@ -218,7 +218,7 @@ namespace LeaseAgreement
 			this.entryNumber.CanFocus = true;
 			this.entryNumber.Name = "entryNumber";
 			this.entryNumber.IsEditable = true;
-			this.entryNumber.MaxLength = 15;
+			this.entryNumber.MaxLength = 20;
 			this.entryNumber.InvisibleChar = '•';
 			this.table2.Add (this.entryNumber);
 			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.entryNumber]));

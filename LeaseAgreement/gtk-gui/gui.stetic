@@ -1549,6 +1549,7 @@
                                         <property name="MemberName" />
                                         <property name="CanFocus">True</property>
                                         <property name="IsEditable">True</property>
+                                        <property name="MaxLength">20</property>
                                         <property name="InvisibleChar">●</property>
                                         <signal name="Changed" handler="OnEntryNumberChanged" />
                                       </widget>
@@ -3302,7 +3303,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">2</property>
+            <property name="CurrentPage">0</property>
             <property name="TabPos">Left</property>
             <child>
               <widget class="Gtk.HBox" id="hboxInfo">
@@ -3437,7 +3438,7 @@
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
-                        <property name="MaxLength">15</property>
+                        <property name="MaxLength">20</property>
                         <property name="InvisibleChar">•</property>
                         <signal name="Changed" handler="OnEntryNumberChanged" />
                         <signal name="Activated" handler="OnEntryActivated" />

@@ -199,6 +199,7 @@ namespace LeaseAgreement
 			this.entryNumber.CanFocus = true;
 			this.entryNumber.Name = "entryNumber";
 			this.entryNumber.IsEditable = true;
+			this.entryNumber.MaxLength = 20;
 			this.entryNumber.InvisibleChar = '●';
 			this.hbox3.Add (this.entryNumber);
 			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.entryNumber]));
