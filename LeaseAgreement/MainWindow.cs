@@ -19,6 +19,9 @@ public partial class MainWindow : Gtk.Window
 
 		//Передаем лебл
 		MainClass.StatusBarLabel = labelStatus;
+		this.Title = QSSupportLib.MainSupport.GetTitle();
+		QSMain.MakeNewStatusTargetForNlog("StatusMessage", "LeaseAgreement.MainClass, LeaseAgreement");
+
 		Reference.RunReferenceItemDlg += OnRunReferenceItemDialog;
 		QSMain.ReferenceUpdated += OnReferenceUpdate;
 
