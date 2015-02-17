@@ -83,9 +83,9 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Place.cs" />
-    <Compile Include="Lessee.cs" />
-    <Compile Include="Contract.cs" />
+    <Compile Include="Dialogs\Place.cs" />
+    <Compile Include="Dialogs\Lessee.cs" />
+    <Compile Include="Dialogs\Contract.cs" />
     <Compile Include="MainWinPlace.cs" />
     <Compile Include="MainWinLessee.cs" />
     <Compile Include="MainWinContract.cs" />
@@ -93,11 +93,11 @@
     <Compile Include="gtk-gui\LeaseAgreement.Place.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.lessee.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.Contract.cs" />
-    <Compile Include="Organization.cs" />
+    <Compile Include="Dialogs\Organization.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.Organization.cs" />
-    <Compile Include="Stead.cs" />
+    <Compile Include="Dialogs\Stead.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.Stead.cs" />
-    <Compile Include="ContractType.cs" />
+    <Compile Include="Dialogs\ContractType.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.ContractType.cs" />
     <Compile Include="OdtWorks.cs" />
     <Compile Include="DocPattern.cs" />
