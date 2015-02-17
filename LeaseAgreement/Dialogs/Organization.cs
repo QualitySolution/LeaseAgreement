@@ -5,13 +5,13 @@ using QSProjectsLib;
 
 namespace LeaseAgreement
 {
-	public partial class Organization : Gtk.Dialog
+	public partial class OrganizationDlg : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool NewItem = true;
 		int ItemId;
 
-		public Organization ()
+		public OrganizationDlg ()
 		{
 			this.Build ();
 			entryName.FullNameEntry = entryFullName;

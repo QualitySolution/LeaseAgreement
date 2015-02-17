@@ -5,13 +5,13 @@ using QSProjectsLib;
 
 namespace LeaseAgreement
 {
-	public partial class Stead : Gtk.Dialog
+	public partial class SteadDlg : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool NewItem = true;
 		int ItemId;
 
-		public Stead ()
+		public SteadDlg ()
 		{
 			this.Build ();
 		}

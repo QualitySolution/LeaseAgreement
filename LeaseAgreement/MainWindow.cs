@@ -114,7 +114,7 @@ public partial class MainWindow : Gtk.Window
 			treeviewPlaces.Selection.GetSelected(out iter);
 			place = PlaceSort.GetValue(iter, (int)PlaceCol.place_no).ToString ();
 			type = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.type_place_id));
-			Place winPlace = new Place(false);
+			PlaceDlg winPlace = new PlaceDlg(false);
 			winPlace.Fill(type,place);
 			winPlace.Show();
 			result = (ResponseType)winPlace.Run();
@@ -125,7 +125,7 @@ public partial class MainWindow : Gtk.Window
 		case 1:
 			treeviewLessees.Selection.GetSelected(out iter);
 			itemid = Convert.ToInt32(LesseesSort.GetValue(iter, (int)LesseesCol.id));
-			lessee winLessee = new lessee();
+			LesseeDlg winLessee = new LesseeDlg();
 			winLessee.Fill(itemid);
 			winLessee.Show();
 			result = (ResponseType)winLessee.Run();
@@ -136,7 +136,7 @@ public partial class MainWindow : Gtk.Window
 		case 2:
 			treeviewContract.Selection.GetSelected(out iter);
 			itemid = (int) ContractSort.GetValue(iter, (int)ContractCol.id);
-			Contract winContract = new Contract();
+			ContractDlg winContract = new ContractDlg();
 			winContract.Fill(itemid);
 			winContract.Show();
 			result = (ResponseType)winContract.Run();
@@ -154,21 +154,21 @@ public partial class MainWindow : Gtk.Window
 	{
 		switch (notebookMain.CurrentPage) {
 		case 0:
-			Place winPlace = new Place(true);
+			PlaceDlg winPlace = new PlaceDlg(true);
 			winPlace.Show();
 			winPlace.Run();
 			winPlace.Destroy();
 			UpdatePlaces();
 		break;
 		case 1:
-			lessee winLessee = new lessee();
+			LesseeDlg winLessee = new LesseeDlg();
 			winLessee.Show();
 			winLessee.Run();
 			winLessee.Destroy();
 			UpdateLessees();
 		break;
 		case 2:
-			Contract winContract = new Contract();
+			ContractDlg winContract = new ContractDlg();
 			winContract.Show();
 			winContract.Run();
 			winContract.Destroy();
@@ -321,7 +321,7 @@ public partial class MainWindow : Gtk.Window
 		switch (e.TableName)
 		{
 		case "lessees":
-			lessee LesseeEdit = new lessee();
+			LesseeDlg LesseeEdit = new LesseeDlg();
 			if(!e.NewItem)
 				LesseeEdit.Fill(e.ItemId);
 			LesseeEdit.Show();
@@ -329,7 +329,7 @@ public partial class MainWindow : Gtk.Window
 			LesseeEdit.Destroy();
 			break;
 		case "organizations":
-			Organization OrgEdit = new Organization();
+			OrganizationDlg OrgEdit = new OrganizationDlg();
 			if(!e.NewItem)
 				OrgEdit.Fill(e.ItemId);
 			OrgEdit.Show();
@@ -337,7 +337,7 @@ public partial class MainWindow : Gtk.Window
 			OrgEdit.Destroy();
 			break;
 		case "stead":
-			Stead SteadEdit = new Stead();
+			SteadDlg SteadEdit = new SteadDlg();
 			if(!e.NewItem)
 				SteadEdit.Fill(e.ItemId);
 			SteadEdit.Show();
@@ -345,7 +345,7 @@ public partial class MainWindow : Gtk.Window
 			SteadEdit.Destroy();
 			break;
 		case "contract_types":
-			ContractType contractTypeEdit = new ContractType();
+			ContractTypeDlg contractTypeEdit = new ContractTypeDlg();
 			if(!e.NewItem)
 				contractTypeEdit.Fill(e.ItemId);
 			contractTypeEdit.Show();
@@ -458,7 +458,7 @@ public partial class MainWindow : Gtk.Window
 		case 2:
 			treeviewContract.Selection.GetSelected(out iter);
 			itemid = (int) ContractSort.GetValue(iter, (int)ContractCol.id);
-			Contract winContract = new Contract();
+			ContractDlg winContract = new ContractDlg();
 			winContract.Fill(itemid, true);
 			winContract.Show();
 			result = (ResponseType)winContract.Run();

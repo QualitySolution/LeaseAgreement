@@ -90,19 +90,19 @@
     <Compile Include="MainWinLessee.cs" />
     <Compile Include="MainWinContract.cs" />
     <Compile Include="gtk-gui\MainWindow.cs" />
-    <Compile Include="gtk-gui\LeaseAgreement.Place.cs" />
-    <Compile Include="gtk-gui\LeaseAgreement.lessee.cs" />
-    <Compile Include="gtk-gui\LeaseAgreement.Contract.cs" />
     <Compile Include="Dialogs\Organization.cs" />
-    <Compile Include="gtk-gui\LeaseAgreement.Organization.cs" />
     <Compile Include="Dialogs\Stead.cs" />
-    <Compile Include="gtk-gui\LeaseAgreement.Stead.cs" />
     <Compile Include="Dialogs\ContractType.cs" />
-    <Compile Include="gtk-gui\LeaseAgreement.ContractType.cs" />
     <Compile Include="OdtWorks.cs" />
     <Compile Include="DocPattern.cs" />
     <Compile Include="RegistryDialog.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.RegistryDialog.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.ContractDlg.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.ContractTypeDlg.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.LesseeDlg.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.OrganizationDlg.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.PlaceDlg.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.SteadDlg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

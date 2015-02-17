@@ -8,7 +8,7 @@ using NLog;
 
 namespace LeaseAgreement
 {
-	public partial class Place : Gtk.Dialog
+	public partial class PlaceDlg : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool newItem;
@@ -20,7 +20,7 @@ namespace LeaseAgreement
 		
 		AccelGroup grup;
 		
-		public Place (bool New)
+		public PlaceDlg (bool New)
 		{
 			this.Build ();
 			ComboWorks.ComboFillReference(comboPType,"place_types", ComboWorks.ListMode.WithNo);
@@ -307,7 +307,7 @@ namespace LeaseAgreement
 			
 			treeviewHistory.Selection.GetSelected(out iter);
 			itemid = (int) HistoryStore.GetValue(iter,0);
-			Contract winContract = new Contract();
+			ContractDlg winContract = new ContractDlg();
 			winContract.Fill(itemid);
 			winContract.Show();
 			winContract.Run();
@@ -322,7 +322,7 @@ namespace LeaseAgreement
 			
 			treeviewHistory.Selection.GetSelected(out iter);
 			itemid = Convert.ToInt32(HistoryStore.GetValue(iter,5));
-			lessee winLessee = new lessee();
+			LesseeDlg winLessee = new LesseeDlg();
 			winLessee.Fill(itemid);
 			winLessee.Show();
 			winLessee.Run();
@@ -332,7 +332,7 @@ namespace LeaseAgreement
 
 		protected void OnButtonLesseeClicked (object sender, EventArgs e)
 		{
-			lessee winLessee = new lessee();
+			LesseeDlg winLessee = new LesseeDlg();
 			winLessee.Fill(lessee_id);
 			winLessee.Show();
 			winLessee.Run();
@@ -342,7 +342,7 @@ namespace LeaseAgreement
 
 		protected void OnButtonContractClicked (object sender, EventArgs e)
 		{
-			Contract winContract = new Contract();
+			ContractDlg winContract = new ContractDlg();
 			winContract.Fill(ContractId);
 			winContract.Show();
 			winContract.Run();
@@ -352,7 +352,7 @@ namespace LeaseAgreement
 
 		protected void OnButtonNewContractClicked (object sender, EventArgs e)
 		{
-			Contract winContract = new Contract();
+			ContractDlg winContract = new ContractDlg();
 			winContract.Show();
 			winContract.SetPlace (type_id, PlaceNumber);
 			winContract.Run();

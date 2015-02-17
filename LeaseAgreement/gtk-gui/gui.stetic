@@ -9,8 +9,8 @@
     <widget-library name="../../../QSProjects/QSSupportLib/bin/Debug/QSSupportLib.dll" />
     <widget-library name="../../../QSProjects/QSWidgetLib/bin/Debug/QSWidgetLib.dll" />
     <widget-library name="../../../QSProjects/Modules/CustomFields/bin/Debug/CustomFields.dll" />
-    <widget-library name="../bin/Debug/LeaseAgreement.exe" internal="true" />
     <widget-library name="../../../QSProjects/Modules/QSAttachment/bin/Debug/QSAttachment.dll" />
+    <widget-library name="../bin/Debug/LeaseAgreement.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="875 590">
     <action-group name="Default">
@@ -1407,7 +1407,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.Place" design-size="770 437">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.PlaceDlg" design-size="770 437">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новое место</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -2132,7 +2132,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.lessee" design-size="798 535">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.LesseeDlg" design-size="798 535">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новый арендатор</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -3288,7 +3288,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.Contract" design-size="850 383">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.ContractDlg" design-size="850 383">
     <action-group name="Default" />
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новый договор</property>
@@ -4230,7 +4230,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.Organization" design-size="604 507">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.OrganizationDlg" design-size="604 507">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -5110,7 +5110,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.Stead" design-size="480 288">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.SteadDlg" design-size="480 288">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новый земельный участок</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -5489,7 +5489,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.ContractType" design-size="505 300">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.ContractTypeDlg" design-size="505 300">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новый тип договора</property>
     <property name="WindowPosition">CenterOnParent</property>

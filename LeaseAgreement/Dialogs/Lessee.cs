@@ -8,7 +8,7 @@ using NLog;
 
 namespace LeaseAgreement
 {
-	public partial class lessee : Gtk.Dialog
+	public partial class LesseeDlg : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool newItem = true;
@@ -18,7 +18,7 @@ namespace LeaseAgreement
 				
 		AccelGroup grup;
 		
-		public lessee ()
+		public LesseeDlg ()
 		{
 			this.Build ();
 			entryName.FullNameEntry = entryFullName;
@@ -277,7 +277,7 @@ namespace LeaseAgreement
 			
 			treeviewContracts.Selection.GetSelected(out iter);
 			itemid = (int) ContractsListStore.GetValue(iter,0);
-			Contract winContract = new Contract();
+			ContractDlg winContract = new ContractDlg();
 			winContract.Fill(itemid);
 			winContract.Show();
 			winContract.Run();
@@ -294,7 +294,7 @@ namespace LeaseAgreement
 			treeviewContracts.Selection.GetSelected(out iter);
 			type = Convert.ToInt32(ContractsListStore.GetValue(iter,5));
 			place = (string)ContractsListStore.GetValue(iter,6);
-			Place winPlace = new Place(false);
+			PlaceDlg winPlace = new PlaceDlg(false);
 			winPlace.Fill(type, place);
 			winPlace.Show();
 			winPlace.Run();

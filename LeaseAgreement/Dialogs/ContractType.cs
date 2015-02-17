@@ -8,7 +8,7 @@ using Gtk;
 
 namespace LeaseAgreement
 {
-	public partial class ContractType : Gtk.Dialog
+	public partial class ContractTypeDlg : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private List<int> deletedItems;
@@ -25,7 +25,7 @@ namespace LeaseAgreement
 			fileChanged
 		}
 
-		public ContractType ()
+		public ContractTypeDlg ()
 		{
 			this.Build ();
 

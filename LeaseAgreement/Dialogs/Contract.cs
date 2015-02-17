@@ -8,7 +8,7 @@ using NLog;
 
 namespace LeaseAgreement
 {
-	public partial class Contract : Gtk.Dialog
+	public partial class ContractDlg : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool NewContract = true;
@@ -30,7 +30,7 @@ namespace LeaseAgreement
 			fileChanged
 		}
 
-		public Contract ()
+		public ContractDlg ()
 		{
 			this.Build ();
 			deletedDocItems = new List<int> ();
@@ -624,7 +624,7 @@ namespace LeaseAgreement
 
 		protected void OnButtonLesseeOpenClicked (object sender, EventArgs e)
 		{
-			lessee winLessee = new lessee();
+			LesseeDlg winLessee = new LesseeDlg();
 			winLessee.Fill(LesseeId);
 			winLessee.Show();
 			winLessee.Run();
