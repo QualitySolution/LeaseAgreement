@@ -83,16 +83,16 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Dialogs\Place.cs" />
-    <Compile Include="Dialogs\Lessee.cs" />
-    <Compile Include="Dialogs\Contract.cs" />
+    <Compile Include="Dialogs\PlaceDlg.cs" />
+    <Compile Include="Dialogs\LesseeDlg.cs" />
+    <Compile Include="Dialogs\ContractDlg.cs" />
     <Compile Include="MainWinPlace.cs" />
     <Compile Include="MainWinLessee.cs" />
     <Compile Include="MainWinContract.cs" />
     <Compile Include="gtk-gui\MainWindow.cs" />
-    <Compile Include="Dialogs\Organization.cs" />
-    <Compile Include="Dialogs\Stead.cs" />
-    <Compile Include="Dialogs\ContractType.cs" />
+    <Compile Include="Dialogs\OrganizationDlg.cs" />
+    <Compile Include="Dialogs\SteadDlg.cs" />
+    <Compile Include="Dialogs\ContractTypeDlg.cs" />
     <Compile Include="OdtWorks.cs" />
     <Compile Include="DocPattern.cs" />
     <Compile Include="RegistryDialog.cs" />
