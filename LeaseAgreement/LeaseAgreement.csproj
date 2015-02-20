@@ -51,11 +51,11 @@
     </Reference>
     <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="Mono.Posix" />
-    <Reference Include="NLog">
-      <HintPath>..\..\QSProjects\lib\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.2.0.0\lib\net40\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +103,7 @@
     <Compile Include="gtk-gui\LeaseAgreement.OrganizationDlg.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.PlaceDlg.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.SteadDlg.cs" />
+    <Compile Include="Domain\Stead.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -116,6 +117,7 @@
     <Folder Include="icons\" />
     <Folder Include="Patterns\" />
     <Folder Include="Reports\" />
+    <Folder Include="Domain\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
@@ -127,6 +129,7 @@
     <None Include="Reports\Contracts.rdl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QSProjects\QSProjectsLib\QSProjectsLib.csproj">
@@ -148,6 +151,18 @@
     <ProjectReference Include="..\..\QSProjects\Modules\QSAttachment\QSAttachment.csproj">
       <Project>{AED7339A-4A71-4063-9C67-0D54821230A3}</Project>
       <Name>QSAttachment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Gtk.DataBindings\Gtk.DataBindings.csproj">
+      <Project>{8D85E430-325A-4532-A123-BF28F9644DB4}</Project>
+      <Name>Gtk.DataBindings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Gtk.DataBindings\System.Data.Bindings\System.Data.Bindings.csproj">
+      <Project>{54F958F5-7E58-4C89-9A04-8835E63B97C3}</Project>
+      <Name>System.Data.Bindings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\QSProjects\QSOrmProject\QSOrmProject.csproj">
+      <Project>{00D32969-612C-417E-9565-BEC6A7719F80}</Project>
+      <Name>QSOrmProject</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
