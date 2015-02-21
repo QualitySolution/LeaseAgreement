@@ -164,5 +164,9 @@
       <Project>{00D32969-612C-417E-9565-BEC6A7719F80}</Project>
       <Name>QSOrmProject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\QSProjects\QSHistoryLog\QSHistoryLog.csproj">
+      <Project>{1C3B49FC-372C-46F7-995F-EEB44474E2DE}</Project>
+      <Name>QSHistoryLog</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

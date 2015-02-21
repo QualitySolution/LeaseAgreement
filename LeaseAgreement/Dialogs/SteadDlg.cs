@@ -13,6 +13,7 @@ namespace LeaseAgreement
 		private bool NewItem = true;
 		private Stead subject = new Stead();
 		private Adaptor adaptorStead = new Adaptor();
+		private QSHistoryLog.ObjectTracker<Stead> tracker;
 
 		public SteadDlg ()
 		{
@@ -20,6 +21,7 @@ namespace LeaseAgreement
 			adaptorStead.Target = subject;
 			table2.DataSource = adaptorStead;
 			labelId.Adaptor.Converter = new IdToStringConverter();
+			tracker = new QSHistoryLog.ObjectTracker<Stead> (subject);
 		}
 
 		public void Fill(int id)
@@ -45,6 +47,7 @@ namespace LeaseAgreement
 					subject.Owner = rdr["contractor"].ToString();
 					subject.Address = rdr["address"].ToString();
 				}
+				tracker.TakeFirst (subject);
 				logger.Info("Ok");
 				this.Title = subject.Name;
 			}
@@ -76,10 +79,17 @@ namespace LeaseAgreement
 					"contractor = @contractor, address = @address " +
 					"WHERE id = @id";
 			}
+			tracker.TakeLast (subject);
+			if(!tracker.Compare ())
+			{
+				logger.Info ("Нет изменений.");
+				return;
+			}
+			MySqlTransaction trans = ((MySqlConnection)QSMain.ConnectionDB).BeginTransaction ();
 			logger.Info("Запись земельного участка...");
 			try 
 			{
-				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
 
 				cmd.Parameters.AddWithValue("@id", subject.Id);
 				cmd.Parameters.AddWithValue("@name", subject.Name);
@@ -90,11 +100,18 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (subject.Address != "", subject.Address));
 
 				cmd.ExecuteNonQuery();
+
+				if(NewItem)
+					tracker.ObjectId = (int)cmd.LastInsertedId;
+				tracker.SaveChangeSet (trans);
+
+				trans.Commit ();
 				logger.Info("Ok");
 				Respond (Gtk.ResponseType.Ok);
 			} 
 			catch (Exception ex) 
 			{
+				trans.Rollback ();
 				logger.ErrorException("Ошибка записи земельного участка!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}
