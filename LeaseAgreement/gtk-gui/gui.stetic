@@ -134,6 +134,12 @@
         <property name="ShortLabel" translatable="yes">Договоры</property>
         <signal name="Activated" handler="OnAction46Activated" />
       </action>
+      <action id="ActionHistoryLog">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Журнал изменений</property>
+        <property name="ShortLabel" translatable="yes">Журнал изменений</property>
+        <signal name="Activated" handler="OnActionHistoryLogActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">QS: Договора аренды</property>
@@ -153,6 +159,8 @@
                 <node type="Menuitem" action="UsersAction" />
                 <node type="Separator" />
                 <node type="Menuitem" action="propertiesAction" />
+                <node type="Separator" />
+                <node type="Menuitem" action="ActionHistoryLog" />
                 <node type="Separator" />
                 <node type="Menuitem" action="quitAction" />
               </node>

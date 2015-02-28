@@ -24,7 +24,7 @@ namespace LeaseAgreement
 
 			CreateProjectParam();
 			// Создаем окно входа
-			Login LoginDialog = new QSProjectsLib.Login ();
+			Login LoginDialog = new Login ();
 			LoginDialog.Logo = Gdk.Pixbuf.LoadFromResource ("LeaseAgreement.icons.logo.png");
 			LoginDialog.SetDefaultNames ("LeaseAgreement");
 			LoginDialog.DefaultLogin = "demo";
@@ -67,6 +67,9 @@ namespace LeaseAgreement
 			};
 
 			QSMain.User = new UserInfo();
+
+			//Настройка журналирования
+			QSHistoryLog.HistoryMain.AddClass (typeof(Stead));
 			
 			//Параметры удаления
 			Dictionary<string, TableInfo> Tables = new Dictionary<string, TableInfo>();

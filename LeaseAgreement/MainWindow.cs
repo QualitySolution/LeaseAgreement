@@ -1,14 +1,14 @@
 using System;
 using Gtk;
-using MySql.Data.MySqlClient;
 using LeaseAgreement;
+using MySql.Data.MySqlClient;
+using QSOrmProject;
 using QSProjectsLib;
 using QSSupportLib;
-using NLog;
 
 public partial class MainWindow : Gtk.Window
 {
-	private static Logger logger = LogManager.GetCurrentClassLogger();
+	private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 	AccelGroup grup;
 	
 	public MainWindow () : base(Gtk.WindowType.Toplevel)
@@ -469,5 +469,13 @@ public partial class MainWindow : Gtk.Window
 		default:
 			break;
 		}
+	}
+
+	protected void OnActionHistoryLogActivated (object sender, EventArgs e)
+	{
+		OneWidgetDialog dialog = new OneWidgetDialog (new QSHistoryLog.HistoryView());
+		dialog.Show ();
+		dialog.Run ();
+		dialog.Destroy ();
 	}
 }
