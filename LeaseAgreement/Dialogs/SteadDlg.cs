@@ -61,7 +61,7 @@ namespace LeaseAgreement
 
 		protected	void TestCanSave ()
 		{
-			bool Nameok = entryName.Text != "";
+			bool Nameok = subject.Name != "";
 			buttonOk.Sensitive = Nameok;
 		}
 

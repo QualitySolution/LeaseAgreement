@@ -69,7 +69,10 @@ namespace LeaseAgreement
 			QSMain.User = new UserInfo();
 
 			//Настройка журналирования
+			QSHistoryLog.HistoryMain.AddClass (typeof(Organization));
 			QSHistoryLog.HistoryMain.AddClass (typeof(Stead));
+			QSHistoryLog.HistoryMain.AddClass (typeof(PlaceType));
+			QSHistoryLog.HistoryMain.AddClass (typeof(Place));
 			
 			//Параметры удаления
 			Dictionary<string, TableInfo> Tables = new Dictionary<string, TableInfo>();

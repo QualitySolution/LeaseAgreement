@@ -1,32 +1,39 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Bindings;
 using Gtk;
-using MySql.Data;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
-using NLog;
 
 namespace LeaseAgreement
 {
 	public partial class PlaceDlg : Gtk.Dialog
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
-		private bool newItem;
-		private int itemId;
-		string PlaceNumber;
-		int lessee_id, type_id, ContractId;
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+		private bool newItem = true;
+		private Place subject = new Place();
+		private Adaptor adaptorPlace = new Adaptor();
+		private QSHistoryLog.ObjectTracker<Place> tracker;
+		private List<PlaceType> typesList;
+		private List<Stead> steadsList;
+		private List<Organization> orgList;
+		int lessee_id, ContractId;
 
 		Gtk.ListStore HistoryStore;
 		
 		AccelGroup grup;
 		
-		public PlaceDlg (bool New)
+		public PlaceDlg ()
 		{
 			this.Build ();
-			ComboWorks.ComboFillReference(comboPType,"place_types", ComboWorks.ListMode.WithNo);
-			ComboWorks.ComboFillReference(comboOrg, "organizations", ComboWorks.ListMode.WithNo);
-			ComboWorks.ComboFillReference(comboStead, "stead", ComboWorks.ListMode.WithNo);
-			newItem = New;
+			adaptorPlace.Target = subject;
+			table2.DataSource = adaptorPlace;
+			textviewComments.DataSource = adaptorPlace;
+			tracker = new QSHistoryLog.ObjectTracker<Place> (subject);
+
+			comboPType.ItemsDataSource = typesList = PlaceType.LoadList ();
+			comboStead.ItemsDataSource = steadsList = Stead.LoadList ();
+			comboOrg.ItemsDataSource = orgList = Organization.LoadList ();
 
 			grup = new AccelGroup ();
 			this.AddAccelGroup(grup);
@@ -59,44 +66,36 @@ namespace LeaseAgreement
 
 		public void Fill(int type, string place)
 		{
-			type_id = type;
-			PlaceNumber = place;
 			newItem = false;
 			buttonOk.Sensitive = true;
 			comboPType.Sensitive = false;
 			entryNumber.Sensitive = false;
 			buttonNewContract.Sensitive = true;
-			TreeIter iter;
 			
 			logger.Info("Запрос сдаваемого места...");
-			string sql = "SELECT places.*, place_types.name as type, stead.name as stead, " +
-			 	"organizations.name as organization FROM places " +
-				"LEFT JOIN place_types ON places.type_id = place_types.id " +
-				"LEFT JOIN stead ON places.stead_id = stead.id " +
-				"LEFT JOIN organizations ON places.org_id = organizations.id " +
+			string sql = "SELECT places.* FROM places " +
 				"WHERE places.type_id = @type_id AND places.place_no = @place";
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
-			cmd.Parameters.AddWithValue("@type_id", type_id);
-			cmd.Parameters.AddWithValue("@place", PlaceNumber);
+			cmd.Parameters.AddWithValue("@type_id", type);
+			cmd.Parameters.AddWithValue("@place", place);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
 			{
 				rdr.Read ();
 
-				itemId = rdr.GetInt32 ("id");
-				entryName.Text = rdr ["name"].ToString ();
-				ListStoreWorks.SearchListStore ((ListStore)comboPType.Model, int.Parse (rdr ["type_id"].ToString ()), out iter);
-				comboPType.SetActiveIter (iter);
-				ComboWorks.SetActiveItem (comboOrg, DBWorks.GetInt(rdr, "org_id", -1));
-				ComboWorks.SetActiveItem (comboStead, DBWorks.GetInt(rdr, "stead_id", -1));
-				entryNumber.Text = rdr ["place_no"].ToString ();
-				if (rdr ["area"] != DBNull.Value)
-					spinArea.Value = Convert.ToDouble (rdr ["area"].ToString ());
-				textviewComments.Buffer.Text = rdr ["comments"].ToString ();
+				subject.Id = rdr.GetInt32 ("id");
+				subject.Name = rdr ["name"].ToString ();
+				subject.PlaceType = DBWorks.FineById (typesList, rdr ["type_id"]);
+				subject.Stead = DBWorks.FineById (steadsList, rdr["stead_id"]);
+				subject.Organization = DBWorks.FineById(orgList, rdr["org_id"]);
+				subject.PlaceNumber = rdr ["place_no"].ToString ();
+				subject.Area = DBWorks.GetDecimal (rdr, "area", default(decimal));
+				subject.Comment = rdr ["comments"].ToString ();
 			}
 			FillCurrentContract ();
-			customPlace.LoadDataFromDB (itemId);
+			customPlace.LoadDataFromDB (subject.Id);
+			tracker.TakeFirst (subject);
 			logger.Info("Ok");
-			this.Title = "Место " + comboPType.ActiveText + " - " + place;
+			this.Title = subject.Title;
 			TestCanSave();
 			UpdateHistory();
 		}
@@ -112,8 +111,8 @@ namespace LeaseAgreement
 				"((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
 				"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date))";
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
-			cmd.Parameters.AddWithValue("@type", type_id);
-			cmd.Parameters.AddWithValue("@place", PlaceNumber);
+			cmd.Parameters.AddWithValue("@type", subject.PlaceType.Id);
+			cmd.Parameters.AddWithValue("@place", subject.PlaceNumber);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
 			{
 				if (rdr.Read ()) {
@@ -159,15 +158,23 @@ namespace LeaseAgreement
 		
 		protected	void TestCanSave ()
 		{
-			bool Numok = entryNumber.Text != "";
-			bool typeok = comboPType.Active > 0;
+			bool Numok = subject.PlaceNumber != "";
+			bool typeok = subject.PlaceType != null;
 			buttonOk.Sensitive = Numok && typeok;
 		}
 		
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
 			string sql;
-			TreeIter iter;
+
+			tracker.TakeLast (subject);
+			if(!tracker.Compare ())
+			{
+				logger.Info ("Нет изменений.");
+				Respond (ResponseType.Reject);
+				return;
+			}
+
 			logger.Info("Запись места...");
 			MySqlTransaction trans = (MySqlTransaction)QSMain.ConnectionDB.BeginTransaction ();
 			if(newItem)
@@ -185,27 +192,19 @@ namespace LeaseAgreement
 			{
 				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
 				
-				if(comboPType.GetActiveIter(out iter))
-				{
-					cmd.Parameters.AddWithValue("@type_id",comboPType.Model.GetValue(iter,1));
-				}	
-				cmd.Parameters.AddWithValue("@place_no", entryNumber.Text);
-				cmd.Parameters.AddWithValue("@name", DBWorks.ValueOrNull (entryName.Text != "", entryName.Text));
-				if(comboOrg.GetActiveIter(out iter) && (int)comboOrg.Model.GetValue(iter,1) != -1)
-					cmd.Parameters.AddWithValue("@org",comboOrg.Model.GetValue(iter,1));
-				else
-					cmd.Parameters.AddWithValue("@org", DBNull.Value);
-				if(spinArea.Value == 0)
-					cmd.Parameters.AddWithValue("@area", DBNull.Value);
-				else
-					cmd.Parameters.AddWithValue("@area", spinArea.Value);
-				if(textviewComments.Buffer.Text == "")
-					cmd.Parameters.AddWithValue("@comments", DBNull.Value);
-				else
-					cmd.Parameters.AddWithValue("@comments", textviewComments.Buffer.Text);
-				cmd.Parameters.AddWithValue("@stead_id", ComboWorks.GetActiveIdOrNull (comboStead));
+				cmd.Parameters.AddWithValue("@type_id", subject.PlaceType.Id);
+				cmd.Parameters.AddWithValue("@place_no", subject.PlaceNumber);
+				cmd.Parameters.AddWithValue("@name", DBWorks.ValueOrNull (subject.Name != "", subject.Name));
+				cmd.Parameters.AddWithValue("@org", DBWorks.IdPropertyOrNull (subject.Organization));
+				cmd.Parameters.AddWithValue("@area", subject.Area);
+				cmd.Parameters.AddWithValue("@comments", subject.Comment);
+				cmd.Parameters.AddWithValue("@stead_id", DBWorks.IdPropertyOrNull (subject.Stead));
 
 				cmd.ExecuteNonQuery();
+
+				if(newItem)
+					tracker.ObjectId = (int)cmd.LastInsertedId;
+				tracker.SaveChangeSet (trans);
 
 				trans.Commit ();
 				logger.Info("Ok");
@@ -236,41 +235,35 @@ namespace LeaseAgreement
 		void UpdateHistory()
 		{
 			logger.Info("Получаем историю места...");
-			TreeIter iter;
 			
 			string sql = "SELECT contracts.*, lessees.name as lessee FROM contracts " +
 			 	"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
 				"WHERE place_type_id = @place_type AND place_no = @place_no AND contracts.draft = '0'";
 	        MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 			
-			if(comboPType.GetActiveIter(out iter))
-			{
-				cmd.Parameters.AddWithValue("@place_type", comboPType.Model.GetValue(iter,1));
-			}
-			cmd.Parameters.AddWithValue("@place_no", entryNumber.Text);
+			cmd.Parameters.AddWithValue("@place_type", subject.PlaceType.Id);
+			cmd.Parameters.AddWithValue("@place_no", subject.PlaceNumber);
 			
-			MySqlDataReader rdr = cmd.ExecuteReader();
-				
-			HistoryStore.Clear();
-			string Cancel_date;
-			while (rdr.Read())
-			{
-				if(rdr.GetInt32("id") == ContractId)
-					continue;
-				if(rdr["cancel_date"] != DBNull.Value)
-					Cancel_date = ((DateTime)rdr["cancel_date"]).ToShortDateString();
-				else
-					Cancel_date = "";
-				HistoryStore.AppendValues(rdr.GetInt32 ("id"),
-											rdr["number"].ToString(),
-											((DateTime)rdr["start_date"]).ToShortDateString(),
-				                             ((DateTime)rdr["end_date"]).ToShortDateString(),
-				                          	 Cancel_date,
-											 rdr.GetInt32("lessee_id"),
-				                             rdr["lessee"].ToString(),
-				                             rdr["comments"].ToString());
-	   		}
-			rdr.Close();
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+				HistoryStore.Clear ();
+				string Cancel_date;
+				while (rdr.Read ()) {
+					if (rdr.GetInt32 ("id") == ContractId)
+						continue;
+					if (rdr ["cancel_date"] != DBNull.Value)
+						Cancel_date = ((DateTime)rdr ["cancel_date"]).ToShortDateString ();
+					else
+						Cancel_date = "";
+					HistoryStore.AppendValues (rdr.GetInt32 ("id"),
+					                         rdr ["number"].ToString (),
+					                         ((DateTime)rdr ["start_date"]).ToShortDateString (),
+					                         ((DateTime)rdr ["end_date"]).ToShortDateString (),
+					                         Cancel_date,
+					                         rdr.GetInt32 ("lessee_id"),
+					                         rdr ["lessee"].ToString (),
+					                         rdr ["comments"].ToString ());
+				}
+			}
 			logger.Info("Ok");
 		}
 		
@@ -354,7 +347,7 @@ namespace LeaseAgreement
 		{
 			ContractDlg winContract = new ContractDlg();
 			winContract.Show();
-			winContract.SetPlace (type_id, PlaceNumber);
+			winContract.SetPlace (subject.PlaceType.Id, subject.PlaceNumber);
 			winContract.Run();
 			winContract.Destroy();
 			FillCurrentContract ();

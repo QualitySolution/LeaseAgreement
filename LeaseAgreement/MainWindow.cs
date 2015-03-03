@@ -114,7 +114,7 @@ public partial class MainWindow : Gtk.Window
 			treeviewPlaces.Selection.GetSelected(out iter);
 			place = PlaceSort.GetValue(iter, (int)PlaceCol.place_no).ToString ();
 			type = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.type_place_id));
-			PlaceDlg winPlace = new PlaceDlg(false);
+			PlaceDlg winPlace = new PlaceDlg();
 			winPlace.Fill(type,place);
 			winPlace.Show();
 			result = (ResponseType)winPlace.Run();
@@ -154,7 +154,7 @@ public partial class MainWindow : Gtk.Window
 	{
 		switch (notebookMain.CurrentPage) {
 		case 0:
-			PlaceDlg winPlace = new PlaceDlg(true);
+			PlaceDlg winPlace = new PlaceDlg();
 			winPlace.Show();
 			winPlace.Run();
 			winPlace.Destroy();

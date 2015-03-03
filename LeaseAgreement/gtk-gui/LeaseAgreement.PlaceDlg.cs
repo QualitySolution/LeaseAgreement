@@ -14,21 +14,21 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Alignment GtkAlignment2;
 		
-		private global::Gtk.Table table2;
+		private global::Gtk.DataBindings.DataTable table2;
 		
-		private global::Gtk.ComboBox comboOrg;
+		private global::Gtk.DataBindings.DataSpecComboBox comboOrg;
 		
-		private global::Gtk.ComboBox comboStead;
+		private global::Gtk.DataBindings.DataSpecComboBox comboStead;
 		
-		private global::Gtk.Entry entryName;
+		private global::Gtk.DataBindings.DataEntry entryName;
 		
-		private global::Gtk.HBox hbox3;
+		private global::Gtk.DataBindings.DataHBox hbox3;
 		
-		private global::Gtk.ComboBox comboPType;
+		private global::Gtk.DataBindings.DataSpecComboBox comboPType;
 		
 		private global::Gtk.Label label1;
 		
-		private global::Gtk.Entry entryNumber;
+		private global::Gtk.DataBindings.DataEntry entryNumber;
 		
 		private global::Gtk.Label label10;
 		
@@ -40,7 +40,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Label label7;
 		
-		private global::Gtk.SpinButton spinArea;
+		private global::Gtk.DataBindings.DataSpinButton spinArea;
 		
 		private global::Gtk.Label GtkLabel8;
 		
@@ -54,7 +54,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		
-		private global::Gtk.TextView textviewComments;
+		private global::Gtk.DataBindings.DataTextView textviewComments;
 		
 		private global::Gtk.Label GtkLabel9;
 		
@@ -132,14 +132,24 @@ namespace LeaseAgreement
 			this.GtkAlignment2.Name = "GtkAlignment2";
 			this.GtkAlignment2.LeftPadding = ((uint)(12));
 			// Container child GtkAlignment2.Gtk.Container+ContainerChild
-			this.table2 = new global::Gtk.Table (((uint)(5)), ((uint)(2)), false);
+			this.table2 = new global::Gtk.DataBindings.DataTable (((uint)(5)), ((uint)(2)), false);
 			this.table2.Name = "table2";
 			this.table2.RowSpacing = ((uint)(6));
 			this.table2.ColumnSpacing = ((uint)(6));
 			this.table2.BorderWidth = ((uint)(3));
+			this.table2.InheritedDataSource = false;
+			this.table2.InheritedBoundaryDataSource = false;
+			this.table2.InheritedDataSource = false;
+			this.table2.InheritedBoundaryDataSource = false;
 			// Container child table2.Gtk.Table+TableChild
-			this.comboOrg = new global::Gtk.ComboBox ();
+			this.comboOrg = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboOrg.Name = "comboOrg";
+			this.comboOrg.ColumnMappings = "Name";
+			this.comboOrg.InheritedDataSource = true;
+			this.comboOrg.Mappings = "Organization";
+			this.comboOrg.InheritedBoundaryDataSource = false;
+			this.comboOrg.ShowSpecialStateAll = false;
+			this.comboOrg.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboOrg);
 			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table2 [this.comboOrg]));
 			w2.TopAttach = ((uint)(3));
@@ -149,8 +159,14 @@ namespace LeaseAgreement
 			w2.XOptions = ((global::Gtk.AttachOptions)(4));
 			w2.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.comboStead = new global::Gtk.ComboBox ();
+			this.comboStead = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboStead.Name = "comboStead";
+			this.comboStead.ColumnMappings = "Name";
+			this.comboStead.InheritedDataSource = true;
+			this.comboStead.Mappings = "Stead";
+			this.comboStead.InheritedBoundaryDataSource = false;
+			this.comboStead.ShowSpecialStateAll = false;
+			this.comboStead.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboStead);
 			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table2 [this.comboStead]));
 			w3.TopAttach = ((uint)(2));
@@ -160,11 +176,17 @@ namespace LeaseAgreement
 			w3.XOptions = ((global::Gtk.AttachOptions)(4));
 			w3.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.entryName = new global::Gtk.Entry ();
+			this.entryName = new global::Gtk.DataBindings.DataEntry ();
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;
 			this.entryName.InvisibleChar = '●';
+			this.entryName.InheritedDataSource = true;
+			this.entryName.Mappings = "Name";
+			this.entryName.InheritedBoundaryDataSource = false;
+			this.entryName.InheritedDataSource = true;
+			this.entryName.Mappings = "Name";
+			this.entryName.InheritedBoundaryDataSource = false;
 			this.table2.Add (this.entryName);
 			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table2 [this.entryName]));
 			w4.TopAttach = ((uint)(1));
@@ -174,12 +196,22 @@ namespace LeaseAgreement
 			w4.XOptions = ((global::Gtk.AttachOptions)(4));
 			w4.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.hbox3 = new global::Gtk.HBox ();
+			this.hbox3 = new global::Gtk.DataBindings.DataHBox ();
 			this.hbox3.Name = "hbox3";
 			this.hbox3.Spacing = 6;
+			this.hbox3.InheritedDataSource = true;
+			this.hbox3.InheritedBoundaryDataSource = false;
+			this.hbox3.InheritedDataSource = true;
+			this.hbox3.InheritedBoundaryDataSource = false;
 			// Container child hbox3.Gtk.Box+BoxChild
-			this.comboPType = new global::Gtk.ComboBox ();
+			this.comboPType = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboPType.Name = "comboPType";
+			this.comboPType.ColumnMappings = "Name";
+			this.comboPType.InheritedDataSource = true;
+			this.comboPType.Mappings = "PlaceType";
+			this.comboPType.InheritedBoundaryDataSource = false;
+			this.comboPType.ShowSpecialStateAll = false;
+			this.comboPType.ShowSpecialStateNot = false;
 			this.hbox3.Add (this.comboPType);
 			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.comboPType]));
 			w5.Position = 0;
@@ -195,15 +227,23 @@ namespace LeaseAgreement
 			w6.Expand = false;
 			w6.Fill = false;
 			// Container child hbox3.Gtk.Box+BoxChild
-			this.entryNumber = new global::Gtk.Entry ();
+			this.entryNumber = new global::Gtk.DataBindings.DataEntry ();
 			this.entryNumber.CanFocus = true;
 			this.entryNumber.Name = "entryNumber";
 			this.entryNumber.IsEditable = true;
 			this.entryNumber.MaxLength = 20;
 			this.entryNumber.InvisibleChar = '●';
+			this.entryNumber.InheritedDataSource = true;
+			this.entryNumber.Mappings = "PlaceNumber";
+			this.entryNumber.InheritedBoundaryDataSource = false;
+			this.entryNumber.InheritedDataSource = true;
+			this.entryNumber.Mappings = "PlaceNumber";
+			this.entryNumber.InheritedBoundaryDataSource = false;
 			this.hbox3.Add (this.entryNumber);
 			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.entryNumber]));
 			w7.Position = 2;
+			w7.Expand = false;
+			w7.Fill = false;
 			this.table2.Add (this.hbox3);
 			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.hbox3]));
 			w8.LeftAttach = ((uint)(1));
@@ -266,13 +306,19 @@ namespace LeaseAgreement
 			w13.XOptions = ((global::Gtk.AttachOptions)(4));
 			w13.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.spinArea = new global::Gtk.SpinButton (0, 100000, 1);
+			this.spinArea = new global::Gtk.DataBindings.DataSpinButton (0, 100000, 1);
 			this.spinArea.CanFocus = true;
 			this.spinArea.Name = "spinArea";
 			this.spinArea.Adjustment.PageIncrement = 100;
 			this.spinArea.ClimbRate = 1;
 			this.spinArea.Digits = ((uint)(2));
 			this.spinArea.Numeric = true;
+			this.spinArea.InheritedDataSource = true;
+			this.spinArea.Mappings = "Area";
+			this.spinArea.InheritedBoundaryDataSource = false;
+			this.spinArea.InheritedDataSource = true;
+			this.spinArea.Mappings = "Area";
+			this.spinArea.InheritedBoundaryDataSource = false;
 			this.table2.Add (this.spinArea);
 			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.table2 [this.spinArea]));
 			w14.TopAttach = ((uint)(4));
@@ -323,10 +369,16 @@ namespace LeaseAgreement
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.textviewComments = new global::Gtk.TextView ();
+			this.textviewComments = new global::Gtk.DataBindings.DataTextView ();
 			this.textviewComments.CanFocus = true;
 			this.textviewComments.Name = "textviewComments";
 			this.textviewComments.WrapMode = ((global::Gtk.WrapMode)(2));
+			this.textviewComments.InheritedDataSource = true;
+			this.textviewComments.Mappings = "Comment";
+			this.textviewComments.InheritedBoundaryDataSource = false;
+			this.textviewComments.InheritedDataSource = true;
+			this.textviewComments.Mappings = "Comment";
+			this.textviewComments.InheritedBoundaryDataSource = false;
 			this.GtkScrolledWindow.Add (this.textviewComments);
 			this.GtkAlignment9.Add (this.GtkScrolledWindow);
 			this.frame3.Add (this.GtkAlignment9);

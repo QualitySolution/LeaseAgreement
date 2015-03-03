@@ -105,6 +105,9 @@
     <Compile Include="gtk-gui\LeaseAgreement.PlaceDlg.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.SteadDlg.cs" />
     <Compile Include="Domain\Stead.cs" />
+    <Compile Include="Domain\Place.cs" />
+    <Compile Include="Domain\PlaceType.cs" />
+    <Compile Include="Domain\Organization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

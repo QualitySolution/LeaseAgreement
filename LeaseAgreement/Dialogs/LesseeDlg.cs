@@ -294,7 +294,7 @@ namespace LeaseAgreement
 			treeviewContracts.Selection.GetSelected(out iter);
 			type = Convert.ToInt32(ContractsListStore.GetValue(iter,5));
 			place = (string)ContractsListStore.GetValue(iter,6);
-			PlaceDlg winPlace = new PlaceDlg(false);
+			PlaceDlg winPlace = new PlaceDlg();
 			winPlace.Fill(type, place);
 			winPlace.Show();
 			winPlace.Run();
