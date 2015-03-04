@@ -30,7 +30,7 @@ namespace LeaseAgreement
 		[Display(Name = "Номер договора")]
 		public virtual string ContractNum {
 			get { return contractNum;}
-			set { SetField(ref contractNum, value, () => contractNum);}
+			set { SetField(ref contractNum, value, () => ContractNum);}
 		}
 
 		DateTime contractDate;

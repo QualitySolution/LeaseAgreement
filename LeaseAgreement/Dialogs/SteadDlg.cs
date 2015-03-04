@@ -83,6 +83,7 @@ namespace LeaseAgreement
 			if(!tracker.Compare ())
 			{
 				logger.Info ("Нет изменений.");
+				Respond (Gtk.ResponseType.Reject);
 				return;
 			}
 			MySqlTransaction trans = ((MySqlConnection)QSMain.ConnectionDB).BeginTransaction ();

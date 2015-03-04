@@ -1,19 +1,31 @@
 ﻿using System;
-using NLog;
+using System.Data.Bindings;
 using MySql.Data.MySqlClient;
+using QSOrmProject;
 using QSProjectsLib;
 
 namespace LeaseAgreement
 {
 	public partial class OrganizationDlg : Gtk.Dialog
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 		private bool NewItem = true;
-		int ItemId;
+		private Organization subject = new Organization();
+		private Adaptor adaptorOrg = new Adaptor();
+		private QSHistoryLog.ObjectTracker<Organization> tracker;
 
 		public OrganizationDlg ()
 		{
 			this.Build ();
+
+			adaptorOrg.Target = subject;
+			table1.DataSource = adaptorOrg;
+			labelId.Adaptor.Converter = new IdToStringConverter();
+			tracker = new QSHistoryLog.ObjectTracker<Organization> (subject);
+
+			subject.SignatoryPost = "Генерального директора";
+			subject.SignatoryBaseOf = "Устава";
+
 			entryName.FullNameEntry = entryFullName;
 
 			entryPost.Completion = new Gtk.EntryCompletion ();
@@ -31,7 +43,6 @@ namespace LeaseAgreement
 
 		public void Fill(int id)
 		{
-			ItemId = id;
 			NewItem = false;
 
 			logger.Info("Запрос организации №{0}...", id);
@@ -45,27 +56,28 @@ namespace LeaseAgreement
 				{
 					rdr.Read();
 
-					labelId.Text = rdr["id"].ToString();
-					entryName.Text = rdr["name"].ToString();
-					entryFullName.Text = rdr["full_name"].ToString();
-					entryPhone.Text = rdr["phone"].ToString();
-					entryEmail.Text = rdr["email"].ToString();
-					entryINN.Text = rdr["INN"].ToString();
-					entryKPP.Text = rdr["KPP"].ToString();
-					entryOGRN.Text = rdr["OGRN"].ToString();
-					entryFIO.Text = rdr["signatory_FIO"].ToString();
-					entryPost.Text = rdr["signatory_post"].ToString();
-					entryBaseOf.Text = rdr["basis_of"].ToString();
-					entryAccount.Text = rdr["account"].ToString();
-					entryBIK.Text = rdr["bik"].ToString();
-					entryBank.Text = rdr["bank"].ToString();
-					entryCorAccount.Text = rdr["cor_account"].ToString();
+					subject.Id = rdr.GetInt32 ("id");
+					subject.Name = rdr["name"].ToString();
+					subject.FullName = rdr["full_name"].ToString();
+					subject.Phone = rdr["phone"].ToString();
+					subject.Email = rdr["email"].ToString();
+					subject.INN = rdr["INN"].ToString();
+					subject.KPP = rdr["KPP"].ToString();
+					subject.OGRN = rdr["OGRN"].ToString();
+					subject.SignatoryFIO = rdr["signatory_FIO"].ToString();
+					subject.SignatoryPost = rdr["signatory_post"].ToString();
+					subject.SignatoryBaseOf = rdr["basis_of"].ToString();
+					subject.Account = rdr["account"].ToString();
+					subject.Bik = rdr["bik"].ToString();
+					subject.Bank = rdr["bank"].ToString();
+					subject.CorAccount = rdr["cor_account"].ToString();
 
-					textviewAddress.Buffer.Text = rdr["address"].ToString();
-					textviewJurAddress.Buffer.Text = rdr["jur_address"].ToString();
+					subject.Address = rdr["address"].ToString();
+					subject.JurAddress = rdr["jur_address"].ToString();
 				}
+				tracker.TakeFirst (subject);
 				logger.Info("Ok");
-				this.Title = entryName.Text;
+				this.Title = subject.Name;
 			}
 			catch (Exception ex)
 			{
@@ -77,12 +89,20 @@ namespace LeaseAgreement
 
 		protected	void TestCanSave ()
 		{
-			bool Nameok = entryName.Text != "";
+			bool Nameok = !String.IsNullOrEmpty (subject.Name);
 			buttonOk.Sensitive = Nameok;
 		}
 
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
+			tracker.TakeLast (subject);
+			if(!tracker.Compare ())
+			{
+				logger.Info ("Нет изменений.");
+				Respond (Gtk.ResponseType.Reject);
+				return;
+			}
+
 			string sql;
 			if(NewItem)
 			{
@@ -101,34 +121,42 @@ namespace LeaseAgreement
 					"WHERE id = @id";
 			}
 			logger.Info("Запись организации...");
+			MySqlTransaction trans = ((MySqlConnection)QSMain.ConnectionDB).BeginTransaction ();
 			try 
 			{
-				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
 
-				cmd.Parameters.AddWithValue("@id", ItemId);
-				cmd.Parameters.AddWithValue("@name", entryName.Text);
-				cmd.Parameters.AddWithValue("@full_name", DBWorks.ValueOrNull (entryFullName.Text != "", entryFullName.Text));
-				cmd.Parameters.AddWithValue("@phone", DBWorks.ValueOrNull (entryPhone.Text != "", entryPhone.Text));
-				cmd.Parameters.AddWithValue("@email", DBWorks.ValueOrNull (entryEmail.Text != "", entryEmail.Text));
-				cmd.Parameters.AddWithValue("@INN", DBWorks.ValueOrNull (entryINN.Text != "", entryINN.Text));
-				cmd.Parameters.AddWithValue("@KPP", DBWorks.ValueOrNull (entryKPP.Text != "", entryKPP.Text));
-				cmd.Parameters.AddWithValue("@OGRN", DBWorks.ValueOrNull (entryOGRN.Text != "", entryOGRN.Text));
-				cmd.Parameters.AddWithValue("@signatory_FIO", DBWorks.ValueOrNull (entryFIO.Text != "", entryFIO.Text));
-				cmd.Parameters.AddWithValue("@signatory_post", DBWorks.ValueOrNull (entryPost.Text != "", entryPost.Text));
-				cmd.Parameters.AddWithValue("@basis_of", DBWorks.ValueOrNull (entryBaseOf.Text != "", entryBaseOf.Text));
-				cmd.Parameters.AddWithValue("@bik", DBWorks.ValueOrNull (entryBIK.Text != "", entryBIK.Text));
-				cmd.Parameters.AddWithValue("@account", DBWorks.ValueOrNull (entryAccount.Text != "", entryAccount.Text));
-				cmd.Parameters.AddWithValue("@bank", DBWorks.ValueOrNull (entryBank.Text != "", entryBank.Text));
-				cmd.Parameters.AddWithValue("@cor_account", DBWorks.ValueOrNull (entryCorAccount.Text != "", entryCorAccount.Text));
-				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (textviewAddress.Buffer.Text != "", textviewAddress.Buffer.Text));
-				cmd.Parameters.AddWithValue("@jur_address", DBWorks.ValueOrNull (textviewJurAddress.Buffer.Text != "", textviewJurAddress.Buffer.Text));
+				cmd.Parameters.AddWithValue("@id", subject.Id);
+				cmd.Parameters.AddWithValue("@name", subject.Name);
+				cmd.Parameters.AddWithValue("@full_name", DBWorks.ValueOrNull (subject.FullName != "", subject.FullName));
+				cmd.Parameters.AddWithValue("@phone", DBWorks.ValueOrNull (subject.Phone != "", subject.Phone));
+				cmd.Parameters.AddWithValue("@email", DBWorks.ValueOrNull (subject.Email != "", subject.Email));
+				cmd.Parameters.AddWithValue("@INN", DBWorks.ValueOrNull (subject.INN != "", subject.INN));
+				cmd.Parameters.AddWithValue("@KPP", DBWorks.ValueOrNull (subject.KPP != "", subject.KPP));
+				cmd.Parameters.AddWithValue("@OGRN", DBWorks.ValueOrNull (subject.OGRN != "", subject.OGRN));
+				cmd.Parameters.AddWithValue("@signatory_FIO", DBWorks.ValueOrNull (subject.SignatoryFIO != "", subject.SignatoryFIO));
+				cmd.Parameters.AddWithValue("@signatory_post", DBWorks.ValueOrNull (subject.SignatoryPost != "", subject.SignatoryPost));
+				cmd.Parameters.AddWithValue("@basis_of", DBWorks.ValueOrNull (subject.SignatoryBaseOf != "", subject.SignatoryBaseOf));
+				cmd.Parameters.AddWithValue("@bik", DBWorks.ValueOrNull (subject.Bik != "", subject.Bik));
+				cmd.Parameters.AddWithValue("@account", DBWorks.ValueOrNull (subject.Account != "", subject.Account));
+				cmd.Parameters.AddWithValue("@bank", DBWorks.ValueOrNull (subject.Bank != "", subject.Bank));
+				cmd.Parameters.AddWithValue("@cor_account", DBWorks.ValueOrNull (subject.CorAccount != "", subject.CorAccount));
+				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (subject.Address != "", subject.Address));
+				cmd.Parameters.AddWithValue("@jur_address", DBWorks.ValueOrNull (subject.JurAddress != "", subject.JurAddress));
 
 				cmd.ExecuteNonQuery();
+
+				if(NewItem)
+					tracker.ObjectId = (int)cmd.LastInsertedId;
+				tracker.SaveChangeSet (trans);
+
+				trans.Commit();
 				logger.Info("Ok");
 				Respond (Gtk.ResponseType.Ok);
 			} 
 			catch (Exception ex) 
 			{
+				trans.Rollback ();
 				logger.ErrorException("Ошибка записи организации!", ex);
 				QSMain.ErrorMessage(this,ex);
 			}

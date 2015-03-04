@@ -2330,11 +2330,15 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="QSWidgetLib.CompanyName" id="entryName">
+                              <widget class="Gtk.DataBindings.DataCompanyName" id="entryName">
                                 <property name="MemberName" />
                                 <property name="CanFocus">True</property>
                                 <property name="IsEditable">True</property>
                                 <property name="InvisibleChar">●</property>
+                                <property name="InheritedDataSource">False</property>
+                                <property name="InheritedBoundaryDataSource">False</property>
+                                <property name="InheritedDataSource">False</property>
+                                <property name="InheritedBoundaryDataSource">False</property>
                                 <signal name="Changed" handler="OnEntryNameChanged" />
                               </widget>
                               <packing>
@@ -4293,8 +4297,9 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.OrganizationDlg" design-size="604 507">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.OrganizationDlg" design-size="826 497">
     <property name="MemberName" />
+    <property name="Title" translatable="yes">Новая организация</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
@@ -4303,12 +4308,16 @@
         <property name="MemberName" />
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.Table" id="table1">
+          <widget class="Gtk.DataBindings.DataTable" id="table1">
             <property name="MemberName" />
             <property name="NRows">11</property>
             <property name="NColumns">4</property>
             <property name="RowSpacing">6</property>
             <property name="ColumnSpacing">6</property>
+            <property name="InheritedDataSource">False</property>
+            <property name="InheritedBoundaryDataSource">False</property>
+            <property name="InheritedDataSource">False</property>
+            <property name="InheritedBoundaryDataSource">False</property>
             <child>
               <placeholder />
             </child>
@@ -4316,13 +4325,19 @@
               <placeholder />
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryAccount">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryAccount">
                 <property name="MemberName" />
                 <property name="WidthRequest">191</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="MaxLength">25</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Account</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Account</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">5</property>
@@ -4341,11 +4356,17 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryBank">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryBank">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Bank</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Bank</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">7</property>
@@ -4364,12 +4385,18 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryBaseOf">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryBaseOf">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Text" translatable="yes">Устава</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">SignatoryBaseOf</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">SignatoryBaseOf</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">3</property>
@@ -4388,12 +4415,18 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryBIK">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryBIK">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="MaxLength">9</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Bik</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Bik</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">6</property>
@@ -4412,12 +4445,18 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryCorAccount">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryCorAccount">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="MaxLength">25</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">CorAccount</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">CorAccount</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">8</property>
@@ -4436,11 +4475,17 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryEmail">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryEmail">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Email</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Email</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">4</property>
@@ -4459,11 +4504,17 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryFIO">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryFIO">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">SignatoryFIO</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">SignatoryFIO</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">1</property>
@@ -4481,11 +4532,17 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryFullName">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryFullName">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">FullName</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">FullName</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">2</property>
@@ -4503,12 +4560,18 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryINN">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryINN">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="MaxLength">12</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">INN</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">INN</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">5</property>
@@ -4527,12 +4590,18 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryKPP">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryKPP">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="MaxLength">10</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">KPP</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">KPP</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">6</property>
@@ -4551,11 +4620,17 @@
               </packing>
             </child>
             <child>
-              <widget class="QSWidgetLib.CompanyName" id="entryName">
+              <widget class="Gtk.DataBindings.DataCompanyName" id="entryName">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Name</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Name</property>
+                <property name="InheritedBoundaryDataSource">False</property>
                 <signal name="Changed" handler="OnEntryNameChanged" />
               </widget>
               <packing>
@@ -4575,12 +4650,18 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryOGRN">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryOGRN">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="MaxLength">15</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">OGRN</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">OGRN</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">7</property>
@@ -4599,11 +4680,17 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryPhone">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryPhone">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Phone</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Phone</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">3</property>
@@ -4622,12 +4709,18 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entryPost">
+              <widget class="Gtk.DataBindings.DataEntry" id="entryPost">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Text" translatable="yes">Генерального директора</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">SignatoryPost</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">SignatoryPost</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="TopAttach">2</property>
@@ -4650,11 +4743,17 @@
                 <property name="MemberName" />
                 <property name="ShadowType">In</property>
                 <child>
-                  <widget class="Gtk.TextView" id="textviewAddress">
+                  <widget class="Gtk.DataBindings.DataTextView" id="textviewAddress">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
                     <property name="ShowScrollbars">True</property>
                     <property name="Text" translatable="yes" />
+                    <property name="InheritedDataSource">True</property>
+                    <property name="Mappings">Address</property>
+                    <property name="InheritedBoundaryDataSource">False</property>
+                    <property name="InheritedDataSource">True</property>
+                    <property name="Mappings">Address</property>
+                    <property name="InheritedBoundaryDataSource">False</property>
                   </widget>
                 </child>
               </widget>
@@ -4679,11 +4778,17 @@
                 <property name="MemberName" />
                 <property name="ShadowType">In</property>
                 <child>
-                  <widget class="Gtk.TextView" id="textviewJurAddress">
+                  <widget class="Gtk.DataBindings.DataTextView" id="textviewJurAddress">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
                     <property name="ShowScrollbars">True</property>
                     <property name="Text" translatable="yes" />
+                    <property name="InheritedDataSource">True</property>
+                    <property name="Mappings">JurAddress</property>
+                    <property name="InheritedBoundaryDataSource">False</property>
+                    <property name="InheritedDataSource">True</property>
+                    <property name="Mappings">JurAddress</property>
+                    <property name="InheritedBoundaryDataSource">False</property>
                   </widget>
                 </child>
               </widget>
@@ -5101,9 +5206,16 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Label" id="labelId">
+              <widget class="Gtk.DataBindings.DataLabel" id="labelId">
                 <property name="MemberName" />
                 <property name="LabelProp" translatable="yes">Не задан</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Id</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="Important">False</property>
+                <property name="InheritedDataSource">True</property>
+                <property name="Mappings">Id</property>
+                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="LeftAttach">1</property>
