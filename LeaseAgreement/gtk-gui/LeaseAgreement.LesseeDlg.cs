@@ -22,7 +22,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Entry entryKPP;
 		
-		private global::QSWidgetLib.CompanyName entryName;
+		private global::Gtk.DataBindings.DataCompanyName entryName;
 		
 		private global::Gtk.Entry entryOGRN;
 		
@@ -242,11 +242,15 @@ namespace LeaseAgreement
 			w5.XOptions = ((global::Gtk.AttachOptions)(4));
 			w5.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.entryName = new global::QSWidgetLib.CompanyName ();
+			this.entryName = new global::Gtk.DataBindings.DataCompanyName ();
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;
 			this.entryName.InvisibleChar = '●';
+			this.entryName.InheritedDataSource = false;
+			this.entryName.InheritedBoundaryDataSource = false;
+			this.entryName.InheritedDataSource = false;
+			this.entryName.InheritedBoundaryDataSource = false;
 			this.table1.Add (this.entryName);
 			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table1 [this.entryName]));
 			w6.TopAttach = ((uint)(1));

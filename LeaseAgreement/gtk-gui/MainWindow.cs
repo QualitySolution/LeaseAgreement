@@ -45,6 +45,8 @@ public partial class MainWindow
 	
 	private global::Gtk.Action ActionHistoryLog;
 	
+	private global::Gtk.Action goDownAction;
+	
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.MenuBar menubar1;
@@ -268,6 +270,9 @@ public partial class MainWindow
 		this.ActionHistoryLog = new global::Gtk.Action ("ActionHistoryLog", global::Mono.Unix.Catalog.GetString ("Журнал изменений"), null, null);
 		this.ActionHistoryLog.ShortLabel = global::Mono.Unix.Catalog.GetString ("Журнал изменений");
 		w1.Add (this.ActionHistoryLog, null);
+		this.goDownAction = new global::Gtk.Action ("goDownAction", global::Mono.Unix.Catalog.GetString ("Проверить обновления"), null, "gtk-go-down");
+		this.goDownAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Проверить обновления");
+		w1.Add (this.goDownAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -279,7 +284,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action41' action='Action41'><menuitem name='dialogAuthenticationAction' action='dialogAuthenticationAction'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='propertiesAction' action='propertiesAction'/><separator/><menuitem name='ActionHistoryLog' action='ActionHistoryLog'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action' action='Action'><menuitem name='Action15' action='Action15'/><menuitem name='Action40' action='Action40'/><separator/><menuitem name='Action10' action='Action10'/><menuitem name='Action43' action='Action43'/><menuitem name='Action44' action='Action44'/><separator/><menuitem name='Action7' action='Action7'/></menu><menu name='Action45' action='Action45'><menuitem name='Action46' action='Action46'/></menu><menu name='Action42' action='Action42'><menuitem name='helpAction' action='helpAction'/><menuitem name='Action36' action='Action36'/><menuitem name='Action26' action='Action26'/><separator/><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action41' action='Action41'><menuitem name='dialogAuthenticationAction' action='dialogAuthenticationAction'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='propertiesAction' action='propertiesAction'/><separator/><menuitem name='ActionHistoryLog' action='ActionHistoryLog'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action' action='Action'><menuitem name='Action15' action='Action15'/><menuitem name='Action40' action='Action40'/><separator/><menuitem name='Action10' action='Action10'/><menuitem name='Action43' action='Action43'/><menuitem name='Action44' action='Action44'/><separator/><menuitem name='Action7' action='Action7'/></menu><menu name='Action45' action='Action45'><menuitem name='Action46' action='Action46'/></menu><menu name='Action42' action='Action42'><menuitem name='helpAction' action='helpAction'/><menuitem name='Action36' action='Action36'/><menuitem name='Action26' action='Action26'/><menuitem name='goDownAction' action='goDownAction'/><separator/><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -1088,6 +1093,7 @@ public partial class MainWindow
 		this.Action44.Activated += new global::System.EventHandler (this.OnAction44Activated);
 		this.Action46.Activated += new global::System.EventHandler (this.OnAction46Activated);
 		this.ActionHistoryLog.Activated += new global::System.EventHandler (this.OnActionHistoryLogActivated);
+		this.goDownAction.Activated += new global::System.EventHandler (this.OnActionCheckUpdateActivated);
 		this.notebookMain.SwitchPage += new global::Gtk.SwitchPageHandler (this.OnNotebookMainSwitchPage);
 		this.comboPlaceType.Changed += new global::System.EventHandler (this.OnComboPlaceTypeChanged);
 		this.entryPlaceNum.Changed += new global::System.EventHandler (this.OnEntryPlaceNumChanged);

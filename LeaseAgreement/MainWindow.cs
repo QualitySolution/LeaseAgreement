@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using QSOrmProject;
 using QSProjectsLib;
 using QSSupportLib;
+using QSUpdater;
 
 public partial class MainWindow : Gtk.Window
 {
@@ -45,7 +46,12 @@ public partial class MainWindow : Gtk.Window
 		MainSupport.ProjectVerion = new AppVersion(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString(),
 		                                           "gpl",
 		                                           System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
-		MainSupport.TestVersion(this); //Проверяем версию базы
+		if (!MainSupport.CheckVersion (this)) {//Проверяем версию базы
+			CheckUpdate.StartCheckUpdateThread (UpdaterFlags.ShowAnyway | UpdaterFlags.UpdateRequired);
+			this.Destroy ();
+			this.Dispose ();
+			return;
+		}
 		QSMain.CheckServer (this); // Проверяем настройки сервера
 		MainClass.MinorDBVersionChange (); // При необходимости корректируем базу.
 		MainClass.CreateDatabaseParam ();
@@ -94,6 +100,7 @@ public partial class MainWindow : Gtk.Window
 		PrepareContract();
 		notebookMain.CurrentPage = 0;
 		UpdatePlaces ();
+		CheckUpdate.StartCheckUpdateThread (UpdaterFlags.StartInThread);
 	}
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
@@ -477,5 +484,10 @@ public partial class MainWindow : Gtk.Window
 		dialog.Show ();
 		dialog.Run ();
 		dialog.Destroy ();
+	}
+
+	protected void OnActionCheckUpdateActivated (object sender, EventArgs e)
+	{
+		CheckUpdate.StartCheckUpdateThread (UpdaterFlags.ShowAnyway);
 	}
 }
