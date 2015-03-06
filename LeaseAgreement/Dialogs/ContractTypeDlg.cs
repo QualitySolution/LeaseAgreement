@@ -100,9 +100,9 @@ namespace LeaseAgreement
 						                            false
 						);
 						//В случае если произойдет чудо - раскомментировать.
-						/*subject.Templates.Add (new DocTemplate (rdr.GetInt32 ("id"),
+						subject.Templates.Add (new DocTemplate (rdr.GetInt32 ("id"),
 						                                        rdr.GetString ("name"),
-						                                        rdr.GetUInt32 ("size")));*/
+						                                        rdr.GetUInt32 ("size")));
 					}
 				}
 				tracker.TakeFirst (subject);
@@ -126,7 +126,7 @@ namespace LeaseAgreement
 			tracker.TakeLast (subject);
 			if (!tracker.Compare ()) {
 				logger.Info ("Нет изменений.");
-				Respond (Gtk.ResponseType.Reject);
+				Respond (ResponseType.Reject);
 				return;
 			}
 
@@ -222,14 +222,14 @@ namespace LeaseAgreement
 		{
 			uint size = (uint)model.GetValue (iter, (int)PatternsCol.size);
 
-			(cell as Gtk.CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((uint)size) : "";
+			(cell as CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((uint)size) : "";
 		}
 
 		private void RenderFileChangedColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 		{
 			bool changed = (bool)model.GetValue (iter, (int)PatternsCol.fileChanged);
 
-			(cell as Gtk.CellRendererText).Text = changed ? "изменен" : "";
+			(cell as CellRendererText).Text = changed ? "изменен" : "";
 		}
 
 		void OnNameColumnEdited (object o, EditedArgs args)
@@ -245,7 +245,7 @@ namespace LeaseAgreement
 			PatternsStore.SetValue (iter, (int)PatternsCol.name, args.NewText);
 
 			//В случае если произойдет чудо - раскомментировать.
-			//subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).Name = args.NewText;
+			subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).Name = args.NewText;
 		}
 
 		protected void OnButtonDelClicked (object sender, EventArgs e)
@@ -257,7 +257,7 @@ namespace LeaseAgreement
 				deletedItems.Add ((int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
 			}
 			//В случае если произойдет чудо - раскомментировать.
-			//subject.Templates.RemoveAll (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
+			subject.Templates.RemoveAll (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
 			PatternsStore.Remove (ref iter);
 			OnTreeviewPatternsCursorChanged (null, EventArgs.Empty);
 		}
@@ -265,7 +265,7 @@ namespace LeaseAgreement
 		protected void OnButtonNewClicked (object sender, EventArgs e)
 		{
 			OdtWorks odt;
-			using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly ().GetManifestResourceStream ("LeaseAgreement.Patterns.empty.odt")) {
+			using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly ().GetManifestResourceStream ("LeaseAgreement.Patterns.empty.odt")) {
 				odt = new OdtWorks (stream);
 			}
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
@@ -280,7 +280,7 @@ namespace LeaseAgreement
 			                            true
 			);
 			//В случае если произойдет чудо - раскомментировать.
-			//subject.Templates.Add (new DocTemplate (-1, "Новый шаблон", (uint)file.LongLength));
+			subject.Templates.Add (new DocTemplate (-1, "Новый шаблон", (uint)file.LongLength));
 			odt.Close ();
 		}
 
@@ -323,7 +323,7 @@ namespace LeaseAgreement
 				                            true
 				);
 				//В случае, если произойдет чудо - раскомментировать
-				//subject.Templates.Add (new DocTemplate (-1, System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename), (uint)file.LongLength));
+				subject.Templates.Add (new DocTemplate (-1, System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename), (uint)file.LongLength));
 				odt.Close ();
 				logger.Info ("Ok");
 			}
@@ -356,7 +356,7 @@ namespace LeaseAgreement
 				watchers.Remove (watcher);
 			}
 
-			System.IO.File.WriteAllBytes (tempFilePath, file);
+			File.WriteAllBytes (tempFilePath, file);
 			logger.Info ("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start (tempFilePath);
 			MakeWatcher (tempDir, tempFile);
@@ -406,8 +406,8 @@ namespace LeaseAgreement
 					PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
 					PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
 					//В случае, если произойдет чудо - раскомментировать
-					//subject.Templates.Find(m => m.Id == PatternsStore.GetValue(iter, (int)PatternsCol.id)).IsChanged = true;
-					//subject.Templates.Find(m => m.Id == PatternsStore.GetValue(iter, (int)PatternsCol.id)).Size = (uint)file.LongLength;
+					subject.Templates.Find (m => m.Id == PatternsStore.GetValue (iter, (int)PatternsCol.id)).IsChanged = true;
+					subject.Templates.Find (m => m.Id == PatternsStore.GetValue (iter, (int)PatternsCol.id)).Size = (uint)file.LongLength;
 				}
 			} catch (Exception ex) {
 				logger.WarnException ("Ошибка при чтении файла!", ex);
