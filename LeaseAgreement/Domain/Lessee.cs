@@ -1,9 +1,6 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using MySql.Data.MySqlClient;
-using QSProjectsLib;
 
 namespace LeaseAgreement
 {
@@ -44,7 +41,7 @@ namespace LeaseAgreement
 			set { SetField (ref email, value, () => Email); }
 		}
 
-		string inn;
+		string inn = String.Empty;
 
 		[Display (Name = "ИНН")]
 		public virtual string INN {

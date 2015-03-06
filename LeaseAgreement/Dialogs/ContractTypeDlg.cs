@@ -5,19 +5,26 @@ using NLog;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
 using Gtk;
+using System.Data.Bindings;
+using QSOrmProject;
 
 namespace LeaseAgreement
 {
 	public partial class ContractTypeDlg : Gtk.Dialog
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		private static Logger logger = LogManager.GetCurrentClassLogger ();
 		private List<int> deletedItems;
 		private List<FileSystemWatcher> watchers;
 		private bool NewItem = true;
 		int ItemId;
 		private ListStore PatternsStore;
+		private ContractType subject = new ContractType ();
+		private Adaptor adaptor = new Adaptor ();
+		private QSHistoryLog.ObjectTracker<ContractType> tracker;
 
-		enum PatternsCol {
+
+		enum PatternsCol
+		{
 			id,
 			name,
 			size,
@@ -29,9 +36,15 @@ namespace LeaseAgreement
 		{
 			this.Build ();
 
+			adaptor.Target = subject;
+			table1.DataSource = adaptor;
+			labelId.Adaptor.Converter = new IdToStringConverter ();
+			tracker = new QSHistoryLog.ObjectTracker<ContractType> (subject);
+			subject.Templates = new List<DocTemplate> ();
+
 			deletedItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
-			PatternsStore = new ListStore (typeof(int), typeof(string), typeof(int), typeof(byte[]), typeof(bool));
+			PatternsStore = new ListStore (typeof(int), typeof(string), typeof(long), typeof(byte[]), typeof(bool));
 
 			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();
 			ColumnName.Title = "Название документа";
@@ -42,11 +55,11 @@ namespace LeaseAgreement
 			CellName.Edited += OnNameColumnEdited;
 			ColumnName.MaxWidth = 500;
 			ColumnName.PackStart (CellName, true);
-			ColumnName.AddAttribute(CellName, "text", (int)PatternsCol.name);
+			ColumnName.AddAttribute (CellName, "text", (int)PatternsCol.name);
 
-			treeviewPatterns.AppendColumn(ColumnName);
-			treeviewPatterns.AppendColumn("Размер шаблона", new Gtk.CellRendererText (), RenderSizeColumn);
-			treeviewPatterns.AppendColumn("", new Gtk.CellRendererText (), RenderFileChangedColumn);
+			treeviewPatterns.AppendColumn (ColumnName);
+			treeviewPatterns.AppendColumn ("Размер шаблона", new Gtk.CellRendererText (), RenderSizeColumn);
+			treeviewPatterns.AppendColumn ("", new Gtk.CellRendererText (), RenderFileChangedColumn);
 
 			treeviewPatterns.Model = PatternsStore;
 			treeviewPatterns.ShowAll ();
@@ -54,125 +67,120 @@ namespace LeaseAgreement
 			TestCanSave ();
 		}
 
-		public void Fill(int id)
+		public void Fill (int id)
 		{
 			ItemId = id;
 			NewItem = false;
 
-			logger.Info("Запрос типа договора №{0}...", id);
+			logger.Info ("Запрос типа договора №{0}...", id);
 			string sql = "SELECT contract_types.* FROM contract_types WHERE contract_types.id = @id";
-			try
-			{
-				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
-				cmd.Parameters.AddWithValue("@id", id);
+			try {
+				MySqlCommand cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
+				cmd.Parameters.AddWithValue ("@id", id);
 
-				using(MySqlDataReader rdr = cmd.ExecuteReader())
-				{
-					rdr.Read();
-
-					labelId.Text = rdr["id"].ToString();
-					entryName.Text = rdr["name"].ToString();
+				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+					rdr.Read ();
+					subject.Id = rdr.GetInt32 ("id");
+					subject.Name = rdr ["name"].ToString ();
 				}
 
 				logger.Info ("Загружаем список шаблонов {0}", entryName.Text);
 				sql = "SELECT id, name, size, pattern FROM doc_patterns WHERE contract_type_id = @contract_type_id ";
-				cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
-				cmd.Parameters.AddWithValue("@contract_type_id", ItemId);
-				using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
-				{
-					while(rdr.Read ())
-					{
-						byte[] file = new byte[rdr.GetInt64("size")];
-						rdr.GetBytes(rdr.GetOrdinal("pattern"), 0, file, 0, rdr.GetInt32("size"));
+				cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
+				cmd.Parameters.AddWithValue ("@contract_type_id", ItemId);
+				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+					while (rdr.Read ()) {
+						byte[] file = new byte[rdr.GetInt64 ("size")];
+						rdr.GetBytes (rdr.GetOrdinal ("pattern"), 0, file, 0, rdr.GetInt32 ("size"));
 
-						PatternsStore.AppendValues(rdr.GetInt32("id"),
-						                    rdr.GetString("name"),
-						                           rdr.GetInt32("size"),
-						                           file,
-						                           false
-						                   );
+						PatternsStore.AppendValues (rdr.GetInt32 ("id"),
+						                            rdr.GetString ("name"),
+						                            rdr.GetInt64 ("size"),
+						                            file,
+						                            false
+						);
+						//В случае если произойдет чудо - раскомментировать.
+						/*subject.Templates.Add (new DocTemplate (rdr.GetInt32 ("id"),
+						                                        rdr.GetString ("name"),
+						                                        rdr.GetUInt64 ("size")));*/
 					}
 				}
-
-				logger.Info("Ok");
-				this.Title = entryName.Text;
+				tracker.TakeFirst (subject);
+				logger.Info ("Ok");
+				this.Title = subject.Name;
+			} catch (Exception ex) {
+				logger.ErrorException ("Ошибка получения информации от типе договора!", ex);
+				QSMain.ErrorMessage (this, ex);
 			}
-			catch (Exception ex)
-			{
-				logger.ErrorException("Ошибка получения информации от типе договора!", ex);
-				QSMain.ErrorMessage(this,ex);
-			}
-			TestCanSave();
+			TestCanSave ();
 		}
 
 		protected	void TestCanSave ()
 		{
-			bool Nameok = entryName.Text != "";
+			bool Nameok = subject.Name != "";
 			buttonOk.Sensitive = Nameok;
 		}
 
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
+			tracker.TakeLast (subject);
+			if (!tracker.Compare ()) {
+				logger.Info ("Нет изменений.");
+				Respond (Gtk.ResponseType.Reject);
+				return;
+			}
+
 			string sql;
-			if(NewItem)
-			{
+			if (NewItem) {
 				sql = "INSERT INTO contract_types (name) " +
-					"VALUES (@name)";
-			}
-			else
-			{
+				"VALUES (@name)";
+			} else {
 				sql = "UPDATE contract_types SET name = @name " +
-					"WHERE id = @id";
+				"WHERE id = @id";
 			}
-			logger.Info("Запись типа договора...");
+			logger.Info ("Запись типа договора...");
 			MySqlTransaction trans = (MySqlTransaction)QSMain.ConnectionDB.BeginTransaction ();
-			try 
-			{
-				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
+			try {
+				MySqlCommand cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB, trans);
 
-				cmd.Parameters.AddWithValue("@id", ItemId);
-				cmd.Parameters.AddWithValue("@name", entryName.Text);
+				cmd.Parameters.AddWithValue ("@id", subject.Id);
+				cmd.Parameters.AddWithValue ("@name", subject.Name);
 
-				cmd.ExecuteNonQuery();
-				if(NewItem)
+				cmd.ExecuteNonQuery ();
+				if (NewItem)
 					ItemId = (int)cmd.LastInsertedId;
 
-				logger.Info("Записывем изменения списке шаблонов...");
-				foreach(object[] row in PatternsStore)
-				{
+				logger.Info ("Записывем изменения списке шаблонов...");
+				foreach (object[] row in PatternsStore) {
 					if ((int)row [(int)PatternsCol.id] > 0)
 						sql = String.Format ("UPDATE doc_patterns SET name = @name {0} WHERE id = @id", 
 						                     (bool)row [(int)PatternsCol.fileChanged] ? ", size = @size, pattern = @pattern" : "");
 					else
 						sql = "INSERT INTO doc_patterns (name, contract_type_id, size, pattern) " +
-							"VALUES (@name, @contract_type_id, @size, @pattern)";
-					cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
+						"VALUES (@name, @contract_type_id, @size, @pattern)";
+					cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB, trans);
 					cmd.Parameters.AddWithValue ("@name", row [(int)PatternsCol.name]);
 					cmd.Parameters.AddWithValue ("@contract_type_id", ItemId);
 					cmd.Parameters.AddWithValue ("@id", row [(int)PatternsCol.id]);
-					if((bool)row [(int)PatternsCol.fileChanged])
-					{
+					if ((bool)row [(int)PatternsCol.fileChanged]) {
 						byte[] file = (byte[])row [(int)PatternsCol.file];
 						cmd.Parameters.AddWithValue ("@size", file.LongLength);
 						cmd.Parameters.AddWithValue ("@pattern", file);
 					}
-					try
-					{
+					try {
 						cmd.ExecuteNonQuery ();
-					}
-					catch(MySqlException ex)
-					{
+					} catch (MySqlException ex) {
 						if (ex.Number == 1153) {
 							logger.WarnException ("Превышен максимальный размер пакета для передачи на сервер.", ex);
 							string Text = "Превышен максимальный размер пакета для передачи на сервер базы данных. " +
-								"Некоторые файлы превысили ограничение и не будут записаны в базу данных. " +
-								"Это значение настраивается на сервере, по умолчанию для MySQL оно равняется 1Мб. " +
-								"Максимальный размер файла поддерживаемый программой составляет 16Мб, мы рекомендуем " +
-								"установить в настройках сервера параметр <b>max_allowed_packet=16M</b>. Подробнее о настройке здесь " +
-								"http://dev.mysql.com/doc/refman/5.6/en/packet-too-large.html";
+							              "Некоторые файлы превысили ограничение и не будут записаны в базу данных. " +
+							              "Это значение настраивается на сервере, по умолчанию для MySQL оно равняется 1Мб. " +
+							              "Максимальный размер файла поддерживаемый программой составляет 16Мб, мы рекомендуем " +
+							              "установить в настройках сервера параметр <b>max_allowed_packet=16M</b>. Подробнее о настройке здесь " +
+							              "http://dev.mysql.com/doc/refman/5.6/en/packet-too-large.html";
 							MessageDialog md = new MessageDialog ((Gtk.Window)this.Toplevel, DialogFlags.Modal,
-							                                  MessageType.Error, 
-							                                  ButtonsType.Ok, Text);
+							                                      MessageType.Error, 
+							                                      ButtonsType.Ok, Text);
 							md.Run ();
 							md.Destroy ();
 						} else
@@ -180,8 +188,7 @@ namespace LeaseAgreement
 					}
 				}
 
-				if (deletedItems.Count > 0) 
-				{
+				if (deletedItems.Count > 0) {
 					logger.Info ("Удаляем удаленные шаблоны на сервере...");
 					DBWorks.SQLHelper sqld = new DBWorks.SQLHelper ("DELETE FROM doc_patterns WHERE id IN ");
 					sqld.QuoteMode = DBWorks.QuoteType.SingleQuotes;
@@ -190,37 +197,37 @@ namespace LeaseAgreement
 						sqld.AddAsList (obj.ToString ());
 					});
 					sqld.Add (")");
-					cmd = new MySqlCommand(sqld.Text, (MySqlConnection)QSMain.ConnectionDB, trans);
+					cmd = new MySqlCommand (sqld.Text, (MySqlConnection)QSMain.ConnectionDB, trans);
 					cmd.ExecuteNonQuery ();
 				}
-					
+				if (NewItem)
+					tracker.ObjectId = (int)cmd.LastInsertedId;
+				tracker.SaveChangeSet (trans);
 				trans.Commit ();
-				logger.Info("Ok");
+				logger.Info ("Ok");
 				Respond (Gtk.ResponseType.Ok);
-			} 
-			catch (Exception ex) 
-			{
+			} catch (Exception ex) {
 				trans.Rollback ();
-				logger.ErrorException("Ошибка записи типа договора!", ex);
-				QSMain.ErrorMessage(this,ex);
+				logger.ErrorException ("Ошибка записи типа договора!", ex);
+				QSMain.ErrorMessage (this, ex);
 			}
 		}
 
 		protected virtual void OnEntryNameChanged (object sender, System.EventArgs e)
 		{
-			TestCanSave();
+			TestCanSave ();
 		}
 
 		private void RenderSizeColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 		{
-			int size = (int) model.GetValue (iter, (int)PatternsCol.size);
+			int size = (int)model.GetValue (iter, (int)PatternsCol.size);
 
 			(cell as Gtk.CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((ulong)size) : "";
 		}
 
 		private void RenderFileChangedColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 		{
-			bool changed = (bool) model.GetValue (iter, (int)PatternsCol.fileChanged);
+			bool changed = (bool)model.GetValue (iter, (int)PatternsCol.fileChanged);
 
 			(cell as Gtk.CellRendererText).Text = changed ? "изменен" : "";
 		}
@@ -230,107 +237,112 @@ namespace LeaseAgreement
 			TreeIter iter;
 			if (!PatternsStore.GetIterFromString (out iter, args.Path))
 				return;
-			if(args.NewText == null)
-			{
-				logger.Warn("newtext is empty");
+			if (args.NewText == null) {
+				logger.Warn ("newtext is empty");
 				return;
 			}
 
-			PatternsStore.SetValue(iter, (int)PatternsCol.name, args.NewText);
+			PatternsStore.SetValue (iter, (int)PatternsCol.name, args.NewText);
+
+			//В случае если произойдет чудо - раскомментировать.
+			//subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).Name = args.NewText;
 		}
 
-		protected void OnButtonDelClicked(object sender, EventArgs e)
+		protected void OnButtonDelClicked (object sender, EventArgs e)
 		{
 			TreeIter iter;
 			treeviewPatterns.Selection.GetSelected (out iter);
 
-			if((int)PatternsStore.GetValue (iter, (int)PatternsCol.id) > 0)
-			{
+			if ((int)PatternsStore.GetValue (iter, (int)PatternsCol.id) > 0) {
 				deletedItems.Add ((int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
 			}
+			//В случае если произойдет чудо - раскомментировать.
+			//subject.Templates.RemoveAll (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
 			PatternsStore.Remove (ref iter);
 			OnTreeviewPatternsCursorChanged (null, EventArgs.Empty);
 		}
 
-		protected void OnButtonNewClicked(object sender, EventArgs e)
+		protected void OnButtonNewClicked (object sender, EventArgs e)
 		{
 			OdtWorks odt;
-			using(System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("LeaseAgreement.Patterns.empty.odt"))
-			{
+			using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly ().GetManifestResourceStream ("LeaseAgreement.Patterns.empty.odt")) {
 				odt = new OdtWorks (stream);
 			}
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
 			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
-			odt.UpdateFields();
+			odt.UpdateFields ();
 			byte[] file = odt.GetArray ();
 
 			PatternsStore.AppendValues (-1,
 			                            "Новый шаблон",
-			                            file.Length,
+			                            file.LongLength,
 			                            file,
 			                            true
-			                           );
+			);
+			//В случае если произойдет чудо - раскомментировать.
+			//subject.Templates.Add (new DocTemplate (-1, "Новый шаблон", file.LongLength));
 			odt.Close ();
 		}
 
-		protected void OnButtonFromDocClicked(object sender, EventArgs e)
+		protected void OnButtonFromDocClicked (object sender, EventArgs e)
 		{
 			//Читаем файл документа
-			FileChooserDialog Chooser = new FileChooserDialog("Выберите шаблон документа...",
-			                                                              this,
-			                                                              FileChooserAction.Open,
-			                                                              "Отмена", ResponseType.Cancel,
-			                                                  "Выбрать", ResponseType.Accept );
-			FileFilter Filter = new FileFilter();
+			FileChooserDialog Chooser = new FileChooserDialog ("Выберите шаблон документа...",
+			                                                   this,
+			                                                   FileChooserAction.Open,
+			                                                   "Отмена", ResponseType.Cancel,
+			                                                   "Выбрать", ResponseType.Accept);
+			FileFilter Filter = new FileFilter ();
 			Filter.Name = "ODT документы и OTT шаблоны";
-			Filter.AddMimeType("application/vnd.oasis.opendocument.text");
-			Filter.AddMimeType("application/vnd.oasis.opendocument.text-template");
-			Filter.AddPattern("*.odt");
-			Filter.AddPattern("*.ott");
-			Chooser.AddFilter(Filter);
+			Filter.AddMimeType ("application/vnd.oasis.opendocument.text");
+			Filter.AddMimeType ("application/vnd.oasis.opendocument.text-template");
+			Filter.AddPattern ("*.odt");
+			Filter.AddPattern ("*.ott");
+			Chooser.AddFilter (Filter);
 
-			Filter = new FileFilter();
+			Filter = new FileFilter ();
 			Filter.Name = "Все файлы";
-			Filter.AddPattern("*.*");
-			Chooser.AddFilter(Filter);
+			Filter.AddPattern ("*.*");
+			Chooser.AddFilter (Filter);
 
-			if((ResponseType) Chooser.Run () == ResponseType.Accept)
-			{
-				Chooser.Hide();
-				logger.Info("Чтение файла...");
+			if ((ResponseType)Chooser.Run () == ResponseType.Accept) {
+				Chooser.Hide ();
+				logger.Info ("Чтение файла...");
 
 				OdtWorks odt;
 				odt = new OdtWorks (Chooser.Filename);
 				odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
 				odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
-				odt.UpdateFields();
+				odt.UpdateFields ();
 				byte[] file = odt.GetArray ();
 	
 				PatternsStore.AppendValues (-1,
 				                            System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename),
-				                            file.Length,
+				                            file.LongLength,
 				                            file,
 				                            true
-				                       );
+				);
+				//В случае, если произойдет чудо - раскомментировать
+				//subject.Templates.Add (new DocTemplate (-1, System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename), file.LongLength));
 				odt.Close ();
-				logger.Info("Ok");
+				logger.Info ("Ok");
 			}
 			Chooser.Destroy ();
 
 		}
 
-		protected void OnButtonOpenClicked(object sender, EventArgs e)
+		protected void OnButtonOpenClicked (object sender, EventArgs e)
 		{
 			TreeIter iter;
 			treeviewPatterns.Selection.GetSelected (out iter);
 
-			logger.Info("Сохраняем временный файл...");
+			logger.Info ("Сохраняем временный файл...");
 			byte[] file = (byte[])PatternsStore.GetValue (iter, (int)PatternsCol.file);
 			OdtWorks odt;
 			odt = new OdtWorks (file);
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
 			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
-			odt.UpdateFields();
+			odt.UpdateFields ();
 			file = odt.GetArray ();
 			odt.Close ();
 
@@ -338,32 +350,31 @@ namespace LeaseAgreement
 			string tempFile = (string)PatternsStore.GetValue (iter, (int)PatternsCol.name) + ".odt";
 			string tempFilePath = System.IO.Path.Combine (tempDir, tempFile);
 			//Если уже есть наблюдатель на файл удаляем его.
-			foreach(FileSystemWatcher watcher in watchers.FindAll (w => w.Filter == tempFile))
-			{
+			foreach (FileSystemWatcher watcher in watchers.FindAll (w => w.Filter == tempFile)) {
 				watcher.EnableRaisingEvents = false;
 				watcher.Dispose ();
 				watchers.Remove (watcher);
 			}
 
 			System.IO.File.WriteAllBytes (tempFilePath, file);
-			logger.Info("Открываем файл во внешнем приложении...");
-			System.Diagnostics.Process.Start(tempFilePath);
+			logger.Info ("Открываем файл во внешнем приложении...");
+			System.Diagnostics.Process.Start (tempFilePath);
 			MakeWatcher (tempDir, tempFile);
 		}
 
-		protected void OnTreeviewPatternsCursorChanged(object sender, EventArgs e)
+		protected void OnTreeviewPatternsCursorChanged (object sender, EventArgs e)
 		{
 			buttonOpen.Sensitive = buttonDel.Sensitive = treeviewPatterns.Selection.CountSelectedRows () == 1;
 		}
 
-		protected void OnTreeviewPatternsRowActivated(object o, RowActivatedArgs args)
+		protected void OnTreeviewPatternsRowActivated (object o, RowActivatedArgs args)
 		{
 			buttonOpen.Click ();
 		}
-			
-		private void MakeWatcher(string path, string filename)
+
+		private void MakeWatcher (string path, string filename)
 		{
-			FileSystemWatcher watcher = new FileSystemWatcher();
+			FileSystemWatcher watcher = new FileSystemWatcher ();
 			watcher.Path = path;
 			watcher.NotifyFilter = NotifyFilters.LastWrite;
 			watcher.Filter = filename;
@@ -374,35 +385,32 @@ namespace LeaseAgreement
 			watchers.Add (watcher);
 		}
 
-		private void OnFileChangedByUser(object source, FileSystemEventArgs e)
+		private void OnFileChangedByUser (object source, FileSystemEventArgs e)
 		{
 			logger.Info ("Файл <{0}> изменен, обновляем...", e.Name);
-			try
-			{
+			try {
 
 				string name = System.IO.Path.GetFileNameWithoutExtension (e.FullPath);
 
 				byte[] file;
-				using (FileStream fs = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-				{
-					using (MemoryStream ms = new MemoryStream())
-					{
-						fs.CopyTo(ms);
-						file = ms.ToArray();
+				using (FileStream fs = new FileStream (e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+					using (MemoryStream ms = new MemoryStream ()) {
+						fs.CopyTo (ms);
+						file = ms.ToArray ();
 					}
 				}
 
 				TreeIter iter;
-				if(ListStoreWorks.SearchListStore (PatternsStore, name, (int)PatternsCol.name, out iter))
-				{
-					PatternsStore.SetValue (iter, (int)PatternsCol.size, file.Length);
+				if (ListStoreWorks.SearchListStore (PatternsStore, name, (int)PatternsCol.name, out iter)) {
+					PatternsStore.SetValue (iter, (int)PatternsCol.size, file.LongLength);
 					PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
 					PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
+					//В случае, если произойдет чудо - раскомментировать
+					//subject.Templates.Find(m => m.Id == PatternsStore.GetValue(iter, (int)PatternsCol.id)).IsChanged = true;
+					//subject.Templates.Find(m => m.Id == PatternsStore.GetValue(iter, (int)PatternsCol.id)).Size = file.LongLength;
 				}
-			}
-			catch(Exception ex)
-			{
-				logger.WarnException("Ошибка при чтении файла!", ex);
+			} catch (Exception ex) {
+				logger.WarnException ("Ошибка при чтении файла!", ex);
 			}
 		}
 	}

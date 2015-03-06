@@ -109,6 +109,8 @@
     <Compile Include="Domain\PlaceType.cs" />
     <Compile Include="Domain\Organization.cs" />
     <Compile Include="Domain\Lessee.cs" />
+    <Compile Include="Domain\ContractType.cs" />
+    <Compile Include="Domain\DocTemplate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

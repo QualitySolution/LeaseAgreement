@@ -4,15 +4,15 @@ namespace LeaseAgreement
 {
 	public partial class ContractTypeDlg
 	{
-		private global::Gtk.Table table1;
+		private global::Gtk.DataBindings.DataTable table1;
 		
-		private global::Gtk.Entry entryName;
+		private global::Gtk.DataBindings.DataEntry entryName;
 		
 		private global::Gtk.Label label2;
 		
 		private global::Gtk.Label label3;
 		
-		private global::Gtk.Label labelId;
+		private global::Gtk.DataBindings.DataLabel labelId;
 		
 		private global::Gtk.Label label4;
 		
@@ -46,16 +46,26 @@ namespace LeaseAgreement
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.table1 = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
+			this.table1 = new global::Gtk.DataBindings.DataTable (((uint)(2)), ((uint)(2)), false);
 			this.table1.Name = "table1";
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(6));
+			this.table1.InheritedDataSource = false;
+			this.table1.InheritedBoundaryDataSource = false;
+			this.table1.InheritedDataSource = false;
+			this.table1.InheritedBoundaryDataSource = false;
 			// Container child table1.Gtk.Table+TableChild
-			this.entryName = new global::Gtk.Entry ();
+			this.entryName = new global::Gtk.DataBindings.DataEntry ();
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;
 			this.entryName.InvisibleChar = '●';
+			this.entryName.InheritedDataSource = true;
+			this.entryName.Mappings = "Name";
+			this.entryName.InheritedBoundaryDataSource = false;
+			this.entryName.InheritedDataSource = true;
+			this.entryName.Mappings = "Name";
+			this.entryName.InheritedBoundaryDataSource = false;
 			this.table1.Add (this.entryName);
 			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table1 [this.entryName]));
 			w2.TopAttach = ((uint)(1));
@@ -84,9 +94,17 @@ namespace LeaseAgreement
 			w4.XOptions = ((global::Gtk.AttachOptions)(4));
 			w4.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.labelId = new global::Gtk.Label ();
+			this.labelId = new global::Gtk.DataBindings.DataLabel ();
 			this.labelId.Name = "labelId";
-			this.labelId.LabelProp = global::Mono.Unix.Catalog.GetString ("не определен");
+			this.labelId.Xalign = 0F;
+			this.labelId.LabelProp = global::Mono.Unix.Catalog.GetString ("Не определен");
+			this.labelId.InheritedDataSource = true;
+			this.labelId.Mappings = "Id";
+			this.labelId.InheritedBoundaryDataSource = false;
+			this.labelId.Important = false;
+			this.labelId.InheritedDataSource = true;
+			this.labelId.Mappings = "Id";
+			this.labelId.InheritedBoundaryDataSource = false;
 			this.table1.Add (this.labelId);
 			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table1 [this.labelId]));
 			w5.LeftAttach = ((uint)(1));
@@ -226,7 +244,7 @@ namespace LeaseAgreement
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 505;
+			this.DefaultWidth = 528;
 			this.DefaultHeight = 300;
 			this.Show ();
 			this.entryName.Changed += new global::System.EventHandler (this.OnEntryNameChanged);
