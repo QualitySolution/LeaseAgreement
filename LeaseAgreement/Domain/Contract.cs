@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace LeaseAgreement
 {
 	[OrmSubject (Name = "Тип договора")]
-	public class Contract
+	public class Contract : PropertyChangedBase
 	{
 		public virtual int Id { get; set; }
 

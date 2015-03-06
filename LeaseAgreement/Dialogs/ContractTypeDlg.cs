@@ -406,8 +406,8 @@ namespace LeaseAgreement
 					PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
 					PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
 					//В случае, если произойдет чудо - раскомментировать
-					subject.Templates.Find (m => m.Id == PatternsStore.GetValue (iter, (int)PatternsCol.id)).IsChanged = true;
-					subject.Templates.Find (m => m.Id == PatternsStore.GetValue (iter, (int)PatternsCol.id)).Size = (uint)file.LongLength;
+					subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).IsChanged = true;
+					subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).Size = (uint)file.LongLength;
 				}
 			} catch (Exception ex) {
 				logger.WarnException ("Ошибка при чтении файла!", ex);
