@@ -44,7 +44,7 @@ namespace LeaseAgreement
 
 			deletedItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
-			PatternsStore = new ListStore (typeof(int), typeof(string), typeof(long), typeof(byte[]), typeof(bool));
+			PatternsStore = new ListStore (typeof(int), typeof(string), typeof(uint), typeof(byte[]), typeof(bool));
 
 			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();
 			ColumnName.Title = "Название документа";
@@ -90,19 +90,19 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue ("@contract_type_id", ItemId);
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 					while (rdr.Read ()) {
-						byte[] file = new byte[rdr.GetInt64 ("size")];
+						byte[] file = new byte[rdr.GetInt32 ("size")];
 						rdr.GetBytes (rdr.GetOrdinal ("pattern"), 0, file, 0, rdr.GetInt32 ("size"));
 
 						PatternsStore.AppendValues (rdr.GetInt32 ("id"),
 						                            rdr.GetString ("name"),
-						                            rdr.GetInt64 ("size"),
+						                            rdr.GetUInt32 ("size"),
 						                            file,
 						                            false
 						);
 						//В случае если произойдет чудо - раскомментировать.
 						/*subject.Templates.Add (new DocTemplate (rdr.GetInt32 ("id"),
 						                                        rdr.GetString ("name"),
-						                                        rdr.GetUInt64 ("size")));*/
+						                                        rdr.GetUInt32 ("size")));*/
 					}
 				}
 				tracker.TakeFirst (subject);
@@ -164,7 +164,7 @@ namespace LeaseAgreement
 					cmd.Parameters.AddWithValue ("@id", row [(int)PatternsCol.id]);
 					if ((bool)row [(int)PatternsCol.fileChanged]) {
 						byte[] file = (byte[])row [(int)PatternsCol.file];
-						cmd.Parameters.AddWithValue ("@size", file.LongLength);
+						cmd.Parameters.AddWithValue ("@size", (uint)file.LongLength);
 						cmd.Parameters.AddWithValue ("@pattern", file);
 					}
 					try {
@@ -220,9 +220,9 @@ namespace LeaseAgreement
 
 		private void RenderSizeColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 		{
-			int size = (int)model.GetValue (iter, (int)PatternsCol.size);
+			uint size = (uint)model.GetValue (iter, (int)PatternsCol.size);
 
-			(cell as Gtk.CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((ulong)size) : "";
+			(cell as Gtk.CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((uint)size) : "";
 		}
 
 		private void RenderFileChangedColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
@@ -275,12 +275,12 @@ namespace LeaseAgreement
 
 			PatternsStore.AppendValues (-1,
 			                            "Новый шаблон",
-			                            file.LongLength,
+			                            (uint)file.LongLength,
 			                            file,
 			                            true
 			);
 			//В случае если произойдет чудо - раскомментировать.
-			//subject.Templates.Add (new DocTemplate (-1, "Новый шаблон", file.LongLength));
+			//subject.Templates.Add (new DocTemplate (-1, "Новый шаблон", (uint)file.LongLength));
 			odt.Close ();
 		}
 
@@ -318,12 +318,12 @@ namespace LeaseAgreement
 	
 				PatternsStore.AppendValues (-1,
 				                            System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename),
-				                            file.LongLength,
+				                            (uint)file.LongLength,
 				                            file,
 				                            true
 				);
 				//В случае, если произойдет чудо - раскомментировать
-				//subject.Templates.Add (new DocTemplate (-1, System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename), file.LongLength));
+				//subject.Templates.Add (new DocTemplate (-1, System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename), (uint)file.LongLength));
 				odt.Close ();
 				logger.Info ("Ok");
 			}
@@ -402,12 +402,12 @@ namespace LeaseAgreement
 
 				TreeIter iter;
 				if (ListStoreWorks.SearchListStore (PatternsStore, name, (int)PatternsCol.name, out iter)) {
-					PatternsStore.SetValue (iter, (int)PatternsCol.size, file.LongLength);
+					PatternsStore.SetValue (iter, (int)PatternsCol.size, (uint)file.LongLength);
 					PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
 					PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
 					//В случае, если произойдет чудо - раскомментировать
 					//subject.Templates.Find(m => m.Id == PatternsStore.GetValue(iter, (int)PatternsCol.id)).IsChanged = true;
-					//subject.Templates.Find(m => m.Id == PatternsStore.GetValue(iter, (int)PatternsCol.id)).Size = file.LongLength;
+					//subject.Templates.Find(m => m.Id == PatternsStore.GetValue(iter, (int)PatternsCol.id)).Size = (uint)file.LongLength;
 				}
 			} catch (Exception ex) {
 				logger.WarnException ("Ошибка при чтении файла!", ex);

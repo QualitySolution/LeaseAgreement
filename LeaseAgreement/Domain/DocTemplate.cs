@@ -18,10 +18,10 @@ namespace LeaseAgreement
 			set { SetField (ref name, value, () => Name); }
 		}
 
-		long size = 0;
+		uint size = 0;
 
 		[Display (Name = "Размер")]
-		public virtual long Size {
+		public virtual uint Size {
 			get { return size; }
 			set { SetField (ref size, value, () => Size); }
 		}
@@ -29,7 +29,7 @@ namespace LeaseAgreement
 
 		public bool IsChanged { get; set; }
 
-		public DocTemplate (int id, string name, long size)
+		public DocTemplate (int id, string name, uint size)
 		{
 			Id = id;
 			Name = name;
