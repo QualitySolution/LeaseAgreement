@@ -13,7 +13,7 @@ namespace LeaseAgreement
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
 		private bool newItem = true;
 		private Lessee subject = new Lessee ();
-		private Adaptor adaptorOrg = new Adaptor ();
+		private Adaptor adaptorLessee = new Adaptor ();
 		private QSHistoryLog.ObjectTracker<Lessee> tracker;
 
 		Gtk.ListStore ContractsListStore;
@@ -23,8 +23,8 @@ namespace LeaseAgreement
 		public LesseeDlg ()
 		{
 			this.Build ();
-			adaptorOrg.Target = subject;
-			tableInfo.DataSource = adaptorOrg;
+			adaptorLessee.Target = subject;
+			tableInfo.DataSource = adaptorLessee;
 			labelID.Adaptor.Converter = new IdToStringConverter ();
 			tracker = new QSHistoryLog.ObjectTracker<Lessee> (subject);
 
@@ -124,8 +124,9 @@ namespace LeaseAgreement
 					subject.JurAddress = rdr ["jur_address"].ToString ();
 					subject.Comments = rdr ["comments"].ToString ();
 				}
-				tracker.TakeFirst (subject);
 				customLessee.LoadDataFromDB (id);
+				subject.Customs = customLessee.FieldsValues;
+				tracker.TakeFirst (subject);
 
 				logger.Info ("Ok");
 				this.Title = subject.Name;
@@ -145,6 +146,7 @@ namespace LeaseAgreement
 
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
+			subject.Customs = customLessee.FieldsValues;
 			tracker.TakeLast (subject);
 			if (!tracker.Compare ()) {
 				logger.Info ("Нет изменений.");
@@ -191,10 +193,10 @@ namespace LeaseAgreement
 				cmd.ExecuteNonQuery ();
 
 				if (newItem)
-					tracker.ObjectId = (int)cmd.LastInsertedId;
+					tracker.ObjectId = customLessee.ObjectId = subject.Id = (int)cmd.LastInsertedId;
+				customLessee.SaveToDB (trans);
 				tracker.SaveChangeSet (trans);
 
-				customLessee.SaveToDB (trans);
 				trans.Commit ();
 				logger.Info ("Ok");
 				Respond (ResponseType.Ok);

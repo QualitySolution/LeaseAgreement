@@ -93,6 +93,7 @@ namespace LeaseAgreement
 			}
 			FillCurrentContract ();
 			customPlace.LoadDataFromDB (subject.Id);
+			subject.Customs = customPlace.FieldsValues;
 			tracker.TakeFirst (subject);
 			logger.Info("Ok");
 			this.Title = subject.Title;
@@ -166,7 +167,7 @@ namespace LeaseAgreement
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
 			string sql;
-
+			subject.Customs = customPlace.FieldsValues;
 			tracker.TakeLast (subject);
 			if(!tracker.Compare ())
 			{
@@ -203,7 +204,11 @@ namespace LeaseAgreement
 				cmd.ExecuteNonQuery();
 
 				if(newItem)
-					tracker.ObjectId = (int)cmd.LastInsertedId;
+				{
+					subject.Id = customPlace.ObjectId = tracker.ObjectId = (int)cmd.LastInsertedId;
+				}
+
+				customPlace.SaveToDB(trans);
 				tracker.SaveChangeSet (trans);
 
 				trans.Commit ();

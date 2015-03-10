@@ -1,6 +1,7 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace LeaseAgreement
 {
@@ -143,6 +144,13 @@ namespace LeaseAgreement
 		public virtual string Comments {
 			get { return comments; }
 			set { SetField (ref comments, value, () => Comments); }
+		}
+
+		Dictionary<string, object> customs;
+		[Display(Name = "Дополнительно")]
+		public virtual Dictionary<string, object> Customs {
+			get { return customs;}
+			set { SetField(ref customs, value, () => Customs);}
 		}
 
 		public Lessee ()
