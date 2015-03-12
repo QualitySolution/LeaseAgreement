@@ -10,19 +10,19 @@ namespace LeaseAgreement
 		
 		private global::Gtk.HBox hboxInfo;
 		
-		private global::Gtk.Table table2;
+		private global::Gtk.DataBindings.DataTable table2;
 		
-		private global::Gtk.CheckButton checkDraft;
+		private global::Gtk.DataBindings.DataCheckButton checkDraft;
 		
-		private global::Gtk.ComboBox comboCategory;
+		private global::Gtk.DataBindings.DataSpecComboBox comboCategory;
 		
-		private global::Gtk.ComboBox comboContractType;
+		private global::Gtk.DataBindings.DataSpecComboBox comboContractType;
 		
-		private global::Gtk.ComboBox comboOrg;
+		private global::Gtk.DataBindings.DataSpecComboBox comboOrg;
 		
-		private global::QSWidgetLib.DatePicker datepickerSign;
+		private global::QSOrmProject.DataDatePicker datepickerSign;
 		
-		private global::Gtk.Entry entryNumber;
+		private global::Gtk.DataBindings.DataEntry entryNumber;
 		
 		private global::Gtk.HBox hbox1;
 		
@@ -34,11 +34,11 @@ namespace LeaseAgreement
 		
 		private global::Gtk.HBox hbox5;
 		
-		private global::Gtk.ComboBox comboPlaceT;
+		private global::Gtk.DataBindings.DataSpecComboBox comboPlaceT;
 		
 		private global::Gtk.Label label1;
 		
-		private global::Gtk.ComboBox comboPlaceNo;
+		private global::Gtk.DataBindings.DataSpecComboBox comboPlaceNo;
 		
 		private global::Gtk.Label labelArea;
 		
@@ -60,15 +60,15 @@ namespace LeaseAgreement
 		
 		private global::Gtk.VBox vbox3;
 		
-		private global::Gtk.Table table3;
+		private global::Gtk.DataBindings.DataTable table3;
 		
-		private global::Gtk.ComboBox comboResponsible;
+		private global::Gtk.DataBindings.DataSpecComboBox comboResponsible;
 		
-		private global::QSWidgetLib.DatePicker datepickerCancel;
+		private global::QSOrmProject.DataDatePicker datepickerCancel;
 		
-		private global::QSWidgetLib.DatePicker datepickerEnd;
+		private global::QSOrmProject.DataDatePicker datepickerEnd;
 		
-		private global::QSWidgetLib.DatePicker datepickerStart;
+		private global::QSOrmProject.DataDatePicker datepickerStart;
 		
 		private global::Gtk.Label label11;
 		
@@ -84,7 +84,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		
-		private global::Gtk.TextView textComments;
+		private global::Gtk.DataBindings.DataTextView textComments;
 		
 		private global::Gtk.Label GtkLabel9;
 		
@@ -146,17 +146,29 @@ namespace LeaseAgreement
 			this.hboxInfo.Name = "hboxInfo";
 			this.hboxInfo.Spacing = 6;
 			// Container child hboxInfo.Gtk.Box+BoxChild
-			this.table2 = new global::Gtk.Table (((uint)(8)), ((uint)(2)), false);
+			this.table2 = new global::Gtk.DataBindings.DataTable (((uint)(8)), ((uint)(2)), false);
 			this.table2.Name = "table2";
 			this.table2.RowSpacing = ((uint)(6));
 			this.table2.ColumnSpacing = ((uint)(6));
+			this.table2.InheritedDataSource = false;
+			this.table2.InheritedBoundaryDataSource = false;
+			this.table2.InheritedDataSource = false;
+			this.table2.InheritedBoundaryDataSource = false;
 			// Container child table2.Gtk.Table+TableChild
-			this.checkDraft = new global::Gtk.CheckButton ();
+			this.checkDraft = new global::Gtk.DataBindings.DataCheckButton ();
 			this.checkDraft.CanFocus = true;
 			this.checkDraft.Name = "checkDraft";
 			this.checkDraft.Label = global::Mono.Unix.Catalog.GetString ("Черновик");
 			this.checkDraft.DrawIndicator = true;
 			this.checkDraft.UseUnderline = true;
+			this.checkDraft.InheritedDataSource = true;
+			this.checkDraft.Mappings = "Draft";
+			this.checkDraft.InheritedBoundaryDataSource = false;
+			this.checkDraft.Editable = false;
+			this.checkDraft.AutomaticTitle = false;
+			this.checkDraft.InheritedBoundaryDataSource = false;
+			this.checkDraft.InheritedDataSource = true;
+			this.checkDraft.Mappings = "Draft";
 			this.table2.Add (this.checkDraft);
 			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table2 [this.checkDraft]));
 			w3.TopAttach = ((uint)(1));
@@ -166,8 +178,14 @@ namespace LeaseAgreement
 			w3.XOptions = ((global::Gtk.AttachOptions)(4));
 			w3.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.comboCategory = new global::Gtk.ComboBox ();
+			this.comboCategory = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboCategory.Name = "comboCategory";
+			this.comboCategory.ColumnMappings = "Name";
+			this.comboCategory.InheritedDataSource = true;
+			this.comboCategory.Mappings = "Category";
+			this.comboCategory.InheritedBoundaryDataSource = false;
+			this.comboCategory.ShowSpecialStateAll = false;
+			this.comboCategory.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboCategory);
 			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table2 [this.comboCategory]));
 			w4.TopAttach = ((uint)(3));
@@ -177,8 +195,14 @@ namespace LeaseAgreement
 			w4.XOptions = ((global::Gtk.AttachOptions)(4));
 			w4.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.comboContractType = new global::Gtk.ComboBox ();
+			this.comboContractType = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboContractType.Name = "comboContractType";
+			this.comboContractType.ColumnMappings = "Name";
+			this.comboContractType.InheritedDataSource = true;
+			this.comboContractType.Mappings = "ContractType";
+			this.comboContractType.InheritedBoundaryDataSource = false;
+			this.comboContractType.ShowSpecialStateAll = false;
+			this.comboContractType.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboContractType);
 			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table2 [this.comboContractType]));
 			w5.TopAttach = ((uint)(2));
@@ -188,8 +212,14 @@ namespace LeaseAgreement
 			w5.XOptions = ((global::Gtk.AttachOptions)(4));
 			w5.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.comboOrg = new global::Gtk.ComboBox ();
+			this.comboOrg = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboOrg.Name = "comboOrg";
+			this.comboOrg.ColumnMappings = "Name";
+			this.comboOrg.InheritedDataSource = true;
+			this.comboOrg.Mappings = "Organization";
+			this.comboOrg.InheritedBoundaryDataSource = false;
+			this.comboOrg.ShowSpecialStateAll = false;
+			this.comboOrg.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboOrg);
 			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table2 [this.comboOrg]));
 			w6.TopAttach = ((uint)(5));
@@ -199,12 +229,15 @@ namespace LeaseAgreement
 			w6.XOptions = ((global::Gtk.AttachOptions)(4));
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.datepickerSign = new global::QSWidgetLib.DatePicker ();
+			this.datepickerSign = new global::QSOrmProject.DataDatePicker ();
 			this.datepickerSign.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerSign.Name = "datepickerSign";
 			this.datepickerSign.Date = new global::System.DateTime (0);
 			this.datepickerSign.IsEditable = true;
 			this.datepickerSign.AutoSeparation = true;
+			this.datepickerSign.InheritedDataSource = true;
+			this.datepickerSign.Mappings = "SignDate";
+			this.datepickerSign.InheritedBoundaryDataSource = false;
 			this.table2.Add (this.datepickerSign);
 			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table2 [this.datepickerSign]));
 			w7.TopAttach = ((uint)(7));
@@ -214,12 +247,18 @@ namespace LeaseAgreement
 			w7.XOptions = ((global::Gtk.AttachOptions)(4));
 			w7.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.entryNumber = new global::Gtk.Entry ();
+			this.entryNumber = new global::Gtk.DataBindings.DataEntry ();
 			this.entryNumber.CanFocus = true;
 			this.entryNumber.Name = "entryNumber";
 			this.entryNumber.IsEditable = true;
 			this.entryNumber.MaxLength = 20;
 			this.entryNumber.InvisibleChar = '•';
+			this.entryNumber.InheritedDataSource = true;
+			this.entryNumber.Mappings = "Number";
+			this.entryNumber.InheritedBoundaryDataSource = false;
+			this.entryNumber.InheritedDataSource = true;
+			this.entryNumber.Mappings = "Number";
+			this.entryNumber.InheritedBoundaryDataSource = false;
 			this.table2.Add (this.entryNumber);
 			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.entryNumber]));
 			w8.LeftAttach = ((uint)(1));
@@ -280,8 +319,13 @@ namespace LeaseAgreement
 			this.hbox5.Name = "hbox5";
 			this.hbox5.Spacing = 6;
 			// Container child hbox5.Gtk.Box+BoxChild
-			this.comboPlaceT = new global::Gtk.ComboBox ();
+			this.comboPlaceT = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboPlaceT.Name = "comboPlaceT";
+			this.comboPlaceT.ColumnMappings = "Name";
+			this.comboPlaceT.InheritedDataSource = false;
+			this.comboPlaceT.InheritedBoundaryDataSource = false;
+			this.comboPlaceT.ShowSpecialStateAll = false;
+			this.comboPlaceT.ShowSpecialStateNot = true;
 			this.hbox5.Add (this.comboPlaceT);
 			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.comboPlaceT]));
 			w15.Position = 0;
@@ -297,8 +341,14 @@ namespace LeaseAgreement
 			w16.Expand = false;
 			w16.Fill = false;
 			// Container child hbox5.Gtk.Box+BoxChild
-			this.comboPlaceNo = global::Gtk.ComboBox.NewText ();
+			this.comboPlaceNo = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboPlaceNo.Name = "comboPlaceNo";
+			this.comboPlaceNo.ColumnMappings = "PlaceNumber";
+			this.comboPlaceNo.InheritedDataSource = true;
+			this.comboPlaceNo.Mappings = "Place";
+			this.comboPlaceNo.InheritedBoundaryDataSource = false;
+			this.comboPlaceNo.ShowSpecialStateAll = false;
+			this.comboPlaceNo.ShowSpecialStateNot = true;
 			this.hbox5.Add (this.comboPlaceNo);
 			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.comboPlaceNo]));
 			w17.Position = 2;
@@ -422,13 +472,23 @@ namespace LeaseAgreement
 			this.vbox3.Name = "vbox3";
 			this.vbox3.Spacing = 6;
 			// Container child vbox3.Gtk.Box+BoxChild
-			this.table3 = new global::Gtk.Table (((uint)(4)), ((uint)(2)), false);
+			this.table3 = new global::Gtk.DataBindings.DataTable (((uint)(4)), ((uint)(2)), false);
 			this.table3.Name = "table3";
 			this.table3.RowSpacing = ((uint)(6));
 			this.table3.ColumnSpacing = ((uint)(6));
+			this.table3.InheritedDataSource = false;
+			this.table3.InheritedBoundaryDataSource = false;
+			this.table3.InheritedDataSource = false;
+			this.table3.InheritedBoundaryDataSource = false;
 			// Container child table3.Gtk.Table+TableChild
-			this.comboResponsible = new global::Gtk.ComboBox ();
+			this.comboResponsible = new global::Gtk.DataBindings.DataSpecComboBox ();
 			this.comboResponsible.Name = "comboResponsible";
+			this.comboResponsible.ColumnMappings = "Name";
+			this.comboResponsible.InheritedDataSource = true;
+			this.comboResponsible.Mappings = "Responsible";
+			this.comboResponsible.InheritedBoundaryDataSource = false;
+			this.comboResponsible.ShowSpecialStateAll = false;
+			this.comboResponsible.ShowSpecialStateNot = false;
 			this.table3.Add (this.comboResponsible);
 			global::Gtk.Table.TableChild w29 = ((global::Gtk.Table.TableChild)(this.table3 [this.comboResponsible]));
 			w29.LeftAttach = ((uint)(1));
@@ -436,12 +496,15 @@ namespace LeaseAgreement
 			w29.XOptions = ((global::Gtk.AttachOptions)(4));
 			w29.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table3.Gtk.Table+TableChild
-			this.datepickerCancel = new global::QSWidgetLib.DatePicker ();
+			this.datepickerCancel = new global::QSOrmProject.DataDatePicker ();
 			this.datepickerCancel.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerCancel.Name = "datepickerCancel";
 			this.datepickerCancel.Date = new global::System.DateTime (0);
 			this.datepickerCancel.IsEditable = true;
 			this.datepickerCancel.AutoSeparation = true;
+			this.datepickerCancel.InheritedDataSource = true;
+			this.datepickerCancel.Mappings = "CancelDate";
+			this.datepickerCancel.InheritedBoundaryDataSource = false;
 			this.table3.Add (this.datepickerCancel);
 			global::Gtk.Table.TableChild w30 = ((global::Gtk.Table.TableChild)(this.table3 [this.datepickerCancel]));
 			w30.TopAttach = ((uint)(3));
@@ -451,12 +514,15 @@ namespace LeaseAgreement
 			w30.XOptions = ((global::Gtk.AttachOptions)(4));
 			w30.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table3.Gtk.Table+TableChild
-			this.datepickerEnd = new global::QSWidgetLib.DatePicker ();
+			this.datepickerEnd = new global::QSOrmProject.DataDatePicker ();
 			this.datepickerEnd.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerEnd.Name = "datepickerEnd";
 			this.datepickerEnd.Date = new global::System.DateTime (0);
 			this.datepickerEnd.IsEditable = true;
 			this.datepickerEnd.AutoSeparation = true;
+			this.datepickerEnd.InheritedDataSource = true;
+			this.datepickerEnd.Mappings = "EndDate";
+			this.datepickerEnd.InheritedBoundaryDataSource = false;
 			this.table3.Add (this.datepickerEnd);
 			global::Gtk.Table.TableChild w31 = ((global::Gtk.Table.TableChild)(this.table3 [this.datepickerEnd]));
 			w31.TopAttach = ((uint)(2));
@@ -466,12 +532,15 @@ namespace LeaseAgreement
 			w31.XOptions = ((global::Gtk.AttachOptions)(4));
 			w31.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table3.Gtk.Table+TableChild
-			this.datepickerStart = new global::QSWidgetLib.DatePicker ();
+			this.datepickerStart = new global::QSOrmProject.DataDatePicker ();
 			this.datepickerStart.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerStart.Name = "datepickerStart";
 			this.datepickerStart.Date = new global::System.DateTime (0);
 			this.datepickerStart.IsEditable = true;
 			this.datepickerStart.AutoSeparation = true;
+			this.datepickerStart.InheritedDataSource = true;
+			this.datepickerStart.Mappings = "StartDate";
+			this.datepickerStart.InheritedBoundaryDataSource = false;
 			this.table3.Add (this.datepickerStart);
 			global::Gtk.Table.TableChild w32 = ((global::Gtk.Table.TableChild)(this.table3 [this.datepickerStart]));
 			w32.TopAttach = ((uint)(1));
@@ -542,10 +611,16 @@ namespace LeaseAgreement
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.textComments = new global::Gtk.TextView ();
+			this.textComments = new global::Gtk.DataBindings.DataTextView ();
 			this.textComments.CanFocus = true;
 			this.textComments.Name = "textComments";
 			this.textComments.WrapMode = ((global::Gtk.WrapMode)(2));
+			this.textComments.InheritedDataSource = true;
+			this.textComments.Mappings = "Comments";
+			this.textComments.InheritedBoundaryDataSource = false;
+			this.textComments.InheritedDataSource = true;
+			this.textComments.Mappings = "Comments";
+			this.textComments.InheritedBoundaryDataSource = false;
 			this.GtkScrolledWindow.Add (this.textComments);
 			this.GtkAlignment8.Add (this.GtkScrolledWindow);
 			this.frame1.Add (this.GtkAlignment8);

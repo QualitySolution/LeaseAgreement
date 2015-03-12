@@ -2,6 +2,8 @@
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using MySql.Data.MySqlClient;
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {
@@ -155,6 +157,38 @@ namespace LeaseAgreement
 
 		public Lessee ()
 		{
+		}
+
+		public static List<Lessee> LoadList()
+		{
+			var list = new List<Lessee> ();
+			string sql = "SELECT lessees.* FROM lessees";
+			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+				while (rdr.Read ()) {
+					list.Add (rdrParse (rdr));
+				}
+			}
+			return list;
+		}
+
+		public static Lessee Load(int id)
+		{
+			string sql = "SELECT lessees.* FROM lessees WHERE id = @id";
+			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+			cmd.Parameters.AddWithValue ("id", id);
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+				return rdr.Read () ? rdrParse (rdr) : null;
+			}
+		}
+
+		private static Lessee rdrParse(MySqlDataReader rdr)
+		{
+			return new Lessee {
+				Id = rdr.GetInt32 ("id"),
+				Name = rdr.GetString ("name"),
+				FullName = rdr.GetString ("full_name")
+			};
 		}
 	}
 }

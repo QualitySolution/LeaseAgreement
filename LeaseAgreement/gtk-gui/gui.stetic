@@ -3502,20 +3502,32 @@
                 <property name="MemberName" />
                 <property name="Spacing">6</property>
                 <child>
-                  <widget class="Gtk.Table" id="table2">
+                  <widget class="Gtk.DataBindings.DataTable" id="table2">
                     <property name="MemberName" />
                     <property name="NRows">8</property>
                     <property name="NColumns">2</property>
                     <property name="RowSpacing">6</property>
                     <property name="ColumnSpacing">6</property>
+                    <property name="InheritedDataSource">False</property>
+                    <property name="InheritedBoundaryDataSource">False</property>
+                    <property name="InheritedDataSource">False</property>
+                    <property name="InheritedBoundaryDataSource">False</property>
                     <child>
-                      <widget class="Gtk.CheckButton" id="checkDraft">
+                      <widget class="Gtk.DataBindings.DataCheckButton" id="checkDraft">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="Label" translatable="yes">Черновик</property>
                         <property name="DrawIndicator">True</property>
                         <property name="HasLabel">True</property>
                         <property name="UseUnderline">True</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">Draft</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <property name="Editable">False</property>
+                        <property name="AutomaticTitle">False</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">Draft</property>
                       </widget>
                       <packing>
                         <property name="TopAttach">1</property>
@@ -3534,10 +3546,16 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.ComboBox" id="comboCategory">
+                      <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboCategory">
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <property name="ColumnMappings">Name</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">Category</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <property name="ShowSpecialStateAll">False</property>
+                        <property name="ShowSpecialStateNot">True</property>
                       </widget>
                       <packing>
                         <property name="TopAttach">3</property>
@@ -3556,10 +3574,16 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.ComboBox" id="comboContractType">
+                      <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboContractType">
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <property name="ColumnMappings">Name</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">ContractType</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <property name="ShowSpecialStateAll">False</property>
+                        <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboContractTypeChanged" />
                       </widget>
                       <packing>
@@ -3579,10 +3603,16 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.ComboBox" id="comboOrg">
+                      <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboOrg">
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <property name="ColumnMappings">Name</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">Organization</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <property name="ShowSpecialStateAll">False</property>
+                        <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboOrgChanged" />
                       </widget>
                       <packing>
@@ -3602,12 +3632,15 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="QSWidgetLib.DatePicker" id="datepickerSign">
+                      <widget class="QSOrmProject.DataDatePicker" id="datepickerSign">
                         <property name="MemberName" />
                         <property name="Events">ButtonPressMask</property>
                         <property name="Date">0</property>
                         <property name="IsEditable">True</property>
                         <property name="AutoSeparation">True</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">SignDate</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
                       </widget>
                       <packing>
                         <property name="TopAttach">7</property>
@@ -3626,12 +3659,18 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.Entry" id="entryNumber">
+                      <widget class="Gtk.DataBindings.DataEntry" id="entryNumber">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="MaxLength">20</property>
                         <property name="InvisibleChar">•</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">Number</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <property name="InheritedDataSource">True</property>
+                        <property name="Mappings">Number</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
                         <signal name="Changed" handler="OnEntryNumberChanged" />
                         <signal name="Activated" handler="OnEntryActivated" />
                       </widget>
@@ -3723,10 +3762,15 @@
                         <property name="MemberName" />
                         <property name="Spacing">6</property>
                         <child>
-                          <widget class="Gtk.ComboBox" id="comboPlaceT">
+                          <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboPlaceT">
                             <property name="MemberName" />
                             <property name="IsTextCombo">False</property>
                             <property name="Items" translatable="yes" />
+                            <property name="ColumnMappings">Name</property>
+                            <property name="InheritedDataSource">False</property>
+                            <property name="InheritedBoundaryDataSource">False</property>
+                            <property name="ShowSpecialStateAll">False</property>
+                            <property name="ShowSpecialStateNot">True</property>
                             <signal name="Changed" handler="OnComboPlaceTChanged" />
                           </widget>
                           <packing>
@@ -3749,10 +3793,16 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="Gtk.ComboBox" id="comboPlaceNo">
+                          <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboPlaceNo">
                             <property name="MemberName" />
-                            <property name="IsTextCombo">True</property>
+                            <property name="IsTextCombo">False</property>
                             <property name="Items" translatable="yes" />
+                            <property name="ColumnMappings">PlaceNumber</property>
+                            <property name="InheritedDataSource">True</property>
+                            <property name="Mappings">Place</property>
+                            <property name="InheritedBoundaryDataSource">False</property>
+                            <property name="ShowSpecialStateAll">False</property>
+                            <property name="ShowSpecialStateNot">True</property>
                             <signal name="Changed" handler="OnComboPlaceNoChanged" />
                           </widget>
                           <packing>
@@ -3967,17 +4017,27 @@
                     <property name="MemberName" />
                     <property name="Spacing">6</property>
                     <child>
-                      <widget class="Gtk.Table" id="table3">
+                      <widget class="Gtk.DataBindings.DataTable" id="table3">
                         <property name="MemberName" />
                         <property name="NRows">4</property>
                         <property name="NColumns">2</property>
                         <property name="RowSpacing">6</property>
                         <property name="ColumnSpacing">6</property>
+                        <property name="InheritedDataSource">False</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <property name="InheritedDataSource">False</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
                         <child>
-                          <widget class="Gtk.ComboBox" id="comboResponsible">
+                          <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboResponsible">
                             <property name="MemberName" />
                             <property name="IsTextCombo">False</property>
                             <property name="Items" translatable="yes" />
+                            <property name="ColumnMappings">Name</property>
+                            <property name="InheritedDataSource">True</property>
+                            <property name="Mappings">Responsible</property>
+                            <property name="InheritedBoundaryDataSource">False</property>
+                            <property name="ShowSpecialStateAll">False</property>
+                            <property name="ShowSpecialStateNot">False</property>
                           </widget>
                           <packing>
                             <property name="LeftAttach">1</property>
@@ -3994,12 +4054,15 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="QSWidgetLib.DatePicker" id="datepickerCancel">
+                          <widget class="QSOrmProject.DataDatePicker" id="datepickerCancel">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
+                            <property name="InheritedDataSource">True</property>
+                            <property name="Mappings">CancelDate</property>
+                            <property name="InheritedBoundaryDataSource">False</property>
                             <signal name="DateChanged" handler="OnDatepickerCancelDateChanged" />
                           </widget>
                           <packing>
@@ -4019,12 +4082,15 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="QSWidgetLib.DatePicker" id="datepickerEnd">
+                          <widget class="QSOrmProject.DataDatePicker" id="datepickerEnd">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
+                            <property name="InheritedDataSource">True</property>
+                            <property name="Mappings">EndDate</property>
+                            <property name="InheritedBoundaryDataSource">False</property>
                             <signal name="DateChanged" handler="OnDatepickerEndDateChanged" />
                           </widget>
                           <packing>
@@ -4044,12 +4110,15 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="QSWidgetLib.DatePicker" id="datepickerStart">
+                          <widget class="QSOrmProject.DataDatePicker" id="datepickerStart">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
+                            <property name="InheritedDataSource">True</property>
+                            <property name="Mappings">StartDate</property>
+                            <property name="InheritedBoundaryDataSource">False</property>
                             <signal name="DateChanged" handler="OnDatepickerStartDateChanged" />
                           </widget>
                           <packing>
@@ -4171,12 +4240,18 @@
                                 <property name="MemberName" />
                                 <property name="ShadowType">In</property>
                                 <child>
-                                  <widget class="Gtk.TextView" id="textComments">
+                                  <widget class="Gtk.DataBindings.DataTextView" id="textComments">
                                     <property name="MemberName" />
                                     <property name="CanFocus">True</property>
                                     <property name="ShowScrollbars">True</property>
                                     <property name="Text" translatable="yes" />
                                     <property name="WrapMode">Word</property>
+                                    <property name="InheritedDataSource">True</property>
+                                    <property name="Mappings">Comments</property>
+                                    <property name="InheritedBoundaryDataSource">False</property>
+                                    <property name="InheritedDataSource">True</property>
+                                    <property name="Mappings">Comments</property>
+                                    <property name="InheritedBoundaryDataSource">False</property>
                                   </widget>
                                 </child>
                               </widget>

@@ -2,6 +2,8 @@
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using MySql.Data.MySqlClient;
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {
@@ -74,6 +76,67 @@ namespace LeaseAgreement
 		{
 		}
 			
+		public static List<Place> LoadList()
+		{
+			var list = new List<Place> ();
+			string sql = "SELECT places.* FROM places LEFT JOIN place_types ON place_types.id = places.place_type_id";
+			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+				while (rdr.Read ()) {
+					list.Add (rdrParse (rdr).rdrParsePlaceType (rdr));
+				}
+			}
+			return list;
+		}
+
+		public static List<Place> LoadList(PlaceType type)
+		{
+			var list = new List<Place> ();
+			string sql = "SELECT places.* FROM places WHERE places.type_id = @type_id";
+			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+			cmd.Parameters.AddWithValue ("type_id", type.Id);
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+				while (rdr.Read ()) {
+					var place = rdrParse (rdr);
+					place.PlaceType = type;
+					list.Add (place);
+				}
+			}
+			return list;
+		}
+
+		public static Place Load(int id)
+		{
+			string sql = "SELECT places.*, place_types.name as place_type FROM places" +
+				"LEFT JOIN place_types ON place_types.id = places.place_type_id WHERE id = @id";
+			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
+			cmd.Parameters.AddWithValue ("id", id);
+			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
+				return rdr.Read () ? rdrParse (rdr).rdrParsePlaceType (rdr) : null;
+			}
+		}
+
+		private static Place rdrParse(MySqlDataReader rdr)
+		{
+			return new Place {
+				Id = rdr.GetInt32 ("id"),
+				Name = DBWorks.GetString (rdr, "name", String.Empty),
+				PlaceNumber = rdr.GetString ("place_no"),
+				Area = DBWorks.GetDecimal (rdr, "area", 0),
+				Organization = new Organization {Id = DBWorks.GetInt (rdr, "org_id", -1)}
+			};
+		}
+
+		private Place rdrParsePlaceType(MySqlDataReader rdr)
+		{
+			PlaceType = new PlaceType {
+				Id = rdr.GetInt32 ("place_type_id"),
+				Name = rdr.GetString ("place_type")
+			};
+			return this;
+		}
+
+
 	}
 }
 

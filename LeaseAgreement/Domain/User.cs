@@ -7,36 +7,35 @@ using QSProjectsLib;
 
 namespace LeaseAgreement
 {
-	[OrmSubject (Name = "Тип договора")]
-	public class ContractType : PropertyChangedBase
+	public class User : PropertyChangedBase
 	{
 		public virtual int Id { get; set; }
 
 		string name = String.Empty;
 
-		[Display (Name = "Название")]
+		[Display (Name = "Имя пользователя")]
 		public virtual string Name {
 			get { return name; }
 			set { SetField (ref name, value, () => Name); }
 		}
 
-		List<DocTemplate> templates = new List<DocTemplate> ();
+		string login = String.Empty;
 
-		[Display (Name = "Шаблоны")]
-		public virtual List<DocTemplate> Templates {
-			get { return templates; }
-			set { SetField (ref templates, value, () => Templates); }
+		[Display (Name = "Логин")]
+		public virtual string Login {
+			get { return login; }
+			set { SetField (ref login, value, () => Login); }
 		}
 
-		public ContractType ()
-		{
 
+		public User ()
+		{
 		}
 
-		public static List<ContractType> LoadList()
+		public static List<User> LoadList()
 		{
-			var list = new List<ContractType> ();
-			string sql = "SELECT contract_types.* FROM contract_types";
+			var list = new List<User> ();
+			string sql = "SELECT users.* FROM users";
 			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 				while (rdr.Read ()) {
@@ -46,13 +45,14 @@ namespace LeaseAgreement
 			return list;
 		}
 
-		private static ContractType rdrParse(MySqlDataReader rdr)
+		private static User rdrParse(MySqlDataReader rdr)
 		{
-			return new ContractType {
+			return new User {
 				Id = rdr.GetInt32 ("id"),
 				Name = rdr.GetString ("name")
 			};
 		}
+
 	}
 }
 

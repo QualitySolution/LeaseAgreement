@@ -57,7 +57,7 @@ public partial class MainWindow : Gtk.Window
 		treeviewContract.AppendColumn("Статус", new Gtk.CellRendererPixbuf (), "pixbuf", (int)ContractCol.state_pixbuf);
 		treeviewContract.AppendColumn("Номер", new Gtk.CellRendererText (), "text", (int)ContractCol.number);
 		treeviewContract.AppendColumn("Организация", new Gtk.CellRendererText (), "text", (int)ContractCol.org);
-		treeviewContract.AppendColumn("Место", new Gtk.CellRendererText (), "text", (int)ContractCol.place_no);
+		treeviewContract.AppendColumn("Место", new Gtk.CellRendererText (), "text", (int)ContractCol.place_text);
 		treeviewContract.AppendColumn("Арендатор", new Gtk.CellRendererText (), "text", (int)ContractCol.lessee);
 		treeviewContract.AppendColumn("Дата окончания", new Gtk.CellRendererText (), RenderContractEndDateColumn);
 
@@ -65,12 +65,12 @@ public partial class MainWindow : Gtk.Window
 		Contractfilter.VisibleFunc = new Gtk.TreeModelFilterVisibleFunc (FilterTreeContract);
 		ContractSort = new TreeModelSort (Contractfilter);
 		ContractSort.SetSortFunc ((int)ContractCol.number, ContractNumberSortFunction);
-		ContractSort.SetSortFunc ((int)ContractCol.place_no, ContractPlaceSortFunction);
+		ContractSort.SetSortFunc ((int)ContractCol.place_text, ContractPlaceSortFunction);
 		ContractSort.SetSortFunc ((int)ContractCol.end_date, ContractEndDateSortFunction);
 		treeviewContract.Model = ContractSort;
 		treeviewContract.Columns [1].SortColumnId = (int)ContractCol.number;
 		treeviewContract.Columns [2].SortColumnId = (int)ContractCol.org;
-		treeviewContract.Columns [3].SortColumnId = (int)ContractCol.place_no;
+		treeviewContract.Columns [3].SortColumnId = (int)ContractCol.place_text;
 		treeviewContract.Columns [4].SortColumnId = (int)ContractCol.lessee;
 		treeviewContract.Columns [5].SortColumnId = (int)ContractCol.end_date;
 		treeviewContract.ShowAll();
@@ -82,14 +82,15 @@ public partial class MainWindow : Gtk.Window
 
 		TreeIter iter;
 		
-		DBWorks.SQLHelper sql = new DBWorks.SQLHelper("SELECT contracts.*, place_types.name as type, lessees.name as lessee, organizations.name as organization FROM contracts " +
-				"LEFT JOIN place_types ON contracts.place_type_id = place_types.id " +
-				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
-		                                              "LEFT JOIN organizations ON contracts.org_id = organizations.id" );
+		DBWorks.SQLHelper sql = new DBWorks.SQLHelper("SELECT contracts.*, places.place_no, places.type_id as place_type_id, place_types.name as place_type, lessees.name as lessee, organizations.name as organization FROM contracts " +
+			"LEFT JOIN places ON places.id = contracts.place_id " +
+			"LEFT JOIN place_types ON places.type_id = place_types.id " +
+			"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
+		    "LEFT JOIN organizations ON contracts.org_id = organizations.id" );
 		sql.StartNewList (" WHERE ", " AND ");
 		if(comboContractPlaceT.GetActiveIter(out iter) && comboContractPlaceT.Active != 0)
 		{
-			sql.AddAsList ("contracts.place_type_id = '" + comboContractPlaceT.Model.GetValue(iter,1) + "' ");
+			sql.AddAsList ("places.type_id = '" + comboContractPlaceT.Model.GetValue(iter,1) + "' ");
 		}
 		if(comboContractOrg.GetActiveIter(out iter) && comboContractOrg.Active != 0)
 		{
@@ -158,7 +159,7 @@ public partial class MainWindow : Gtk.Window
 			                             rdr["organization"].ToString(),
 			                             rdr.GetInt32("place_type_id"),
 			                             rdr["place_no"].ToString(),
-			                             rdr["type"].ToString() + " - " + rdr["place_no"].ToString(),
+			                               rdr["place_type"].ToString() + " - " + rdr["place_no"].ToString(),
 			                             lessee_id,
 			                             rdr["lessee"].ToString(),
 			                               endDate,
@@ -206,8 +207,8 @@ public partial class MainWindow : Gtk.Window
 
 	private int ContractPlaceSortFunction(TreeModel model, TreeIter a, TreeIter b) 
 	{
-		string oa = (string) model.GetValue(a, (int)ContractCol.place_no);
-		string ob = (string) model.GetValue(b, (int)ContractCol.place_no);
+		string oa = (string) model.GetValue(a, (int)ContractCol.place_text);
+		string ob = (string) model.GetValue(b, (int)ContractCol.place_text);
 
 		return StringWorks.NaturalStringComparer.Compare (oa, ob);
 	}

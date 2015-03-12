@@ -108,12 +108,11 @@ namespace LeaseAgreement
 			 	"contracts.start_date as start_date, contracts.end_date as end_date, " +
 			 	"contracts.cancel_date as cancel_date FROM contracts " +
 				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
-				"WHERE contracts.place_type_id = @type AND contracts.place_no = @place AND contracts.draft = '0' AND " +
+				"WHERE contracts.place_id = @place_id AND contracts.draft = '0' AND " +
 				"((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
 				"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date))";
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
-			cmd.Parameters.AddWithValue("@type", subject.PlaceType.Id);
-			cmd.Parameters.AddWithValue("@place", subject.PlaceNumber);
+			cmd.Parameters.AddWithValue("@place_id", subject.Id);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
 			{
 				if (rdr.Read ()) {
@@ -243,11 +242,10 @@ namespace LeaseAgreement
 			
 			string sql = "SELECT contracts.*, lessees.name as lessee FROM contracts " +
 			 	"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
-				"WHERE place_type_id = @place_type AND place_no = @place_no AND contracts.draft = '0'";
+				"WHERE place_id = @place_id AND contracts.draft = '0'";
 	        MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 			
-			cmd.Parameters.AddWithValue("@place_type", subject.PlaceType.Id);
-			cmd.Parameters.AddWithValue("@place_no", subject.PlaceNumber);
+			cmd.Parameters.AddWithValue("@place_id", subject.Id);
 			
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 				HistoryStore.Clear ();
@@ -352,7 +350,7 @@ namespace LeaseAgreement
 		{
 			ContractDlg winContract = new ContractDlg();
 			winContract.Show();
-			winContract.SetPlace (subject.PlaceType.Id, subject.PlaceNumber);
+			winContract.SetPlace (subject.PlaceType, subject.Id);
 			winContract.Run();
 			winContract.Destroy();
 			FillCurrentContract ();

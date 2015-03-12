@@ -7,8 +7,8 @@ using QSProjectsLib;
 
 namespace LeaseAgreement
 {
-	[OrmSubject (Name = "Тип договора")]
-	public class ContractType : PropertyChangedBase
+	[OrmSubject (Name = "Категория договора")]
+	public class ContractCategory : PropertyChangedBase
 	{
 		public virtual int Id { get; set; }
 
@@ -20,23 +20,14 @@ namespace LeaseAgreement
 			set { SetField (ref name, value, () => Name); }
 		}
 
-		List<DocTemplate> templates = new List<DocTemplate> ();
-
-		[Display (Name = "Шаблоны")]
-		public virtual List<DocTemplate> Templates {
-			get { return templates; }
-			set { SetField (ref templates, value, () => Templates); }
+		public ContractCategory ()
+		{
 		}
 
-		public ContractType ()
+		public static List<ContractCategory> LoadList()
 		{
-
-		}
-
-		public static List<ContractType> LoadList()
-		{
-			var list = new List<ContractType> ();
-			string sql = "SELECT contract_types.* FROM contract_types";
+			var list = new List<ContractCategory> ();
+			string sql = "SELECT contract_category.* FROM contract_category";
 			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 				while (rdr.Read ()) {
@@ -46,13 +37,14 @@ namespace LeaseAgreement
 			return list;
 		}
 
-		private static ContractType rdrParse(MySqlDataReader rdr)
+		private static ContractCategory rdrParse(MySqlDataReader rdr)
 		{
-			return new ContractType {
+			return new ContractCategory {
 				Id = rdr.GetInt32 ("id"),
 				Name = rdr.GetString ("name")
 			};
 		}
+
 	}
 }
 
