@@ -271,18 +271,18 @@ namespace LeaseAgreement
 			DocPatterns.SetValue(iter, (int)DocPatternCol.name, args.NewText);
 		}
 
-		protected bool TestCorrectDates(bool DisplayMessage)
+		protected bool TestCorrectDates(bool displayMessage)
 		{
 			bool DateCorrectok = false;
 			bool DateCancelok = false;
-			bool DatesIsEmpty = datepickerStart.IsEmpty || datepickerEnd.IsEmpty;
+			bool DatesIsEmpty = subject.StartDate == default(DateTime) || subject.EndDate == default(DateTime);
 			if( !DatesIsEmpty)
-				DateCorrectok = datepickerEnd.Date.CompareTo(datepickerStart.Date) > 0;
-			if(datepickerCancel.IsEmpty)
+				DateCorrectok = subject.EndDate.CompareTo(subject.StartDate) > 0;
+			if(subject.CancelDate == default(DateTime))
 				DateCancelok = true;
 			else
-				DateCancelok = datepickerCancel.Date > datepickerStart.Date && datepickerCancel.Date < datepickerEnd.Date;
-			if(DisplayMessage && !DateCorrectok && !DatesIsEmpty)
+				DateCancelok = subject.CancelDate > subject.StartDate && subject.CancelDate < subject.EndDate;
+			if(displayMessage && !DateCorrectok && !DatesIsEmpty)
 			{
 				MessageDialog md = new MessageDialog ( this, DialogFlags.DestroyWithParent,
 				                                      MessageType.Warning, 
@@ -291,7 +291,7 @@ namespace LeaseAgreement
 				md.Run ();
 				md.Destroy();
 			}
-			if(DisplayMessage && !DateCancelok)
+			if(displayMessage && !DateCancelok)
 			{
 				MessageDialog md = new MessageDialog ( this, DialogFlags.DestroyWithParent,
 				                                      MessageType.Warning, 
