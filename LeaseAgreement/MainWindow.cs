@@ -19,9 +19,9 @@ public partial class MainWindow : Gtk.Window
 		this.AddAccelGroup(grup);
 
 		//Передаем лебл
-		MainClass.StatusBarLabel = labelStatus;
+		QSMain.StatusBarLabel = labelStatus;
 		this.Title = QSSupportLib.MainSupport.GetTitle();
-		QSMain.MakeNewStatusTargetForNlog("StatusMessage", "LeaseAgreement.MainClass, LeaseAgreement");
+		QSMain.MakeNewStatusTargetForNlog ();
 
 		Reference.RunReferenceItemDlg += OnRunReferenceItemDialog;
 		QSMain.ReferenceUpdated += OnReferenceUpdate;

@@ -10,7 +10,6 @@ namespace LeaseAgreement
 	class MainClass
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
-		public static Label StatusBarLabel;
 		public static MainWindow MainWin;
 
 		[STAThread]
@@ -20,6 +19,7 @@ namespace LeaseAgreement
 			AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs e) {
 				QSMain.ErrorMessage (MainWin, (Exception)e.ExceptionObject);
 			};
+			QSMain.GuiThread = System.Threading.Thread.CurrentThread;
 
 			CreateProjectParam ();
 			// Создаем окно входа
@@ -263,14 +263,6 @@ namespace LeaseAgreement
 			};
 			string Display = "{1} от {2:d}";
 			ComboWorks.ComboFillUniversal (combo, sql, Display, Param, 0, ComboWorks.ListMode.OnlyItems);
-		}
-
-		public static void StatusMessage (string message)
-		{
-			StatusBarLabel.Text = message;
-			while (GLib.MainContext.Pending ()) {
-				Gtk.Main.Iteration ();
-			}
 		}
 	}
 }
