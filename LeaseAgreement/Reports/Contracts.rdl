@@ -16,10 +16,10 @@
       <Query >
         <DataSourceName>MySQL</DataSourceName>
         <CommandText>select contracts.number, contracts.start_date, contracts.end_date, places.name as place_name, places.area, organizations.name as org_name, lessees.name as less_name, lessees.address, lessees.INN, lessees.phone
-from LeaseAgreement.contracts
-left join LeaseAgreement.places on places.place_no = contracts.place_no
-left join LeaseAgreement.organizations on organizations.id = contracts.org_id
-left join LeaseAgreement.lessees on lessees.id = contracts.lessee_id
+from contracts
+left join places on places.id = contracts.place_id
+left join organizations on organizations.id = contracts.org_id
+left join lessees on lessees.id = contracts.lessee_id
 where organizations.id = @org_id or @org_id = 0;</CommandText>
         <QueryParameters>
           <QueryParameter Name="org_id">
