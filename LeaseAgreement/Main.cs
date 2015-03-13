@@ -73,7 +73,10 @@ namespace LeaseAgreement
 			QSHistoryLog.HistoryMain.AddClass (typeof(PlaceType));
 			QSHistoryLog.HistoryMain.AddClass (typeof(Place));
 			QSHistoryLog.HistoryMain.AddClass (typeof(Lessee));
+			QSHistoryLog.HistoryMain.AddClass (typeof(Contract));
 			QSHistoryLog.HistoryMain.AddClass (typeof(ContractType));
+			QSHistoryLog.HistoryMain.AddClass (typeof(ContractCategory));
+			QSHistoryLog.HistoryMain.AddClass (typeof(User));
 
 			//Параметры удаления
 			Dictionary<string, TableInfo> Tables = new Dictionary<string, TableInfo> ();
