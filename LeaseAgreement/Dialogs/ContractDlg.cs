@@ -440,10 +440,10 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@draft", subject.Draft);
 				cmd.Parameters.AddWithValue("@number", subject.Number);
 				cmd.Parameters.AddWithValue("@lessee_id", subject.Lessee.Id);
-				cmd.Parameters.AddWithValue("@contract_type_id", DBWorks.ValueOrNull (subject.ContractType != null, subject.ContractType.Id));
-				cmd.Parameters.AddWithValue("@responsible_id", DBWorks.ValueOrNull (subject.Responsible != null, subject.Responsible.Id));
-				cmd.Parameters.AddWithValue("@category_id", DBWorks.ValueOrNull (subject.Category != null, subject.Category.Id));
-				cmd.Parameters.AddWithValue("@org_id", DBWorks.ValueOrNull (subject.Organization != null, subject.Organization.Id));
+				cmd.Parameters.AddWithValue("@contract_type_id", DBWorks.IdPropertyOrNull ( subject.ContractType));
+				cmd.Parameters.AddWithValue("@responsible_id", DBWorks.IdPropertyOrNull (subject.Responsible));
+				cmd.Parameters.AddWithValue("@category_id", DBWorks.IdPropertyOrNull ( subject.Category));
+				cmd.Parameters.AddWithValue("@org_id", DBWorks.IdPropertyOrNull (subject.Organization));
 				cmd.Parameters.AddWithValue("@place_id", DBWorks.ValueOrNull (subject.Place != null, subject.Place.Id));
 				cmd.Parameters.AddWithValue("@sign_date", DBWorks.ValueOrNull (subject.SignDate != default(DateTime), subject.SignDate));
 				cmd.Parameters.AddWithValue("@start_date", DBWorks.ValueOrNull (subject.StartDate != default(DateTime), subject.StartDate));
