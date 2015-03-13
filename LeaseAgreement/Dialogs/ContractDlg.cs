@@ -194,8 +194,11 @@ namespace LeaseAgreement
 				subject.ContractType = DBWorks.FineById (contrTypeList, dbContractTypeId);
 
 				customContracts.LoadDataFromDB(Id);
+				subject.Customs = customContracts.FieldsValues;
 				attachmentFiles.ItemId = Id;
 				attachmentFiles.UpdateFileList (copy);
+
+				tracker.TakeFirst (subject);
 
 				if(copy)
 					this.Title = "Копия договора №" + entryNumber.Text;
@@ -353,8 +356,7 @@ namespace LeaseAgreement
 			if(!tracker.Compare ())
 			{
 				logger.Info ("Нет изменений.");
-				//Respond (ResponseType.Reject);
-				return false;
+				return true;
 			}
 
 			logger.Info("Запись договора...");
@@ -454,7 +456,8 @@ namespace LeaseAgreement
 				cmd.ExecuteNonQuery();
 				if(NewContract)
 				{
-					attachmentFiles.ItemId = customContracts.ObjectId = subject.Id = (int) cmd.LastInsertedId;
+					attachmentFiles.ItemId = customContracts.ObjectId
+						= tracker.ObjectId = subject.Id = (int) cmd.LastInsertedId;
 				}
 				customContracts.SaveToDB(trans);
 				attachmentFiles.SaveChanges(trans);
