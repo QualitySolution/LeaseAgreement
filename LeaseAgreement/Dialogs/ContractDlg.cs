@@ -40,7 +40,6 @@ namespace LeaseAgreement
 
 		public ContractDlg ()
 		{
-			QSMain.CanRedrawUI = false;
 			this.Build ();
 			deletedDocItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
@@ -110,12 +109,10 @@ namespace LeaseAgreement
 			treeviewDocs.ShowAll ();
 
 			tracker = new QSHistoryLog.ObjectTracker<Contract> (subject);
-			QSMain.CanRedrawUI = true;
 		}
 
 		public void Fill(int Id, bool copy = false)
 		{
-			QSMain.CanRedrawUI = false;
 			NewContract = copy;
 			if(!copy)
 				subject.Id = Id;
@@ -212,7 +209,6 @@ namespace LeaseAgreement
 				QSMain.ErrorMessage(this,ex);
 			}
 			TestCanSave();
-			QSMain.CanRedrawUI = true;
 		}
 
 		protected void OnComboPlaceTChanged (object sender, EventArgs e)
