@@ -115,6 +115,10 @@ namespace LeaseAgreement
 			set { SetField(ref customs, value, () => Customs);}
 		}
 
+		public string Title {
+			get { return String.Format ("Договор №{0} от {1:d}", Number, SignDate);}
+		}
+
 		public Contract ()
 		{
 		}
