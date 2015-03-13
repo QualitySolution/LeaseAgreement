@@ -3523,7 +3523,7 @@
                         <property name="InheritedDataSource">True</property>
                         <property name="Mappings">Draft</property>
                         <property name="InheritedBoundaryDataSource">False</property>
-                        <property name="Editable">False</property>
+                        <property name="Editable">True</property>
                         <property name="AutomaticTitle">False</property>
                         <property name="InheritedBoundaryDataSource">False</property>
                         <property name="InheritedDataSource">True</property>

@@ -164,7 +164,7 @@ namespace LeaseAgreement
 			this.checkDraft.InheritedDataSource = true;
 			this.checkDraft.Mappings = "Draft";
 			this.checkDraft.InheritedBoundaryDataSource = false;
-			this.checkDraft.Editable = false;
+			this.checkDraft.Editable = true;
 			this.checkDraft.AutomaticTitle = false;
 			this.checkDraft.InheritedBoundaryDataSource = false;
 			this.checkDraft.InheritedDataSource = true;
