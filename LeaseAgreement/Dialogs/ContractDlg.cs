@@ -194,9 +194,9 @@ namespace LeaseAgreement
 				tracker.TakeFirst (subject);
 
 				if (copy)
-					this.Title = "Копия договора №" + entryNumber.Text;
+					this.Title = String.Format ("Копия договора №{0}", subject.Number);
 				else
-					this.Title = "Договор №" + entryNumber.Text;
+					this.Title = String.Format ("Договор №{0}", subject.Number);
 				logger.Info ("Ok");
 			} catch (Exception ex) {
 				logger.ErrorException ("Ошибка получения информации о договоре!", ex);
