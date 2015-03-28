@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Gtk;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
-using QSProjectsLib;
 using NLog;
+using QSCustomFields;
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {
@@ -71,9 +73,12 @@ namespace LeaseAgreement
 			QSHistoryLog.HistoryMain.AddClass (typeof(Organization));
 			QSHistoryLog.HistoryMain.AddClass (typeof(Stead));
 			QSHistoryLog.HistoryMain.AddClass (typeof(PlaceType));
-			QSHistoryLog.HistoryMain.AddClass (typeof(Place));
-			QSHistoryLog.HistoryMain.AddClass (typeof(Lessee));
-			QSHistoryLog.HistoryMain.AddClass (typeof(Contract));
+			QSHistoryLog.HistoryMain.AddClass (typeof(Place))
+				.PropertiesKeyTitleFunc.Add ("Customs", OnPlaceGetCustomsTitle);
+			QSHistoryLog.HistoryMain.AddClass (typeof(Lessee))
+				.PropertiesKeyTitleFunc.Add ("Customs", OnLesseeGetCustomsTitle);
+			QSHistoryLog.HistoryMain.AddClass (typeof(Contract))
+				.PropertiesKeyTitleFunc.Add ("Customs", OnContractGetCustomsTitle);
 			QSHistoryLog.HistoryMain.AddClass (typeof(ContractType));
 			QSHistoryLog.HistoryMain.AddClass (typeof(ContractCategory));
 			QSHistoryLog.HistoryMain.AddClass (typeof(User));
@@ -207,6 +212,24 @@ namespace LeaseAgreement
 			                             new TableInfo.ClearDependenceItem ("WHERE responsible_id = @id", "", "@id", "responsible_id"));
 			Tables.Add ("users", PrepareTable);
 
+		}
+
+		public static string OnPlaceGetCustomsTitle (string key)
+		{
+			var field = CFMain.GetTableByName ("places").Fields.Find(k => k.ColumnName == key);
+			return field != null ? field.Name : String.Empty;
+		}
+
+		static string OnLesseeGetCustomsTitle (string key)
+		{
+			var field = CFMain.GetTableByName ("lessees").Fields.Find(k => k.ColumnName == key);
+			return field != null ? field.Name : String.Empty;
+		}
+
+		static string OnContractGetCustomsTitle (string key)
+		{
+			var field = CFMain.GetTableByName ("contracts").Fields.Find(k => k.ColumnName == key);
+			return field != null ? field.Name : String.Empty;
 		}
 
 		public static void CreateDatabaseParam ()
