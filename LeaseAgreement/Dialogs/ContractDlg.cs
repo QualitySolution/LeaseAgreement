@@ -46,7 +46,7 @@ namespace LeaseAgreement
 			watchers = new List<FileSystemWatcher> ();
 			DocPatterns = new ListStore (typeof(int), typeof(int), typeof(string), typeof(bool), typeof(int), typeof(byte[]), typeof(bool));
 			adaptorContract.Target = subject;
-			table2.DataSource = table3.DataSource = adaptorContract;
+			table2.DataSource = table3.DataSource = textComments.DataSource = adaptorContract;
 
 			//Исправляем табы
 			Gtk.Image img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.user-home.png");

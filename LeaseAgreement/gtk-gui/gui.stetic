@@ -4246,10 +4246,10 @@
                                     <property name="ShowScrollbars">True</property>
                                     <property name="Text" translatable="yes" />
                                     <property name="WrapMode">Word</property>
-                                    <property name="InheritedDataSource">True</property>
+                                    <property name="InheritedDataSource">False</property>
                                     <property name="Mappings">Comments</property>
                                     <property name="InheritedBoundaryDataSource">False</property>
-                                    <property name="InheritedDataSource">True</property>
+                                    <property name="InheritedDataSource">False</property>
                                     <property name="Mappings">Comments</property>
                                     <property name="InheritedBoundaryDataSource">False</property>
                                   </widget>

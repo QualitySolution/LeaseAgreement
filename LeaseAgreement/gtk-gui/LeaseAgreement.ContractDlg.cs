@@ -615,10 +615,10 @@ namespace LeaseAgreement
 			this.textComments.CanFocus = true;
 			this.textComments.Name = "textComments";
 			this.textComments.WrapMode = ((global::Gtk.WrapMode)(2));
-			this.textComments.InheritedDataSource = true;
+			this.textComments.InheritedDataSource = false;
 			this.textComments.Mappings = "Comments";
 			this.textComments.InheritedBoundaryDataSource = false;
-			this.textComments.InheritedDataSource = true;
+			this.textComments.InheritedDataSource = false;
 			this.textComments.Mappings = "Comments";
 			this.textComments.InheritedBoundaryDataSource = false;
 			this.GtkScrolledWindow.Add (this.textComments);
