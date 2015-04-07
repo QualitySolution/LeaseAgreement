@@ -26,7 +26,6 @@ namespace LeaseAgreement
 			adaptorLessee.Target = subject;
 			tableInfo.DataSource = adaptorLessee;
 			labelID.Adaptor.Converter = new IdToStringConverter ();
-			tracker = new QSHistoryLog.ObjectTracker<Lessee> (subject);
 
 			subject.SignatoryPost = "Генерального директора";
 			subject.SignatoryBaseOf = "Устава";
@@ -89,6 +88,8 @@ namespace LeaseAgreement
 			treeviewContracts.ShowAll ();
 
 			customLessee.UsedTable = QSCustomFields.CFMain.GetTableByName ("lessees");
+			subject.Customs = customLessee.FieldsValues;
+			tracker = new QSHistoryLog.ObjectTracker<Lessee> (subject);
 		}
 
 		public void Fill (int id)

@@ -90,6 +90,7 @@ namespace LeaseAgreement
 			subject.Responsible = DBWorks.FineById (userList, QSMain.User.id);
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
+			subject.Customs = customContracts.FieldsValues;
 			attachmentFiles.AttachToTable = "contracts";
 
 			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();

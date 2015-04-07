@@ -29,7 +29,6 @@ namespace LeaseAgreement
 			adaptorPlace.Target = subject;
 			table2.DataSource = adaptorPlace;
 			textviewComments.DataSource = adaptorPlace;
-			tracker = new QSHistoryLog.ObjectTracker<Place> (subject);
 
 			comboPType.ItemsDataSource = typesList = PlaceType.LoadList ();
 			comboStead.ItemsDataSource = steadsList = Stead.LoadList ();
@@ -62,6 +61,8 @@ namespace LeaseAgreement
 			treeviewHistory.ShowAll();
 
 			customPlace.UsedTable = QSCustomFields.CFMain.GetTableByName ("places");
+			subject.Customs = customPlace.FieldsValues;
+			tracker = new QSHistoryLog.ObjectTracker<Place> (subject);
 		}
 
 		public void Fill(int type, string place)
