@@ -22,7 +22,6 @@ namespace LeaseAgreement
 		private Adaptor adaptor = new Adaptor ();
 		private QSHistoryLog.ObjectTracker<ContractType> tracker;
 
-
 		enum PatternsCol
 		{
 			id,
@@ -39,8 +38,8 @@ namespace LeaseAgreement
 			adaptor.Target = subject;
 			table1.DataSource = adaptor;
 			labelId.Adaptor.Converter = new IdToStringConverter ();
-			tracker = new QSHistoryLog.ObjectTracker<ContractType> (subject);
 			subject.Templates = new List<DocTemplate> ();
+			tracker = new QSHistoryLog.ObjectTracker<ContractType> (subject);
 
 			deletedItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();

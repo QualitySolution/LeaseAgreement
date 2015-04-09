@@ -83,6 +83,8 @@ namespace LeaseAgreement
 			QSHistoryLog.HistoryMain.AddClass (typeof(ContractCategory));
 			QSHistoryLog.HistoryMain.AddClass (typeof(User));
 
+			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(DocTemplate));
+
 			//Параметры удаления
 			Dictionary<string, TableInfo> Tables = new Dictionary<string, TableInfo> ();
 			QSMain.ProjectTables = Tables;
