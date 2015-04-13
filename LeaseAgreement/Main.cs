@@ -18,9 +18,7 @@ namespace LeaseAgreement
 		public static void Main (string[] args)
 		{
 			Application.Init ();
-			AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs e) {
-				QSMain.ErrorMessage (MainWin, (Exception)e.ExceptionObject);
-			};
+			QSMain.SubscribeToUnhadledExceptions ();
 			QSMain.GuiThread = System.Threading.Thread.CurrentThread;
 
 			CreateProjectParam ();
