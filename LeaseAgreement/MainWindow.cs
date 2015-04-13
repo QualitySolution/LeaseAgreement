@@ -262,28 +262,26 @@ public partial class MainWindow : Gtk.Window
 	{
 		// Удаление
 		TreeIter iter;
-		int type, itemid;
-		Delete winDelete = new Delete();
-		string place;
+		int itemid;
+		DeleteDlg winDelete = new DeleteDlg();
 		
 		switch (notebookMain.CurrentPage) {
 		case 0:
 			treeviewPlaces.Selection.GetSelected(out iter);
-			place = PlaceSort.GetValue(iter, (int)PlaceCol.place_no).ToString ();
-			type = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.type_place_id));
-			winDelete.RunDeletion("places", type, place);
+			itemid = (int)PlaceSort.GetValue(iter, (int)PlaceCol.id);
+			winDelete.RunDeletion(typeof(Place), itemid);
 			UpdatePlaces();
 		break;
 		case 1:
 			treeviewLessees.Selection.GetSelected(out iter);
 			itemid = Convert.ToInt32(LesseesSort.GetValue(iter, (int)LesseesCol.id));
-			winDelete.RunDeletion("lessees", itemid);
+			winDelete.RunDeletion(typeof(Lessee), itemid);
 			UpdateLessees();
 		break;
 		case 2:
 			treeviewContract.Selection.GetSelected(out iter);
 			itemid = Convert.ToInt32(ContractSort.GetValue(iter, (int)ContractCol.id));
-			winDelete.RunDeletion("contracts", itemid);
+			winDelete.RunDeletion(typeof(Contract), itemid);
 			UpdateContract();
 		break;
 		default:

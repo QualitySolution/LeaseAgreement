@@ -6,6 +6,7 @@ using MySql.Data.MySqlClient;
 using NLog;
 using QSCustomFields;
 using QSProjectsLib;
+using QSOrmProject;
 
 namespace LeaseAgreement
 {
@@ -84,134 +85,150 @@ namespace LeaseAgreement
 			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(DocTemplate));
 
 			//Параметры удаления
-			Dictionary<string, TableInfo> Tables = new Dictionary<string, TableInfo> ();
-			QSMain.ProjectTables = Tables;
-			TableInfo PrepareTable;
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
+				ObjectClass = typeof(Place),
+				TableName = "places",
+				ObjectsName = "Места",
+				ObjectName = "место",
+				SqlSelect = "SELECT place_types.name as type, place_no, area , type_id FROM places " +
+				"LEFT JOIN place_types ON places.type_id = place_types.id ",
+				DisplayString = "Место {0}-{1} с площадью {2} кв.м.",
+				DeleteItems = new List<DeleteDependenceInfo> {
+					new DeleteDependenceInfo (typeof(Contract), "WHERE contracts.place_id = @id")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Места";
-			PrepareTable.ObjectName = "место";
-			PrepareTable.SqlSelect = "SELECT place_types.name as type, place_no, area , type_id FROM places " +
-			"LEFT JOIN place_types ON places.type_id = place_types.id ";
-			PrepareTable.DisplayString = "Место {0}-{1} с площадью {2} кв.м.";
-			PrepareTable.PrimaryKey = new  TableInfo.PrimaryKeys ("type_id", "place_no");
-			PrepareTable.DeleteItems.Add ("contracts", 
-			                              new TableInfo.DeleteDependenceItem ("WHERE contracts.place_type_id = @type_id AND contracts.place_no = @place_no", "@place_no", "@type_id"));
-			Tables.Add ("places", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(Contract),
+				TableName = "contracts",
+				ObjectsName = "Договора",
+				ObjectName = "договор",
+				SqlSelect = "SELECT number, sign_date, lessees.name as lessee, contracts.id as id FROM contracts " +
+					"LEFT JOIN lessees ON lessees.id = lessee_id ",
+				DisplayString = "Договор №{0} от {1:d} с арендатором {2}",
+				DeleteItems = new List<DeleteDependenceInfo>{
+					new DeleteDependenceInfo ("contract_docs", "WHERE contract_id = @id "),
+					new DeleteDependenceInfo ("files", "WHERE item_group = 'contracts' AND item_id = @id")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Договора"; 
-			PrepareTable.ObjectName = "договор"; 
-			PrepareTable.SqlSelect = "SELECT number, sign_date, lessees.name as lessee, contracts.id as id FROM contracts " +
-			"LEFT JOIN lessees ON lessees.id = lessee_id ";
-			PrepareTable.DisplayString = "Договор №{0} от {1:d} с арендатором {2}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.DeleteItems.Add ("contract_docs", 
-			                              new TableInfo.DeleteDependenceItem ("WHERE contract_id = @contract_id ", "", "@contract_id"));
-			PrepareTable.DeleteItems.Add ("files", 
-			                              new TableInfo.DeleteDependenceItem ("WHERE item_group = 'contracts' AND item_id = @contract_id ", "", "@contract_id"));
-			Tables.Add ("contracts", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
+				ObjectClass = typeof(Lessee),
+				TableName = "lessees",
+				ObjectsName = "Арендаторы",
+				ObjectName = "арендатора",
+				SqlSelect = "SELECT name, id FROM lessees ",
+				DisplayString = "Арендатор {0}",
+				DeleteItems = new List<DeleteDependenceInfo> {
+					new DeleteDependenceInfo (typeof(Contract), "WHERE lessee_id = @id ")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Арендаторы";
-			PrepareTable.ObjectName = "арендатора"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM lessees ";
-			PrepareTable.DisplayString = "Арендатор {0}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.DeleteItems.Add ("contracts", 
-			                              new TableInfo.DeleteDependenceItem ("WHERE lessee_id = @lessee_id ", "", "@lessee_id"));
-			Tables.Add ("lessees", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(DocPattern),
+				TableName = "doc_patterns",
+				ObjectsName = "Шаблоны документов",
+				ObjectName = "шаблон",
+				SqlSelect = "SELECT name, id FROM doc_patterns ",
+				DisplayString = "Шаблон <{0}>",
+				ClearItems = new List<ClearDependenceInfo>{
+					new ClearDependenceInfo ("contract_docs", "WHERE pattern_id = @id", "pattern_id")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Шаблоны документов";
-			PrepareTable.ObjectName = "шаблон"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM doc_patterns ";
-			PrepareTable.DisplayString = "шаблон <{0}>";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.ClearItems.Add ("contract_docs", 
-			                             new TableInfo.ClearDependenceItem ("WHERE pattern_id = @id", "", "@id", "pattern_id"));
-			Tables.Add ("doc_patterns", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				TableName = "files",
+				ObjectsName = "Файлы",
+				ObjectName = "файл",
+				SqlSelect = "SELECT name, id FROM files ",
+				DisplayString = "Фаил <{0}>",
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Файлы";
-			PrepareTable.ObjectName = "файл"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM files ";
-			PrepareTable.DisplayString = "Фаил <{0}>";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			Tables.Add ("files", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(ContractType),
+				TableName = "contract_types",
+				ObjectsName = "Типы договоров",
+				ObjectName = "тип договора",
+				SqlSelect = "SELECT name, id FROM contract_types ",
+				DisplayString = "{0}",
+				DeleteItems = new List<DeleteDependenceInfo>{
+					new DeleteDependenceInfo (typeof(DocPattern), "WHERE contract_type_id = @id")
+				},
+				ClearItems = new List<ClearDependenceInfo>{
+					new ClearDependenceInfo (typeof(Contract), "WHERE contract_type_id = @id", "contract_type_id")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Типы договоров";
-			PrepareTable.ObjectName = "тип договора"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM contract_types ";
-			PrepareTable.DisplayString = "{0}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.DeleteItems.Add ("doc_patterns", 
-			                              new TableInfo.DeleteDependenceItem ("WHERE contract_type_id = @id", "", "@id"));
-			PrepareTable.ClearItems.Add ("contracts", 
-			                             new TableInfo.ClearDependenceItem ("WHERE contract_type_id = @id", "", "@id", "contract_type_id"));
-			Tables.Add ("contract_types", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(Stead),
+				TableName = "stead",
+				ObjectsName = "Земельные участки",
+				ObjectName = "земельный участок",
+				SqlSelect = "SELECT name, id, address FROM stead ",
+				DisplayString = "{0} {2}",
+				ClearItems = new List<ClearDependenceInfo>{
+					new ClearDependenceInfo (typeof(Place), "WHERE stead_id = @id", "stead_id")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Земельные участки";
-			PrepareTable.ObjectName = "земельный участок"; 
-			PrepareTable.SqlSelect = "SELECT name, id, address FROM stead ";
-			PrepareTable.DisplayString = "{0} {2}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.ClearItems.Add ("places", 
-			                             new TableInfo.ClearDependenceItem ("WHERE stead_id = @id", "", "@id", "stead_id"));
-			Tables.Add ("stead", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				TableName = "contract_docs",
+				ObjectsName = "Документы",
+				ObjectName = "измененый документа",
+				SqlSelect = "SELECT name, id FROM contract_docs ",
+				DisplayString = "Документ <{0}>"
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Документы";
-			PrepareTable.ObjectName = "измененый документа"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM contract_docs ";
-			PrepareTable.DisplayString = "Документ <{0}>";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			Tables.Add ("contract_docs", PrepareTable);
-
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Категории договоров";
-			PrepareTable.ObjectName = "категория"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM contract_category ";
-			PrepareTable.DisplayString = "{0}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.ClearItems.Add ("contracts", 
-			                             new TableInfo.ClearDependenceItem ("WHERE category_id = @id", "", "@id", "category_id"));
-			Tables.Add ("contract_category", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(ContractCategory),
+				TableName = "contract_category",
+				ObjectsName = "Категории договоров",
+				ObjectName = "категория",
+				SqlSelect = "SELECT name, id FROM contract_category ",
+				DisplayString = "{0}",
+				ClearItems = new List<ClearDependenceInfo>{
+					new ClearDependenceInfo (typeof(Contract), "WHERE category_id = @id", "category_id")
+				}
+			});
 	
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Организации";
-			PrepareTable.ObjectName = "организацию"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM organizations ";
-			PrepareTable.DisplayString = "{0}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.DeleteItems.Add ("contracts", 
-			                              new TableInfo.DeleteDependenceItem ("WHERE org_id = @id ", "", "@id"));
-			PrepareTable.ClearItems.Add ("places", 
-			                             new TableInfo.ClearDependenceItem ("WHERE org_id = @id", "", "@id", "org_id"));
-			Tables.Add ("organizations", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(Organization),
+				TableName = "organizations",
+				ObjectsName = "Организации",
+				ObjectName = "организацию",
+				SqlSelect = "SELECT name, id FROM organizations ",
+				DisplayString = "{0}",
+				DeleteItems = new List<DeleteDependenceInfo>{
+					new DeleteDependenceInfo (typeof(Contract), "WHERE org_id = @id ")
+				},
+				ClearItems = new List<ClearDependenceInfo>{
+					new ClearDependenceInfo (typeof(Place), "WHERE org_id = @id", "org_id")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Типы мест";
-			PrepareTable.ObjectName = "тип места"; 
-			PrepareTable.SqlSelect = "SELECT name, description, id FROM place_types ";
-			PrepareTable.DisplayString = "{0} - {1}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.DeleteItems.Add ("places", 
-			                              new TableInfo.DeleteDependenceItem ("WHERE type_id = @id ", "", "@id"));
-			Tables.Add ("place_types", PrepareTable);
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(PlaceType),
+				TableName = "place_types",
+				ObjectsName = "Типы мест",
+				ObjectName = "тип места",
+				SqlSelect = "SELECT name, description, id FROM place_types ",
+				DisplayString = "{0} - {1}",
+				DeleteItems = new List<DeleteDependenceInfo>{
+					new DeleteDependenceInfo (typeof(Place), "WHERE type_id = @id")
+				}
+			});
 
-			PrepareTable = new TableInfo ();
-			PrepareTable.ObjectsName = "Пользователи";
-			PrepareTable.ObjectName = "пользователя"; 
-			PrepareTable.SqlSelect = "SELECT name, id FROM users ";
-			PrepareTable.DisplayString = "{0}";
-			PrepareTable.PrimaryKey = new TableInfo.PrimaryKeys ("id");
-			PrepareTable.ClearItems.Add ("contracts", 
-			                             new TableInfo.ClearDependenceItem ("WHERE responsible_id = @id", "", "@id", "responsible_id"));
-			Tables.Add ("users", PrepareTable);
-
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(User),
+				TableName = "users",
+				ObjectsName = "Пользователи",
+				ObjectName = "пользователя",
+				SqlSelect = "SELECT name, id FROM users ",
+				DisplayString = "{0}",
+				ClearItems = new List<ClearDependenceInfo>{
+					new ClearDependenceInfo (typeof(Contract), "WHERE responsible_id = @id", "responsible_id")
+				}
+			});
 		}
 
 		public static string OnPlaceGetCustomsTitle (string key)

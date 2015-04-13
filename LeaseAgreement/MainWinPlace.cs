@@ -11,6 +11,7 @@ public partial class MainWindow : Gtk.Window
 	Gtk.TreeModelSort PlaceSort;
 
 	private enum PlaceCol {
+		id,
 		type_place_id,
 		type_place,
 		place_no,
@@ -28,7 +29,7 @@ public partial class MainWindow : Gtk.Window
 		ComboWorks.ComboFillReference(comboPlaceOrg,"organizations", ComboWorks.ListMode.WithAll, false);
 
 		//Создаем таблицу "Места"
-		PlacesListStore = new Gtk.ListStore (typeof (int), typeof (string),typeof (string),
+		PlacesListStore = new Gtk.ListStore (typeof(int), typeof (int), typeof (string),typeof (string),
 		                                     typeof (string), typeof (int), 
 		                                     typeof (string), typeof (int), typeof (decimal));
 
@@ -105,7 +106,8 @@ public partial class MainWindow : Gtk.Window
 			PlacesListStore.Clear ();
 			while (rdr.Read ()) 
 			{
-				PlacesListStore.AppendValues (rdr.GetInt32 ("type_id"),
+				PlacesListStore.AppendValues (rdr.GetInt32 ("id"),
+											rdr.GetInt32 ("type_id"),
 				                            rdr ["type"].ToString (),
 				                            rdr ["place_no"].ToString (),
 				                            rdr ["lessee"].ToString (),
