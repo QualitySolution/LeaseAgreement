@@ -2,6 +2,7 @@
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using QSAttachment;
 
 namespace LeaseAgreement
 {
@@ -113,6 +114,14 @@ namespace LeaseAgreement
 		public virtual Dictionary<string, object> Customs {
 			get { return customs;}
 			set { SetField(ref customs, value, () => Customs);}
+		}
+
+		List<AttachedFile> files;
+
+		[Display (Name = "Файлы")]
+		public virtual List<AttachedFile> Files {
+			get { return files; }
+			set { SetField (ref files, value, () => Files); }
 		}
 
 		public string Title {

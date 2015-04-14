@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Bindings;
 using System.IO;
+using System.Linq;
 using Gtk;
 using MySql.Data.MySqlClient;
 using NLog;
@@ -91,7 +92,9 @@ namespace LeaseAgreement
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 			subject.Customs = customContracts.FieldsValues;
+
 			attachmentFiles.AttachToTable = "contracts";
+			subject.Files = attachmentFiles.AttachedFiles.ToList ();
 
 			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();
 			ColumnName.Title = "Название документа";
@@ -191,6 +194,7 @@ namespace LeaseAgreement
 				subject.Customs = customContracts.FieldsValues;
 				attachmentFiles.ItemId = Id;
 				attachmentFiles.UpdateFileList (copy);
+				subject.Files = attachmentFiles.AttachedFiles.ToList ();
 
 				tracker.TakeFirst (subject);
 
@@ -339,8 +343,9 @@ namespace LeaseAgreement
 		{
 			TreeIter iter;
 			subject.Customs = customContracts.FieldsValues;
+			subject.Files = attachmentFiles.AttachedFiles.ToList ();
 			tracker.TakeLast (subject);
-			if (!tracker.Compare () && !attachmentFiles.HasChanges) {
+			if (!tracker.Compare ()) {
 				logger.Info ("Нет изменений.");
 				return true;
 			}
