@@ -84,6 +84,8 @@ namespace LeaseAgreement
 
 			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(DocTemplate));
 
+			QSHistoryLog.HistoryMain.SubscribeToDeletion ();
+
 			//Параметры удаления
 			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(Place),
