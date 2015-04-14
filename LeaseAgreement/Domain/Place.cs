@@ -123,7 +123,7 @@ namespace LeaseAgreement
 				Name = DBWorks.GetString (rdr, "name", String.Empty),
 				PlaceNumber = rdr.GetString ("place_no"),
 				Area = DBWorks.GetDecimal (rdr, "area", 0),
-				Organization = new Organization {Id = DBWorks.GetInt (rdr, "org_id", -1)}
+				Organization = rdr["org_id"] != DBNull.Value ? new Organization {Id = rdr.GetInt32 ("org_id")} : null
 			};
 		}
 
@@ -135,8 +135,6 @@ namespace LeaseAgreement
 			};
 			return this;
 		}
-
-
 	}
 }
 

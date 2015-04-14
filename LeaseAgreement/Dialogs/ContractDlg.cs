@@ -303,9 +303,10 @@ namespace LeaseAgreement
 
 		protected void OnComboPlaceNoChanged (object sender, EventArgs e)
 		{
-			if (NewContract && comboPlaceNo.SelectedItem is Place) {
+			if (comboPlaceNo.SelectedItem is Place) {
 				var place = comboPlaceNo.SelectedItem as Place;
-				subject.Organization = DBWorks.FineById (orgList, place.Organization.Id);
+				if(NewContract)
+					subject.Organization = place.Organization != null ? DBWorks.FineById (orgList, place.Organization.Id) : null;
 				labelArea.LabelProp = String.Format ("{0} м<sup>2</sup>", place.Area);
 			}
 			TestCanSave ();
