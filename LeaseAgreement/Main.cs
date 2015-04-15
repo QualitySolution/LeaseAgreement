@@ -228,9 +228,20 @@ namespace LeaseAgreement
 				SqlSelect = "SELECT name, id FROM users ",
 				DisplayString = "{0}",
 				ClearItems = new List<ClearDependenceInfo>{
-					new ClearDependenceInfo (typeof(Contract), "WHERE responsible_id = @id", "responsible_id")
+					new ClearDependenceInfo (typeof(Contract), "WHERE responsible_id = @id", "responsible_id"),
+					new ClearDependenceInfo (typeof(QSHistoryLog.HistoryChangeSet), "WHERE user_id = @id", "user_id")
 				}
 			});
+
+			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+				ObjectClass = typeof(QSHistoryLog.HistoryChangeSet),
+				TableName = "history_changeset",
+				ObjectsName = "Журнал действий",
+				ObjectName = "действие пользователя",
+				SqlSelect = "SELECT datetime, object_title, id FROM history_changeset ",
+				DisplayString = "Изменено {1} в {0}"
+			});
+
 		}
 
 		public static string OnPlaceGetCustomsTitle (string key)
