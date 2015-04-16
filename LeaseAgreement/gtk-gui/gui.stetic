@@ -3495,7 +3495,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">0</property>
+            <property name="CurrentPage">1</property>
             <property name="TabPos">Left</property>
             <child>
               <widget class="Gtk.HBox" id="hboxInfo">
@@ -6096,7 +6096,7 @@
                 <property name="CanFocus">True</property>
                 <property name="Type">TextAndIcon</property>
                 <property name="Icon">stock:gtk-add Menu</property>
-                <property name="Label" translatable="yes">Из докумената</property>
+                <property name="Label" translatable="yes">Из документа</property>
                 <property name="UseUnderline">True</property>
                 <signal name="Clicked" handler="OnButtonFromDocClicked" />
               </widget>

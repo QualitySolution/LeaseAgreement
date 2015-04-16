@@ -165,7 +165,7 @@ namespace LeaseAgreement
 			this.buttonFromDoc.CanFocus = true;
 			this.buttonFromDoc.Name = "buttonFromDoc";
 			this.buttonFromDoc.UseUnderline = true;
-			this.buttonFromDoc.Label = global::Mono.Unix.Catalog.GetString ("Из докумената");
+			this.buttonFromDoc.Label = global::Mono.Unix.Catalog.GetString ("Из документа");
 			global::Gtk.Image w12 = new global::Gtk.Image ();
 			w12.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-add", global::Gtk.IconSize.Menu);
 			this.buttonFromDoc.Image = w12;
