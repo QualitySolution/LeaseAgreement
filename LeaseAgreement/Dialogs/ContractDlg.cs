@@ -221,9 +221,9 @@ namespace LeaseAgreement
 
 		protected	void TestCanSave ()
 		{
-			bool Numberok = (entryNumber.Text != "");
-			bool Orgok = comboOrg.Active > 0;
-			bool Placeok = comboPlaceT.Active > 0 && comboPlaceNo.Active >= 0;
+			bool Numberok = subject.Number != "";
+			bool Orgok = subject.Organization != null;
+			bool Placeok = subject.Place != null;
 			bool Lesseeok = subject.Lessee != null;
 			bool DatesCorrectok = TestCorrectDates (false);
 
