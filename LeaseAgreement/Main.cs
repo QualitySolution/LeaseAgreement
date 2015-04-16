@@ -83,6 +83,8 @@ namespace LeaseAgreement
 			QSHistoryLog.HistoryMain.AddClass (typeof(User));
 
 			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(DocTemplate));
+			//Для корректного сравнения словарей.
+			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(KeyValuePair<string, object>), new string[]{"Key"});
 
 			QSHistoryLog.HistoryMain.SubscribeToDeletion ();
 
