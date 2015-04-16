@@ -107,42 +107,53 @@ namespace LeaseAgreement
 			string sql = "SELECT lessees.name as lessee, lessees.comments as l_comments, " +
 			 	"contracts.id as contract_id, contracts.lessee_id as contr_lessee_id, contracts.number as contr_number, " +
 			 	"contracts.start_date as start_date, contracts.end_date as end_date, " +
-			 	"contracts.cancel_date as cancel_date FROM contracts " +
+				"contracts.cancel_date as cancel_date, contracts.draft FROM contracts " +
 				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
-				"WHERE contracts.place_id = @place_id AND contracts.draft = '0' AND " +
+				"WHERE contracts.place_id = @place_id AND " +
 				"((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
 				"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date))";
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 			cmd.Parameters.AddWithValue("@place_id", subject.Id);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
 			{
-				if (rdr.Read ()) {
-					if (rdr ["contract_id"] != DBNull.Value) {
-						ContractId = rdr.GetInt32 ("contract_id");
-						labelContractNumber.Text = rdr ["contr_number"].ToString ();
-						if (rdr ["cancel_date"] == DBNull.Value)
-							labelContractDates.Text = DateTime.Parse (rdr ["start_date"].ToString ()).ToShortDateString () +
-							" - " + DateTime.Parse (rdr ["end_date"].ToString ()).ToShortDateString ();
-						else
-							labelContractDates.Text = DateTime.Parse (rdr ["start_date"].ToString ()).ToShortDateString () +
-							" - " + DateTime.Parse (rdr ["cancel_date"].ToString ()).ToShortDateString () + "(досрочно)";
-						buttonContract.Sensitive = true;
+				ContractId = -1;
+				labelContractNumber.Text = "Нет активного договора";
+				labelContractDates.Text = String.Empty;
+				buttonContract.Sensitive = false;
+				lessee_id = 0;
+				labelLessee.LabelProp = "<span background=\"green\">Свободно</span>";
+				labelLessee.TooltipText = String.Empty;
+				buttonLessee.Sensitive = false;
+				int draftCount = 0;
+				bool activeContractExist = false;
+
+				while (rdr.Read ())
+				 {
+					if(rdr.GetBoolean ("draft"))
+					{
+						draftCount++;
+						if (activeContractExist)
+							continue;
 					}
+						
+					ContractId = rdr.GetInt32 ("contract_id");
+					labelContractNumber.LabelProp = rdr ["contr_number"].ToString () 
+						+ (rdr.GetBoolean ("draft") ? "(Черновик)" : "") 
+						+ ((draftCount > 1) ? String.Format (" +{0}", draftCount - 1) : "");
+					if (rdr ["cancel_date"] == DBNull.Value)
+						labelContractDates.Text = DateTime.Parse (rdr ["start_date"].ToString ()).ToShortDateString () +
+						" - " + DateTime.Parse (rdr ["end_date"].ToString ()).ToShortDateString ();
+					else
+						labelContractDates.Text = DateTime.Parse (rdr ["start_date"].ToString ()).ToShortDateString () +
+						" - " + DateTime.Parse (rdr ["cancel_date"].ToString ()).ToShortDateString () + "(досрочно)";
+					buttonContract.Sensitive = true;
+
 					if (rdr ["contr_lessee_id"] != DBNull.Value) {
 						lessee_id = rdr.GetInt32 ("contr_lessee_id");
 						labelLessee.Text = rdr ["lessee"].ToString ();
 						labelLessee.TooltipText = rdr ["lessee"].ToString () + "\n" + rdr ["l_comments"].ToString ();
 						buttonLessee.Sensitive = true;
 					}
-				} else {
-					ContractId = -1;
-					labelContractNumber.Text = "Нет активного договора";
-					labelContractDates.Text = String.Empty;
-					buttonContract.Sensitive = false;
-					lessee_id = 0;
-					labelLessee.LabelProp = "<span background=\"green\">Свободно</span>";
-					labelLessee.TooltipText = String.Empty;
-					buttonLessee.Sensitive = false;
 				}
 			}
 		}
