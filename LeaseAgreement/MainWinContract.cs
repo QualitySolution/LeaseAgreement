@@ -22,6 +22,7 @@ public partial class MainWindow : Gtk.Window
 		place_text,
 		lessee_id,
 		lessee,
+		start_date,
 		end_date,
 		state_pixbuf
 	}
@@ -50,7 +51,8 @@ public partial class MainWindow : Gtk.Window
 		                                       typeof (string), //7 - place
 		                                       typeof (int), 	//8 - id leesse
 		                                       typeof (string),	//9 - lesse
-		                                       typeof (DateTime),	//10 - end date
+		                                       typeof (DateTime),	//10 start date
+		                                       typeof (DateTime),	//11 - end date
 		                                       typeof (Gdk.Pixbuf)
 		                                       );
 		
@@ -59,6 +61,7 @@ public partial class MainWindow : Gtk.Window
 		treeviewContract.AppendColumn("Организация", new Gtk.CellRendererText (), "text", (int)ContractCol.org);
 		treeviewContract.AppendColumn("Место", new Gtk.CellRendererText (), "text", (int)ContractCol.place_text);
 		treeviewContract.AppendColumn("Арендатор", new Gtk.CellRendererText (), "text", (int)ContractCol.lessee);
+		treeviewContract.AppendColumn("Дата начала", new Gtk.CellRendererText (), RenderContractStartDateColumn);
 		treeviewContract.AppendColumn("Дата окончания", new Gtk.CellRendererText (), RenderContractEndDateColumn);
 
 		Contractfilter = new Gtk.TreeModelFilter (ContractListStore, null);
@@ -66,13 +69,15 @@ public partial class MainWindow : Gtk.Window
 		ContractSort = new TreeModelSort (Contractfilter);
 		ContractSort.SetSortFunc ((int)ContractCol.number, ContractNumberSortFunction);
 		ContractSort.SetSortFunc ((int)ContractCol.place_text, ContractPlaceSortFunction);
+		ContractSort.SetSortFunc ((int)ContractCol.start_date, ContractStartDateSortFunction);
 		ContractSort.SetSortFunc ((int)ContractCol.end_date, ContractEndDateSortFunction);
 		treeviewContract.Model = ContractSort;
 		treeviewContract.Columns [1].SortColumnId = (int)ContractCol.number;
 		treeviewContract.Columns [2].SortColumnId = (int)ContractCol.org;
 		treeviewContract.Columns [3].SortColumnId = (int)ContractCol.place_text;
 		treeviewContract.Columns [4].SortColumnId = (int)ContractCol.lessee;
-		treeviewContract.Columns [5].SortColumnId = (int)ContractCol.end_date;
+		treeviewContract.Columns [5].SortColumnId = (int)ContractCol.start_date;
+		treeviewContract.Columns [6].SortColumnId = (int)ContractCol.end_date;
 		treeviewContract.ShowAll();
 	}
 
@@ -162,6 +167,7 @@ public partial class MainWindow : Gtk.Window
 			                               rdr["place_type"].ToString() + " - " + rdr["place_no"].ToString(),
 			                             lessee_id,
 			                             rdr["lessee"].ToString(),
+			                               rdr.GetDateTime ("start_date"),
 			                               endDate,
 			                               stateIcon
 			                              );
@@ -229,9 +235,24 @@ public partial class MainWindow : Gtk.Window
 		return oa.CompareTo(ob);
 	}
 
+	private int ContractStartDateSortFunction(TreeModel model, TreeIter a, TreeIter b) 
+	{
+		DateTime oa = (DateTime) model.GetValue(a, (int)ContractCol.start_date);
+		DateTime ob = (DateTime) model.GetValue(b, (int)ContractCol.start_date);
+
+		return oa.CompareTo(ob);
+	}
+
+
 	private void RenderContractEndDateColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
 		DateTime date = (DateTime) model.GetValue (iter, (int)ContractCol.end_date);
+		(cell as Gtk.CellRendererText).Text = date.ToShortDateString ();
+	}
+
+	private void RenderContractStartDateColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+	{
+		DateTime date = (DateTime) model.GetValue (iter, (int)ContractCol.start_date);
 		(cell as Gtk.CellRendererText).Text = date.ToShortDateString ();
 	}
 
