@@ -6,7 +6,7 @@ using QSAttachment;
 
 namespace LeaseAgreement
 {
-	[OrmSubject (Name = "Договор")]
+	[OrmSubject (ObjectName = "Договор")]
 	public class Contract : PropertyChangedBase
 	{
 		public virtual int Id { get; set; }

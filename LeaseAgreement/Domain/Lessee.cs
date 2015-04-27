@@ -7,7 +7,7 @@ using QSProjectsLib;
 
 namespace LeaseAgreement
 {
-	[OrmSubject (Name = "Арендатор")]
+	[OrmSubject (ObjectName = "Арендатор")]
 	public class Lessee : PropertyChangedBase
 	{
 		public virtual int Id { get; set; }

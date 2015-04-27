@@ -5,7 +5,7 @@ using QSHistoryLog;
 
 namespace LeaseAgreement
 {
-	[OrmSubject (Name = "Шаблон документа")]
+	[OrmSubject (ObjectName = "Шаблон документа")]
 	public class DocTemplate : PropertyChangedBase, IFileTrace
 	{
 		public virtual int Id { get; set; }
