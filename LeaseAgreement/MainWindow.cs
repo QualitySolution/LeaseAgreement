@@ -1,11 +1,12 @@
 using System;
 using Gtk;
-using LeaseAgreement;
 using MySql.Data.MySqlClient;
 using QSOrmProject;
+using QSOrmProject.Deletion;
 using QSProjectsLib;
 using QSSupportLib;
 using QSUpdater;
+using LeaseAgreement;
 
 public partial class MainWindow : Gtk.Window
 {

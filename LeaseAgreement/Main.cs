@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Gtk;
 using MySql.Data.MySqlClient;
 using NLog;
 using QSCustomFields;
+using QSOrmProject.Deletion;
 using QSProjectsLib;
-using QSOrmProject;
 
 namespace LeaseAgreement
 {
