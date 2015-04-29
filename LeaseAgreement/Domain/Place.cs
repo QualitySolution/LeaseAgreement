@@ -69,7 +69,9 @@ namespace LeaseAgreement
 		}
 
 		public string Title {
-			get { return String.Format ("Место {0}-{1}", PlaceType.Name, PlaceNumber);}
+			get { return PlaceType != null && String.IsNullOrEmpty (PlaceNumber)  
+				? String.Format ("Место {0}-{1}", PlaceType.Name, PlaceNumber)
+					: String.Empty ;}
 		}
 
 		public Place ()
