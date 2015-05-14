@@ -93,7 +93,7 @@ namespace LeaseAgreement
 				TableName = "places",
 				ObjectsName = "Места",
 				ObjectName = "место",
-				SqlSelect = "SELECT place_types.name as type, place_no, area , type_id FROM places " +
+				SqlSelect = "SELECT place_types.name as type, place_no, area, type_id, places.id as id FROM places " +
 				"LEFT JOIN place_types ON places.type_id = place_types.id ",
 				DisplayString = "Место {0}-{1} с площадью {2} кв.м.",
 				DeleteItems = new List<DeleteDependenceInfo> {
