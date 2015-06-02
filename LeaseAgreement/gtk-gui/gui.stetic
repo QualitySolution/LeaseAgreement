@@ -2254,6 +2254,7 @@
                                 <property name="MemberName" />
                                 <property name="CanFocus">True</property>
                                 <property name="IsEditable">True</property>
+                                <property name="MaxLength">45</property>
                                 <property name="InvisibleChar">●</property>
                                 <property name="InheritedDataSource">True</property>
                                 <property name="Mappings">Email</property>
@@ -2283,6 +2284,7 @@
                                 <property name="MemberName" />
                                 <property name="CanFocus">True</property>
                                 <property name="IsEditable">True</property>
+                                <property name="MaxLength">300</property>
                                 <property name="InvisibleChar">●</property>
                                 <property name="InheritedDataSource">True</property>
                                 <property name="Mappings">FullName</property>
@@ -2371,6 +2373,7 @@
                                 <property name="MemberName" />
                                 <property name="CanFocus">True</property>
                                 <property name="IsEditable">True</property>
+                                <property name="MaxLength">100</property>
                                 <property name="InvisibleChar">●</property>
                                 <property name="InheritedDataSource">True</property>
                                 <property name="Mappings">Name</property>
@@ -2431,6 +2434,7 @@
                                 <property name="MemberName" />
                                 <property name="CanFocus">True</property>
                                 <property name="IsEditable">True</property>
+                                <property name="MaxLength">45</property>
                                 <property name="InvisibleChar">●</property>
                                 <property name="InheritedDataSource">True</property>
                                 <property name="Mappings">Phone</property>
@@ -2908,6 +2912,7 @@
                                     <property name="CanFocus">True</property>
                                     <property name="Text" translatable="yes">Устава</property>
                                     <property name="IsEditable">True</property>
+                                    <property name="MaxLength">45</property>
                                     <property name="InvisibleChar">●</property>
                                     <property name="InheritedDataSource">True</property>
                                     <property name="Mappings">SignatoryBaseOf</property>
@@ -2966,6 +2971,7 @@
                                     <property name="CanFocus">True</property>
                                     <property name="Text" translatable="yes">Генерального директора</property>
                                     <property name="IsEditable">True</property>
+                                    <property name="MaxLength">45</property>
                                     <property name="InvisibleChar">●</property>
                                     <property name="InheritedDataSource">True</property>
                                     <property name="Mappings">SignatoryPost</property>
@@ -3122,6 +3128,7 @@
                                     <property name="MemberName" />
                                     <property name="CanFocus">True</property>
                                     <property name="IsEditable">True</property>
+                                    <property name="MaxLength">100</property>
                                     <property name="InvisibleChar">●</property>
                                     <property name="InheritedDataSource">True</property>
                                     <property name="Mappings">Bank</property>
@@ -4561,6 +4568,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">100</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">Bank</property>
@@ -4591,6 +4599,7 @@
                 <property name="CanFocus">True</property>
                 <property name="Text" translatable="yes">Устава</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">45</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">SignatoryBaseOf</property>
@@ -4680,6 +4689,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">45</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">Email</property>
@@ -4738,6 +4748,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">200</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">FullName</property>
@@ -4826,6 +4837,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">100</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">Name</property>
@@ -4886,6 +4898,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">45</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">Phone</property>
@@ -4916,6 +4929,7 @@
                 <property name="CanFocus">True</property>
                 <property name="Text" translatable="yes">Генерального директора</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">45</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">SignatoryPost</property>

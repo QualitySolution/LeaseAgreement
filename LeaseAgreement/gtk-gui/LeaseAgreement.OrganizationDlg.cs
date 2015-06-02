@@ -133,6 +133,7 @@ namespace LeaseAgreement
 			this.entryBank.CanFocus = true;
 			this.entryBank.Name = "entryBank";
 			this.entryBank.IsEditable = true;
+			this.entryBank.MaxLength = 100;
 			this.entryBank.InvisibleChar = '●';
 			this.entryBank.InheritedDataSource = true;
 			this.entryBank.Mappings = "Bank";
@@ -154,6 +155,7 @@ namespace LeaseAgreement
 			this.entryBaseOf.Name = "entryBaseOf";
 			this.entryBaseOf.Text = global::Mono.Unix.Catalog.GetString ("Устава");
 			this.entryBaseOf.IsEditable = true;
+			this.entryBaseOf.MaxLength = 45;
 			this.entryBaseOf.InvisibleChar = '●';
 			this.entryBaseOf.InheritedDataSource = true;
 			this.entryBaseOf.Mappings = "SignatoryBaseOf";
@@ -216,6 +218,7 @@ namespace LeaseAgreement
 			this.entryEmail.CanFocus = true;
 			this.entryEmail.Name = "entryEmail";
 			this.entryEmail.IsEditable = true;
+			this.entryEmail.MaxLength = 45;
 			this.entryEmail.InvisibleChar = '●';
 			this.entryEmail.InheritedDataSource = true;
 			this.entryEmail.Mappings = "Email";
@@ -256,6 +259,7 @@ namespace LeaseAgreement
 			this.entryFullName.CanFocus = true;
 			this.entryFullName.Name = "entryFullName";
 			this.entryFullName.IsEditable = true;
+			this.entryFullName.MaxLength = 200;
 			this.entryFullName.InvisibleChar = '●';
 			this.entryFullName.InheritedDataSource = true;
 			this.entryFullName.Mappings = "FullName";
@@ -317,6 +321,7 @@ namespace LeaseAgreement
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;
+			this.entryName.MaxLength = 100;
 			this.entryName.InvisibleChar = '●';
 			this.entryName.InheritedDataSource = true;
 			this.entryName.Mappings = "Name";
@@ -358,6 +363,7 @@ namespace LeaseAgreement
 			this.entryPhone.CanFocus = true;
 			this.entryPhone.Name = "entryPhone";
 			this.entryPhone.IsEditable = true;
+			this.entryPhone.MaxLength = 45;
 			this.entryPhone.InvisibleChar = '●';
 			this.entryPhone.InheritedDataSource = true;
 			this.entryPhone.Mappings = "Phone";
@@ -379,6 +385,7 @@ namespace LeaseAgreement
 			this.entryPost.Name = "entryPost";
 			this.entryPost.Text = global::Mono.Unix.Catalog.GetString ("Генерального директора");
 			this.entryPost.IsEditable = true;
+			this.entryPost.MaxLength = 45;
 			this.entryPost.InvisibleChar = '●';
 			this.entryPost.InheritedDataSource = true;
 			this.entryPost.Mappings = "SignatoryPost";
