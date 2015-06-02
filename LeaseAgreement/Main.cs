@@ -55,7 +55,6 @@ namespace LeaseAgreement
 
 		static void CreateProjectParam ()
 		{
-			QSMain.AdminFieldName = "admin";
 			QSMain.ProjectPermission = new Dictionary<string, UserPermission> ();
 			//QSMain.ProjectPermission.Add ("edit_slips", new UserPermission("edit_slips", "Изменение кассы задним числом",
 			//                                                             "Пользователь может изменять или добавлять кассовые документы задним числом."));
@@ -64,8 +63,6 @@ namespace LeaseAgreement
 				new QSCustomFields.CFTable ("contracts", "Договор"),
 				new QSCustomFields.CFTable ("places", "Место"),
 			};
-
-			QSMain.User = new UserInfo ();
 
 			//Настройка журналирования
 			QSHistoryLog.HistoryMain.AddClass (typeof(Organization));
@@ -83,7 +80,7 @@ namespace LeaseAgreement
 
 			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(DocTemplate));
 			//Для корректного сравнения словарей.
-			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(KeyValuePair<string, object>), new string[]{"Key"});
+			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(KeyValuePair<string, object>), new string[]{ "Key" });
 
 			QSHistoryLog.HistoryMain.SubscribeToDeletion ();
 
@@ -101,15 +98,15 @@ namespace LeaseAgreement
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(Contract),
 				TableName = "contracts",
 				ObjectsName = "Договора",
 				ObjectName = "договор",
 				SqlSelect = "SELECT number, sign_date, lessees.name as lessee, contracts.id as id FROM contracts " +
-					"LEFT JOIN lessees ON lessees.id = lessee_id ",
+				"LEFT JOIN lessees ON lessees.id = lessee_id ",
 				DisplayString = "Договор №{0} от {1:d} с арендатором {2}",
-				DeleteItems = new List<DeleteDependenceInfo>{
+				DeleteItems = new List<DeleteDependenceInfo> {
 					new DeleteDependenceInfo ("contract_docs", "WHERE contract_id = @id "),
 					new DeleteDependenceInfo ("files", "WHERE item_group = 'contracts' AND item_id = @id")
 				}
@@ -127,19 +124,19 @@ namespace LeaseAgreement
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(DocPattern),
 				TableName = "doc_patterns",
 				ObjectsName = "Шаблоны документов",
 				ObjectName = "шаблон",
 				SqlSelect = "SELECT name, id FROM doc_patterns ",
 				DisplayString = "Шаблон <{0}>",
-				ClearItems = new List<ClearDependenceInfo>{
+				ClearItems = new List<ClearDependenceInfo> {
 					new ClearDependenceInfo ("contract_docs", "WHERE pattern_id = @id", "pattern_id")
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				TableName = "files",
 				ObjectsName = "Файлы",
 				ObjectName = "файл",
@@ -147,34 +144,34 @@ namespace LeaseAgreement
 				DisplayString = "Фаил <{0}>",
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(ContractType),
 				TableName = "contract_types",
 				ObjectsName = "Типы договоров",
 				ObjectName = "тип договора",
 				SqlSelect = "SELECT name, id FROM contract_types ",
 				DisplayString = "{0}",
-				DeleteItems = new List<DeleteDependenceInfo>{
+				DeleteItems = new List<DeleteDependenceInfo> {
 					new DeleteDependenceInfo (typeof(DocPattern), "WHERE contract_type_id = @id")
 				},
-				ClearItems = new List<ClearDependenceInfo>{
+				ClearItems = new List<ClearDependenceInfo> {
 					new ClearDependenceInfo (typeof(Contract), "WHERE contract_type_id = @id", "contract_type_id")
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(Stead),
 				TableName = "stead",
 				ObjectsName = "Земельные участки",
 				ObjectName = "земельный участок",
 				SqlSelect = "SELECT name, id, address FROM stead ",
 				DisplayString = "{0} {2}",
-				ClearItems = new List<ClearDependenceInfo>{
+				ClearItems = new List<ClearDependenceInfo> {
 					new ClearDependenceInfo (typeof(Place), "WHERE stead_id = @id", "stead_id")
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				TableName = "contract_docs",
 				ObjectsName = "Документы",
 				ObjectName = "измененый документа",
@@ -182,59 +179,59 @@ namespace LeaseAgreement
 				DisplayString = "Документ <{0}>"
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(ContractCategory),
 				TableName = "contract_category",
 				ObjectsName = "Категории договоров",
 				ObjectName = "категория",
 				SqlSelect = "SELECT name, id FROM contract_category ",
 				DisplayString = "{0}",
-				ClearItems = new List<ClearDependenceInfo>{
+				ClearItems = new List<ClearDependenceInfo> {
 					new ClearDependenceInfo (typeof(Contract), "WHERE category_id = @id", "category_id")
 				}
 			});
 	
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(Organization),
 				TableName = "organizations",
 				ObjectsName = "Организации",
 				ObjectName = "организацию",
 				SqlSelect = "SELECT name, id FROM organizations ",
 				DisplayString = "{0}",
-				DeleteItems = new List<DeleteDependenceInfo>{
+				DeleteItems = new List<DeleteDependenceInfo> {
 					new DeleteDependenceInfo (typeof(Contract), "WHERE org_id = @id ")
 				},
-				ClearItems = new List<ClearDependenceInfo>{
+				ClearItems = new List<ClearDependenceInfo> {
 					new ClearDependenceInfo (typeof(Place), "WHERE org_id = @id", "org_id")
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(PlaceType),
 				TableName = "place_types",
 				ObjectsName = "Типы мест",
 				ObjectName = "тип места",
 				SqlSelect = "SELECT name, description, id FROM place_types ",
 				DisplayString = "{0} - {1}",
-				DeleteItems = new List<DeleteDependenceInfo>{
+				DeleteItems = new List<DeleteDependenceInfo> {
 					new DeleteDependenceInfo (typeof(Place), "WHERE type_id = @id")
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(User),
 				TableName = "users",
 				ObjectsName = "Пользователи",
 				ObjectName = "пользователя",
 				SqlSelect = "SELECT name, id FROM users ",
 				DisplayString = "{0}",
-				ClearItems = new List<ClearDependenceInfo>{
+				ClearItems = new List<ClearDependenceInfo> {
 					new ClearDependenceInfo (typeof(Contract), "WHERE responsible_id = @id", "responsible_id"),
 					new ClearDependenceInfo (typeof(QSHistoryLog.HistoryChangeSet), "WHERE user_id = @id", "user_id")
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo{
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(QSHistoryLog.HistoryChangeSet),
 				TableName = "history_changeset",
 				ObjectsName = "Журнал действий",
@@ -247,19 +244,19 @@ namespace LeaseAgreement
 
 		public static string OnPlaceGetCustomsTitle (string key)
 		{
-			var field = CFMain.GetTableByName ("places").Fields.Find(k => k.ColumnName == key);
+			var field = CFMain.GetTableByName ("places").Fields.Find (k => k.ColumnName == key);
 			return field != null ? field.Name : String.Empty;
 		}
 
 		static string OnLesseeGetCustomsTitle (string key)
 		{
-			var field = CFMain.GetTableByName ("lessees").Fields.Find(k => k.ColumnName == key);
+			var field = CFMain.GetTableByName ("lessees").Fields.Find (k => k.ColumnName == key);
 			return field != null ? field.Name : String.Empty;
 		}
 
 		static string OnContractGetCustomsTitle (string key)
 		{
-			var field = CFMain.GetTableByName ("contracts").Fields.Find(k => k.ColumnName == key);
+			var field = CFMain.GetTableByName ("contracts").Fields.Find (k => k.ColumnName == key);
 			return field != null ? field.Name : String.Empty;
 		}
 
