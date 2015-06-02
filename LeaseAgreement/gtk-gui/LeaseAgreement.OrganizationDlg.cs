@@ -236,6 +236,7 @@ namespace LeaseAgreement
 			this.entryFIO.CanFocus = true;
 			this.entryFIO.Name = "entryFIO";
 			this.entryFIO.IsEditable = true;
+			this.entryFIO.MaxLength = 60;
 			this.entryFIO.InvisibleChar = '●';
 			this.entryFIO.InheritedDataSource = true;
 			this.entryFIO.Mappings = "SignatoryFIO";

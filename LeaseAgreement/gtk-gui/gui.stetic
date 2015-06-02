@@ -2937,6 +2937,7 @@
                                     <property name="MemberName" />
                                     <property name="CanFocus">True</property>
                                     <property name="IsEditable">True</property>
+                                    <property name="MaxLength">60</property>
                                     <property name="InvisibleChar">●</property>
                                     <property name="InheritedDataSource">True</property>
                                     <property name="Mappings">SignatoryFIO</property>
@@ -4708,6 +4709,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">60</property>
                 <property name="InvisibleChar">●</property>
                 <property name="InheritedDataSource">True</property>
                 <property name="Mappings">SignatoryFIO</property>
