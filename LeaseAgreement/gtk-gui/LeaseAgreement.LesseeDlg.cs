@@ -603,7 +603,7 @@ namespace LeaseAgreement
 			this.entryBaseOf.Name = "entryBaseOf";
 			this.entryBaseOf.Text = global::Mono.Unix.Catalog.GetString ("Устава");
 			this.entryBaseOf.IsEditable = true;
-			this.entryBaseOf.MaxLength = 45;
+			this.entryBaseOf.MaxLength = 60;
 			this.entryBaseOf.InvisibleChar = '●';
 			this.entryBaseOf.InheritedDataSource = true;
 			this.entryBaseOf.Mappings = "SignatoryBaseOf";
@@ -636,7 +636,6 @@ namespace LeaseAgreement
 			global::Gtk.Table.TableChild w35 = ((global::Gtk.Table.TableChild)(this.table2 [this.entryFIO]));
 			w35.LeftAttach = ((uint)(1));
 			w35.RightAttach = ((uint)(2));
-			w35.XOptions = ((global::Gtk.AttachOptions)(4));
 			w35.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
 			this.entryPost = new global::Gtk.DataBindings.DataEntry ();
@@ -644,7 +643,7 @@ namespace LeaseAgreement
 			this.entryPost.Name = "entryPost";
 			this.entryPost.Text = global::Mono.Unix.Catalog.GetString ("Генерального директора");
 			this.entryPost.IsEditable = true;
-			this.entryPost.MaxLength = 45;
+			this.entryPost.MaxLength = 60;
 			this.entryPost.InvisibleChar = '●';
 			this.entryPost.InheritedDataSource = true;
 			this.entryPost.Mappings = "SignatoryPost";
@@ -735,7 +734,6 @@ namespace LeaseAgreement
 			global::Gtk.Table.TableChild w43 = ((global::Gtk.Table.TableChild)(this.table5 [this.entryAccount]));
 			w43.LeftAttach = ((uint)(1));
 			w43.RightAttach = ((uint)(2));
-			w43.XOptions = ((global::Gtk.AttachOptions)(4));
 			w43.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table5.Gtk.Table+TableChild
 			this.entryBank = new global::Gtk.DataBindings.DataEntry ();

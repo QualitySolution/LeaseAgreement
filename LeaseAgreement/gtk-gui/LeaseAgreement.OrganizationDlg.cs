@@ -155,7 +155,7 @@ namespace LeaseAgreement
 			this.entryBaseOf.Name = "entryBaseOf";
 			this.entryBaseOf.Text = global::Mono.Unix.Catalog.GetString ("Устава");
 			this.entryBaseOf.IsEditable = true;
-			this.entryBaseOf.MaxLength = 45;
+			this.entryBaseOf.MaxLength = 60;
 			this.entryBaseOf.InvisibleChar = '●';
 			this.entryBaseOf.InheritedDataSource = true;
 			this.entryBaseOf.Mappings = "SignatoryBaseOf";
@@ -385,7 +385,7 @@ namespace LeaseAgreement
 			this.entryPost.Name = "entryPost";
 			this.entryPost.Text = global::Mono.Unix.Catalog.GetString ("Генерального директора");
 			this.entryPost.IsEditable = true;
-			this.entryPost.MaxLength = 45;
+			this.entryPost.MaxLength = 60;
 			this.entryPost.InvisibleChar = '●';
 			this.entryPost.InheritedDataSource = true;
 			this.entryPost.Mappings = "SignatoryPost";
