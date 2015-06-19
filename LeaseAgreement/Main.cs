@@ -56,6 +56,11 @@ namespace LeaseAgreement
 		static void CreateProjectParam ()
 		{
 			QSMain.ProjectPermission = new Dictionary<string, UserPermission> ();
+
+			QSUpdater.DB.DBUpdater.AddMicroUpdate (
+				new Version (1, 1),
+				new Version (1, 1, 1),
+				"LeaseAgreement.Updates.1.1.1.sql");
 			//QSMain.ProjectPermission.Add ("edit_slips", new UserPermission("edit_slips", "Изменение кассы задним числом",
 			//                                                             "Пользователь может изменять или добавлять кассовые документы задним числом."));
 			QSCustomFields.CFMain.Tables = new List<QSCustomFields.CFTable> {

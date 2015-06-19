@@ -32,9 +32,11 @@ public partial class MainWindow : Gtk.Window
 			this.Dispose ();
 			return;
 		}
+
 		QSMain.CheckServer (this); // Проверяем настройки сервера
 		MainClass.MinorDBVersionChange (); // При необходимости корректируем базу.
 		MainClass.CreateDatabaseParam ();
+		QSUpdater.DB.DBUpdater.CheckMicroUpdates ();
 
 		if (QSMain.User.Login == "root") {
 			string Message = "Вы зашли в программу под администратором базы данных. У вас есть только возможность создавать других пользователей.";

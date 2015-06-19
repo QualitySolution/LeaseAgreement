@@ -76,6 +76,7 @@
     <EmbeddedResource Include="icons\state-draft.png" />
     <EmbeddedResource Include="icons\state-now.png" />
     <EmbeddedResource Include="icons\state-soon.png" />
+    <EmbeddedResource Include="Updates\1.1.1.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
@@ -128,6 +129,7 @@
     <Folder Include="Patterns\" />
     <Folder Include="Reports\" />
     <Folder Include="Domain\" />
+    <Folder Include="Updates\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
