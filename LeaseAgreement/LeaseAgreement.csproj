@@ -58,6 +58,15 @@
     <Reference Include="NLog">
       <HintPath>..\..\QSProjects\packages\NLog.4.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="GammaBinding">
+      <HintPath>..\..\GammaBinding\GammaBinding\bin\Debug\GammaBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\..\QSProjects\packages\FluentNHibernate.2.0.1.0\lib\net40\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\QSProjects\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -116,6 +125,8 @@
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\ContractCategory.cs" />
     <Compile Include="Domain\ContractPlace.cs" />
+    <Compile Include="ViewWidgets\ContractPlacesView.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.ContractPlacesView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -131,6 +142,7 @@
     <Folder Include="Reports\" />
     <Folder Include="Domain\" />
     <Folder Include="Updates\" />
+    <Folder Include="ViewWidgets\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
