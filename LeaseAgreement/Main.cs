@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Gtk;
+using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using NLog;
 using QSCustomFields;

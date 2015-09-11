@@ -115,6 +115,7 @@
     <Compile Include="Domain\Contract.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\ContractCategory.cs" />
+    <Compile Include="Domain\ContractPlace.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

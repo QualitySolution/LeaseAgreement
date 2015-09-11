@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Bindings;
 using Gtk;
+using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
 

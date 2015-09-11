@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using QSAttachment;
 
-namespace LeaseAgreement
+namespace LeaseAgreement.Domain
 {
 	[OrmSubject (ObjectName = "Договор")]
 	public class Contract : PropertyChangedBase

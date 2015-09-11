@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Bindings;
+using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using QSOrmProject;
 using QSProjectsLib;

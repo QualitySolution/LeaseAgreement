@@ -1,9 +1,10 @@
 ﻿using System;
-using NLog;
-using MySql.Data.MySqlClient;
-using QSProjectsLib;
 using System.Data.Bindings;
+using LeaseAgreement.Domain;
+using MySql.Data.MySqlClient;
+using NLog;
 using QSOrmProject;
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {

@@ -4,6 +4,7 @@ using System.Data.Bindings;
 using System.IO;
 using System.Linq;
 using Gtk;
+using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using NLog;
 using QSProjectsLib;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
 
-namespace LeaseAgreement
+namespace LeaseAgreement.Domain
 {
 	[OrmSubject(ObjectName = "Земельный участок")]
 	public class Stead : PropertyChangedBase

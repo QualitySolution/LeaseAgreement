@@ -3,7 +3,7 @@ using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using QSHistoryLog;
 
-namespace LeaseAgreement
+namespace LeaseAgreement.Domain
 {
 	[OrmSubject (ObjectName = "Шаблон документа")]
 	public class DocTemplate : PropertyChangedBase, IFileTrace

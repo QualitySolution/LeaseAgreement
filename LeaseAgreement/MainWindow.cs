@@ -1,10 +1,11 @@
 using System;
 using Gtk;
+using LeaseAgreement;
+using LeaseAgreement.Domain;
 using QSOrmProject;
 using QSProjectsLib;
 using QSSupportLib;
 using QSUpdater;
-using LeaseAgreement;
 
 public partial class MainWindow : Gtk.Window
 {

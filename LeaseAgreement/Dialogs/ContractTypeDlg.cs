@@ -1,12 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using NLog;
-using MySql.Data.MySqlClient;
-using QSProjectsLib;
-using Gtk;
 using System.Data.Bindings;
+using System.IO;
+using Gtk;
+using LeaseAgreement.Domain;
+using MySql.Data.MySqlClient;
+using NLog;
 using QSOrmProject;
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {
