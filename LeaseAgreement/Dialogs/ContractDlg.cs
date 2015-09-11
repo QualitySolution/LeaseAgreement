@@ -434,7 +434,7 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue ("@start_date", DBWorks.ValueOrNull (subject.StartDate != default(DateTime), subject.StartDate));
 				cmd.Parameters.AddWithValue ("@end_date", DBWorks.ValueOrNull (subject.EndDate != default(DateTime), subject.EndDate));
 				cmd.Parameters.AddWithValue ("@cancel_date", DBWorks.ValueOrNull (subject.CancelDate != default(DateTime), subject.CancelDate));
-				cmd.Parameters.AddWithValue ("@comments", DBWorks.ValueOrNull (String.IsNullOrEmpty (subject.Comments), subject.Comments));
+				cmd.Parameters.AddWithValue ("@comments", DBWorks.ValueOrNull (!String.IsNullOrEmpty (subject.Comments), subject.Comments));
 				
 				cmd.ExecuteNonQuery ();
 				if (NewContract) {
