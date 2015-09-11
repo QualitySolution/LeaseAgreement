@@ -242,7 +242,7 @@ namespace LeaseAgreement
 				}
 				else
 				{
-					logger.ErrorException("Ошибка записи места!", ex);
+					logger.Error(ex, "Ошибка записи места!");
 					QSMain.ErrorMessage(this,ex);
 				}
 			}

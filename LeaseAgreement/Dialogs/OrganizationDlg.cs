@@ -77,7 +77,7 @@ namespace LeaseAgreement
 				logger.Info ("Ok");
 				this.Title = subject.Name;
 			} catch (Exception ex) {
-				logger.ErrorException ("Ошибка получения информации о организации!", ex);
+				logger.Error (ex, "Ошибка получения информации о организации!");
 				QSMain.ErrorMessage (this, ex);
 			}
 			TestCanSave ();
@@ -146,7 +146,7 @@ namespace LeaseAgreement
 				Respond (Gtk.ResponseType.Ok);
 			} catch (Exception ex) {
 				trans.Rollback ();
-				logger.ErrorException ("Ошибка записи организации!", ex);
+				logger.Error (ex, "Ошибка записи организации!");
 				QSMain.ErrorMessage (this, ex);
 			}
 		}

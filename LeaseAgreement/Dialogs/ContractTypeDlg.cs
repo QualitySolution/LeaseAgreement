@@ -108,7 +108,7 @@ namespace LeaseAgreement
 				logger.Info ("Ok");
 				this.Title = subject.Name;
 			} catch (Exception ex) {
-				logger.ErrorException ("Ошибка получения информации от типе договора!", ex);
+				logger.Error (ex, "Ошибка получения информации от типе договора!");
 				QSMain.ErrorMessage (this, ex);
 			}
 			TestCanSave ();
@@ -170,7 +170,7 @@ namespace LeaseAgreement
 						cmd.ExecuteNonQuery ();
 					} catch (MySqlException ex) {
 						if (ex.Number == 1153) {
-							logger.WarnException ("Превышен максимальный размер пакета для передачи на сервер.", ex);
+							logger.Warn (ex, "Превышен максимальный размер пакета для передачи на сервер.");
 							string Text = "Превышен максимальный размер пакета для передачи на сервер базы данных. " +
 							              "Некоторые файлы превысили ограничение и не будут записаны в базу данных. " +
 							              "Это значение настраивается на сервере, по умолчанию для MySQL оно равняется 1Мб. " +
@@ -207,7 +207,7 @@ namespace LeaseAgreement
 				Respond (Gtk.ResponseType.Ok);
 			} catch (Exception ex) {
 				trans.Rollback ();
-				logger.ErrorException ("Ошибка записи типа договора!", ex);
+				logger.Error (ex, "Ошибка записи типа договора!");
 				QSMain.ErrorMessage (this, ex);
 			}
 		}
@@ -409,7 +409,7 @@ namespace LeaseAgreement
 					subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).Size = (uint)file.LongLength;
 				}
 			} catch (Exception ex) {
-				logger.WarnException ("Ошибка при чтении файла!", ex);
+				logger.Warn (ex, "Ошибка при чтении файла!");
 			}
 		}
 	}

@@ -204,7 +204,7 @@ namespace LeaseAgreement
 					this.Title = String.Format ("Договор №{0}", subject.Number);
 				logger.Info ("Ok");
 			} catch (Exception ex) {
-				logger.ErrorException ("Ошибка получения информации о договоре!", ex);
+				logger.Error (ex, "Ошибка получения информации о договоре!");
 				QSMain.ErrorMessage (this, ex);
 			}
 			TestCanSave ();
@@ -475,7 +475,7 @@ namespace LeaseAgreement
 							DocPatterns.SetValue (iter, (int)DocPatternCol.fileChanged, false);
 						} catch (MySqlException ex) {
 							if (ex.Number == 1153) {
-								logger.WarnException ("Превышен максимальный размер пакета для передачи на сервер.", ex);
+								logger.Warn (ex, "Превышен максимальный размер пакета для передачи на сервер.");
 								string Text = "Превышен максимальный размер пакета для передачи на сервер базы данных. " +
 								              "Некоторые файлы превысили ограничение и не будут записаны в базу данных. " +
 								              "Это значение настраивается на сервере, по умолчанию для MySQL оно равняется 1Мб. " +
@@ -515,7 +515,7 @@ namespace LeaseAgreement
 				return true;
 			} catch (Exception ex) {
 				trans.Rollback ();
-				logger.ErrorException ("Ошибка записи договора!", ex);
+				logger.Error (ex, "Ошибка записи договора!");
 				QSMain.ErrorMessage (this, ex);
 			}
 			return false;
@@ -605,7 +605,7 @@ namespace LeaseAgreement
 					}
 				}
 			} catch (Exception ex) {
-				logger.ErrorException ("Чтения шаблонов для типа договора!", ex);
+				logger.Error (ex, "Чтения шаблонов для типа договора!");
 				QSMain.ErrorMessage (this, ex);
 			}
 			OnTreeviewDocsCursorChanged (treeviewDocs, EventArgs.Empty);
@@ -762,7 +762,7 @@ namespace LeaseAgreement
 					DocPatterns.SetValue (iter, (int)DocPatternCol.isDocPattern, true);
 				}
 			} catch (Exception ex) {
-				logger.WarnException ("Ошибка при чтении файла!", ex);
+				logger.Warn (ex, "Ошибка при чтении файла!");
 			}
 		}
 

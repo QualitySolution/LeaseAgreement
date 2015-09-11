@@ -132,7 +132,7 @@ namespace LeaseAgreement
 				logger.Info ("Ok");
 				this.Title = subject.Name;
 			} catch (Exception ex) {
-				logger.ErrorException ("Ошибка получения информации о арендаторе!", ex);
+				logger.Error (ex, "Ошибка получения информации о арендаторе!");
 				QSMain.ErrorMessage (this, ex);
 			}
 			TestCanSave ();
@@ -203,7 +203,7 @@ namespace LeaseAgreement
 				Respond (ResponseType.Ok);
 			} catch (Exception ex) {
 				trans.Rollback ();
-				logger.ErrorException ("Ошибка записи арендатора!", ex);
+				logger.Error (ex, "Ошибка записи арендатора!");
 				QSMain.ErrorMessage (this, ex);
 			}
 		}

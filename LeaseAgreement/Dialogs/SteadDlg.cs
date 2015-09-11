@@ -53,7 +53,7 @@ namespace LeaseAgreement
 			}
 			catch (Exception ex)
 			{
-				logger.ErrorException("Ошибка получения информации земельном участке!", ex);
+				logger.Error(ex, "Ошибка получения информации земельном участке!");
 				QSMain.ErrorMessage(this,ex);
 			}
 			TestCanSave();
@@ -113,7 +113,7 @@ namespace LeaseAgreement
 			catch (Exception ex) 
 			{
 				trans.Rollback ();
-				logger.ErrorException("Ошибка записи земельного участка!", ex);
+				logger.Error(ex, "Ошибка записи земельного участка!");
 				QSMain.ErrorMessage(this,ex);
 			}
 		}

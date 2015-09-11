@@ -295,7 +295,7 @@ namespace LeaseAgreement
 
 				logger.Info ("Ok");
 			} catch (Exception ex) {
-				logger.ErrorException ("Ошибка получения номеров мест!", ex);
+				logger.Error (ex, "Ошибка получения номеров мест!");
 			}
 		}
 
