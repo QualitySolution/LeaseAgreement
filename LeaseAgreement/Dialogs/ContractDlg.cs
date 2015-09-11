@@ -88,7 +88,7 @@ namespace LeaseAgreement
 			comboPlaceT.ItemsDataSource = typesList = PlaceType.LoadList ();
 
 			comboResponsible.ItemsDataSource = userList = User.LoadList ();
-			subject.Responsible = DBWorks.FineById (userList, QSMain.User.id);
+			subject.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 			subject.Customs = customContracts.FieldsValues;

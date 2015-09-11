@@ -70,7 +70,7 @@ public partial class MainWindow : Gtk.Window
 		}
 
 		//Загружаем информацию о пользователе
-		UsersAction.Sensitive = QSMain.User.admin;
+		UsersAction.Sensitive = QSMain.User.Admin;
 		labelUser.LabelProp = QSMain.User.Name;
 
 		PreparePlaces ();
