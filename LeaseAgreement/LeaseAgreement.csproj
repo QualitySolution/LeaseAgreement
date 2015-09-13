@@ -128,6 +128,7 @@
     <Compile Include="ViewWidgets\ContractPlacesView.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.ContractPlacesView.cs" />
     <Compile Include="CreateProjectParam.cs" />
+    <Compile Include="HibernateMapping\ContractPlaceMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -144,6 +145,7 @@
     <Folder Include="Domain\" />
     <Folder Include="Updates\" />
     <Folder Include="ViewWidgets\" />
+    <Folder Include="HibernateMapping\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
