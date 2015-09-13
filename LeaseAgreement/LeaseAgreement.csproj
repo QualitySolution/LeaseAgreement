@@ -127,6 +127,7 @@
     <Compile Include="Domain\ContractPlace.cs" />
     <Compile Include="ViewWidgets\ContractPlacesView.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.ContractPlacesView.cs" />
+    <Compile Include="CreateProjectParam.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -152,6 +153,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Reports\Contracts.rdl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="hibernate.cfg.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
