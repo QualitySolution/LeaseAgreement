@@ -8,9 +8,11 @@ namespace LeaseAgreement
 {
 	public partial class ContractPlaceAdd : Gtk.Dialog, IPlacesVMFilter
 	{
-		public ContractPlaceAdd ()
+		public ContractPlaceAdd (DateTime? startdate)
 		{
 			this.Build ();
+
+			RestrictStartDate = startdate;
 
 			ytreeviewPlaces.RepresentationModel = new PlacesVM (this);
 			ytreeviewPlaces.Selection.Mode = Gtk.SelectionMode.Multiple;

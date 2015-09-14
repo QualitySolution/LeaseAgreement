@@ -47,7 +47,9 @@ namespace LeaseAgreement
 
 		protected void OnButtonAddClicked (object sender, EventArgs e)
 		{
-			var dlg = new ContractPlaceAdd ();
+			var dlg = new ContractPlaceAdd (
+				Contract.StartDate > DateTime.Today ? Contract.StartDate : DateTime.Today
+			);
 			dlg.Show ();
 			if((Gtk.ResponseType)dlg.Run () == Gtk.ResponseType.Ok)
 			{

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
-using QSOrmProject;
 using QSOrmProject.RepresentationModel;
 using Gtk.DataBindings;
 using LeaseAgreement.Domain;
 using Gamma.ColumnConfig;
+using NHibernate.Criterion;
 
 namespace LeaseAgreement.Representations
 {
@@ -24,17 +24,29 @@ namespace LeaseAgreement.Representations
 
 		public override void UpdateNodes ()
 		{
-
 			PlaceType placetypeAlias = null;
 			Place placeAlias = null;
 			PlacesVMNode resultAlias = null;
 			Organization organizationAlias = null;
 
-			var contactslist = UoW.Session.QueryOver<Place> (() => placeAlias)
+			var placesQuery = UoW.Session.QueryOver<Place> (() => placeAlias)
 				.JoinAlias (c => c.PlaceType, () => placetypeAlias)
-				.JoinAlias (c => c.Organization, () => organizationAlias, NHibernate.SqlCommand.JoinType.LeftOuterJoin)
-				.SelectList (list => list
-					.Select (() => placeAlias.Id).WithAlias (() => resultAlias.Id)
+				.JoinAlias (c => c.Organization, () => organizationAlias, NHibernate.SqlCommand.JoinType.LeftOuterJoin);
+			if(Filter.RestrictStartDate.HasValue)
+			{
+				var freePlacesQuery = QueryOver.Of<ContractPlace>()
+					.Where (cp => cp.StartDate >= Filter.RestrictStartDate 
+					        || cp.EndDate >= Filter.RestrictStartDate
+					        || (cp.EndDate == null));
+				if (Filter.RestrictEndDate.HasValue)
+					freePlacesQuery.And (cp => cp.StartDate < Filter.RestrictEndDate);
+				freePlacesQuery.Select (c => c.Place);
+
+				placesQuery.WithSubquery.WhereNotExists (freePlacesQuery);
+			}
+
+			var placesList = placesQuery.SelectList (list => list
+			                 .Select (() => placeAlias.Id).WithAlias (() => resultAlias.Id)
 				             .Select (() => placeAlias.PlaceNumber).WithAlias (() => resultAlias.PlaceNumber)
 				             .Select (() => placeAlias.Area).WithAlias (() => resultAlias.Area)
 				             .Select (() => placetypeAlias.Name).WithAlias (() => resultAlias.PlaceTypeName)
@@ -43,7 +55,7 @@ namespace LeaseAgreement.Representations
 				.TransformUsing (Transformers.AliasToBean<PlacesVMNode> ())
 				.List<PlacesVMNode> ();
 
-			SetItemsSource (contactslist);
+			SetItemsSource (placesList);
 		}
 
 		IColumnsConfig treeViewConfig = Gamma.GtkWidgets.ColumnsConfigFactory.Create<PlacesVMNode> ()
