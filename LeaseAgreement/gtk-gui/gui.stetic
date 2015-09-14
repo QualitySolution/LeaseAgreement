@@ -6400,12 +6400,14 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Button" id="button273">
+              <widget class="Gtk.Button" id="buttonDel">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
-                <property name="Type">TextOnly</property>
-                <property name="Label" translatable="yes">GtkButton</property>
+                <property name="Type">TextAndIcon</property>
+                <property name="Icon">stock:gtk-delete Menu</property>
+                <property name="Label" translatable="yes">Удалить</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Clicked" handler="OnButtonDelClicked" />
               </widget>
               <packing>
                 <property name="Position">1</property>

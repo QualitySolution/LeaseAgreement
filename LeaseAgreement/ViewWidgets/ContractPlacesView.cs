@@ -26,7 +26,14 @@ namespace LeaseAgreement
 					return;
 				contract = value;
 				ytreeviewPlaces.ItemsDataSource = Contract.ObservableLeasedPlaces;
+				ytreeviewPlaces.Selection.Mode = Gtk.SelectionMode.Multiple;
+				ytreeviewPlaces.Selection.Changed += YtreeviewPlaces_Selection_Changed;
 			}
+		}
+
+		void YtreeviewPlaces_Selection_Changed (object sender, EventArgs e)
+		{
+			buttonDel.Sensitive = ytreeviewPlaces.Selection.CountSelectedRows () > 0;
 		}
 
 		public ContractPlacesView ()
@@ -64,6 +71,14 @@ namespace LeaseAgreement
 				}
 			}
 			dlg.Destroy ();
+		}
+
+		protected void OnButtonDelClicked (object sender, EventArgs e)
+		{
+			foreach(var cp in ytreeviewPlaces.GetSelectedObjects<ContractPlace> ())
+			{
+				Contract.RemoveLeassedPlace (cp);
+			}
 		}
 	}
 }

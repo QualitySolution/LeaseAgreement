@@ -18,7 +18,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Button buttonAdd;
 		
-		private global::Gtk.Button button273;
+		private global::Gtk.Button buttonDel;
 
 		protected virtual void Build ()
 		{
@@ -81,27 +81,31 @@ namespace LeaseAgreement
 			w6.Expand = false;
 			w6.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.button273 = new global::Gtk.Button ();
-			this.button273.CanFocus = true;
-			this.button273.Name = "button273";
-			this.button273.UseUnderline = true;
-			this.button273.Label = global::Mono.Unix.Catalog.GetString ("GtkButton");
-			this.hbox1.Add (this.button273);
-			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.button273]));
-			w7.Position = 1;
-			w7.Expand = false;
-			w7.Fill = false;
-			this.vbox2.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
-			w8.Position = 2;
+			this.buttonDel = new global::Gtk.Button ();
+			this.buttonDel.CanFocus = true;
+			this.buttonDel.Name = "buttonDel";
+			this.buttonDel.UseUnderline = true;
+			this.buttonDel.Label = global::Mono.Unix.Catalog.GetString ("Удалить");
+			global::Gtk.Image w7 = new global::Gtk.Image ();
+			w7.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-delete", global::Gtk.IconSize.Menu);
+			this.buttonDel.Image = w7;
+			this.hbox1.Add (this.buttonDel);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonDel]));
+			w8.Position = 1;
 			w8.Expand = false;
 			w8.Fill = false;
+			this.vbox2.Add (this.hbox1);
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+			w9.Position = 2;
+			w9.Expand = false;
+			w9.Fill = false;
 			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
 			this.Hide ();
 			this.buttonAdd.Clicked += new global::System.EventHandler (this.OnButtonAddClicked);
+			this.buttonDel.Clicked += new global::System.EventHandler (this.OnButtonDelClicked);
 		}
 	}
 }

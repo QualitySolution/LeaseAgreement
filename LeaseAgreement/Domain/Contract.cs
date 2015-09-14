@@ -157,6 +157,13 @@ namespace LeaseAgreement.Domain
 			ObservableLeasedPlaces.Add (place);
 			return true;
 		}
+
+		public bool RemoveLeassedPlace(ContractPlace place)
+		{
+			ObservableLeasedPlaces.Remove (place);
+			return true;
+		}
+
 	}
 }
 
