@@ -47,6 +47,18 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref comments, value, () => Comments); }
 		}
 
+		public string RowColor {
+			get {
+				if (!StartDate.HasValue)
+					return "orange";
+				if (EndDate.HasValue && DateTime.Today > EndDate.Value)
+					return "grey";
+				if (DateTime.Today < StartDate.Value)
+					return "blue";
+				return "black";
+			}
+		}
+
 		public ContractPlace ()
 		{
 		}

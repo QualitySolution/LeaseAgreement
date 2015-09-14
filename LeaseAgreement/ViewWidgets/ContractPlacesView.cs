@@ -41,6 +41,7 @@ namespace LeaseAgreement
 				.AddTextRenderer (node => node.StartDate.HasValue ? node.StartDate.Value.ToShortDateString () : String.Empty)
 				.AddColumn ("Окончание аренды")
 				.AddTextRenderer (node => node.EndDate.HasValue ? node.EndDate.Value.ToShortDateString () : String.Empty)
+				.RowCells ().AddSetter<Gtk.CellRendererText> ((c, n) => c.Foreground = n.RowColor)
 				.Finish ();
 		}
 
