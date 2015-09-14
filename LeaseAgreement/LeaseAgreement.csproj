@@ -129,6 +129,14 @@
     <Compile Include="gtk-gui\LeaseAgreement.ContractPlacesView.cs" />
     <Compile Include="CreateProjectParam.cs" />
     <Compile Include="HibernateMapping\ContractPlaceMap.cs" />
+    <Compile Include="ServiceDialogs\ContractPlaceAdd.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.ContractPlaceAdd.cs" />
+    <Compile Include="Representations\PlacesVM.cs" />
+    <Compile Include="Representations\IPlacesVMFilter.cs" />
+    <Compile Include="HibernateMapping\ContractMap.cs" />
+    <Compile Include="HibernateMapping\PlaceMap.cs" />
+    <Compile Include="HibernateMapping\PlaceTypeMap.cs" />
+    <Compile Include="HibernateMapping\OrganizationMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -146,6 +154,8 @@
     <Folder Include="Updates\" />
     <Folder Include="ViewWidgets\" />
     <Folder Include="HibernateMapping\" />
+    <Folder Include="ServiceDialogs\" />
+    <Folder Include="Representations\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

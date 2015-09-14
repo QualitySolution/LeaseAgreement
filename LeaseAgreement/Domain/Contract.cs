@@ -3,6 +3,7 @@ using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using QSAttachment;
+using System.Data.Bindings.Collections.Generic;
 
 namespace LeaseAgreement.Domain
 {
@@ -124,12 +125,37 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref files, value, () => Files); }
 		}
 
+		IList<ContractPlace> leasedPlaces = new List<ContractPlace>();
+
+		[Display (Name = "Аренда мест")]
+		public virtual IList<ContractPlace> LeasedPlaces {
+			get { return leasedPlaces; }
+			set { SetField (ref leasedPlaces, value, () => LeasedPlaces); }
+		}
+
+		GenericObservableList<ContractPlace> observableLeasedPlaces;
+		//FIXME Кослыль пока не разберемся как научить hibernate работать с обновляемыми списками.
+		public GenericObservableList<ContractPlace> ObservableLeasedPlaces {
+			get {
+				if (observableLeasedPlaces == null)
+					observableLeasedPlaces = new GenericObservableList<ContractPlace> (LeasedPlaces);
+				return observableLeasedPlaces;
+			}
+		}
+
 		public string Title {
 			get { return String.Format ("Договор №{0} от {1:d}", Number, SignDate);}
 		}
 
 		public Contract ()
 		{
+		}
+
+		public bool AddLeassedPlace(ContractPlace place)
+		{
+			place.Contract = this;
+			ObservableLeasedPlaces.Add (place);
+			return true;
 		}
 	}
 }

@@ -24,17 +24,17 @@ namespace LeaseAgreement.Domain
 			set { SetField(ref place, value, () => Place);}
 		}
 
-		DateTime startDate;
+		DateTime? startDate;
 
 		[Display (Name = "Дата начала")]
-		public virtual DateTime StartDate {
+		public virtual DateTime? StartDate {
 			get { return startDate; }
 			set { SetField (ref startDate, value, () => StartDate); }
 		}
 
-		DateTime endDate;
+		DateTime? endDate;
 		[Display(Name = "Дата окончания")]
-		public virtual DateTime EndDate {
+		public virtual DateTime? EndDate {
 			get { return endDate;}
 			set { SetField(ref endDate, value, () => EndDate);}
 		}

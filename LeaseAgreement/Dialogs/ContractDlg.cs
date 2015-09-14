@@ -114,6 +114,8 @@ namespace LeaseAgreement
 			treeviewDocs.Model = DocPatterns;
 			treeviewDocs.ShowAll ();
 
+			contractplacesview1.Contract = subject;
+
 			tracker = new QSHistoryLog.ObjectTracker<Contract> (subject);
 		}
 
