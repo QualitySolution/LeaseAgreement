@@ -60,6 +60,14 @@ namespace LeaseAgreement
 			notebookMain.SetTabLabel (hboxInfo, box);
 
 			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.folder.png");
+			textLable = new Label ("Аренда мест");
+			box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (contractplacesview1, box);
+
+			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.folder.png");
 			textLable = new Label ("Дополнительно");
 			box = new VBox ();
 			box.Add (img);
