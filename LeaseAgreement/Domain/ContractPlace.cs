@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LeaseAgreement.Domain
 {
-	[OrmSubject (ObjectName = "аренда места")]
+	[OrmSubject (Nominative = "аренда места",
+	             NominativePlural = "арендованые места")]
 	public class ContractPlace : PropertyChangedBase
 	{
 		public virtual int Id { get; set; }

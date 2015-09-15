@@ -44,8 +44,12 @@ namespace LeaseAgreement
 			QSHistoryLog.HistoryMain.AddIdComparationType (typeof(KeyValuePair<string, object>), new string[]{ "Key" });
 
 			QSHistoryLog.HistoryMain.SubscribeToDeletion ();
+		}
 
-			//Параметры удаления
+		public static void ConfigureDeletion()
+		{
+			logger.Info("Настройка параметров удаления...");
+
 			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(Place),
 				TableName = "places",
@@ -55,7 +59,7 @@ namespace LeaseAgreement
 					"LEFT JOIN place_types ON places.type_id = place_types.id ",
 				DisplayString = "Место {0}-{1} с площадью {2} кв.м.",
 				DeleteItems = new List<DeleteDependenceInfo> {
-					new DeleteDependenceInfo (typeof(Contract), "WHERE contracts.place_id = @id")
+					DeleteDependenceInfo.Create<ContractPlace>(item => item.Place)
 				}
 			});
 
@@ -69,9 +73,20 @@ namespace LeaseAgreement
 				DisplayString = "Договор №{0} от {1:d} с арендатором {2}",
 				DeleteItems = new List<DeleteDependenceInfo> {
 					new DeleteDependenceInfo ("contract_docs", "WHERE contract_id = @id "),
-					new DeleteDependenceInfo ("files", "WHERE item_group = 'contracts' AND item_id = @id")
+					new DeleteDependenceInfo ("files", "WHERE item_group = 'contracts' AND item_id = @id"),
+					DeleteDependenceInfo.CreateFromBag<Contract>(item => item.LeasedPlaces)
 				}
 			});
+
+			DeleteConfig.AddDeleteInfo(new DeleteInfo
+			{
+				ObjectClass = typeof(ContractPlace),
+				SqlSelect = "SELECT @tablename.id, place_types.name, places.place_no, start_date, end_date FROM @tablename " +
+					"LEFT JOIN places ON places.id = @tablename.place_id " +
+					"LEFT JOIN place_types ON place_types.id = places.type_id ",
+				DisplayString = "Место {1}-{2} c {3:d} по {4:d}"
+			}.FillFromMetaInfo()
+			);
 
 			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				ObjectClass = typeof(Lessee),
