@@ -80,10 +80,9 @@ public partial class MainWindow : Gtk.Window
 			"organizations.name as organization FROM places " +
 				"LEFT JOIN place_types ON places.type_id = place_types.id " +
 				"LEFT JOIN organizations ON places.org_id = organizations.id " +
-			"LEFT JOIN contracts ON places.id = contracts.place_id AND contracts.draft = '0' AND " +
-				"((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
-				"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date)) " +
-				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id";
+			"LEFT JOIN current_leased_places ON current_leased_places.place_id = places.id " +
+			"LEFT JOIN contracts ON current_leased_places.contract_id = contracts.id " +
+			"LEFT JOIN lessees ON contracts.lessee_id = lessees.id";
 		bool WhereExist = false;
 		if(comboPlaceType.GetActiveIter(out iter) && comboPlaceType.Active != 0)
 		{
