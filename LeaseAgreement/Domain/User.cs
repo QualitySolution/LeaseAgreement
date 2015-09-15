@@ -7,7 +7,7 @@ using QSProjectsLib;
 
 namespace LeaseAgreement.Domain
 {
-	public class User : PropertyChangedBase
+	public class User : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id { get; set; }
 

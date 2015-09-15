@@ -8,7 +8,7 @@ using QSProjectsLib;
 namespace LeaseAgreement.Domain
 {
 	[OrmSubject(ObjectName = "Тип места")]
-	public class PlaceType : PropertyChangedBase
+	public class PlaceType : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id { get; set; }
 

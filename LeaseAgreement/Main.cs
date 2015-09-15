@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Gtk;
-using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using NLog;
 using QSCustomFields;
-using QSOrmProject.Deletion;
 using QSProjectsLib;
 
 namespace LeaseAgreement
@@ -47,6 +44,7 @@ namespace LeaseAgreement
 			LoginDialog.Destroy ();
 
 			CreateBaseConfig ();
+			ConfigureDeletion ();
 
 			//Запускаем программу
 			MainWin = new MainWindow ();

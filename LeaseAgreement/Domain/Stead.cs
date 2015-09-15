@@ -8,7 +8,7 @@ using QSProjectsLib;
 namespace LeaseAgreement.Domain
 {
 	[OrmSubject(ObjectName = "Земельный участок")]
-	public class Stead : PropertyChangedBase
+	public class Stead : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id { get; set; }
 

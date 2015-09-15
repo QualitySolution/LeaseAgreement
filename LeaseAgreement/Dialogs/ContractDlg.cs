@@ -25,15 +25,21 @@ namespace LeaseAgreement
 		private List<int> deletedDocItems;
 		private List<FileSystemWatcher> watchers;
 
-		private List<Organization> orgList;
-		private List<Place> placesList;
-		private List<ContractCategory> categoryList;
-		private List<ContractType> contrTypeList;
 		private List<User> userList;
 
 		private bool NewContract {
 			get {
 				return UoW.IsNew;
+			}
+		}
+
+		protected Contract Subject {
+			get {
+				return subject;
+			}
+			set {
+				subject = value;
+				tracker = new QSHistoryLog.ObjectTracker<Contract> (subject);
 			}
 		}
 
@@ -53,7 +59,7 @@ namespace LeaseAgreement
 			this.Build ();
 			PrepareDlg ();
 			UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract> ();
-			subject = UoW.Root;
+			Subject = UoW.Root;
 			ConfigureDlg ();
 		}
 
@@ -62,8 +68,10 @@ namespace LeaseAgreement
 			deletedDocItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
 			DocPatterns = new ListStore (typeof(int), typeof(int), typeof(string), typeof(bool), typeof(int), typeof(byte[]), typeof(bool));
-			adaptorContract.Target = subject;
 			table2.DataSource = table3.DataSource = textComments.DataSource = adaptorContract;
+
+			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
+			attachmentFiles.AttachToTable = "contracts";
 
 			//Исправляем табы
 			Gtk.Image img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.user-home.png");
@@ -106,28 +114,27 @@ namespace LeaseAgreement
 			box.ShowAll ();
 			notebookMain.SetTabLabel (attachmentFiles, box);
 
-			comboOrg.ItemsList = orgList = Organization.LoadList ();
-			comboCategory.ItemsList = categoryList = ContractCategory.LoadList ();
-			comboContractType.ItemsList = contrTypeList = ContractType.LoadList ();
-
 			comboResponsible.ItemsList = userList = User.LoadList ();
 		}
 
 		private void ConfigureDlg()
 		{
+			adaptorContract.Target = Subject;
+
+			comboOrg.ItemsList = Organization.LoadList ();
+			comboCategory.ItemsList = ContractCategory.LoadList ();
+			comboContractType.ItemsList = ContractType.LoadList ();
+
 			yentryreferenceLessee.SubjectType = typeof(Lessee);
-			yentryreferenceLessee.Binding.AddBinding (subject, s => s.Lessee, w => w.Subject).InitializeFromSource ();
+			yentryreferenceLessee.Binding.AddBinding (Subject, s => s.Lessee, w => w.Subject).InitializeFromSource ();
 
-			comboCategory.Binding.AddBinding (subject, s => s.Category, w => w.SelectedItem).InitializeFromSource ();
-			comboContractType.Binding.AddBinding (subject, s => s.ContractType, w => w.SelectedItem).InitializeFromSource ();
-			comboOrg.Binding.AddBinding (subject, s => s.Organization, w => w.SelectedItem).InitializeFromSource ();
-			comboResponsible.Binding.AddBinding (subject, s => s.Responsible, w => w.SelectedItem).InitializeFromSource ();
+			comboCategory.Binding.AddBinding (Subject, s => s.Category, w => w.SelectedItem).InitializeFromSource ();
+			comboContractType.Binding.AddBinding (Subject, s => s.ContractType, w => w.SelectedItem).InitializeFromSource ();
+			comboOrg.Binding.AddBinding (Subject, s => s.Organization, w => w.SelectedItem).InitializeFromSource ();
+			comboResponsible.Binding.AddBinding (Subject, s => s.Responsible, w => w.SelectedItem).InitializeFromSource ();
 
-			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
-			subject.Customs = customContracts.FieldsValues;
-
-			attachmentFiles.AttachToTable = "contracts";
-			subject.Files = attachmentFiles.AttachedFiles.ToList ();
+			Subject.Customs = customContracts.FieldsValues;
+			Subject.Files = attachmentFiles.AttachedFiles.ToList ();
 
 			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();
 			ColumnName.Title = "Название документа";
@@ -146,9 +153,7 @@ namespace LeaseAgreement
 			treeviewDocs.Model = DocPatterns;
 			treeviewDocs.ShowAll ();
 
-			contractplacesview1.Contract = subject;
-
-			tracker = new QSHistoryLog.ObjectTracker<Contract> (subject);
+			contractplacesview1.Contract = Subject;
 		}
 
 		public ContractDlg (int Id, bool copy = false)
@@ -172,7 +177,7 @@ namespace LeaseAgreement
 			{
 				UoW = UnitOfWorkFactory.CreateForRoot<Contract> (Id);
 			}
-			subject = UoW.Root;
+			Subject = UoW.Root;
 
 			try {
 
@@ -197,17 +202,17 @@ namespace LeaseAgreement
 				}
 
 				customContracts.LoadDataFromDB (Id);
-				subject.Customs = customContracts.FieldsValues;
+				Subject.Customs = customContracts.FieldsValues;
 				attachmentFiles.ItemId = Id;
 				attachmentFiles.UpdateFileList (copy);
-				subject.Files = attachmentFiles.AttachedFiles.ToList ();
+				Subject.Files = attachmentFiles.AttachedFiles.ToList ();
 
-				tracker.TakeFirst (subject);
+				tracker.TakeFirst (Subject);
 
 				if (copy)
-					this.Title = String.Format ("Копия договора №{0}", subject.Number);
+					this.Title = String.Format ("Копия договора №{0}", Subject.Number);
 				else
-					this.Title = String.Format ("Договор №{0}", subject.Number);
+					this.Title = String.Format ("Договор №{0}", Subject.Number);
 				logger.Info ("Ok");
 			} catch (Exception ex) {
 				logger.Error (ex, "Ошибка получения информации о договоре!");
@@ -219,9 +224,9 @@ namespace LeaseAgreement
 
 		protected	void TestCanSave ()
 		{
-			bool Numberok = subject.Number != "";
-			bool Orgok = subject.Organization != null;
-			bool Lesseeok = subject.Lessee != null;
+			bool Numberok = !String.IsNullOrWhiteSpace (Subject.Number);
+			bool Orgok = Subject.Organization != null;
+			bool Lesseeok = Subject.Lessee != null;
 			bool DatesCorrectok = TestCorrectDates (false);
 
 			buttonOk.Sensitive = Numberok && Orgok && Lesseeok && DatesCorrectok;
@@ -265,13 +270,15 @@ namespace LeaseAgreement
 		{
 			bool DateCorrectok = false;
 			bool DateCancelok = false;
-			bool DatesIsEmpty = subject.StartDate == default(DateTime) || subject.EndDate == default(DateTime);
+			bool DatesIsEmpty = !Subject.StartDate.HasValue || !Subject.EndDate.HasValue || Subject.StartDate == default(DateTime) || Subject.EndDate == default(DateTime);
 			if (!DatesIsEmpty)
-				DateCorrectok = subject.EndDate.Value.CompareTo (subject.StartDate) > 0;
-			if (subject.CancelDate == default(DateTime))
+				DateCorrectok = Subject.EndDate.Value.CompareTo (Subject.StartDate.Value) > 0;
+			if (Subject.CancelDate == null || Subject.CancelDate.Value == default(DateTime))
 				DateCancelok = true;
+			else if (!DatesIsEmpty)
+				DateCancelok = Subject.CancelDate.Value > Subject.StartDate.Value && Subject.CancelDate.Value < Subject.EndDate.Value;
 			else
-				DateCancelok = subject.CancelDate > subject.StartDate && subject.CancelDate < subject.EndDate;
+				DateCancelok = false;
 			if (displayMessage && !DateCorrectok && !DatesIsEmpty) {
 				MessageDialog md = new MessageDialog (this, DialogFlags.DestroyWithParent,
 				                                       MessageType.Warning, 
@@ -311,9 +318,9 @@ namespace LeaseAgreement
 		private bool SaveContract ()
 		{
 			TreeIter iter;
-			subject.Customs = customContracts.FieldsValues;
-			subject.Files = attachmentFiles.AttachedFiles.ToList ();
-			tracker.TakeLast (subject);
+			Subject.Customs = customContracts.FieldsValues;
+			Subject.Files = attachmentFiles.AttachedFiles.ToList ();
+			tracker.TakeLast (Subject);
 			if (!tracker.Compare ()) {
 				logger.Info ("Нет изменений.");
 				return true;
@@ -325,9 +332,9 @@ namespace LeaseAgreement
 				// Проверка номера договора на дубликат
 				string sql = "SELECT COUNT(*) AS cnt FROM contracts WHERE number = @number AND sign_date = @sign_date AND id <> @id AND draft = '0' ";
 				MySqlCommand cmd = new MySqlCommand (sql, QSMain.connectionDB, trans);
-				cmd.Parameters.AddWithValue ("@number", subject.Number);
-				cmd.Parameters.AddWithValue ("@id", subject.Id);
-				cmd.Parameters.AddWithValue ("@sign_date", DBWorks.ValueOrNull (subject.SignDate != default(DateTime), subject.SignDate));
+				cmd.Parameters.AddWithValue ("@number", Subject.Number);
+				cmd.Parameters.AddWithValue ("@id", Subject.Id);
+				cmd.Parameters.AddWithValue ("@sign_date", DBWorks.ValueOrNull (Subject.SignDate != default(DateTime), Subject.SignDate));
 				long Count = (long)cmd.ExecuteScalar ();
 
 				if (Count > 0) {
@@ -336,27 +343,27 @@ namespace LeaseAgreement
 					                                      MessageType.Error, 
 					                                      ButtonsType.Ok, "ошибка");
 					md.UseMarkup = false;
-					md.Text = String.Format ("Договор с номером {0} от {1:d}, уже существует в базе данных!", subject.Number, subject.SignDate);
+					md.Text = String.Format ("Договор с номером {0} от {1:d}, уже существует в базе данных!", Subject.Number, Subject.SignDate);
 					md.Run ();
 					md.Destroy ();
 					trans.Rollback ();
 					return false;
 				}
 /* FIXME
-				if (!subject.Draft) {// Проверка не занято ли место другим арендатором
+				if (!Subject.Draft) {// Проверка не занято ли место другим арендатором
 					sql = "SELECT id, number, start_date AS start, IFNULL(cancel_date,end_date) AS end FROM contracts " +
 					"WHERE place_id = @place_id AND draft = '0' AND " +
 					"!(@start > DATE(IFNULL(cancel_date,end_date)) OR @end < start_date)";
 					cmd = new MySqlCommand (sql, QSMain.connectionDB, trans);
-					cmd.Parameters.AddWithValue ("@place_id", subject.Place.Id);
-					cmd.Parameters.AddWithValue ("@start", subject.StartDate);
+					cmd.Parameters.AddWithValue ("@place_id", Subject.Place.Id);
+					cmd.Parameters.AddWithValue ("@start", Subject.StartDate);
 					if (datepickerCancel.IsEmpty)
-						cmd.Parameters.AddWithValue ("@end", subject.EndDate);
+						cmd.Parameters.AddWithValue ("@end", Subject.EndDate);
 					else
-						cmd.Parameters.AddWithValue ("@end", subject.CancelDate);
+						cmd.Parameters.AddWithValue ("@end", Subject.CancelDate);
 					using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 						while (rdr.Read ()) {
-							if (rdr.GetInt32 ("id") == subject.Id)
+							if (rdr.GetInt32 ("id") == Subject.Id)
 								continue;
 							logger.Warn ("Место уже занято!");
 							MessageDialog md = new MessageDialog (this, DialogFlags.Modal,
@@ -381,7 +388,7 @@ namespace LeaseAgreement
 
 				if (NewContract) {
 					attachmentFiles.ItemId = customContracts.ObjectId
-						= tracker.ObjectId = subject.Id = (int)cmd.LastInsertedId;
+						= tracker.ObjectId = Subject.Id = (int)cmd.LastInsertedId;
 				}
 				customContracts.SaveToDB (trans);
 				attachmentFiles.SaveChanges (trans);
@@ -400,7 +407,7 @@ namespace LeaseAgreement
 							"VALUES (@name, @pattern_id, @contract_id, @size, @pattern)";
 						cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB, trans);
 						cmd.Parameters.AddWithValue ("@name", DocPatterns.GetValue (iter, (int)DocPatternCol.name));
-						cmd.Parameters.AddWithValue ("@contract_id", subject.Id);
+						cmd.Parameters.AddWithValue ("@contract_id", Subject.Id);
 						cmd.Parameters.AddWithValue ("@pattern_id", DocPatterns.GetValue (iter, (int)DocPatternCol.patternId));
 						cmd.Parameters.AddWithValue ("@id", DocPatterns.GetValue (iter, (int)DocPatternCol.docId));
 						if ((bool)DocPatterns.GetValue (iter, (int)DocPatternCol.fileChanged)) {
@@ -477,7 +484,7 @@ namespace LeaseAgreement
 		protected void OnButtonLesseeOpenClicked (object sender, EventArgs e)
 		{
 			LesseeDlg winLessee = new LesseeDlg ();
-			winLessee.Fill (subject.Lessee.Id);
+			winLessee.Fill (Subject.Lessee.Id);
 			winLessee.Show ();
 			winLessee.Run ();
 			winLessee.Destroy ();
@@ -486,7 +493,7 @@ namespace LeaseAgreement
 		public bool AddPlace (Place place)
 		{
 			try {
-				subject.AddLeassedPlace (new ContractPlace{
+				Subject.AddLeassedPlace (new ContractPlace{
 					Place = place
 				});
 				return true;
@@ -522,13 +529,13 @@ namespace LeaseAgreement
 				} while(DocPatterns.IterNext (ref iter));
 			}
 				
-			if (subject.ContractType == null)
+			if (Subject.ContractType == null)
 				return;
-			logger.Info ("Загружаем шаблоны документов для типа {0}", subject.ContractType.Name);
+			logger.Info ("Загружаем шаблоны документов для типа {0}", Subject.ContractType.Name);
 			string sql = "SELECT id, name, size, pattern FROM doc_patterns WHERE contract_type_id = @contract_type_id ";
 			try {
 				MySqlCommand cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
-				cmd.Parameters.AddWithValue ("@contract_type_id", subject.ContractType.Id);
+				cmd.Parameters.AddWithValue ("@contract_type_id", Subject.ContractType.Id);
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 					while (rdr.Read ()) {
 						if (ListStoreWorks.SearchListStore (DocPatterns, rdr.GetInt32 ("id"), (int)DocPatternCol.patternId, out iter))
@@ -565,7 +572,7 @@ namespace LeaseAgreement
 			OdtWorks odt = new OdtWorks (file);
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
 			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
-			odt.DocInfo.LoadValuesFromDB (subject.Id);
+			odt.DocInfo.LoadValuesFromDB (Subject.Id);
 			odt.FillValues ();
 			file = odt.GetArray ();
 			odt.Close ();
@@ -647,7 +654,7 @@ namespace LeaseAgreement
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
 			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 			odt.UpdateFields ();
-			odt.DocInfo.LoadValuesFromDB (subject.Id);
+			odt.DocInfo.LoadValuesFromDB (Subject.Id);
 			odt.FillValues ();
 			file = odt.GetArray ();
 			odt.Close ();
