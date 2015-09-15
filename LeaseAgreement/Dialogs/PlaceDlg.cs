@@ -53,7 +53,6 @@ namespace LeaseAgreement
 			treeviewHistory.AppendColumn ("Договор", new Gtk.CellRendererText (), "text", 1);
 			treeviewHistory.AppendColumn ("с", new Gtk.CellRendererText (), "text", 2);
 			treeviewHistory.AppendColumn ("по", new Gtk.CellRendererText (), "text", 3);
-			treeviewHistory.AppendColumn ("Расторгнут", new Gtk.CellRendererText (), "text", 4);
 			treeviewHistory.AppendColumn ("Арендатор", new Gtk.CellRendererText (), "text", 6);
 			treeviewHistory.AppendColumn(CommentsColumn);
 			CommentsColumn.AddAttribute(CommentsCell, "text" , 7);
@@ -109,10 +108,9 @@ namespace LeaseAgreement
 			 	"contracts.id as contract_id, contracts.lessee_id as contr_lessee_id, contracts.number as contr_number, " +
 			 	"contracts.start_date as start_date, contracts.end_date as end_date, " +
 				"contracts.cancel_date as cancel_date, contracts.draft FROM contracts " +
+				"LEFT JOIN current_leased_places ON current_leased_places.contract_id = contracts.id " +
 				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
-				"WHERE contracts.place_id = @place_id AND " +
-				"((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
-				"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date))";
+				"WHERE current_leased_places.place_id = @place_id ";
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 			cmd.Parameters.AddWithValue("@place_id", subject.Id);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
@@ -253,7 +251,9 @@ namespace LeaseAgreement
 		{
 			logger.Info("Получаем историю места...");
 			
-			string sql = "SELECT contracts.*, lessees.name as lessee FROM contracts " +
+			string sql = "SELECT contracts.id, contracts.number, contracts.lessee_id, lessees.name as lessee, " +
+				"contract_places.start_date, contract_places.end_date, contracts.comments FROM contract_places " +
+				"LEFT JOIN contracts ON contracts.id = contract_places.contract_id " +
 			 	"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
 				"WHERE place_id = @place_id AND contracts.draft = '0'";
 	        MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
@@ -262,19 +262,14 @@ namespace LeaseAgreement
 			
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 				HistoryStore.Clear ();
-				string Cancel_date;
 				while (rdr.Read ()) {
 					if (rdr.GetInt32 ("id") == ContractId)
 						continue;
-					if (rdr ["cancel_date"] != DBNull.Value)
-						Cancel_date = ((DateTime)rdr ["cancel_date"]).ToShortDateString ();
-					else
-						Cancel_date = "";
 					HistoryStore.AppendValues (rdr.GetInt32 ("id"),
 					                         rdr ["number"].ToString (),
 					                         ((DateTime)rdr ["start_date"]).ToShortDateString (),
 					                         ((DateTime)rdr ["end_date"]).ToShortDateString (),
-					                         Cancel_date,
+					                           default(DateTime), // Удален.
 					                         rdr.GetInt32 ("lessee_id"),
 					                         rdr ["lessee"].ToString (),
 					                         rdr ["comments"].ToString ());
@@ -361,7 +356,7 @@ namespace LeaseAgreement
 		{
 			ContractDlg winContract = new ContractDlg();
 			winContract.Show();
-			winContract.SetPlace (subject.PlaceType, subject.Id);
+			winContract.AddPlace (subject);
 			winContract.Run();
 			winContract.Destroy();
 			FillCurrentContract ();

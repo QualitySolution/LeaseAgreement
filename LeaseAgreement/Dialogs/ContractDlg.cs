@@ -483,13 +483,12 @@ namespace LeaseAgreement
 			winLessee.Destroy ();
 		}
 
-		public bool SetPlace (PlaceType type, int place_id)
+		public bool AddPlace (Place place)
 		{
-			
 			try {
-				//FIXME
-				//comboPlaceT.SelectedItem = DBWorks.FineById (typesList, type.Id);
-				//subject.Place = DBWorks.FineById (placesList, place_id);
+				subject.AddLeassedPlace (new ContractPlace{
+					Place = place
+				});
 				return true;
 			} catch {
 				return false;
