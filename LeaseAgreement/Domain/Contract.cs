@@ -43,13 +43,6 @@ namespace LeaseAgreement.Domain
 			set { SetField(ref category, value, () => Category);}
 		}
 
-		Place place;
-		[Display(Name = "Место")]
-		public virtual Place Place {
-			get { return place;}
-			set { SetField(ref place, value, () => Place);}
-		}
-
 		User responsible;
 
 		[Display (Name = "Ответственный")]

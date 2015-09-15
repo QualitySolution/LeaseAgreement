@@ -221,11 +221,10 @@ namespace LeaseAgreement
 		{
 			bool Numberok = subject.Number != "";
 			bool Orgok = subject.Organization != null;
-			bool Placeok = subject.Place != null;
 			bool Lesseeok = subject.Lessee != null;
 			bool DatesCorrectok = TestCorrectDates (false);
 
-			buttonOk.Sensitive = Numberok && Orgok && Placeok && Lesseeok && DatesCorrectok;
+			buttonOk.Sensitive = Numberok && Orgok && Lesseeok && DatesCorrectok;
 		}
 
 		private void RenderNameColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
@@ -343,6 +342,7 @@ namespace LeaseAgreement
 					trans.Rollback ();
 					return false;
 				}
+/* FIXME
 				if (!subject.Draft) {// Проверка не занято ли место другим арендатором
 					sql = "SELECT id, number, start_date AS start, IFNULL(cancel_date,end_date) AS end FROM contracts " +
 					"WHERE place_id = @place_id AND draft = '0' AND " +
@@ -375,6 +375,7 @@ namespace LeaseAgreement
 						}
 					}
 				}
+*/
 
 				UoW.Save ();
 
@@ -488,7 +489,7 @@ namespace LeaseAgreement
 			try {
 				//FIXME
 				//comboPlaceT.SelectedItem = DBWorks.FineById (typesList, type.Id);
-				subject.Place = DBWorks.FineById (placesList, place_id);
+				//subject.Place = DBWorks.FineById (placesList, place_id);
 				return true;
 			} catch {
 				return false;
