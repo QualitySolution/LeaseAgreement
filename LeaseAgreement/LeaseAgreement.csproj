@@ -137,6 +137,10 @@
     <Compile Include="HibernateMapping\PlaceMap.cs" />
     <Compile Include="HibernateMapping\PlaceTypeMap.cs" />
     <Compile Include="HibernateMapping\OrganizationMap.cs" />
+    <Compile Include="HibernateMapping\LesseeMap.cs" />
+    <Compile Include="HibernateMapping\ContractTypeMap.cs" />
+    <Compile Include="HibernateMapping\ContractCategoryMap.cs" />
+    <Compile Include="HibernateMapping\UserMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
