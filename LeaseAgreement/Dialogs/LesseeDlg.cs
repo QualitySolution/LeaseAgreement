@@ -75,14 +75,14 @@ namespace LeaseAgreement
 									
 			//Создаем таблицу "Договора"
 			ContractsListStore = new Gtk.ListStore (typeof(int), typeof(bool), typeof(string), typeof(string), typeof(string),
-			                                        typeof(int), typeof(string), typeof(string), typeof(string), typeof(string));
+			                                        typeof(int), typeof(string), typeof(int), typeof(string), typeof(string));
 
 			treeviewContracts.AppendColumn ("Акт.", new Gtk.CellRendererToggle (), "active", 1);
 			treeviewContracts.AppendColumn ("с", new Gtk.CellRendererText (), "text", 2);
 			treeviewContracts.AppendColumn ("по", new Gtk.CellRendererText (), "text", 3);
 			treeviewContracts.AppendColumn ("Договор", new Gtk.CellRendererText (), "text", 4);
-			treeviewContracts.AppendColumn ("Место", new Gtk.CellRendererText (), "text", 7);
-			treeviewContracts.AppendColumn ("Площадь", new Gtk.CellRendererText (), "text", 8);
+			treeviewContracts.AppendColumn ("Количество мест", new Gtk.CellRendererText (), "text", 7);
+			treeviewContracts.AppendColumn ("Суммарная площадь", new Gtk.CellRendererText (), "text", 8);
 			treeviewContracts.AppendColumn ("Расторгнут", new Gtk.CellRendererText (), "text", 9);
 			
 			treeviewContracts.Model = ContractsListStore;
@@ -218,13 +218,14 @@ namespace LeaseAgreement
 		{
 			logger.Info ("Получаем таблицу договоров...");
 			
-			string sql = "SELECT contracts.*, places.place_no, places.type_id as place_type_id, place_types.name as type, places.area as area FROM contracts " +
-			             "LEFT JOIN places ON places.id = contracts.place_id " +
-						"LEFT JOIN place_types ON places.type_id = place_types.id " +
+			string sql = "SELECT contracts.*, COUNT(contract_places.id) as place_count, SUM(places.area) as area FROM contracts " +
+				"LEFT JOIN contract_places ON contract_places.contract_id = contracts.id " +
+			             "LEFT JOIN places ON places.id = contract_places.place_id " +
 			             "WHERE contracts.lessee_id = @lessee AND contracts.draft = '0'";
 			if (checkActiveContracts.Active)
 				sql += " AND ((contracts.cancel_date IS NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.end_date) " +
 				"OR (contracts.cancel_date IS NOT NULL AND CURDATE() BETWEEN contracts.start_date AND contracts.cancel_date)) ";
+			sql += " GROUP BY contracts.id";
 			
 			MySqlCommand cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
 	
@@ -248,9 +249,9 @@ namespace LeaseAgreement
 					                                 ((DateTime)rdr ["start_date"]).ToShortDateString (),
 					                                 ((DateTime)rdr ["end_date"]).ToShortDateString (),
 					                                 rdr ["number"].ToString (),
-					                                 rdr.GetInt32 ("place_type_id"),
-					                                 rdr ["place_no"].ToString (),
-					                                 rdr ["type"].ToString () + " - " + rdr ["place_no"].ToString (),				                             
+					                                 0, //удалено.
+					                                 String.Empty, //удалено.
+					                                 rdr.GetInt32 ("place_count"),
 					                                 rdr ["area"].ToString (),
 					                                 cancel_date);
 				}
@@ -266,10 +267,6 @@ namespace LeaseAgreement
 			MenuItemOpenContract.Activated += new EventHandler (OnContractsOpenContract);
 			MenuItemOpenContract.Sensitive = ItemSelected;
 			popupBox.Add (MenuItemOpenContract);           
-			Gtk.MenuItem MenuItemOpenPlace = new MenuItem ("Открыть место");
-			MenuItemOpenPlace.Activated += new EventHandler (OnContractsOpenPlace);
-			MenuItemOpenPlace.Sensitive = ItemSelected;
-			popupBox.Add (MenuItemOpenPlace);         
 			popupBox.ShowAll ();
 			popupBox.Popup ();
 		}
@@ -294,22 +291,6 @@ namespace LeaseAgreement
 			winContract.Run ();
 			winContract.Destroy ();
 			UpdateContracts ();
-		}
-
-		protected virtual void OnContractsOpenPlace (object o, EventArgs args)
-		{
-			int type;
-			string place;
-			TreeIter iter;
-			
-			treeviewContracts.Selection.GetSelected (out iter);
-			type = Convert.ToInt32 (ContractsListStore.GetValue (iter, 5));
-			place = (string)ContractsListStore.GetValue (iter, 6);
-			PlaceDlg winPlace = new PlaceDlg ();
-			winPlace.Fill (type, place);
-			winPlace.Show ();
-			winPlace.Run ();
-			winPlace.Destroy ();
 		}
 
 		protected void OnCheckActiveContractsToggled (object sender, EventArgs e)
