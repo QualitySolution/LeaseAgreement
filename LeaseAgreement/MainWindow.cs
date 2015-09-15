@@ -122,8 +122,7 @@ public partial class MainWindow : Gtk.Window
 		case 2:
 			treeviewContract.Selection.GetSelected (out iter);
 			itemid = (int)ContractSort.GetValue (iter, (int)ContractCol.id);
-			ContractDlg winContract = new ContractDlg ();
-			winContract.Fill (itemid);
+			ContractDlg winContract = new ContractDlg (itemid);
 			winContract.Show ();
 			result = (ResponseType)winContract.Run ();
 			winContract.Destroy ();
@@ -439,8 +438,7 @@ public partial class MainWindow : Gtk.Window
 		case 2:
 			treeviewContract.Selection.GetSelected (out iter);
 			itemid = (int)ContractSort.GetValue (iter, (int)ContractCol.id);
-			ContractDlg winContract = new ContractDlg ();
-			winContract.Fill (itemid, true);
+			ContractDlg winContract = new ContractDlg (itemid, true);
 			winContract.Show ();
 			result = (ResponseType)winContract.Run ();
 			winContract.Destroy ();

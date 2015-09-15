@@ -211,9 +211,9 @@ namespace LeaseAgreement
 				System.Reflection.Assembly.GetAssembly (typeof(MainClass))
 			});
 
-/*			OrmMain.ClassMappingList = new List<IOrmObjectMapping> {
-				new OrmObjectMapping<Domain.Bug.BugReport> (typeof(BugReportDlg))
+			OrmMain.ClassMappingList = new List<IOrmObjectMapping> {
+				new OrmObjectMapping<Lessee> (typeof(LesseeDlg), "{LeaseAgreement.Domain.Lessee} Name[Название];")
 			};
-*/		}
+		}
 	}
 }

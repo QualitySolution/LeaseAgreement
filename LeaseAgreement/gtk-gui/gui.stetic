@@ -15,6 +15,7 @@
     <widget-library name="../../../QSProjects/QSHistoryLog/bin/Debug/QSHistoryLog.dll" />
     <widget-library name="../../../QSProjects/QSUpdater/bin/Debug/QSUpdater.dll" />
     <widget-library name="../bin/Debug/LeaseAgreement.exe" internal="true" />
+    <widget-library name="../../../QSProjects/QSTDI/bin/Debug/QSTDI.dll" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="875 590">
     <action-group name="Default">
@@ -3486,7 +3487,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.ContractDlg" design-size="850 383">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.ContractDlg" design-size="882 383">
     <action-group name="Default" />
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новый договор</property>
@@ -3501,7 +3502,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">1</property>
+            <property name="CurrentPage">2</property>
             <property name="TabPos">Left</property>
             <child>
               <widget class="Gtk.HBox" id="hboxInfo">
@@ -3510,7 +3511,7 @@
                 <child>
                   <widget class="Gtk.DataBindings.DataTable" id="table2">
                     <property name="MemberName" />
-                    <property name="NRows">8</property>
+                    <property name="NRows">7</property>
                     <property name="NColumns">2</property>
                     <property name="RowSpacing">6</property>
                     <property name="ColumnSpacing">6</property>
@@ -3552,14 +3553,10 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboCategory">
+                      <widget class="Gamma.Widgets.ySpecComboBox" id="comboCategory">
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
-                        <property name="ColumnMappings">Name</property>
-                        <property name="InheritedDataSource">True</property>
-                        <property name="Mappings">Category</property>
-                        <property name="InheritedBoundaryDataSource">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                       </widget>
@@ -3580,14 +3577,10 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboContractType">
+                      <widget class="Gamma.Widgets.ySpecComboBox" id="comboContractType">
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
-                        <property name="ColumnMappings">Name</property>
-                        <property name="InheritedDataSource">True</property>
-                        <property name="Mappings">ContractType</property>
-                        <property name="InheritedBoundaryDataSource">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboContractTypeChanged" />
@@ -3609,21 +3602,17 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboOrg">
+                      <widget class="Gamma.Widgets.ySpecComboBox" id="comboOrg">
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
-                        <property name="ColumnMappings">Name</property>
-                        <property name="InheritedDataSource">True</property>
-                        <property name="Mappings">Organization</property>
-                        <property name="InheritedBoundaryDataSource">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboOrgChanged" />
                       </widget>
                       <packing>
-                        <property name="TopAttach">5</property>
-                        <property name="BottomAttach">6</property>
+                        <property name="TopAttach">4</property>
+                        <property name="BottomAttach">5</property>
                         <property name="LeftAttach">1</property>
                         <property name="RightAttach">2</property>
                         <property name="AutoSize">True</property>
@@ -3649,8 +3638,8 @@
                         <property name="InheritedBoundaryDataSource">False</property>
                       </widget>
                       <packing>
-                        <property name="TopAttach">7</property>
-                        <property name="BottomAttach">8</property>
+                        <property name="TopAttach">6</property>
+                        <property name="BottomAttach">7</property>
                         <property name="LeftAttach">1</property>
                         <property name="RightAttach">2</property>
                         <property name="AutoSize">False</property>
@@ -3686,161 +3675,6 @@
                         <property name="AutoSize">False</property>
                         <property name="YOptions">Fill</property>
                         <property name="XExpand">True</property>
-                        <property name="XFill">True</property>
-                        <property name="XShrink">False</property>
-                        <property name="YExpand">False</property>
-                        <property name="YFill">True</property>
-                        <property name="YShrink">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="Gtk.HBox" id="hbox1">
-                        <property name="MemberName" />
-                        <property name="Spacing">6</property>
-                        <child>
-                          <widget class="Gtk.Entry" id="entryLessee">
-                            <property name="MemberName" />
-                            <property name="CanFocus">True</property>
-                            <property name="IsEditable">False</property>
-                            <property name="InvisibleChar">•</property>
-                          </widget>
-                          <packing>
-                            <property name="Position">0</property>
-                            <property name="AutoSize">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.Button" id="buttonLesseeOpen">
-                            <property name="MemberName" />
-                            <property name="Sensitive">False</property>
-                            <property name="Tooltip" translatable="yes">Открыть текущего арендатора</property>
-                            <property name="CanFocus">True</property>
-                            <property name="Type">TextAndIcon</property>
-                            <property name="Icon">stock:gtk-open Menu</property>
-                            <property name="Label" translatable="yes" />
-                            <property name="UseUnderline">True</property>
-                            <signal name="Clicked" handler="OnButtonLesseeOpenClicked" />
-                          </widget>
-                          <packing>
-                            <property name="Position">1</property>
-                            <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.Button" id="buttonLesseeEdit">
-                            <property name="MemberName" />
-                            <property name="Tooltip" translatable="yes">Изменить арендатора</property>
-                            <property name="CanFocus">True</property>
-                            <property name="Type">TextAndIcon</property>
-                            <property name="Icon">stock:gtk-edit Menu</property>
-                            <property name="Label" translatable="yes" />
-                            <property name="UseUnderline">True</property>
-                            <signal name="Clicked" handler="OnButtonLesseeEditClicked" />
-                          </widget>
-                          <packing>
-                            <property name="Position">2</property>
-                            <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="TopAttach">6</property>
-                        <property name="BottomAttach">7</property>
-                        <property name="LeftAttach">1</property>
-                        <property name="RightAttach">2</property>
-                        <property name="AutoSize">True</property>
-                        <property name="XOptions">Fill</property>
-                        <property name="YOptions">Fill</property>
-                        <property name="XExpand">False</property>
-                        <property name="XFill">True</property>
-                        <property name="XShrink">False</property>
-                        <property name="YExpand">False</property>
-                        <property name="YFill">True</property>
-                        <property name="YShrink">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="Gtk.HBox" id="hbox5">
-                        <property name="MemberName" />
-                        <property name="Spacing">6</property>
-                        <child>
-                          <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboPlaceT">
-                            <property name="MemberName" />
-                            <property name="IsTextCombo">False</property>
-                            <property name="Items" translatable="yes" />
-                            <property name="ColumnMappings">Name</property>
-                            <property name="InheritedDataSource">False</property>
-                            <property name="InheritedBoundaryDataSource">False</property>
-                            <property name="ShowSpecialStateAll">False</property>
-                            <property name="ShowSpecialStateNot">True</property>
-                            <signal name="Changed" handler="OnComboPlaceTChanged" />
-                          </widget>
-                          <packing>
-                            <property name="Position">0</property>
-                            <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.Label" id="label1">
-                            <property name="MemberName" />
-                            <property name="LabelProp" translatable="yes">-</property>
-                          </widget>
-                          <packing>
-                            <property name="Position">1</property>
-                            <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboPlaceNo">
-                            <property name="MemberName" />
-                            <property name="IsTextCombo">False</property>
-                            <property name="Items" translatable="yes" />
-                            <property name="ColumnMappings">PlaceNumber</property>
-                            <property name="InheritedDataSource">True</property>
-                            <property name="Mappings">Place</property>
-                            <property name="InheritedBoundaryDataSource">False</property>
-                            <property name="ShowSpecialStateAll">False</property>
-                            <property name="ShowSpecialStateNot">True</property>
-                            <signal name="Changed" handler="OnComboPlaceNoChanged" />
-                          </widget>
-                          <packing>
-                            <property name="Position">2</property>
-                            <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.Label" id="labelArea">
-                            <property name="MemberName" />
-                            <property name="Tooltip" translatable="yes">Площадь</property>
-                            <property name="UseMarkup">True</property>
-                          </widget>
-                          <packing>
-                            <property name="PackType">End</property>
-                            <property name="Position">3</property>
-                            <property name="AutoSize">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="TopAttach">4</property>
-                        <property name="BottomAttach">5</property>
-                        <property name="LeftAttach">1</property>
-                        <property name="RightAttach">2</property>
-                        <property name="AutoSize">True</property>
-                        <property name="XOptions">Fill</property>
-                        <property name="YOptions">Fill</property>
-                        <property name="XExpand">False</property>
                         <property name="XFill">True</property>
                         <property name="XShrink">False</property>
                         <property name="YExpand">False</property>
@@ -3935,27 +3769,6 @@
                         <property name="UseMarkup">True</property>
                       </widget>
                       <packing>
-                        <property name="TopAttach">5</property>
-                        <property name="BottomAttach">6</property>
-                        <property name="AutoSize">True</property>
-                        <property name="XOptions">Fill</property>
-                        <property name="YOptions">Fill</property>
-                        <property name="XExpand">False</property>
-                        <property name="XFill">True</property>
-                        <property name="XShrink">False</property>
-                        <property name="YExpand">False</property>
-                        <property name="YFill">True</property>
-                        <property name="YShrink">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="Gtk.Label" id="label7">
-                        <property name="MemberName" />
-                        <property name="Xalign">1</property>
-                        <property name="LabelProp" translatable="yes">Место&lt;span foreground="red"&gt;*&lt;/span&gt;:</property>
-                        <property name="UseMarkup">True</property>
-                      </widget>
-                      <packing>
                         <property name="TopAttach">4</property>
                         <property name="BottomAttach">5</property>
                         <property name="AutoSize">True</property>
@@ -3977,8 +3790,8 @@
                         <property name="UseMarkup">True</property>
                       </widget>
                       <packing>
-                        <property name="TopAttach">6</property>
-                        <property name="BottomAttach">7</property>
+                        <property name="TopAttach">5</property>
+                        <property name="BottomAttach">6</property>
                         <property name="AutoSize">True</property>
                         <property name="XOptions">Fill</property>
                         <property name="YOptions">Fill</property>
@@ -3997,8 +3810,29 @@
                         <property name="LabelProp" translatable="yes">Дата подписания:</property>
                       </widget>
                       <packing>
-                        <property name="TopAttach">7</property>
-                        <property name="BottomAttach">8</property>
+                        <property name="TopAttach">6</property>
+                        <property name="BottomAttach">7</property>
+                        <property name="AutoSize">True</property>
+                        <property name="XOptions">Fill</property>
+                        <property name="YOptions">Fill</property>
+                        <property name="XExpand">False</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">False</property>
+                        <property name="YFill">True</property>
+                        <property name="YShrink">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gamma.Widgets.yEntryReference" id="yentryreferenceLessee">
+                        <property name="MemberName" />
+                        <property name="Events">ButtonPressMask</property>
+                      </widget>
+                      <packing>
+                        <property name="TopAttach">5</property>
+                        <property name="BottomAttach">6</property>
+                        <property name="LeftAttach">1</property>
+                        <property name="RightAttach">2</property>
                         <property name="AutoSize">True</property>
                         <property name="XOptions">Fill</property>
                         <property name="YOptions">Fill</property>
@@ -4034,14 +3868,10 @@
                         <property name="InheritedDataSource">False</property>
                         <property name="InheritedBoundaryDataSource">False</property>
                         <child>
-                          <widget class="Gtk.DataBindings.DataSpecComboBox" id="comboResponsible">
+                          <widget class="Gamma.Widgets.ySpecComboBox" id="comboResponsible">
                             <property name="MemberName" />
                             <property name="IsTextCombo">False</property>
                             <property name="Items" translatable="yes" />
-                            <property name="ColumnMappings">Name</property>
-                            <property name="InheritedDataSource">True</property>
-                            <property name="Mappings">Responsible</property>
-                            <property name="InheritedBoundaryDataSource">False</property>
                             <property name="ShowSpecialStateAll">False</property>
                             <property name="ShowSpecialStateNot">False</property>
                           </widget>
@@ -4049,9 +3879,8 @@
                             <property name="LeftAttach">1</property>
                             <property name="RightAttach">2</property>
                             <property name="AutoSize">False</property>
-                            <property name="XOptions">Fill</property>
                             <property name="YOptions">Fill</property>
-                            <property name="XExpand">False</property>
+                            <property name="XExpand">True</property>
                             <property name="XFill">True</property>
                             <property name="XShrink">False</property>
                             <property name="YExpand">False</property>
@@ -4351,7 +4180,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
+                  <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow2">
                     <property name="MemberName" />
                     <property name="ShadowType">In</property>
                     <child>
@@ -4370,7 +4199,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="Gtk.HBox" id="hbox8">
+                  <widget class="Gtk.HBox" id="hbox9">
                     <property name="MemberName" />
                     <property name="Spacing">6</property>
                     <child>

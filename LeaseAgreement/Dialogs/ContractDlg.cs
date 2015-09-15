@@ -8,27 +8,34 @@ using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using NLog;
 using QSProjectsLib;
+using QSOrmProject;
 
 namespace LeaseAgreement
 {
 	public partial class ContractDlg : Gtk.Dialog
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
-		private bool NewContract = true;
-		private Contract subject = new Contract ();
+		private Contract subject;
 		private Adaptor adaptorContract = new Adaptor ();
 		private QSHistoryLog.ObjectTracker<Contract> tracker;
+
+		private IUnitOfWorkGeneric<Contract> UoW;
 
 		private ListStore DocPatterns;
 		private List<int> deletedDocItems;
 		private List<FileSystemWatcher> watchers;
 
 		private List<Organization> orgList;
-		private List<PlaceType> typesList;
 		private List<Place> placesList;
 		private List<ContractCategory> categoryList;
 		private List<ContractType> contrTypeList;
 		private List<User> userList;
+
+		private bool NewContract {
+			get {
+				return UoW.IsNew;
+			}
+		}
 
 		enum DocPatternCol
 		{
@@ -44,6 +51,14 @@ namespace LeaseAgreement
 		public ContractDlg ()
 		{
 			this.Build ();
+			PrepareDlg ();
+			UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract> ();
+			subject = UoW.Root;
+			ConfigureDlg ();
+		}
+
+		private void PrepareDlg()
+		{
 			deletedDocItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
 			DocPatterns = new ListStore (typeof(int), typeof(int), typeof(string), typeof(bool), typeof(int), typeof(byte[]), typeof(bool));
@@ -91,13 +106,22 @@ namespace LeaseAgreement
 			box.ShowAll ();
 			notebookMain.SetTabLabel (attachmentFiles, box);
 
-			comboOrg.ItemsDataSource = orgList = Organization.LoadList ();
-			comboCategory.ItemsDataSource = categoryList = ContractCategory.LoadList ();
-			comboContractType.ItemsDataSource = contrTypeList = ContractType.LoadList ();
-			comboPlaceT.ItemsDataSource = typesList = PlaceType.LoadList ();
+			comboOrg.ItemsList = orgList = Organization.LoadList ();
+			comboCategory.ItemsList = categoryList = ContractCategory.LoadList ();
+			comboContractType.ItemsList = contrTypeList = ContractType.LoadList ();
 
-			comboResponsible.ItemsDataSource = userList = User.LoadList ();
-			subject.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
+			comboResponsible.ItemsList = userList = User.LoadList ();
+		}
+
+		private void ConfigureDlg()
+		{
+			yentryreferenceLessee.SubjectType = typeof(Lessee);
+			yentryreferenceLessee.Binding.AddBinding (subject, s => s.Lessee, w => w.Subject).InitializeFromSource ();
+
+			comboCategory.Binding.AddBinding (subject, s => s.Category, w => w.SelectedItem).InitializeFromSource ();
+			comboContractType.Binding.AddBinding (subject, s => s.ContractType, w => w.SelectedItem).InitializeFromSource ();
+			comboOrg.Binding.AddBinding (subject, s => s.Organization, w => w.SelectedItem).InitializeFromSource ();
+			comboResponsible.Binding.AddBinding (subject, s => s.Responsible, w => w.SelectedItem).InitializeFromSource ();
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 			subject.Customs = customContracts.FieldsValues;
@@ -127,62 +151,34 @@ namespace LeaseAgreement
 			tracker = new QSHistoryLog.ObjectTracker<Contract> (subject);
 		}
 
-		public void Fill (int Id, bool copy = false)
+		public ContractDlg (int Id, bool copy = false)
 		{
-			NewContract = copy;
-			if (!copy)
-				subject.Id = Id;
-			
+			this.Build ();
+			PrepareDlg ();
 			logger.Info ("Запрос договора ID:{0}...", Id);
-			string sql = "SELECT contracts.*, places.type_id as place_type_id FROM contracts " +
-			             "LEFT JOIN places ON places.id = contracts.place_id " +
-			             "WHERE contracts.id = @id";
+			if (copy)
+			{
+				var tempUow = UnitOfWorkFactory.CreateWithoutRoot ();
+				var copedContract = tempUow.GetById<Contract> (Id);
+				tempUow.Session.Evict (copedContract);
+				copedContract.Id = 0;
+
+				UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract>(copedContract);
+				UoW.Root.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
+				UoW.Root.StartDate = UoW.Root.EndDate.Value.AddDays (1);
+				UoW.Root.SignDate = UoW.Root.CancelDate = UoW.Root.EndDate = null;
+			}
+			else
+			{
+				UoW = UnitOfWorkFactory.CreateForRoot<Contract> (Id);
+			}
+			subject = UoW.Root;
+
 			try {
-				MySqlCommand cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
-				
-				cmd.Parameters.AddWithValue ("@id", Id);
-				object dbPlace, dbPlaceTypeId, dbLessee, dbContractTypeId;
-
-				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
-					rdr.Read ();
-					
-					subject.Number = rdr ["number"].ToString ();
-					subject.Draft = rdr.GetBoolean ("draft");
-					subject.Category = DBWorks.FineById (categoryList, rdr ["category_id"]);
-					if (!copy)
-						subject.Responsible = DBWorks.FineById (userList, rdr ["responsible_id"]);
-
-					if (copy) {
-						subject.StartDate = rdr.GetDateTime ("end_date").AddDays (1);
-					} else {
-						subject.SignDate = DBWorks.GetDateTime (rdr, "sign_date", default(DateTime));
-						subject.StartDate = rdr.GetDateTime ("start_date");
-						subject.EndDate = rdr.GetDateTime ("end_date");
-						subject.CancelDate = DBWorks.GetDateTime (rdr, "cancel_date", default(DateTime));
-					}
-
-					subject.Organization = DBWorks.FineById (orgList, rdr ["org_id"]);
-					subject.Comments = rdr ["comments"].ToString ();
-
-					//запоминаем переменные что бы освободить соединение
-					dbPlace = rdr ["place_id"];
-					dbPlaceTypeId = rdr ["place_type_id"];
-					dbLessee = rdr ["lessee_id"];
-					dbContractTypeId = rdr ["contract_type_id"];
-				}
-
-				if (dbLessee != DBNull.Value) {
-					subject.Lessee = Lessee.Load (Convert.ToInt32 (dbLessee));
-					entryLessee.Text = subject.Lessee.Name;
-					entryLessee.TooltipText = subject.Lessee.FullName;
-				}
-
-				comboPlaceT.SelectedItem = DBWorks.FineById (typesList, dbPlaceTypeId);
-				comboPlaceNo.SelectedItem = DBWorks.FineById (placesList, dbPlace);
 
 				logger.Info ("Загружаем исправленные шаблоны...");
-				sql = "SELECT id, pattern_id, name, size, pattern FROM contract_docs WHERE contract_id = @contract_id ";
-				cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
+				string sql = "SELECT id, pattern_id, name, size, pattern FROM contract_docs WHERE contract_id = @contract_id ";
+				MySqlCommand cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
 				cmd.Parameters.AddWithValue ("@contract_id", Id);
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 					while (rdr.Read ()) {
@@ -199,7 +195,6 @@ namespace LeaseAgreement
 						);
 					}
 				}
-				subject.ContractType = DBWorks.FineById (contrTypeList, dbContractTypeId);
 
 				customContracts.LoadDataFromDB (Id);
 				subject.Customs = customContracts.FieldsValues;
@@ -218,15 +213,7 @@ namespace LeaseAgreement
 				logger.Error (ex, "Ошибка получения информации о договоре!");
 				QSMain.ErrorMessage (this, ex);
 			}
-			TestCanSave ();
-		}
-
-		protected void OnComboPlaceTChanged (object sender, EventArgs e)
-		{
-			if (comboPlaceT.SelectedItem is PlaceType)
-				comboPlaceNo.ItemsDataSource = placesList = Place.LoadList (comboPlaceT.SelectedItem as PlaceType);
-			else
-				comboPlaceNo.ItemsDataSource = null;
+			ConfigureDlg ();
 			TestCanSave ();
 		}
 
@@ -238,7 +225,6 @@ namespace LeaseAgreement
 			bool Lesseeok = subject.Lessee != null;
 			bool DatesCorrectok = TestCorrectDates (false);
 
-			buttonLesseeOpen.Sensitive = Lesseeok;
 			buttonOk.Sensitive = Numberok && Orgok && Placeok && Lesseeok && DatesCorrectok;
 		}
 
@@ -282,7 +268,7 @@ namespace LeaseAgreement
 			bool DateCancelok = false;
 			bool DatesIsEmpty = subject.StartDate == default(DateTime) || subject.EndDate == default(DateTime);
 			if (!DatesIsEmpty)
-				DateCorrectok = subject.EndDate.CompareTo (subject.StartDate) > 0;
+				DateCorrectok = subject.EndDate.Value.CompareTo (subject.StartDate) > 0;
 			if (subject.CancelDate == default(DateTime))
 				DateCancelok = true;
 			else
@@ -313,33 +299,6 @@ namespace LeaseAgreement
 
 		protected void OnComboOrgChanged (object sender, EventArgs e)
 		{
-			TestCanSave ();
-		}
-
-		protected void OnComboPlaceNoChanged (object sender, EventArgs e)
-		{
-			if (comboPlaceNo.SelectedItem is Place) {
-				var place = comboPlaceNo.SelectedItem as Place;
-				if(NewContract)
-					subject.Organization = place.Organization != null ? DBWorks.FineById (orgList, place.Organization.Id) : null;
-				labelArea.LabelProp = String.Format ("{0} м<sup>2</sup>", place.Area);
-			}
-			TestCanSave ();
-		}
-
-		protected void OnButtonLesseeEditClicked (object sender, EventArgs e)
-		{
-			Reference LesseeSelect = new Reference ();
-			LesseeSelect.SetMode (false, true, true, true, false);
-			LesseeSelect.FillList ("lessees", "Арендатор", "Арендаторы");
-			LesseeSelect.Show ();
-			int result = LesseeSelect.Run ();
-			if ((ResponseType)result == ResponseType.Ok) {
-				subject.Lessee = Lessee.Load (LesseeSelect.SelectedID);
-				entryLessee.Text = subject.Lessee.Name;
-				entryLessee.TooltipText = subject.Lessee.FullName;
-			}
-			LesseeSelect.Destroy ();
 			TestCanSave ();
 		}
 
@@ -416,38 +375,9 @@ namespace LeaseAgreement
 						}
 					}
 				}
-				// записываем
-				if (NewContract) {
-					sql = "INSERT INTO contracts (number, draft, lessee_id, org_id, place_id, sign_date, " +
-					"start_date, end_date, contract_type_id, category_id, responsible_id, cancel_date, comments) " +
-					"VALUES (@number, @draft, @lessee_id, @org_id, @place_id, @sign_date, " +
-					"@start_date, @end_date, @contract_type_id, @category_id, @responsible_id, @cancel_date, @comments)";
-				} else {
-					sql = "UPDATE contracts SET number = @number, draft = @draft, lessee_id = @lessee_id, org_id = @org_id, " +
-					"place_id = @place_id, sign_date = @sign_date, start_date = @start_date, " +
-					"end_date = @end_date, contract_type_id = @contract_type_id, category_id = @category_id, " +
-					"responsible_id = @responsible_id, cancel_date = @cancel_date, comments = @comments " +
-					"WHERE id = @id";
-				}
 
-				cmd = new MySqlCommand (sql, QSMain.connectionDB, trans);
+				UoW.Save ();
 
-				cmd.Parameters.AddWithValue ("@id", subject.Id);
-				cmd.Parameters.AddWithValue ("@draft", subject.Draft);
-				cmd.Parameters.AddWithValue ("@number", subject.Number);
-				cmd.Parameters.AddWithValue ("@lessee_id", subject.Lessee.Id);
-				cmd.Parameters.AddWithValue ("@contract_type_id", DBWorks.IdPropertyOrNull (subject.ContractType));
-				cmd.Parameters.AddWithValue ("@responsible_id", DBWorks.IdPropertyOrNull (subject.Responsible));
-				cmd.Parameters.AddWithValue ("@category_id", DBWorks.IdPropertyOrNull (subject.Category));
-				cmd.Parameters.AddWithValue ("@org_id", DBWorks.IdPropertyOrNull (subject.Organization));
-				cmd.Parameters.AddWithValue ("@place_id", DBWorks.ValueOrNull (subject.Place != null, subject.Place.Id));
-				cmd.Parameters.AddWithValue ("@sign_date", DBWorks.ValueOrNull (subject.SignDate != default(DateTime), subject.SignDate));
-				cmd.Parameters.AddWithValue ("@start_date", DBWorks.ValueOrNull (subject.StartDate != default(DateTime), subject.StartDate));
-				cmd.Parameters.AddWithValue ("@end_date", DBWorks.ValueOrNull (subject.EndDate != default(DateTime), subject.EndDate));
-				cmd.Parameters.AddWithValue ("@cancel_date", DBWorks.ValueOrNull (subject.CancelDate != default(DateTime), subject.CancelDate));
-				cmd.Parameters.AddWithValue ("@comments", DBWorks.ValueOrNull (!String.IsNullOrEmpty (subject.Comments), subject.Comments));
-				
-				cmd.ExecuteNonQuery ();
 				if (NewContract) {
 					attachmentFiles.ItemId = customContracts.ObjectId
 						= tracker.ObjectId = subject.Id = (int)cmd.LastInsertedId;
@@ -520,7 +450,6 @@ namespace LeaseAgreement
 
 				tracker.SaveChangeSet (trans);
 
-				NewContract = false;
 				trans.Commit ();
 				logger.Info ("Ok");
 				return true;
@@ -555,8 +484,10 @@ namespace LeaseAgreement
 
 		public bool SetPlace (PlaceType type, int place_id)
 		{
+			
 			try {
-				comboPlaceT.SelectedItem = DBWorks.FineById (typesList, type.Id);
+				//FIXME
+				//comboPlaceT.SelectedItem = DBWorks.FineById (typesList, type.Id);
 				subject.Place = DBWorks.FineById (placesList, place_id);
 				return true;
 			} catch {

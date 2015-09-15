@@ -289,8 +289,7 @@ namespace LeaseAgreement
 			
 			treeviewContracts.Selection.GetSelected (out iter);
 			itemid = (int)ContractsListStore.GetValue (iter, 0);
-			ContractDlg winContract = new ContractDlg ();
-			winContract.Fill (itemid);
+			ContractDlg winContract = new ContractDlg (itemid);
 			winContract.Show ();
 			winContract.Run ();
 			winContract.Destroy ();

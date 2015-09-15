@@ -8,7 +8,7 @@ using System.Data.Bindings.Collections.Generic;
 namespace LeaseAgreement.Domain
 {
 	[OrmSubject (ObjectName = "Договор")]
-	public class Contract : PropertyChangedBase
+	public class Contract : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id { get; set; }
 
@@ -66,31 +66,31 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref lessee, value, () => Lessee); }
 		}
 
-		DateTime startDate;
+		DateTime? startDate;
 
 		[Display (Name = "Дата начала")]
-		public virtual DateTime StartDate {
+		public virtual DateTime? StartDate {
 			get { return startDate; }
 			set { SetField (ref startDate, value, () => StartDate); }
 		}
 
-		DateTime endDate;
+		DateTime? endDate;
 		[Display(Name = "Дата окончания")]
-		public virtual DateTime EndDate {
+		public virtual DateTime? EndDate {
 			get { return endDate;}
 			set { SetField(ref endDate, value, () => EndDate);}
 		}
 
-		DateTime signDate;
+		DateTime? signDate;
 		[Display(Name = "Дата подписания")]
-		public virtual DateTime SignDate {
+		public virtual DateTime? SignDate {
 			get { return signDate;}
 			set { SetField(ref signDate, value, () => SignDate);}
 		}
 
-		DateTime cancelDate;
+		DateTime? cancelDate;
 		[Display(Name = "Дата расторжения")]
-		public virtual DateTime CancelDate {
+		public virtual DateTime? CancelDate {
 			get { return cancelDate;}
 			set { SetField(ref cancelDate, value, () => CancelDate);}
 		}
