@@ -19,9 +19,14 @@
 			<OnStatment>contracts.lessee_id = lessees.id</OnStatment>
 		</PatternTable>
 		<PatternTable>
-			<DBTable>places</DBTable>
+			<DBTable>contract_places</DBTable>
 			<DependsOn>contracts</DependsOn>
-			<OnStatment>contracts.place_id = places.id</OnStatment>
+			<OnStatment>contract_places.contract_id = contracts.id</OnStatment>
+		</PatternTable>
+		<PatternTable>
+			<DBTable>places</DBTable>
+			<DependsOn>contract_places</DependsOn>
+			<OnStatment>contract_places.place_id = places.id</OnStatment>
 		</PatternTable>
 		<PatternTable>
 			<DBTable>place_types</DBTable>
