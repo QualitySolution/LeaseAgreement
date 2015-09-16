@@ -27,12 +27,6 @@ namespace LeaseAgreement
 
 		private List<User> userList;
 
-		private bool NewContract {
-			get {
-				return UoW.IsNew;
-			}
-		}
-
 		protected Contract Subject {
 			get {
 				return subject;
@@ -331,6 +325,8 @@ namespace LeaseAgreement
 			}
 
 			logger.Info ("Запись договора...");
+			bool contractWasNew = UoW.IsNew;
+
 			MySqlTransaction trans = (MySqlTransaction)QSMain.ConnectionDB.BeginTransaction ();
 			try {
 				// Проверка номера договора на дубликат
@@ -390,9 +386,9 @@ namespace LeaseAgreement
 
 				UoW.Save ();
 
-				if (NewContract) {
+				if (contractWasNew) {
 					attachmentFiles.ItemId = customContracts.ObjectId
-						= tracker.ObjectId = Subject.Id = (int)cmd.LastInsertedId;
+						= tracker.ObjectId = Subject.Id;
 				}
 				customContracts.SaveToDB (trans);
 				attachmentFiles.SaveChanges (trans);
@@ -590,7 +586,7 @@ namespace LeaseAgreement
 
 		private bool SaveIfNeed ()
 		{
-			if (!NewContract)
+			if (!UoW.IsNew)
 				return SaveContract ();
 
 			MessageDialog md = new MessageDialog (this, DialogFlags.Modal,
