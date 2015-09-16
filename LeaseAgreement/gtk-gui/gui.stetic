@@ -3502,7 +3502,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">2</property>
+            <property name="CurrentPage">0</property>
             <property name="TabPos">Left</property>
             <child>
               <widget class="Gtk.HBox" id="hboxInfo">
@@ -3627,15 +3627,12 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="QSOrmProject.DataDatePicker" id="datepickerSign">
+                      <widget class="Gamma.Widgets.yDatePicker" id="datepickerSign">
                         <property name="MemberName" />
                         <property name="Events">ButtonPressMask</property>
                         <property name="Date">0</property>
                         <property name="IsEditable">True</property>
                         <property name="AutoSeparation">True</property>
-                        <property name="InheritedDataSource">True</property>
-                        <property name="Mappings">SignDate</property>
-                        <property name="InheritedBoundaryDataSource">False</property>
                       </widget>
                       <packing>
                         <property name="TopAttach">6</property>
@@ -3889,15 +3886,12 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="QSOrmProject.DataDatePicker" id="datepickerCancel">
+                          <widget class="Gamma.Widgets.yDatePicker" id="datepickerCancel">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
-                            <property name="InheritedDataSource">True</property>
-                            <property name="Mappings">CancelDate</property>
-                            <property name="InheritedBoundaryDataSource">False</property>
                             <signal name="DateChanged" handler="OnDatepickerCancelDateChanged" />
                           </widget>
                           <packing>
@@ -3917,15 +3911,12 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="QSOrmProject.DataDatePicker" id="datepickerEnd">
+                          <widget class="Gamma.Widgets.yDatePicker" id="datepickerEnd">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
-                            <property name="InheritedDataSource">True</property>
-                            <property name="Mappings">EndDate</property>
-                            <property name="InheritedBoundaryDataSource">False</property>
                             <signal name="DateChanged" handler="OnDatepickerEndDateChanged" />
                           </widget>
                           <packing>
@@ -3945,15 +3936,12 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="QSOrmProject.DataDatePicker" id="datepickerStart">
+                          <widget class="Gamma.Widgets.yDatePicker" id="datepickerStart">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
-                            <property name="InheritedDataSource">True</property>
-                            <property name="Mappings">StartDate</property>
-                            <property name="InheritedBoundaryDataSource">False</property>
                             <signal name="DateChanged" handler="OnDatepickerStartDateChanged" />
                           </widget>
                           <packing>

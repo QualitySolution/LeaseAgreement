@@ -132,6 +132,10 @@ namespace LeaseAgreement
 			comboContractType.Binding.AddBinding (Subject, s => s.ContractType, w => w.SelectedItem).InitializeFromSource ();
 			comboOrg.Binding.AddBinding (Subject, s => s.Organization, w => w.SelectedItem).InitializeFromSource ();
 			comboResponsible.Binding.AddBinding (Subject, s => s.Responsible, w => w.SelectedItem).InitializeFromSource ();
+			datepickerSign.Binding.AddBinding (Subject, s => s.SignDate, w => w.DateOrNull).InitializeFromSource ();
+			datepickerStart.Binding.AddBinding (Subject, s => s.StartDate, w => w.DateOrNull).InitializeFromSource ();
+			datepickerEnd.Binding.AddBinding (Subject, s => s.EndDate, w => w.DateOrNull).InitializeFromSource ();
+			datepickerCancel.Binding.AddBinding (Subject, s => s.CancelDate, w => w.DateOrNull).InitializeFromSource ();
 
 			Subject.Customs = customContracts.FieldsValues;
 			Subject.Files = attachmentFiles.AttachedFiles.ToList ();

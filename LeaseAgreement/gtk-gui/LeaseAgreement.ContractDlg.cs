@@ -20,7 +20,7 @@ namespace LeaseAgreement
 		
 		private global::Gamma.Widgets.ySpecComboBox comboOrg;
 		
-		private global::QSOrmProject.DataDatePicker datepickerSign;
+		private global::Gamma.Widgets.yDatePicker datepickerSign;
 		
 		private global::Gtk.DataBindings.DataEntry entryNumber;
 		
@@ -46,11 +46,11 @@ namespace LeaseAgreement
 		
 		private global::Gamma.Widgets.ySpecComboBox comboResponsible;
 		
-		private global::QSOrmProject.DataDatePicker datepickerCancel;
+		private global::Gamma.Widgets.yDatePicker datepickerCancel;
 		
-		private global::QSOrmProject.DataDatePicker datepickerEnd;
+		private global::Gamma.Widgets.yDatePicker datepickerEnd;
 		
-		private global::QSOrmProject.DataDatePicker datepickerStart;
+		private global::Gamma.Widgets.yDatePicker datepickerStart;
 		
 		private global::Gtk.Label label11;
 		
@@ -125,7 +125,7 @@ namespace LeaseAgreement
 			this.notebookMain = new global::Gtk.Notebook ();
 			this.notebookMain.CanFocus = true;
 			this.notebookMain.Name = "notebookMain";
-			this.notebookMain.CurrentPage = 2;
+			this.notebookMain.CurrentPage = 0;
 			this.notebookMain.TabPos = ((global::Gtk.PositionType)(0));
 			// Container child notebookMain.Gtk.Notebook+NotebookChild
 			this.hboxInfo = new global::Gtk.HBox ();
@@ -203,15 +203,12 @@ namespace LeaseAgreement
 			w6.XOptions = ((global::Gtk.AttachOptions)(4));
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.datepickerSign = new global::QSOrmProject.DataDatePicker ();
+			this.datepickerSign = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerSign.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerSign.Name = "datepickerSign";
 			this.datepickerSign.Date = new global::System.DateTime (0);
 			this.datepickerSign.IsEditable = true;
 			this.datepickerSign.AutoSeparation = true;
-			this.datepickerSign.InheritedDataSource = true;
-			this.datepickerSign.Mappings = "SignDate";
-			this.datepickerSign.InheritedBoundaryDataSource = false;
 			this.table2.Add (this.datepickerSign);
 			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table2 [this.datepickerSign]));
 			w7.TopAttach = ((uint)(6));
@@ -357,15 +354,12 @@ namespace LeaseAgreement
 			w18.RightAttach = ((uint)(2));
 			w18.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table3.Gtk.Table+TableChild
-			this.datepickerCancel = new global::QSOrmProject.DataDatePicker ();
+			this.datepickerCancel = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerCancel.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerCancel.Name = "datepickerCancel";
 			this.datepickerCancel.Date = new global::System.DateTime (0);
 			this.datepickerCancel.IsEditable = true;
 			this.datepickerCancel.AutoSeparation = true;
-			this.datepickerCancel.InheritedDataSource = true;
-			this.datepickerCancel.Mappings = "CancelDate";
-			this.datepickerCancel.InheritedBoundaryDataSource = false;
 			this.table3.Add (this.datepickerCancel);
 			global::Gtk.Table.TableChild w19 = ((global::Gtk.Table.TableChild)(this.table3 [this.datepickerCancel]));
 			w19.TopAttach = ((uint)(3));
@@ -375,15 +369,12 @@ namespace LeaseAgreement
 			w19.XOptions = ((global::Gtk.AttachOptions)(4));
 			w19.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table3.Gtk.Table+TableChild
-			this.datepickerEnd = new global::QSOrmProject.DataDatePicker ();
+			this.datepickerEnd = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerEnd.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerEnd.Name = "datepickerEnd";
 			this.datepickerEnd.Date = new global::System.DateTime (0);
 			this.datepickerEnd.IsEditable = true;
 			this.datepickerEnd.AutoSeparation = true;
-			this.datepickerEnd.InheritedDataSource = true;
-			this.datepickerEnd.Mappings = "EndDate";
-			this.datepickerEnd.InheritedBoundaryDataSource = false;
 			this.table3.Add (this.datepickerEnd);
 			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.table3 [this.datepickerEnd]));
 			w20.TopAttach = ((uint)(2));
@@ -393,15 +384,12 @@ namespace LeaseAgreement
 			w20.XOptions = ((global::Gtk.AttachOptions)(4));
 			w20.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table3.Gtk.Table+TableChild
-			this.datepickerStart = new global::QSOrmProject.DataDatePicker ();
+			this.datepickerStart = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerStart.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerStart.Name = "datepickerStart";
 			this.datepickerStart.Date = new global::System.DateTime (0);
 			this.datepickerStart.IsEditable = true;
 			this.datepickerStart.AutoSeparation = true;
-			this.datepickerStart.InheritedDataSource = true;
-			this.datepickerStart.Mappings = "StartDate";
-			this.datepickerStart.InheritedBoundaryDataSource = false;
 			this.table3.Add (this.datepickerStart);
 			global::Gtk.Table.TableChild w21 = ((global::Gtk.Table.TableChild)(this.table3 [this.datepickerStart]));
 			w21.TopAttach = ((uint)(1));
