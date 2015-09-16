@@ -21,6 +21,11 @@ namespace LeaseAgreement
 				
 		AccelGroup grup;
 
+		public LesseeDlg (Lessee entity) : this()
+		{
+			Fill (entity.Id);
+		}
+
 		public LesseeDlg ()
 		{
 			this.Build ();
