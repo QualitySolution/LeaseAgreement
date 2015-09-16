@@ -12,7 +12,7 @@ using QSOrmProject;
 
 namespace LeaseAgreement
 {
-	public partial class ContractDlg : Gtk.Dialog
+	public partial class ContractDlg : FakeTDIDialogGtkDialogBase
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
 		private Contract subject;

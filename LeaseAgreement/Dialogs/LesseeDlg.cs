@@ -9,7 +9,7 @@ using QSProjectsLib;
 
 namespace LeaseAgreement
 {
-	public partial class LesseeDlg : Gtk.Dialog
+	public partial class LesseeDlg : FakeTDIDialogGtkDialogBase
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
 		private bool newItem = true;
