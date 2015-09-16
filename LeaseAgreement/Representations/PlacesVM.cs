@@ -42,7 +42,7 @@ namespace LeaseAgreement.Representations
 					freePlacesQuery.And (cp => cp.StartDate < Filter.RestrictEndDate);
 				freePlacesQuery.Select (c => c.Place);
 
-				placesQuery.WithSubquery.WhereNotExists (freePlacesQuery);
+				placesQuery.WithSubquery.WhereProperty (p => p.Id).In (freePlacesQuery);
 			}
 
 			var placesList = placesQuery.SelectList (list => list
