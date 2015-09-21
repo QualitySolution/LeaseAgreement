@@ -54,6 +54,7 @@ namespace LeaseAgreement
 			PrepareDlg ();
 			UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract> ();
 			Subject = UoW.Root;
+			Subject.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
 			ConfigureDlg ();
 		}
 
