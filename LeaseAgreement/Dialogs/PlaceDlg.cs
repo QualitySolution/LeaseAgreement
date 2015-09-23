@@ -267,8 +267,8 @@ namespace LeaseAgreement
 						continue;
 					HistoryStore.AppendValues (rdr.GetInt32 ("id"),
 					                         rdr ["number"].ToString (),
-					                         ((DateTime)rdr ["start_date"]).ToShortDateString (),
-					                         ((DateTime)rdr ["end_date"]).ToShortDateString (),
+					                           rdr ["start_date"] == DBNull.Value ? String.Empty : ((DateTime)rdr ["start_date"]).ToShortDateString (),
+					                           rdr ["end_date"] == DBNull.Value ? String.Empty : ((DateTime)rdr ["end_date"]).ToShortDateString (),
 					                           default(DateTime), // Удален.
 					                         rdr.GetInt32 ("lessee_id"),
 					                         rdr ["lessee"].ToString (),
