@@ -17,7 +17,7 @@ namespace LeaseAgreement
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
 		private Contract subject;
 		private Adaptor adaptorContract = new Adaptor ();
-		private QSHistoryLog.ObjectTracker<Contract> tracker;
+		private QSHistoryLog.ObjectTracker<Contract> tracker = new QSHistoryLog.ObjectTracker<Contract> ();
 
 		private IUnitOfWorkGeneric<Contract> UoW;
 
@@ -33,7 +33,6 @@ namespace LeaseAgreement
 			}
 			set {
 				subject = value;
-				tracker = new QSHistoryLog.ObjectTracker<Contract> (subject);
 			}
 		}
 
@@ -164,6 +163,7 @@ namespace LeaseAgreement
 			{
 				var tempUow = UnitOfWorkFactory.CreateWithoutRoot ();
 				var copedContract = tempUow.GetById<Contract> (Id);
+				NHibernate.NHibernateUtil.Initialize (copedContract.LeasedPlaces);
 				tempUow.Session.Evict (copedContract);
 				copedContract.Id = 0;
 
@@ -171,6 +171,11 @@ namespace LeaseAgreement
 				UoW.Root.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
 				UoW.Root.StartDate = UoW.Root.EndDate.Value.AddDays (1);
 				UoW.Root.SignDate = UoW.Root.CancelDate = UoW.Root.EndDate = null;
+				foreach(var place in UoW.Root.LeasedPlaces)
+				{
+					place.StartDate = UoW.Root.StartDate;
+					place.EndDate = null;
+				}
 			}
 			else
 			{
