@@ -665,6 +665,7 @@ namespace LeaseAgreement
 			this.DefaultWidth = 882;
 			this.DefaultHeight = 383;
 			this.Show ();
+			this.yentryreferenceLessee.Changed += new global::System.EventHandler (this.OnYentryreferenceLesseeChanged);
 			this.entryNumber.Changed += new global::System.EventHandler (this.OnEntryNumberChanged);
 			this.entryNumber.Activated += new global::System.EventHandler (this.OnEntryActivated);
 			this.comboOrg.Changed += new global::System.EventHandler (this.OnComboOrgChanged);

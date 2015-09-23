@@ -206,6 +206,7 @@ namespace LeaseAgreement
 
 				trans.Commit ();
 				logger.Info ("Ok");
+				OrmMain.NotifyObjectUpdated (subject);
 				Respond (ResponseType.Ok);
 			} catch (Exception ex) {
 				trans.Rollback ();
