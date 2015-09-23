@@ -1,12 +1,13 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
+using QSHistoryLog;
 
 namespace LeaseAgreement.Domain
 {
 	[OrmSubject (Nominative = "аренда места",
 	             NominativePlural = "арендованые места")]
-	public class ContractPlace : PropertyChangedBase
+	public class ContractPlace : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id { get; set; }
 
@@ -17,7 +18,7 @@ namespace LeaseAgreement.Domain
 			get { return contract; }
 			set { SetField (ref contract, value, () => Contract); }
 		}
-
+		
 		Place place;
 		[Display(Name = "Место")]
 		public virtual Place Place {
@@ -46,6 +47,11 @@ namespace LeaseAgreement.Domain
 		public virtual string Comments {
 			get { return comments; }
 			set { SetField (ref comments, value, () => Comments); }
+		}
+
+		[IgnoreHistoryTrace]
+		public string Title {
+			get { return String.Format ("Аренда {0} c {1:d} по {2:d}", Place.Title, StartDate, EndDate);}
 		}
 
 		public string RowColor {

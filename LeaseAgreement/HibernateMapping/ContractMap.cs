@@ -24,7 +24,7 @@ namespace LeaseAgreement.HMap
 			References (x => x.ContractType).Column ("contract_type_id");
 			References (x => x.Category).Column ("category_id");
 			References (x => x.Responsible).Column ("responsible_id");
-			HasMany (x => x.LeasedPlaces).Cascade.AllDeleteOrphan ().KeyColumn ("contract_id");
+			HasMany (x => x.LeasedPlaces).Inverse ().Cascade.AllDeleteOrphan ().KeyColumn ("contract_id");
 		}
 	}
 }

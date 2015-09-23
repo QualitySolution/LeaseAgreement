@@ -36,6 +36,7 @@ namespace LeaseAgreement
 			QSHistoryLog.HistoryMain.AddClass (typeof(Contract))
 				.PropertiesKeyTitleFunc.Add ("Customs", OnContractGetCustomsTitle);
 			QSHistoryLog.HistoryMain.AddClass (typeof(ContractType));
+			QSHistoryLog.HistoryMain.AddClass (typeof(ContractPlace));
 			QSHistoryLog.HistoryMain.AddClass (typeof(ContractCategory));
 			QSHistoryLog.HistoryMain.AddClass (typeof(User));
 

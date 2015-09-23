@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using QSAttachment;
 using System.Data.Bindings.Collections.Generic;
+using QSHistoryLog;
 
 namespace LeaseAgreement.Domain
 {
@@ -118,6 +119,7 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref files, value, () => Files); }
 		}
 
+		[HistoryTraceGoDeep]
 		IList<ContractPlace> leasedPlaces = new List<ContractPlace>();
 
 		[Display (Name = "Аренда мест")]
@@ -125,9 +127,11 @@ namespace LeaseAgreement.Domain
 			get { return leasedPlaces; }
 			set { SetField (ref leasedPlaces, value, () => LeasedPlaces); }
 		}
-
+			
+		[IgnoreHistoryClone]
 		GenericObservableList<ContractPlace> observableLeasedPlaces;
 		//FIXME Кослыль пока не разберемся как научить hibernate работать с обновляемыми списками.
+		[IgnoreHistoryTrace]
 		public GenericObservableList<ContractPlace> ObservableLeasedPlaces {
 			get {
 				if (observableLeasedPlaces == null)
@@ -136,6 +140,7 @@ namespace LeaseAgreement.Domain
 			}
 		}
 
+		[IgnoreHistoryTrace]
 		public string Title {
 			get { return String.Format ("Договор №{0} от {1:d}", Number, SignDate);}
 		}
