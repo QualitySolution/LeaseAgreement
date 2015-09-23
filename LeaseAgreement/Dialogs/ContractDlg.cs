@@ -716,5 +716,10 @@ namespace LeaseAgreement
 			}
 		}
 
+		protected void OnYentryreferenceLesseeChanged (object sender, EventArgs e)
+		{
+			TestCanSave ();
+		}
+
 	}
 }
