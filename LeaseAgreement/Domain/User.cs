@@ -1,9 +1,6 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using MySql.Data.MySqlClient;
-using QSProjectsLib;
 
 namespace LeaseAgreement.Domain
 {
@@ -29,7 +26,7 @@ namespace LeaseAgreement.Domain
 
 		bool deactivated;
 
-		[Display (Name = "Логин")]
+		[Display (Name = "Деактивирован")]
 		public virtual bool Deactivated {
 			get { return deactivated; }
 			set { SetField (ref deactivated, value, () => Deactivated); }
@@ -38,28 +35,6 @@ namespace LeaseAgreement.Domain
 		public User ()
 		{
 		}
-
-		public static List<User> LoadList()
-		{
-			var list = new List<User> ();
-			string sql = "SELECT users.* FROM users";
-			MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB);
-			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
-				while (rdr.Read ()) {
-					list.Add (rdrParse (rdr));
-				}
-			}
-			return list;
-		}
-
-		private static User rdrParse(MySqlDataReader rdr)
-		{
-			return new User {
-				Id = rdr.GetInt32 ("id"),
-				Name = rdr.GetString ("name")
-			};
-		}
-
 	}
 }
 
