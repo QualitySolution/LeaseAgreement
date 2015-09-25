@@ -106,11 +106,13 @@ namespace LeaseAgreement.Representations
 
 		public string PlaceNumber { get; set; }
 
+		[UseForSearch]
 		public string PlaceTilte { get{ return String.Format ("{0}-{1}", PlaceTypeName, PlaceNumber);
 			} }
 
 		public decimal Area{ get; set; }
 
+		[UseForSearch]
 		public string Organigation { get; set; }
 
 		public string AreaText {get { return Area > 0 ? String.Format ("{0} м<sup>2</sup>", Area) : String.Empty;}}

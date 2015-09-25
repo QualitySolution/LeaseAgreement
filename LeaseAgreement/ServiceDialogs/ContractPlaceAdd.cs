@@ -8,6 +8,8 @@ namespace LeaseAgreement
 {
 	public partial class ContractPlaceAdd : Gtk.Dialog, IPlacesVMFilter
 	{
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
+
 		public ContractPlaceAdd (DateTime? startdate)
 		{
 			this.Build ();
@@ -71,6 +73,16 @@ namespace LeaseAgreement
 		protected void OnDateEndDateChanged (object sender, EventArgs e)
 		{
 			OnRefiltered ();
+		}
+
+		protected void OnButtonCleanClicked (object sender, EventArgs e)
+		{
+			entrySearch.Text = String.Empty;
+		}
+
+		protected void OnEntrySearchChanged (object sender, EventArgs e)
+		{
+			ytreeviewPlaces.RepresentationModel.SearchString = entrySearch.Text;
 		}
 	}
 }

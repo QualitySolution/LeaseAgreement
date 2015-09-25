@@ -16,6 +16,14 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Label label1;
 		
+		private global::Gtk.HBox hbox4;
+		
+		private global::Gtk.Label label4;
+		
+		private global::Gtk.Entry entrySearch;
+		
+		private global::Gtk.Button buttonClean;
+		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		
 		private global::QSOrmProject.RepresentationTreeView ytreeviewPlaces;
@@ -91,6 +99,47 @@ namespace LeaseAgreement
 			w7.Expand = false;
 			w7.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
+			this.hbox4 = new global::Gtk.HBox ();
+			this.hbox4.Name = "hbox4";
+			this.hbox4.Spacing = 6;
+			// Container child hbox4.Gtk.Box+BoxChild
+			this.label4 = new global::Gtk.Label ();
+			this.label4.Name = "label4";
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Поиск:");
+			this.hbox4.Add (this.label4);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.label4]));
+			w8.Position = 0;
+			w8.Expand = false;
+			w8.Fill = false;
+			// Container child hbox4.Gtk.Box+BoxChild
+			this.entrySearch = new global::Gtk.Entry ();
+			this.entrySearch.CanFocus = true;
+			this.entrySearch.Name = "entrySearch";
+			this.entrySearch.IsEditable = true;
+			this.entrySearch.InvisibleChar = '●';
+			this.hbox4.Add (this.entrySearch);
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.entrySearch]));
+			w9.Position = 1;
+			// Container child hbox4.Gtk.Box+BoxChild
+			this.buttonClean = new global::Gtk.Button ();
+			this.buttonClean.TooltipMarkup = "Очистить";
+			this.buttonClean.CanFocus = true;
+			this.buttonClean.Name = "buttonClean";
+			this.buttonClean.UseUnderline = true;
+			global::Gtk.Image w10 = new global::Gtk.Image ();
+			w10.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-clear", global::Gtk.IconSize.Menu);
+			this.buttonClean.Image = w10;
+			this.hbox4.Add (this.buttonClean);
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.buttonClean]));
+			w11.Position = 2;
+			w11.Expand = false;
+			w11.Fill = false;
+			w1.Add (this.hbox4);
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox4]));
+			w12.Position = 2;
+			w12.Expand = false;
+			w12.Fill = false;
+			// Container child dialog1_VBox.Gtk.Box+BoxChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
@@ -100,14 +149,14 @@ namespace LeaseAgreement
 			this.ytreeviewPlaces.Name = "ytreeviewPlaces";
 			this.GtkScrolledWindow.Add (this.ytreeviewPlaces);
 			w1.Add (this.GtkScrolledWindow);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(w1 [this.GtkScrolledWindow]));
-			w9.Position = 2;
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(w1 [this.GtkScrolledWindow]));
+			w14.Position = 3;
 			// Internal child LeaseAgreement.ContractPlaceAdd.ActionArea
-			global::Gtk.HButtonBox w10 = this.ActionArea;
-			w10.Name = "dialog1_ActionArea";
-			w10.Spacing = 10;
-			w10.BorderWidth = ((uint)(5));
-			w10.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w15 = this.ActionArea;
+			w15.Name = "dialog1_ActionArea";
+			w15.Spacing = 10;
+			w15.BorderWidth = ((uint)(5));
+			w15.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
@@ -117,9 +166,9 @@ namespace LeaseAgreement
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = "gtk-cancel";
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w11 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w10 [this.buttonCancel]));
-			w11.Expand = false;
-			w11.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w16 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w15 [this.buttonCancel]));
+			w16.Expand = false;
+			w16.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.CanDefault = true;
@@ -129,10 +178,10 @@ namespace LeaseAgreement
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = "gtk-ok";
 			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w12 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w10 [this.buttonOk]));
-			w12.Position = 1;
-			w12.Expand = false;
-			w12.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w17 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w15 [this.buttonOk]));
+			w17.Position = 1;
+			w17.Expand = false;
+			w17.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
@@ -141,6 +190,8 @@ namespace LeaseAgreement
 			this.Show ();
 			this.dateStart.DateChanged += new global::System.EventHandler (this.OnDateStartDateChanged);
 			this.dateEnd.DateChanged += new global::System.EventHandler (this.OnDateEndDateChanged);
+			this.entrySearch.Changed += new global::System.EventHandler (this.OnEntrySearchChanged);
+			this.buttonClean.Clicked += new global::System.EventHandler (this.OnButtonCleanClicked);
 		}
 	}
 }
