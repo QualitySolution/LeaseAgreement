@@ -34,15 +34,15 @@ namespace LeaseAgreement.Representations
 				.JoinAlias (c => c.Organization, () => organizationAlias, NHibernate.SqlCommand.JoinType.LeftOuterJoin);
 			if(Filter.RestrictStartDate.HasValue)
 			{
-				var freePlacesQuery = QueryOver.Of<ContractPlace>()
+				var notfreePlacesQuery = QueryOver.Of<ContractPlace>()
 					.Where (cp => cp.StartDate >= Filter.RestrictStartDate 
 					        || cp.EndDate >= Filter.RestrictStartDate
 					        || (cp.EndDate == null));
 				if (Filter.RestrictEndDate.HasValue)
-					freePlacesQuery.And (cp => cp.StartDate < Filter.RestrictEndDate);
-				freePlacesQuery.Select (c => c.Place);
+					notfreePlacesQuery.And (cp => cp.StartDate < Filter.RestrictEndDate);
+				notfreePlacesQuery.Select (c => c.Place);
 
-				placesQuery.WithSubquery.WhereProperty (p => p.Id).In (freePlacesQuery);
+				placesQuery.WithSubquery.WhereProperty (p => p.Id).NotIn (notfreePlacesQuery);
 			}
 
 			var placesList = placesQuery.SelectList (list => list
