@@ -27,6 +27,13 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref login, value, () => Login); }
 		}
 
+		bool deactivated;
+
+		[Display (Name = "Логин")]
+		public virtual bool Deactivated {
+			get { return deactivated; }
+			set { SetField (ref deactivated, value, () => Deactivated); }
+		}
 
 		public User ()
 		{

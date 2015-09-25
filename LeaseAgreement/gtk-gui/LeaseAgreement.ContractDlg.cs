@@ -166,6 +166,7 @@ namespace LeaseAgreement
 			// Container child table2.Gtk.Table+TableChild
 			this.comboCategory = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboCategory.Name = "comboCategory";
+			this.comboCategory.AddIfNotExist = false;
 			this.comboCategory.ShowSpecialStateAll = false;
 			this.comboCategory.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboCategory);
@@ -179,6 +180,7 @@ namespace LeaseAgreement
 			// Container child table2.Gtk.Table+TableChild
 			this.comboContractType = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboContractType.Name = "comboContractType";
+			this.comboContractType.AddIfNotExist = false;
 			this.comboContractType.ShowSpecialStateAll = false;
 			this.comboContractType.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboContractType);
@@ -192,6 +194,7 @@ namespace LeaseAgreement
 			// Container child table2.Gtk.Table+TableChild
 			this.comboOrg = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboOrg.Name = "comboOrg";
+			this.comboOrg.AddIfNotExist = false;
 			this.comboOrg.ShowSpecialStateAll = false;
 			this.comboOrg.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboOrg);
@@ -346,6 +349,7 @@ namespace LeaseAgreement
 			// Container child table3.Gtk.Table+TableChild
 			this.comboResponsible = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboResponsible.Name = "comboResponsible";
+			this.comboResponsible.AddIfNotExist = true;
 			this.comboResponsible.ShowSpecialStateAll = false;
 			this.comboResponsible.ShowSpecialStateNot = false;
 			this.table3.Add (this.comboResponsible);

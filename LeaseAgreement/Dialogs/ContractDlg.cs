@@ -25,7 +25,7 @@ namespace LeaseAgreement
 		private List<int> deletedDocItems;
 		private List<FileSystemWatcher> watchers;
 
-		private List<User> userList;
+		private IList<User> userList;
 
 		protected Contract Subject {
 			get {
@@ -53,7 +53,6 @@ namespace LeaseAgreement
 			PrepareDlg ();
 			UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract> ();
 			Subject = UoW.Root;
-			Subject.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
 			ConfigureDlg ();
 		}
 
@@ -107,8 +106,6 @@ namespace LeaseAgreement
 			box.Add (textLable);
 			box.ShowAll ();
 			notebookMain.SetTabLabel (attachmentFiles, box);
-
-			comboResponsible.ItemsList = userList = User.LoadList ();
 		}
 
 		private void ConfigureDlg()
@@ -118,6 +115,10 @@ namespace LeaseAgreement
 			comboOrg.ItemsList = Organization.LoadList ();
 			comboCategory.ItemsList = ContractCategory.LoadList ();
 			comboContractType.ItemsList = ContractType.LoadList ();
+
+			comboResponsible.ItemsList = userList = Repository.UserRepository.GetActiveUsers (UoW);
+			if(UoW.IsNew)
+				UoW.Root.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
 
 			yentryreferenceLessee.SubjectType = typeof(Lessee);
 			yentryreferenceLessee.Binding.AddBinding (Subject, s => s.Lessee, w => w.Subject).InitializeFromSource ();
@@ -168,7 +169,6 @@ namespace LeaseAgreement
 				copedContract.Id = 0;
 
 				UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract>(copedContract);
-				UoW.Root.Responsible = DBWorks.FineById (userList, QSMain.User.Id);
 				UoW.Root.StartDate = UoW.Root.EndDate.Value.AddDays (1);
 				UoW.Root.SignDate = UoW.Root.CancelDate = UoW.Root.EndDate = null;
 				foreach(var place in UoW.Root.LeasedPlaces)

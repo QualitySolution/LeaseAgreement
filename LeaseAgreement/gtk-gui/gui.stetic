@@ -3557,6 +3557,7 @@
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <property name="AddIfNotExist">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                       </widget>
@@ -3581,6 +3582,7 @@
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <property name="AddIfNotExist">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboContractTypeChanged" />
@@ -3606,6 +3608,7 @@
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <property name="AddIfNotExist">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboOrgChanged" />
@@ -3870,6 +3873,7 @@
                             <property name="MemberName" />
                             <property name="IsTextCombo">False</property>
                             <property name="Items" translatable="yes" />
+                            <property name="AddIfNotExist">True</property>
                             <property name="ShowSpecialStateAll">False</property>
                             <property name="ShowSpecialStateNot">False</property>
                           </widget>

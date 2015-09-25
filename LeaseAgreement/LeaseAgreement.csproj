@@ -141,6 +141,7 @@
     <Compile Include="HibernateMapping\ContractTypeMap.cs" />
     <Compile Include="HibernateMapping\ContractCategoryMap.cs" />
     <Compile Include="HibernateMapping\UserMap.cs" />
+    <Compile Include="Repository\UserRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -160,6 +161,7 @@
     <Folder Include="HibernateMapping\" />
     <Folder Include="ServiceDialogs\" />
     <Folder Include="Representations\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
