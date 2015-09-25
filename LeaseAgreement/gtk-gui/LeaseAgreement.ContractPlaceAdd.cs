@@ -16,6 +16,8 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Label label1;
 		
+		private global::Gtk.CheckButton checkWithDraft;
+		
 		private global::Gtk.HBox hbox4;
 		
 		private global::Gtk.Label label4;
@@ -100,6 +102,19 @@ namespace LeaseAgreement
 			w7.Expand = false;
 			w7.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
+			this.checkWithDraft = new global::Gtk.CheckButton ();
+			this.checkWithDraft.CanFocus = true;
+			this.checkWithDraft.Name = "checkWithDraft";
+			this.checkWithDraft.Label = global::Mono.Unix.Catalog.GetString ("Учитывая черновики договоров");
+			this.checkWithDraft.Active = true;
+			this.checkWithDraft.DrawIndicator = true;
+			this.checkWithDraft.UseUnderline = true;
+			w1.Add (this.checkWithDraft);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(w1 [this.checkWithDraft]));
+			w8.Position = 2;
+			w8.Expand = false;
+			w8.Fill = false;
+			// Container child dialog1_VBox.Gtk.Box+BoxChild
 			this.hbox4 = new global::Gtk.HBox ();
 			this.hbox4.Name = "hbox4";
 			this.hbox4.Spacing = 6;
@@ -108,10 +123,10 @@ namespace LeaseAgreement
 			this.label4.Name = "label4";
 			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Поиск:");
 			this.hbox4.Add (this.label4);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.label4]));
-			w8.Position = 0;
-			w8.Expand = false;
-			w8.Fill = false;
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.label4]));
+			w9.Position = 0;
+			w9.Expand = false;
+			w9.Fill = false;
 			// Container child hbox4.Gtk.Box+BoxChild
 			this.entrySearch = new global::Gtk.Entry ();
 			this.entrySearch.CanFocus = true;
@@ -119,27 +134,27 @@ namespace LeaseAgreement
 			this.entrySearch.IsEditable = true;
 			this.entrySearch.InvisibleChar = '●';
 			this.hbox4.Add (this.entrySearch);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.entrySearch]));
-			w9.Position = 1;
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.entrySearch]));
+			w10.Position = 1;
 			// Container child hbox4.Gtk.Box+BoxChild
 			this.buttonClean = new global::Gtk.Button ();
 			this.buttonClean.TooltipMarkup = "Очистить";
 			this.buttonClean.CanFocus = true;
 			this.buttonClean.Name = "buttonClean";
 			this.buttonClean.UseUnderline = true;
-			global::Gtk.Image w10 = new global::Gtk.Image ();
-			w10.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-clear", global::Gtk.IconSize.Menu);
-			this.buttonClean.Image = w10;
+			global::Gtk.Image w11 = new global::Gtk.Image ();
+			w11.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-clear", global::Gtk.IconSize.Menu);
+			this.buttonClean.Image = w11;
 			this.hbox4.Add (this.buttonClean);
-			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.buttonClean]));
-			w11.Position = 2;
-			w11.Expand = false;
-			w11.Fill = false;
-			w1.Add (this.hbox4);
-			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox4]));
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.buttonClean]));
 			w12.Position = 2;
 			w12.Expand = false;
 			w12.Fill = false;
+			w1.Add (this.hbox4);
+			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox4]));
+			w13.Position = 3;
+			w13.Expand = false;
+			w13.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
@@ -150,14 +165,14 @@ namespace LeaseAgreement
 			this.ytreeviewPlaces.Name = "ytreeviewPlaces";
 			this.GtkScrolledWindow.Add (this.ytreeviewPlaces);
 			w1.Add (this.GtkScrolledWindow);
-			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(w1 [this.GtkScrolledWindow]));
-			w14.Position = 3;
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(w1 [this.GtkScrolledWindow]));
+			w15.Position = 4;
 			// Internal child LeaseAgreement.ContractPlaceAdd.ActionArea
-			global::Gtk.HButtonBox w15 = this.ActionArea;
-			w15.Name = "dialog1_ActionArea";
-			w15.Spacing = 10;
-			w15.BorderWidth = ((uint)(5));
-			w15.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w16 = this.ActionArea;
+			w16.Name = "dialog1_ActionArea";
+			w16.Spacing = 10;
+			w16.BorderWidth = ((uint)(5));
+			w16.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
@@ -167,9 +182,9 @@ namespace LeaseAgreement
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = "gtk-cancel";
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w16 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w15 [this.buttonCancel]));
-			w16.Expand = false;
-			w16.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w17 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16 [this.buttonCancel]));
+			w17.Expand = false;
+			w17.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.CanDefault = true;
@@ -179,18 +194,19 @@ namespace LeaseAgreement
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = "gtk-ok";
 			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w17 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w15 [this.buttonOk]));
-			w17.Position = 1;
-			w17.Expand = false;
-			w17.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w18 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16 [this.buttonOk]));
+			w18.Position = 1;
+			w18.Expand = false;
+			w18.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 451;
-			this.DefaultHeight = 300;
+			this.DefaultWidth = 592;
+			this.DefaultHeight = 394;
 			this.Show ();
 			this.dateStart.DateChanged += new global::System.EventHandler (this.OnDateStartDateChanged);
 			this.dateEnd.DateChanged += new global::System.EventHandler (this.OnDateEndDateChanged);
+			this.checkWithDraft.Clicked += new global::System.EventHandler (this.OnCheckWithDraftClicked);
 			this.entrySearch.Changed += new global::System.EventHandler (this.OnEntrySearchChanged);
 			this.buttonClean.Clicked += new global::System.EventHandler (this.OnButtonCleanClicked);
 		}

@@ -40,6 +40,13 @@ namespace LeaseAgreement
 			}
 		}
 
+		public bool RestrictWithDraft {
+			get { return checkWithDraft.Active; }
+			set {
+				checkWithDraft.Active = value;
+			}
+		}
+
 		#region IRepresentationFilter implementation
 
 		public event EventHandler Refiltered;
@@ -83,6 +90,11 @@ namespace LeaseAgreement
 		protected void OnEntrySearchChanged (object sender, EventArgs e)
 		{
 			ytreeviewPlaces.RepresentationModel.SearchString = entrySearch.Text;
+		}
+
+		protected void OnCheckWithDraftClicked (object sender, EventArgs e)
+		{
+			OnRefiltered ();
 		}
 	}
 }

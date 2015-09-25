@@ -7,6 +7,7 @@ namespace LeaseAgreement.Representations
 	{
 		DateTime? RestrictStartDate { get;}
 		DateTime? RestrictEndDate { get;}
+		bool RestrictWithDraft { get;}
 	}
 }
 

@@ -40,6 +40,11 @@ namespace LeaseAgreement.Representations
 					        || (cp.EndDate == null));
 				if (Filter.RestrictEndDate.HasValue)
 					notfreePlacesQuery.And (cp => cp.StartDate < Filter.RestrictEndDate);
+				if(Filter.RestrictWithDraft == false)
+				{
+					notfreePlacesQuery.JoinQueryOver (cp => cp.Contract)
+						.Where (c => !c.Draft);
+				}
 				notfreePlacesQuery.Select (c => c.Place);
 
 				placesQuery.WithSubquery.WhereProperty (p => p.Id).NotIn (notfreePlacesQuery);
