@@ -37,6 +37,7 @@ namespace LeaseAgreement
 			global::Stetic.Gui.Initialize (this);
 			// Widget LeaseAgreement.ContractPlaceAdd
 			this.Name = "LeaseAgreement.ContractPlaceAdd";
+			this.Title = global::Mono.Unix.Catalog.GetString ("Выберите места для добавления");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.ContractPlaceAdd.VBox
 			global::Gtk.VBox w1 = this.VBox;

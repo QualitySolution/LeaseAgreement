@@ -6254,6 +6254,7 @@
   </widget>
   <widget class="Gtk.Dialog" id="LeaseAgreement.ContractPlaceAdd" design-size="451 300">
     <property name="MemberName" />
+    <property name="Title" translatable="yes">Выберите места для добавления</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
