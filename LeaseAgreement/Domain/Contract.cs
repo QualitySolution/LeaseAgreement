@@ -111,6 +111,7 @@ namespace LeaseAgreement.Domain
 			set { SetField(ref customs, value, () => Customs);}
 		}
 
+		[HistoryDeepCloneItems]
 		List<AttachedFile> files;
 
 		[Display (Name = "Файлы")]
@@ -119,7 +120,7 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref files, value, () => Files); }
 		}
 
-		[HistoryTraceGoDeep]
+		[HistoryDeepCloneItems]
 		IList<ContractPlace> leasedPlaces = new List<ContractPlace>();
 
 		[Display (Name = "Аренда мест")]

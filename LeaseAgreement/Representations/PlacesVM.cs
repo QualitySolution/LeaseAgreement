@@ -9,7 +9,7 @@ using NHibernate.Criterion;
 
 namespace LeaseAgreement.Representations
 {
-	public class PlacesVM : RepresentationModelBase<Place, PlacesVMNode>, IRepresentationModelGamma
+	public class PlacesVM : RepresentationModelEntityBase<Place, PlacesVMNode>, IRepresentationModelGamma
 	{
 		public IPlacesVMFilter Filter {
 			get {
@@ -86,11 +86,6 @@ namespace LeaseAgreement.Representations
 		protected override bool NeedUpdateFunc (Place updatedSubject)
 		{
 			return true;
-		}
-
-		protected override bool NeedUpdateFunc (object updatedSubject)
-		{
-			throw new NotImplementedException ();
 		}
 
 		#endregion

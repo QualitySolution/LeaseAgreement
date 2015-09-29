@@ -1,8 +1,9 @@
 ﻿using System;
-using QSOrmProject;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MySql.Data.MySqlClient;
+using QSHistoryLog;
+using QSOrmProject;
 using QSProjectsLib;
 
 namespace LeaseAgreement.Domain
@@ -20,6 +21,7 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref name, value, () => Name); }
 		}
 
+		[HistoryDeepCloneItems]
 		List<DocTemplate> templates = new List<DocTemplate> ();
 
 		[Display (Name = "Шаблоны")]

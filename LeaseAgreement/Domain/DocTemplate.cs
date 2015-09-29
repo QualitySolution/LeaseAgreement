@@ -36,6 +36,8 @@ namespace LeaseAgreement.Domain
 			Size = size;
 			IsChanged = false;
 		}
+
+		public DocTemplate() {}
 	}
 }
 
