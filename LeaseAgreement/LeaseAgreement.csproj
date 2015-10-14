@@ -142,6 +142,10 @@
     <Compile Include="HibernateMapping\ContractCategoryMap.cs" />
     <Compile Include="HibernateMapping\UserMap.cs" />
     <Compile Include="Repository\UserRepository.cs" />
+    <Compile Include="ServiceDialogs\ContractEdit.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.ContractEdit.cs" />
+    <Compile Include="ServiceDialogs\ContractEditWarning.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.ContractEditWarning.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

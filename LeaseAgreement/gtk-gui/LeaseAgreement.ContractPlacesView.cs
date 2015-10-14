@@ -18,6 +18,8 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Button buttonAdd;
 		
+		private global::Gtk.Button buttonEdit;
+		
 		private global::Gtk.Button buttonDel;
 
 		protected virtual void Build ()
@@ -81,30 +83,46 @@ namespace LeaseAgreement
 			w6.Expand = false;
 			w6.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
+			this.buttonEdit = new global::Gtk.Button ();
+			this.buttonEdit.CanFocus = true;
+			this.buttonEdit.Name = "buttonEdit";
+			this.buttonEdit.UseUnderline = true;
+			this.buttonEdit.Label = global::Mono.Unix.Catalog.GetString ("Изменить");
+			global::Gtk.Image w7 = new global::Gtk.Image ();
+			w7.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-edit", global::Gtk.IconSize.Button);
+			this.buttonEdit.Image = w7;
+			this.hbox1.Add (this.buttonEdit);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonEdit]));
+			w8.Position = 1;
+			w8.Expand = false;
+			w8.Fill = false;
+			// Container child hbox1.Gtk.Box+BoxChild
 			this.buttonDel = new global::Gtk.Button ();
 			this.buttonDel.CanFocus = true;
 			this.buttonDel.Name = "buttonDel";
 			this.buttonDel.UseUnderline = true;
 			this.buttonDel.Label = global::Mono.Unix.Catalog.GetString ("Удалить");
-			global::Gtk.Image w7 = new global::Gtk.Image ();
-			w7.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-delete", global::Gtk.IconSize.Menu);
-			this.buttonDel.Image = w7;
+			global::Gtk.Image w9 = new global::Gtk.Image ();
+			w9.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-delete", global::Gtk.IconSize.Menu);
+			this.buttonDel.Image = w9;
 			this.hbox1.Add (this.buttonDel);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonDel]));
-			w8.Position = 1;
-			w8.Expand = false;
-			w8.Fill = false;
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonDel]));
+			w10.Position = 2;
+			w10.Expand = false;
+			w10.Fill = false;
 			this.vbox2.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
-			w9.Position = 2;
-			w9.Expand = false;
-			w9.Fill = false;
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+			w11.Position = 2;
+			w11.Expand = false;
+			w11.Fill = false;
 			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
 			this.Hide ();
+			this.ytreeviewPlaces.RowActivated += new global::Gtk.RowActivatedHandler (this.OnRowActivated);
 			this.buttonAdd.Clicked += new global::System.EventHandler (this.OnButtonAddClicked);
+			this.buttonEdit.Clicked += new global::System.EventHandler (this.OnButtonEditClicked);
 			this.buttonDel.Clicked += new global::System.EventHandler (this.OnButtonDelClicked);
 		}
 	}

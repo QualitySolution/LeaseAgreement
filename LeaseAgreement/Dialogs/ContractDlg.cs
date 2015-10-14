@@ -9,6 +9,8 @@ using MySql.Data.MySqlClient;
 using NLog;
 using QSProjectsLib;
 using QSOrmProject;
+using NHibernate.Criterion;
+using System.Collections;
 
 namespace LeaseAgreement
 {
@@ -26,6 +28,16 @@ namespace LeaseAgreement
 		private List<FileSystemWatcher> watchers;
 
 		private IList<User> userList;
+
+		private DateTime? prevCancelDate;
+		private DateTime? prevStartDate;
+		private DateTime? prevEndDate;
+		private DateTime oldEnd;
+		private DateTime newEnd;
+		private DateTime newStart;
+		private DateTime oldStart;
+
+
 
 		protected Contract Subject {
 			get {
@@ -110,6 +122,10 @@ namespace LeaseAgreement
 
 		private void ConfigureDlg()
 		{
+			prevCancelDate = Subject.CancelDate;
+			prevStartDate = Subject.StartDate;
+			prevEndDate = Subject.EndDate;
+
 			adaptorContract.Target = Subject;
 
 			comboOrg.ItemsList = Organization.LoadList ();
@@ -226,14 +242,15 @@ namespace LeaseAgreement
 			TestCanSave ();
 		}
 
-		protected	void TestCanSave ()
+		protected void TestCanSave ()
 		{
 			bool Numberok = !String.IsNullOrWhiteSpace (Subject.Number);
 			bool Orgok = Subject.Organization != null;
 			bool Lesseeok = Subject.Lessee != null;
 			bool DatesCorrectok = TestCorrectDates (false);
+			bool canChangeDates = (GetUnresolvablePlaces().Length==0);
 
-			buttonOk.Sensitive = Numberok && Orgok && Lesseeok && DatesCorrectok;
+			buttonOk.Sensitive = Numberok && Orgok && Lesseeok && DatesCorrectok && canChangeDates;
 		}
 
 		private void RenderNameColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
@@ -389,7 +406,22 @@ namespace LeaseAgreement
 					}
 				}
 */
-
+				var changes = GetDateChanges();
+				if(changes.Count>0){
+					var dialog = new ContractEditWarning(changes,"При изменении договора будут проведены "+
+					                                     "следующие изменения в арендованных местах:");
+					ResponseType response = (ResponseType) dialog.Run();
+					dialog.Destroy();
+					if(response==ResponseType.Ok){
+						foreach(DateChange change in changes) change.apply();
+					}else{
+						datepickerCancel.DateOrNull = prevCancelDate;
+						datepickerStart.DateOrNull = prevStartDate;
+						datepickerEnd.DateOrNull = prevEndDate;
+						trans.Rollback();
+						return false;
+					}
+				}
 				UoW.Save ();
 
 				if (contractWasNew) {
@@ -477,13 +509,37 @@ namespace LeaseAgreement
 
 		protected void OnDatepickerStartDateChanged (object sender, EventArgs e)
 		{
-			TestCorrectDates (true);
+			if (!TestCorrectDates (true)) {
+				datepickerStart.DateOrNull = prevStartDate;
+				return;
+			}
+			OnDateChanged ();
+			var problems = GetUnresolvablePlaces ();	
+			if (problems.Length > 0) {
+				ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату начала договора т.к. аренда " +
+				                              "следующих мест заканчивается до начала договора:");
+				warning.Run ();
+				warning.Destroy ();
+				datepickerStart.DateOrNull = prevStartDate;
+			}
 			TestCanSave ();
 		}
 
 		protected void OnDatepickerEndDateChanged (object sender, EventArgs e)
 		{
-			TestCorrectDates (true);
+			if (!TestCorrectDates (true)) {
+				datepickerEnd.DateOrNull = prevEndDate;
+				return;
+			}
+			OnDateChanged ();
+			var problems = GetUnresolvablePlaces ();	
+			if (problems.Length > 0) {
+				ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату окончани договора т.к. аренда " +
+				                              "следующих мест начинается после даты окончания:");
+				warning.Run ();
+				warning.Destroy ();
+				datepickerEnd.DateOrNull = prevEndDate;
+			}
 			TestCanSave ();
 		}
 
@@ -507,10 +563,89 @@ namespace LeaseAgreement
 				return false;
 			}
 		}
+		protected void OnDateChanged(){
+			oldEnd = prevCancelDate.HasValue ? prevCancelDate.Value : prevEndDate.Value;
+			newEnd = datepickerCancel.DateOrNull.HasValue ? datepickerCancel.DateOrNull.Value : Subject.EndDate.Value;
+			newStart = datepickerStart.DateOrNull.HasValue ? datepickerStart.DateOrNull.Value : Subject.StartDate.Value;
+			oldStart = prevStartDate.Value;
+		}
+
+		protected ContractPlace[] GetUnresolvablePlaces(){			
+			if (oldStart == newStart && oldEnd == newEnd)
+				return new ContractPlace[0]; 			
+			var excludedQuery = UoW.Session.QueryOver<ContractPlace> ().Where (c => c.Contract.Id == Subject.Id).Where (c => c.EndDate.Value < newStart || c.StartDate.Value > newEnd);
+			var excluded = excludedQuery.List<ContractPlace>().ToArray();
+			if (excluded.Length > 0) {
+				//места, аренда которых выходит за границы договора
+				return excluded;
+			}
+
+			var extendIntoFutureQuery = UoW.Session.QueryOver<ContractPlace> ().Where (c => c.Contract.Id == Subject.Id).Where (c => c.EndDate.Value == oldEnd);
+			var extendIntoFutureIDs = extendIntoFutureQuery.Select (p => p.Id).List<int> ().ToArray ();
+			var extendIntoFuturePlaceIDs = extendIntoFutureQuery.Select (cp => cp.Place.Id).List<int> ().ToArray ();
+			var notFreeFutureQuery = UoW.Session.QueryOver<ContractPlace> ()
+				.Where(cp=>cp.StartDate.Value > oldEnd && cp.StartDate.Value < newEnd && !cp.Id.IsIn(extendIntoFutureIDs));
+			notFreeFutureQuery.JoinQueryOver (cp => cp.Contract)
+				.Where (c => !c.Draft);
+			//контракты которые  пересекаются по времени(но не обязательно по месту)
+			notFreeFutureQuery.Where (cp => cp.Place.Id.IsIn (extendIntoFuturePlaceIDs));
+			// контракты которые пересекаются ещё и по месту
+			var futureIntersections = notFreeFutureQuery.List<ContractPlace> ().ToArray();
+			// id пересекающихся контрактов
+
+
+			var extendIntoPastQuery = UoW.Session.QueryOver<ContractPlace> ().Where (c => c.Contract.Id == Subject.Id).Where (c => c.StartDate.Value == oldStart);
+			var extendIntoPastIDs = extendIntoPastQuery.Select (p => p.Id).List<int> ().ToArray ();
+			var extendIntoPastPlaceIDs = extendIntoPastQuery.Select (cp => cp.Place.Id).List<int> ().ToArray ();
+			var notFreePastQuery = UoW.Session.QueryOver<ContractPlace> ()
+				.Where(cp=>cp.EndDate.Value < oldStart && cp.EndDate.Value > newStart && !cp.Id.IsIn(extendIntoPastIDs));
+			notFreePastQuery.JoinQueryOver (cp => cp.Contract)
+				.Where (c => !c.Draft);
+			//контракты которые  пересекаются по времени(но не обязательно по месту)
+			notFreePastQuery.Where (cp => cp.Place.Id.IsIn (extendIntoPastPlaceIDs));
+			// контракты которые пересекаются ещё и по месту
+			var pastIntersections = notFreePastQuery.List<ContractPlace> ().ToArray();
+			// id пересекающихся контрактов
+
+			return futureIntersections.Union(pastIntersections).ToArray();
+		}
+
+		public IList<DateChange> GetDateChanges(){
+			var currentPlacesQuery = UoW.Session.QueryOver<ContractPlace> ().Where (cp => cp.Contract.Id == Subject.Id);
+			var currentPlaces = currentPlacesQuery.List<ContractPlace> ().ToList ();
+			var changes = new List<DateChange> ();
+			foreach (ContractPlace cp in currentPlaces) {
+				DateTime changeEnd=cp.EndDate.Value;
+				DateTime changeStart=cp.StartDate.Value;
+				if (cp.EndDate.Value == oldEnd)
+					changeEnd = newEnd;				
+				if (cp.StartDate.Value == oldStart)
+					changeStart = newStart;
+				if (cp.StartDate.Value < newStart)
+					changeStart = newStart;
+				if (cp.EndDate > newEnd)
+					changeEnd = newEnd;				
+				if((cp.StartDate!=changeStart)||(cp.EndDate!=changeEnd)) 
+					changes.Add(new DateChange(cp,changeStart,changeEnd));
+			}
+			return changes;					    
+		}
 
 		protected void OnDatepickerCancelDateChanged (object sender, EventArgs e)
 		{
-			TestCorrectDates (true);
+			if (!TestCorrectDates (true)) {
+				datepickerCancel.DateOrNull = prevCancelDate;
+				return;
+			}
+			OnDateChanged ();
+			var problems = GetUnresolvablePlaces ();	
+			if (problems.Length > 0) {
+				ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату расторжения договора т.к. аренда " +
+				                              "следующих мест начинается после даты расторжения:");
+				warning.Run ();
+				warning.Destroy ();
+				datepickerCancel.DateOrNull = prevCancelDate;
+			}
 			TestCanSave ();
 		}
 

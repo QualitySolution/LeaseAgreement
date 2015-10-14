@@ -10,11 +10,12 @@ namespace LeaseAgreement
 	{
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 
-		public ContractPlaceAdd (DateTime? startdate)
+		public ContractPlaceAdd (DateTime? startdate,DateTime? enddate)
 		{
 			this.Build ();
 
 			RestrictStartDate = startdate;
+			RestrictEndDate = enddate;
 
 			ytreeviewPlaces.RepresentationModel = new PlacesVM (this);
 			ytreeviewPlaces.Selection.Mode = Gtk.SelectionMode.Multiple;

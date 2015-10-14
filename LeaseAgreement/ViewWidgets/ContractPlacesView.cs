@@ -2,6 +2,7 @@
 using LeaseAgreement.Domain;
 using QSOrmProject;
 using NHibernate.Criterion;
+using System.Linq;
 
 namespace LeaseAgreement
 {
@@ -33,7 +34,10 @@ namespace LeaseAgreement
 
 		void YtreeviewPlaces_Selection_Changed (object sender, EventArgs e)
 		{
-			buttonDel.Sensitive = ytreeviewPlaces.Selection.CountSelectedRows () > 0;
+			var selectedContractPlaces = ytreeviewPlaces.GetSelectedObjects<ContractPlace> ();
+			bool multipleContractsSamePlace = selectedContractPlaces.GroupBy(c=>c.Place.Id).Select(g=>g.Count()).Any(count=>count>1);
+			buttonEdit.Sensitive = selectedContractPlaces.Length > 0 && !multipleContractsSamePlace;
+			buttonDel.Sensitive = selectedContractPlaces.Length > 0;
 		}
 
 		public ContractPlacesView ()
@@ -55,7 +59,8 @@ namespace LeaseAgreement
 		protected void OnButtonAddClicked (object sender, EventArgs e)
 		{
 			var dlg = new ContractPlaceAdd (
-				Contract.StartDate > DateTime.Today ? Contract.StartDate : DateTime.Today
+				Contract.StartDate > DateTime.Today ? Contract.StartDate : DateTime.Today,
+				Contract.EndDate
 			);
 			dlg.Show ();
 			if((Gtk.ResponseType)dlg.Run () == Gtk.ResponseType.Ok)
@@ -79,6 +84,27 @@ namespace LeaseAgreement
 			{
 				Contract.RemoveLeassedPlace (cp);
 			}
+		}
+
+		protected void OnButtonEditClicked ( object sende, EventArgs e)
+		{
+			var contractPlaces = ytreeviewPlaces.GetSelectedObjects<ContractPlace> ();
+			var dlg = new ContractEdit (contractPlaces);
+			dlg.Show ();
+			if ((Gtk.ResponseType)dlg.Run () == Gtk.ResponseType.Ok) {
+				Array.ForEach(contractPlaces,(place) => {place.StartDate=dlg.StartDate;place.EndDate=dlg.EndDate;});
+			}
+			dlg.Destroy ();
+
+			foreach (var contractPlace in ytreeviewPlaces.GetSelectedObjects<ContractPlace> ()) 
+			{
+				
+			}
+		}
+
+		protected void OnRowActivated (object o, Gtk.RowActivatedArgs args)
+		{
+			OnButtonEditClicked (o, args);
 		}
 	}
 }
