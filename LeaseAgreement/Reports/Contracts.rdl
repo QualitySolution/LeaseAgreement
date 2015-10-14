@@ -15,15 +15,47 @@
     <DataSet Name="Contracts">
       <Query >
         <DataSourceName>MySQL</DataSourceName>
-        <CommandText>select contracts.number, contracts.start_date, contracts.end_date, places.name as place_name, places.area, organizations.name as org_name, lessees.name as less_name, lessees.address, lessees.INN, lessees.phone
-from contracts
-left join places on places.id = contracts.place_id
-left join organizations on organizations.id = contracts.org_id
-left join lessees on lessees.id = contracts.lessee_id
-where organizations.id = @org_id or @org_id = 0;</CommandText>
+        <CommandText>SELECT 
+    contracts.number,
+    contracts.start_date,
+    contracts.end_date,
+    GROUP_CONCAT(CONCAT(place_types.name, '-', places.place_no)
+        SEPARATOR ', ') AS place_name,
+    SUM(places.area) AS area,
+    organizations.name AS org_name,
+    lessees.name AS less_name,
+    lessees.address,
+    lessees.INN,
+    lessees.phone
+FROM
+    contracts
+        LEFT JOIN
+    contract_places ON contracts.id = contract_places.contract_id
+        LEFT JOIN
+    places ON places.id = contract_places.place_id
+        LEFT JOIN
+    place_types ON place_types.id = places.type_id
+        LEFT JOIN
+    organizations ON organizations.id = contracts.org_id
+        LEFT JOIN
+    lessees ON lessees.id = contracts.lessee_id
+WHERE
+    (organizations.id = @org_id
+        OR @org_id = 0)
+	AND (contracts.sign_date &gt;= @startDate
+		OR ISNULL(@startDate))
+    AND (contracts.sign_date &lt;= @endDate
+		OR ISNULL(@endDate))
+GROUP BY contracts.id</CommandText>
         <QueryParameters>
           <QueryParameter Name="org_id">
             <Value>=Parameters!org_id</Value>
+          </QueryParameter>
+          <QueryParameter Name="startDate">
+            <Value>=Parameters!startDate</Value>
+          </QueryParameter>
+          <QueryParameter Name="endDate">
+            <Value>=Parameters!endDate</Value>
           </QueryParameter>
         </QueryParameters>
       </Query>
@@ -95,7 +127,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
           <FontSize>18pt</FontSize>
         </Style>
       </Textbox>
-      <Table Name="Table1" >
+      <Table Name="Table1">
         <DataSetName>Contracts</DataSetName>
         <NoRows>Query returned no rows!</NoRows>
         <Style>
@@ -105,7 +137,10 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
         </Style>
         <TableColumns>
           <TableColumn>
-            <Width>59.1pt</Width>
+            <Width>50.6pt</Width>
+          </TableColumn>
+          <TableColumn >
+            <Width>52.5pt</Width>
           </TableColumn>
           <TableColumn>
             <Width>29.3pt</Width>
@@ -123,7 +158,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
             <Width>70.6pt</Width>
           </TableColumn>
           <TableColumn>
-            <Width>202.5pt</Width>
+            <Width>136.0pt</Width>
           </TableColumn>
         </TableColumns>
         <Header>
@@ -136,6 +171,23 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
                     <Textbox Name="Textbox1">
                       <Value>Номер договора</Value>
                       <Style>
+                        <TextAlign>Center</TextAlign>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>Bold</FontWeight>
+                        <BorderColor />
+                        <BorderWidth />
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell >
+                  <ReportItems>
+                    <Textbox Name="Textbox18">
+                      <Value>Места</Value>
+                      <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
                         <TextAlign>Center</TextAlign>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -258,13 +310,13 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
         <Details>
           <TableRows>
             <TableRow>
-              <Height>29.0pt</Height>
+              <Height>29.1pt</Height>
               <TableCells>
                 <TableCell>
                   <ReportItems>
                     <Textbox Name="Textbox10">
                       <Value>=Fields!number.Value</Value>
-                      <CanGrow>false</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -277,11 +329,27 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
                     </Textbox>
                   </ReportItems>
                 </TableCell>
+                <TableCell >
+                  <ReportItems>
+                    <Textbox Name="Textbox19">
+                      <Value>=Fields!place_name</Value>
+                      <Style xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <BorderColor />
+                        <BorderWidth />
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
                 <TableCell>
                   <ReportItems>
                     <Textbox Name="Textbox11">
                       <Value>=Fields!area.Value</Value>
-                      <CanGrow>false</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -298,7 +366,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
                   <ReportItems>
                     <Textbox Name="Textbox12">
                       <Value>=Fields!less_name.Value</Value>
-                      <CanGrow>false</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -315,7 +383,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
                   <ReportItems>
                     <Textbox Name="Textbox13">
                       <Value>=Fields!start_date.Value</Value>
-                      <CanGrow>false</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -332,7 +400,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
                   <ReportItems>
                     <Textbox Name="Textbox14">
                       <Value>=Fields!end_date.Value</Value>
-                      <CanGrow>false</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -349,7 +417,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
                   <ReportItems>
                     <Textbox Name="Textbox15">
                       <Value>=Fields!INN.Value</Value>
-                      <CanGrow>false</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -366,7 +434,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
                   <ReportItems>
                     <Textbox Name="Textbox16">
                       <Value>=Fields!phone.Value + "\n" + Fields!address.Value</Value>
-                      <CanGrow>false</CanGrow>
+                      <CanGrow>true</CanGrow>
                       <Style>
                         <BorderStyle>
                           <Default>Solid</Default>
@@ -383,8 +451,8 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
             </TableRow>
           </TableRows>
         </Details>
-        <Left>1.6pt</Left>
-        <Top>41.0pt</Top>
+        <Left>6.3pt</Left>
+        <Top>41.7pt</Top>
       </Table>
     </ReportItems>
   </Body>
@@ -404,7 +472,7 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
   </DataSources>
   <DataElementName>Report</DataElementName>
   <DataElementStyle>AttributeNormal</DataElementStyle>
-  <ReportParameters>
+  <ReportParameters >
     <ReportParameter Name="org_id">
       <DataType>Integer</DataType>
       <DefaultValue>
@@ -413,6 +481,22 @@ where organizations.id = @org_id or @org_id = 0;</CommandText>
         </Values>
       </DefaultValue>
       <Nullable>false</Nullable>
+      <AllowBlank>false</AllowBlank>
+      <MultiValue>false</MultiValue>
+      <Prompt>
+      </Prompt>
+    </ReportParameter>
+    <ReportParameter Name="startDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>false</AllowBlank>
+      <MultiValue>false</MultiValue>
+      <Prompt>
+      </Prompt>
+    </ReportParameter>
+    <ReportParameter Name="endDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
       <AllowBlank>false</AllowBlank>
       <MultiValue>false</MultiValue>
       <Prompt>
