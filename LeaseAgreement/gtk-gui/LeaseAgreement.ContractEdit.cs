@@ -23,6 +23,7 @@ namespace LeaseAgreement
 			global::Stetic.Gui.Initialize (this);
 			// Widget LeaseAgreement.ContractEdit
 			this.Name = "LeaseAgreement.ContractEdit";
+			this.Title = global::Mono.Unix.Catalog.GetString ("Измените даты начала/конца аренды.");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.ContractEdit.VBox
 			global::Gtk.VBox w1 = this.VBox;
