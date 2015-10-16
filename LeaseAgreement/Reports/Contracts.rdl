@@ -391,6 +391,7 @@ GROUP BY contracts.id</CommandText>
                         <FontSize>8pt</FontSize>
                         <BorderColor />
                         <BorderWidth />
+                        <Format >dd.MM.yyyy</Format>
                       </Style>
                       <CanShrink>false</CanShrink>
                     </Textbox>
@@ -408,6 +409,7 @@ GROUP BY contracts.id</CommandText>
                         <FontSize>8pt</FontSize>
                         <BorderColor />
                         <BorderWidth />
+                        <Format >dd.MM.yyyy</Format>
                       </Style>
                       <CanShrink>false</CanShrink>
                     </Textbox>
