@@ -36,7 +36,7 @@ namespace LeaseAgreement
 		private DateTime newEnd;
 		private DateTime newStart;
 		private DateTime oldStart;
-
+		private bool isNew;
 
 
 		protected Contract Subject {
@@ -61,6 +61,7 @@ namespace LeaseAgreement
 
 		public ContractDlg ()
 		{
+			this.isNew = true;
 			this.Build ();
 			PrepareDlg ();
 			UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract> ();
@@ -173,6 +174,7 @@ namespace LeaseAgreement
 
 		public ContractDlg (int Id, bool copy = false)
 		{
+			this.isNew = false;
 			this.Build ();
 			PrepareDlg ();
 			logger.Info ("Запрос договора ID:{0}...", Id);
@@ -510,17 +512,19 @@ namespace LeaseAgreement
 		protected void OnDatepickerStartDateChanged (object sender, EventArgs e)
 		{
 			if (!TestCorrectDates (true)) {
-				datepickerStart.DateOrNull = prevStartDate;
+				if(!isNew) datepickerStart.DateOrNull = prevStartDate;
 				return;
 			}
-			OnDateChanged ();
-			var problems = GetUnresolvablePlaces ();	
-			if (problems.Length > 0) {
-				ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату начала договора т.к. аренда " +
-				                              "следующих мест заканчивается до начала договора:");
-				warning.Run ();
-				warning.Destroy ();
-				datepickerStart.DateOrNull = prevStartDate;
+			if (!isNew) {
+				OnDateChanged ();
+				var problems = GetUnresolvablePlaces ();	
+				if (problems.Length > 0) {
+					ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату начала договора т.к. аренда " +
+					                             "следующих мест заканчивается до начала договора:");
+					warning.Run ();
+					warning.Destroy ();
+					datepickerStart.DateOrNull = prevStartDate;
+				}
 			}
 			TestCanSave ();
 		}
@@ -528,17 +532,19 @@ namespace LeaseAgreement
 		protected void OnDatepickerEndDateChanged (object sender, EventArgs e)
 		{
 			if (!TestCorrectDates (true)) {
-				datepickerEnd.DateOrNull = prevEndDate;
+				if(!isNew) datepickerEnd.DateOrNull = prevEndDate;
 				return;
 			}
-			OnDateChanged ();
-			var problems = GetUnresolvablePlaces ();	
-			if (problems.Length > 0) {
-				ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату окончани договора т.к. аренда " +
-				                              "следующих мест начинается после даты окончания:");
-				warning.Run ();
-				warning.Destroy ();
-				datepickerEnd.DateOrNull = prevEndDate;
+			if (!isNew) {
+				OnDateChanged ();
+				var problems = GetUnresolvablePlaces ();	
+				if (problems.Length > 0) {
+					ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату окончани договора т.к. аренда " +
+					                             "следующих мест начинается после даты окончания:");
+					warning.Run ();
+					warning.Destroy ();
+					datepickerEnd.DateOrNull = prevEndDate;
+				}
 			}
 			TestCanSave ();
 		}
@@ -634,17 +640,19 @@ namespace LeaseAgreement
 		protected void OnDatepickerCancelDateChanged (object sender, EventArgs e)
 		{
 			if (!TestCorrectDates (true)) {
-				datepickerCancel.DateOrNull = prevCancelDate;
+				if(!isNew) datepickerCancel.DateOrNull = prevCancelDate;
 				return;
 			}
-			OnDateChanged ();
-			var problems = GetUnresolvablePlaces ();	
-			if (problems.Length > 0) {
-				ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату расторжения договора т.к. аренда " +
-				                              "следующих мест начинается после даты расторжения:");
-				warning.Run ();
-				warning.Destroy ();
-				datepickerCancel.DateOrNull = prevCancelDate;
+			if (!isNew) {
+				OnDateChanged ();
+				var problems = GetUnresolvablePlaces ();	
+				if (problems.Length > 0) {
+					ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату расторжения договора т.к. аренда " +
+					                             "следующих мест начинается после даты расторжения:");
+					warning.Run ();
+					warning.Destroy ();
+					datepickerCancel.DateOrNull = prevCancelDate;
+				}
 			}
 			TestCanSave ();
 		}
