@@ -332,6 +332,12 @@ public partial class MainWindow : Gtk.Window
 			Result = (ResponseType)contractTypeEdit.Run ();
 			contractTypeEdit.Destroy ();
 			break;
+		case "plans":
+			PlanDialog dialog = (e.NewItem)? new PlanDialog ():new PlanDialog(e.ItemId);
+			dialog.Show ();
+			Result = (ResponseType)dialog.Run ();
+			dialog.Destroy ();
+			break;
 		default:
 			Result = ResponseType.None;
 			break;
@@ -461,5 +467,15 @@ public partial class MainWindow : Gtk.Window
 	protected void OnActionCheckUpdateActivated (object sender, EventArgs e)
 	{
 		CheckUpdate.StartCheckUpdateThread (UpdaterFlags.ShowAnyway);
+	}
+ 
+	protected void OnPlanActionActivated (object sender, EventArgs e)
+	{
+		Reference dialog = new Reference ();
+		dialog.SetMode (false, false, true, true, true);
+		dialog.FillList ("plans", "схема", "Схемы");
+		dialog.Show ();
+		dialog.Run ();
+		dialog.Destroy ();
 	}
 }

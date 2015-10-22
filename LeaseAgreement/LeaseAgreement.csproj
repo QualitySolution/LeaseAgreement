@@ -67,6 +67,8 @@
     <Reference Include="NLog">
       <HintPath>..\..\QSProjects\packages\NLog.4.1.2\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Cairo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -146,6 +148,14 @@
     <Compile Include="gtk-gui\LeaseAgreement.ContractEdit.cs" />
     <Compile Include="ServiceDialogs\ContractEditWarning.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.ContractEditWarning.cs" />
+    <Compile Include="Dialogs\PlanDialog.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.PlanDialog.cs" />
+    <Compile Include="ViewWidgets\PlanViewWidget.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.PlanViewWidget.cs" />
+    <Compile Include="MathHelper.cs" />
+    <Compile Include="Domain\Plan.cs" />
+    <Compile Include="HibernateMapping\PlanMap.cs" />
+    <Compile Include="ViewWidgets\ImageDataWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
