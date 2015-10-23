@@ -1,6 +1,8 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using NHibernate.Criterion;
 
 namespace LeaseAgreement
 {
@@ -30,9 +32,13 @@ namespace LeaseAgreement
 			get{ return filename; }
 			set{ SetField (ref filename, value, () => filename); }
 		}
-			
+
+
+		public virtual IList<Polygon> Polygons{ get; set;}
+
 		public Plan ()
 		{
+			Polygons = new List<Polygon> ();
 		}
 	}
 }

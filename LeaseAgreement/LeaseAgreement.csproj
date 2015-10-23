@@ -69,6 +69,7 @@
     </Reference>
     <Reference Include="Mono.Cairo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <Reference Include="System.Drawing" />
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -156,6 +157,8 @@
     <Compile Include="Domain\Plan.cs" />
     <Compile Include="HibernateMapping\PlanMap.cs" />
     <Compile Include="ViewWidgets\ImageDataWrapper.cs" />
+    <Compile Include="Domain\Polygon.cs" />
+    <Compile Include="HibernateMapping\PolygonMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
