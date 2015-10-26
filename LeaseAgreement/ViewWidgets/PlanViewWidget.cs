@@ -209,12 +209,12 @@ namespace LeaseAgreement
 			double viewPortHeight = drawingarea1.Allocation.Height;
 
 			if (args.Event.Direction == ScrollDirection.Up) {
-				gScaleX += 0.05;
-				gScaleY += 0.05;
+				gScaleX *= 1.05;
+				gScaleY *= 1.05;
 			}
 			if (args.Event.Direction == ScrollDirection.Down) {
-				gScaleX -= 0.05;
-				gScaleY -= 0.05;
+				gScaleX /= 1.05;
+				gScaleY /= 1.05;
 			}
 			if (gScaleX < MinScale || gScaleY < MinScale) {
 				gScaleX = oldScaleX;
