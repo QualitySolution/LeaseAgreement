@@ -15,6 +15,10 @@ namespace LeaseAgreement
 				return val;
 		}
 
+		public static double DistanceSquared(PointD a, PointD b){
+			return (a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y);
+		}
+
 		/// <summary>
 		/// Проверяет принадлежность точки многоугольнику.
 		/// </summary>

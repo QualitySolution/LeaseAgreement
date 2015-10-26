@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Gtk;
 using Cairo;
 using Gdk;
@@ -6,6 +7,9 @@ using NLog;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using QSOrmProject;
+using System.Collections.Generic;
+using LeaseAgreement.Domain;
 
 
 namespace LeaseAgreement
@@ -14,10 +18,19 @@ namespace LeaseAgreement
 	public partial class PlanViewWidget : EventBox
 	{ 
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
+		private IUnitOfWorkGeneric<Polygon> UoW;
+		private const double SCREEN_EDIT_LINE_SIZE=5;
+		private const double SCREEN_POINT_SIZE=10;
+
 		private ImageSurface image;
-		private const int BitsPerPixel=4;
 		private ImageDataWrapper imageWrapper;
+
 		private Plan plan;
+		private Polygon editPolygon;
+
+		private PointD mouseCoords;
+		public PlanViewMode Mode{ get; set;}
+
 		public Plan Plan {
 			get{ return plan;}
 			set {
@@ -47,6 +60,11 @@ namespace LeaseAgreement
 			image = GenerateStub ();
 			gScaleX = gScaleY = MinScale;
 			ReconfigureScrollbars();
+		}			
+
+		public bool tick(){
+			drawingarea1.QueueDraw ();
+			return true;
 		}
 
 		private ImageSurface GenerateStub(){
@@ -55,12 +73,12 @@ namespace LeaseAgreement
 			cairo.IdentityMatrix ();
 			cairo.Scale (600,300);
 			cairo.Rectangle (0, 0, 1, 1);
-			cairo.SetSourceRGB (0.8, 0.8, 0.8);
+			cairo.SetSourceRGB (1,1,1);
 			cairo.Fill ();
 			cairo.MoveTo (0, 0.5);
 			cairo.SetFontSize (0.08);
 			cairo.SetSourceRGB (0, 0, 0);
-			cairo.ShowText ("Загрузите изображение");
+			cairo.ShowText ("Загрузите подложку");
 			cairo.Dispose ();
 			return stub;
 		}
@@ -115,25 +133,14 @@ namespace LeaseAgreement
 		protected double CanvasHeight{
 			get{ return image.Height;}
 		}
-			
-		public double normalX(double x){
-			return x / CanvasWidth;
-		}
 
-		public double normalY(double y){
-			return y / CanvasHeight;
-		}
-
-		public double pixelX(double x){
-			return x * CanvasWidth;
-		}
-
-		public double pixelY(double y){
-			return y * CanvasHeight;
+		PointD ScreenToWorld (PointD point)
+		{
+			return new PointD ((point.X + scrollAdjX.Value) / gScaleX, (point.Y+scrollAdjY.Value)/ gScaleY);
 		}
 
 		protected double MinScale{
-			get{ return Math.Max (drawingarea1.Allocation.Width / CanvasWidth, drawingarea1.Allocation.Height / CanvasHeight); }
+			get{ return Math.Min (drawingarea1.Allocation.Width / CanvasWidth, drawingarea1.Allocation.Height / CanvasHeight); }
 		}
 			
 		protected override bool OnButtonPressEvent(EventButton e)
@@ -152,16 +159,43 @@ namespace LeaseAgreement
 
 				cairo.SetSource (image);
 				cairo.Fill ();
-				
-				cairo.Rectangle (100, 100, 100, 100);
-				cairo.SetSourceRGBA (0, 0, 1, 0.5);
-				cairo.Fill ();
-				cairo.Rectangle (220, 100, 100, 100);
-				cairo.SetSourceRGBA (0, 1, 0, 0.5);
-				cairo.Fill ();
-				cairo.Rectangle (340, 100, 100, 100);
-				cairo.SetSourceRGBA (1, 0, 0, 0.5);
-				cairo.Fill ();
+
+				cairo.LineWidth = 5/gScaleX;
+				cairo.LineJoin = LineJoin.Round;
+				cairo.LineCap = LineCap.Round;
+				cairo.SetSourceRGBA (0,0.3,0.8,0.8);
+				foreach(Polygon polygon in plan.Polygons){
+					var color = polygon.Hightlighted ?  new Cairo.Color (0, 0.5, 0.3, 0.8) : new Cairo.Color (0, 0.3, 0.8, 0.8);
+					polygon.draw(cairo,color);
+				}
+
+				cairo.SetSourceRGBA (0, 1, 0, 1);
+			
+				//cairo.Scale (1 / gScaleX, 1 / gScaleY);
+				if (Mode == PlanViewMode.Edit) {
+					cairo.LineCap = LineCap.Round;
+					cairo.LineWidth = SCREEN_EDIT_LINE_SIZE/gScaleX;
+					var iter = editPolygon.Vertices.GetEnumerator ();
+					if (iter.MoveNext ()) {
+						cairo.MoveTo (iter.Current);
+						while (iter.MoveNext ()) {
+							cairo.LineTo (iter.Current);
+						}
+						cairo.LineTo (mouseCoords);
+						cairo.SetSourceRGBA (0, 0.3, 0.8, 0.8);
+						cairo.Stroke ();
+					}
+					cairo.NewPath ();
+					cairo.SetSourceRGBA (0, 0.8, 0.3, 0.8);
+					cairo.LineCap = LineCap.Round;
+					cairo.LineWidth = SCREEN_POINT_SIZE / gScaleX;
+					foreach (PointD p in editPolygon.Vertices) {
+						cairo.MoveTo (p);
+						cairo.LineTo (p);
+						cairo.ClosePath ();
+					}
+					cairo.Stroke ();					
+				}
 			}
 		}
 
@@ -226,6 +260,19 @@ namespace LeaseAgreement
 				dragStartScrollY = scrollAdjY.Value;
 				Console.WriteLine ("Clicked (" + dragStartScrollX + ", " + dragStartScrollY + ")");
 			}
+			if (args.Event.Button == 1) {
+				Console.WriteLine ("Left click at world coords = {" + mouseCoords.X + ", " + mouseCoords.Y + "}");
+				if (Mode == PlanViewMode.Edit) {
+					bool vertexClicked = editPolygon.Vertices.Where (x => MathHelper.DistanceSquared (x, mouseCoords) < SCREEN_POINT_SIZE/gScaleX * SCREEN_POINT_SIZE/gScaleX).Count()>0;
+					if (vertexClicked && editPolygon.Vertices.Count > 2) {
+						Mode = PlanViewMode.View;
+						UoW.Save ();
+					} else {
+						editPolygon.Vertices.Add (mouseCoords);
+						drawingarea1.QueueDraw ();
+					}
+				}
+			}
 		}
 
 		protected void OnButtonReleased(object o, ButtonReleaseEventArgs args){
@@ -234,6 +281,17 @@ namespace LeaseAgreement
 		}
 
 		protected void OnPointerMotion(object o, MotionNotifyEventArgs args){
+			mouseCoords = ScreenToWorld (new PointD(args.Event.X, args.Event.Y));
+			if (Mode == PlanViewMode.Edit) {
+				drawingarea1.QueueDraw ();
+			}
+			foreach (Polygon polygon in plan.Polygons) {
+				bool highlighted = polygon.Contains (mouseCoords);
+				if (highlighted ^ polygon.Hightlighted) {
+					drawingarea1.QueueDraw ();
+					polygon.Hightlighted = highlighted;
+				}
+			}
 			if (isDragging) {								
 				scrollAdjX.Value = MathHelper.Clamp (dragStartScrollX + (dragStartX - args.Event.X),scrollAdjX.Lower,scrollAdjX.Upper-scrollAdjX.PageSize);
 				scrollAdjY.Value = MathHelper.Clamp (dragStartScrollY + (dragStartY - args.Event.Y),scrollAdjY.Lower,scrollAdjY.Upper-scrollAdjY.PageSize);
@@ -244,6 +302,20 @@ namespace LeaseAgreement
 			imageWrapper.Dispose ();
 			if(image!=null) image.Dispose ();
 		}
+
+		public void StartEdit(Place place){
+			UoW = UnitOfWorkFactory.CreateWithNewRoot<Polygon> ();
+			editPolygon = UoW.Root;
+			editPolygon.Plan = plan;
+			editPolygon.Place = place;
+			editPolygon.Vertices = new List<PointD> ();
+			Mode = PlanViewMode.Edit;
+		}
+	}
+
+	public enum PlanViewMode{
+		View,
+		Edit
 	}
 }
 

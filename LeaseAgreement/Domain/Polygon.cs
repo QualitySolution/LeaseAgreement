@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 namespace LeaseAgreement
 {
 	public class Polygon : PropertyChangedBase
+	public class Polygon : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id{ get; set; }
 
@@ -19,9 +20,10 @@ namespace LeaseAgreement
 			set{ SetField (ref plan, value, () => Plan);}
 		}
 
+		private List<PointD> vertices;
 		public virtual List<PointD> Vertices{ 
-			get; 
-			set; 
+			get{return vertices;} 
+			set{ vertices = value; } 
 		}
 
 		public virtual string Points { 
@@ -34,9 +36,6 @@ namespace LeaseAgreement
 		public virtual bool Hightlighted{ get; set;}
 
 		public virtual void draw(Context cairo,Cairo.Color color){
-			cairo.LineWidth = 5;
-			cairo.LineJoin = LineJoin.Round;
-			cairo.LineCap = LineCap.Round;
 			bool first = true;
 			PointD firstPoint = new PointD (0, 0);
 			foreach (PointD point in Vertices) {
@@ -60,7 +59,7 @@ namespace LeaseAgreement
 
 		public Polygon ()
 		{
-			Vertices = new List<PointD> ();
+			vertices = new List<PointD> ();
 		}
 
 	}

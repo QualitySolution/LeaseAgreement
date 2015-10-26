@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using QSOrmProject;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Gtk;
+using LeaseAgreement.Domain;
 
 namespace LeaseAgreement
 {
@@ -20,6 +22,7 @@ namespace LeaseAgreement
 			plan = UoW.Root;
 			Title = "Новая схема";		
 			planViewWidget.Plan = plan;
+			//planViewWidget.StartEdit (UoW.Session.QueryOver<Place>().Where(p=>p.Id==2).List().First());
 		}
 
 		public PlanDialog(int id)
@@ -31,6 +34,9 @@ namespace LeaseAgreement
 			nameEntry.Text = plan.Name;
 			Validate ();
 			planViewWidget.Plan=plan;
+			Place place = UoW.Session.QueryOver<Place> ().Where (p => p.Id == 2).List ().ToArray () [0];
+			Console.WriteLine (place.Name);
+			planViewWidget.StartEdit (place);
 		}
 
 		protected void OnButtonOkClicked (object sender, EventArgs e)
@@ -67,7 +73,7 @@ namespace LeaseAgreement
 					dataStream.Position = 0;
 					plan.Image = new byte[dataStream.Length];
 					dataStream.Read (plan.Image, 0, (int)dataStream.Length);
-					plan.Filename = fileChooser.Filename;
+					plan.Filename = System.IO.Path.GetFileName(fileChooser.Filename);
 				}		
 				planViewWidget.OnPlanImageChanged();
 				Validate ();
