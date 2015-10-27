@@ -22,6 +22,7 @@ namespace LeaseAgreement
 		{
 			global::Stetic.Gui.Initialize (this);
 			// Widget LeaseAgreement.PolygonDlg
+			this.Events = ((global::Gdk.EventMask)(1024));
 			this.Name = "LeaseAgreement.PolygonDlg";
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.PolygonDlg.VBox
@@ -114,6 +115,7 @@ namespace LeaseAgreement
 			this.DefaultWidth = 400;
 			this.DefaultHeight = 300;
 			this.Show ();
+			this.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnKeyPressEvent);
 			this.planEntryReference.Changed += new global::System.EventHandler (this.OnPlanEntryReferenceChanged);
 			this.buttonDelete.Clicked += new global::System.EventHandler (this.OnButtonDeleteClicked);
 			this.buttonDeletePolygon.Clicked += new global::System.EventHandler (this.OnButtonDeletePolygonClicked);

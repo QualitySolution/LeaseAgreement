@@ -5,6 +5,7 @@ using QSOrmProject;
 using NHibernate.Criterion;
 using Cairo;
 using System.Collections.Generic;
+using Gtk;
 
 namespace LeaseAgreement
 {
@@ -73,6 +74,17 @@ namespace LeaseAgreement
 			planviewwidget1.RemoveAllVertices ();
 
 		}
+
+		protected void OnKeyPressEvent(object sender, KeyPressEventArgs e)
+		{
+			if (e.Event.Key == Gdk.Key.Delete || e.Event.Key == Gdk.Key.KP_Delete) {				
+				if (e.Event.State.HasFlag (Gdk.ModifierType.ShiftMask))
+					OnButtonDeletePolygonClicked (this, null);
+				else
+					OnButtonDeleteClicked (this, null);
+			}
+		}
+				
 	}
 }
 

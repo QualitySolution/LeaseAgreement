@@ -117,7 +117,7 @@ namespace LeaseAgreement
 
 		public void OnPlanImageChanged(){
 			image.Dispose ();
-			if (plan.Image != null) {				
+			if ((plan!=null)&&(plan.Image != null)) {				
 				using (var dataStream = new MemoryStream (plan.Image)) {
 					SetImage (dataStream);
 				}
