@@ -95,6 +95,7 @@ namespace LeaseAgreement
 			w7.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
 			this.planViewWidget = new global::LeaseAgreement.PlanViewWidget ();
+			this.planViewWidget.Sensitive = false;
 			this.planViewWidget.Events = ((global::Gdk.EventMask)(256));
 			this.planViewWidget.Name = "planViewWidget";
 			this.planViewWidget.VisibleWindow = false;

@@ -9,7 +9,7 @@ using LeaseAgreement.Domain;
 
 namespace LeaseAgreement
 {
-	public partial class PlanDialog : Gtk.Dialog
+	public partial class PlanDialog : FakeTDIDialogGtkDialogBase
 	{
 		protected int? id;
 		protected Plan plan;
@@ -25,6 +25,11 @@ namespace LeaseAgreement
 			//planViewWidget.StartEdit (UoW.Session.QueryOver<Place>().Where(p=>p.Id==2).List().First());
 		}
 
+		public PlanDialog(Plan plan):this(plan.Id)
+		{
+			
+		}
+
 		public PlanDialog(int id)
 		{
 			this.Build ();
@@ -34,13 +39,12 @@ namespace LeaseAgreement
 			nameEntry.Text = plan.Name;
 			Validate ();
 			planViewWidget.Plan=plan;
-			Place place = UoW.Session.QueryOver<Place> ().Where (p => p.Id == 2).List ().ToArray () [0];
-			Console.WriteLine (place.Name);
-			planViewWidget.StartEdit (place);
+			//planViewWidget.StartEdit (2);//TODO Убрать
 		}
 
 		protected void OnButtonOkClicked (object sender, EventArgs e)
 		{
+			plan.Name = nameEntry.Text;
 			UoW.Save ();
 		}
 

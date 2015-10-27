@@ -161,6 +161,8 @@
     <Compile Include="ViewWidgets\ImageDataWrapper.cs" />
     <Compile Include="Domain\Polygon.cs" />
     <Compile Include="HibernateMapping\PolygonMap.cs" />
+    <Compile Include="Dialogs\PolygonDlg.cs" />
+    <Compile Include="gtk-gui\LeaseAgreement.PolygonDlg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

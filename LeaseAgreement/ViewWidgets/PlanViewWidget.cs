@@ -18,7 +18,6 @@ namespace LeaseAgreement
 	public partial class PlanViewWidget : EventBox
 	{ 
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
-		private IUnitOfWorkGeneric<Polygon> UoW;
 		private const double SCREEN_EDIT_LINE_SIZE=5;
 		private const double SCREEN_POINT_SIZE=10;
 
@@ -26,15 +25,30 @@ namespace LeaseAgreement
 		private ImageDataWrapper imageWrapper;
 
 		private Plan plan;
+		public Polygon CurrentPolygon{ get{ return editPolygon; } set{ editPolygon = value; }}
 		private Polygon editPolygon;
+		public PointD? SelectedVertex{ get; private set;}
 
 		private PointD mouseCoords;
-		public PlanViewMode Mode{ get; set;}
+		private PlanViewMode mode;
+		public PlanViewMode Mode{ 
+			get{ return mode;}
+			set{ 
+				mode = value;
+				if (mode == PlanViewMode.Selection) {
+					SelectedVertex = null;
+				} else if (mode == PlanViewMode.Edit) {
+					editPolygon.Vertices = new List<PointD> ();
+					editPolygon.Plan = plan;
+				} 
+			}
+		}
 
 		public Plan Plan {
 			get{ return plan;}
 			set {
 				plan = value;
+				Sensitive = (plan != null);
 				OnPlanImageChanged ();
 			}
 		}
@@ -53,6 +67,7 @@ namespace LeaseAgreement
 		public PlanViewWidget ()
 		{			
 			this.Build ();
+			Mode = PlanViewMode.View;
 			scrollAdjX = new Adjustment (0, 0, 0, 20, 0, 0);
 			scrollAdjY = new Adjustment (0, 0, 0, 20, 0, 0);
 			hscrollbar1.Adjustment = scrollAdjX;
@@ -150,6 +165,8 @@ namespace LeaseAgreement
 			
 		protected void OnDrawingAreaExposed (object o, ExposeEventArgs args)
 		{			
+			if (plan == null)
+				return;
 			DrawingArea area = (DrawingArea)o;
 			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {			 	
 				cairo.Rectangle (0, 0, area.Allocation.Width,area.Allocation.Height);
@@ -165,14 +182,34 @@ namespace LeaseAgreement
 				cairo.LineCap = LineCap.Round;
 				cairo.SetSourceRGBA (0,0.3,0.8,0.8);
 				foreach(Polygon polygon in plan.Polygons){
-					var color = polygon.Hightlighted ?  new Cairo.Color (0, 0.5, 0.3, 0.8) : new Cairo.Color (0, 0.3, 0.8, 0.8);
-					polygon.draw(cairo,color);
+					if (polygon != editPolygon) {
+						var color = polygon.Hightlighted ? new Cairo.Color (0, 0.5, 0.3, 0.8) : new Cairo.Color (0, 0.3, 0.8, 0.8);
+						polygon.draw (cairo, color);
+					}
 				}
 
-				cairo.SetSourceRGBA (0, 1, 0, 1);
-			
-				//cairo.Scale (1 / gScaleX, 1 / gScaleY);
+				if (Mode == PlanViewMode.View) {
+					var color = editPolygon.Hightlighted ? new Cairo.Color (0, 0.5, 0.3, 0.8) : new Cairo.Color (0, 0.3, 0.8, 0.8);
+					editPolygon.draw (cairo, color);
+				}
+
+				if (Mode == PlanViewMode.View) {
+					cairo.SetSourceRGBA (0, 1, 0, 1);
+					DrawVertices (cairo,editPolygon);
+				}
+
+				// текущий полигон всегда подсвечен
+				if (Mode == PlanViewMode.Selection) {
+					cairo.SetSourceRGBA (0, 0.5, 0.3, 0.8);
+					var color = editPolygon.Hightlighted ? new Cairo.Color (0, 0.5, 0.3, 0.8) : new Cairo.Color (0, 0.3, 0.8, 0.8);
+					editPolygon.draw (cairo, color);
+					cairo.SetSourceRGBA (0, 0.8, 0.3, 0.8);
+					DrawVertices (cairo, editPolygon,SelectedVertex);
+				}
+
 				if (Mode == PlanViewMode.Edit) {
+					//cairo.SetSourceRGBA (0, 1, 0, 1);					
+					// draw lines
 					cairo.LineCap = LineCap.Round;
 					cairo.LineWidth = SCREEN_EDIT_LINE_SIZE/gScaleX;
 					var iter = editPolygon.Vertices.GetEnumerator ();
@@ -185,18 +222,41 @@ namespace LeaseAgreement
 						cairo.SetSourceRGBA (0, 0.3, 0.8, 0.8);
 						cairo.Stroke ();
 					}
-					cairo.NewPath ();
-					cairo.SetSourceRGBA (0, 0.8, 0.3, 0.8);
-					cairo.LineCap = LineCap.Round;
-					cairo.LineWidth = SCREEN_POINT_SIZE / gScaleX;
-					foreach (PointD p in editPolygon.Vertices) {
-						cairo.MoveTo (p);
-						cairo.LineTo (p);
-						cairo.ClosePath ();
+					// draw vertices
+					DrawVertices(cairo, editPolygon);
+					// draw first point
+					cairo.SetSourceRGBA (0, 1, 0, 1);	
+					if (editPolygon.Vertices.Count == 0) 
+					{
+						cairo.MoveTo (mouseCoords);
+						cairo.LineTo (mouseCoords);				
 					}
-					cairo.Stroke ();					
+					cairo.Stroke ();
 				}
 			}
+		}
+
+		protected void DrawVertices(Context cairo,Polygon polygon)
+		{
+			DrawVertices (cairo, polygon, null);
+		}
+
+		protected void DrawVertices(Context cairo, Polygon polygon, PointD? selected)
+		{
+			cairo.NewPath ();
+			cairo.LineCap = LineCap.Round;
+			cairo.LineWidth = SCREEN_POINT_SIZE / gScaleX;
+			foreach (PointD p in polygon.Vertices) {
+				if(selected.HasValue && (p.Equals(selected.Value)))
+					cairo.SetSourceRGBA (0, 0.8, 0.3, 0.8);
+				else 
+					cairo.SetSourceRGBA (0.8, 0, 0.3, 0.8);
+				cairo.MoveTo (p);
+				cairo.LineTo (p);
+				cairo.ClosePath ();
+			}
+			cairo.Stroke ();	
+
 		}
 
 		protected void OnDrawingAreaScroll (object o, ScrollEventArgs args)
@@ -265,12 +325,17 @@ namespace LeaseAgreement
 				if (Mode == PlanViewMode.Edit) {
 					bool vertexClicked = editPolygon.Vertices.Where (x => MathHelper.DistanceSquared (x, mouseCoords) < SCREEN_POINT_SIZE/gScaleX * SCREEN_POINT_SIZE/gScaleX).Count()>0;
 					if (vertexClicked && editPolygon.Vertices.Count > 2) {
-						Mode = PlanViewMode.View;
-						UoW.Save ();
+						FinishEditing ();
 					} else {
 						editPolygon.Vertices.Add (mouseCoords);
 						drawingarea1.QueueDraw ();
 					}
+				}
+				if (Mode == PlanViewMode.Selection) {
+					SelectedVertex = editPolygon.Vertices
+						.Where (x => 
+						        MathHelper.DistanceSquared (x, mouseCoords) < SCREEN_POINT_SIZE / gScaleX * SCREEN_POINT_SIZE / gScaleX)
+						.ToList ().FirstOrDefault (null);					
 				}
 			}
 		}
@@ -302,18 +367,16 @@ namespace LeaseAgreement
 			imageWrapper.Dispose ();
 			if(image!=null) image.Dispose ();
 		}
-
-		public void StartEdit(Place place){
-			UoW = UnitOfWorkFactory.CreateWithNewRoot<Polygon> ();
-			editPolygon = UoW.Root;
-			editPolygon.Plan = plan;
-			editPolygon.Place = place;
-			editPolygon.Vertices = new List<PointD> ();
-			Mode = PlanViewMode.Edit;
+			
+		private void FinishEditing ()
+		{			
+			Mode = PlanViewMode.Selection;	
+			drawingarea1.QueueDraw ();
 		}
 	}
 
 	public enum PlanViewMode{
+		Selection,
 		View,
 		Edit
 	}

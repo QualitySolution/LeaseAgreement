@@ -86,6 +86,8 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Button buttonNewContract;
 		
+		private global::Gtk.Button buttonMap;
+		
 		private global::Gtk.Label GtkLabel10;
 		
 		private global::Gtk.Notebook notebookMain;
@@ -306,11 +308,11 @@ namespace LeaseAgreement
 			w13.XOptions = ((global::Gtk.AttachOptions)(4));
 			w13.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.spinArea = new global::Gtk.DataBindings.DataSpinButton (0, 100000, 1);
+			this.spinArea = new global::Gtk.DataBindings.DataSpinButton (0D, 100000D, 1D);
 			this.spinArea.CanFocus = true;
 			this.spinArea.Name = "spinArea";
-			this.spinArea.Adjustment.PageIncrement = 100;
-			this.spinArea.ClimbRate = 1;
+			this.spinArea.Adjustment.PageIncrement = 100D;
+			this.spinArea.ClimbRate = 1D;
 			this.spinArea.Digits = ((uint)(2));
 			this.spinArea.Numeric = true;
 			this.spinArea.InheritedDataSource = true;
@@ -526,14 +528,25 @@ namespace LeaseAgreement
 			this.buttonNewContract.Image = w35;
 			this.hbox1.Add (this.buttonNewContract);
 			global::Gtk.Box.BoxChild w36 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonNewContract]));
-			w36.Position = 3;
+			w36.Position = 2;
 			w36.Expand = false;
 			w36.Fill = false;
-			this.vbox4.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w37 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
-			w37.Position = 1;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.buttonMap = new global::Gtk.Button ();
+			this.buttonMap.CanFocus = true;
+			this.buttonMap.Name = "buttonMap";
+			this.buttonMap.UseUnderline = true;
+			this.buttonMap.Label = global::Mono.Unix.Catalog.GetString ("На карте");
+			this.hbox1.Add (this.buttonMap);
+			global::Gtk.Box.BoxChild w37 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonMap]));
+			w37.Position = 3;
 			w37.Expand = false;
 			w37.Fill = false;
+			this.vbox4.Add (this.hbox1);
+			global::Gtk.Box.BoxChild w38 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
+			w38.Position = 1;
+			w38.Expand = false;
+			w38.Fill = false;
 			this.GtkAlignment10.Add (this.vbox4);
 			this.frame1.Add (this.GtkAlignment10);
 			this.GtkLabel10 = new global::Gtk.Label ();
@@ -542,17 +555,17 @@ namespace LeaseAgreement
 			this.GtkLabel10.UseMarkup = true;
 			this.frame1.LabelWidget = this.GtkLabel10;
 			this.vbox3.Add (this.frame1);
-			global::Gtk.Box.BoxChild w40 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.frame1]));
-			w40.Position = 1;
-			w40.Expand = false;
-			w40.Fill = false;
-			this.hbox2.Add (this.vbox3);
-			global::Gtk.Box.BoxChild w41 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.vbox3]));
+			global::Gtk.Box.BoxChild w41 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.frame1]));
 			w41.Position = 1;
+			w41.Expand = false;
+			w41.Fill = false;
+			this.hbox2.Add (this.vbox3);
+			global::Gtk.Box.BoxChild w42 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.vbox3]));
+			w42.Position = 1;
 			this.vbox2.Add (this.hbox2);
-			global::Gtk.Box.BoxChild w42 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox2]));
-			w42.Position = 0;
-			w42.Expand = false;
+			global::Gtk.Box.BoxChild w43 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox2]));
+			w43.Position = 0;
+			w43.Expand = false;
 			// Container child vbox2.Gtk.Box+BoxChild
 			this.notebookMain = new global::Gtk.Notebook ();
 			this.notebookMain.CanFocus = true;
@@ -576,17 +589,17 @@ namespace LeaseAgreement
 			this.notebookMain.SetTabLabel (this.GtkScrolledWindow1, this.label5);
 			this.label5.ShowAll ();
 			this.vbox2.Add (this.notebookMain);
-			global::Gtk.Box.BoxChild w45 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.notebookMain]));
-			w45.Position = 1;
+			global::Gtk.Box.BoxChild w46 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.notebookMain]));
+			w46.Position = 1;
 			w1.Add (this.vbox2);
-			global::Gtk.Box.BoxChild w46 = ((global::Gtk.Box.BoxChild)(w1 [this.vbox2]));
-			w46.Position = 0;
+			global::Gtk.Box.BoxChild w47 = ((global::Gtk.Box.BoxChild)(w1 [this.vbox2]));
+			w47.Position = 0;
 			// Internal child LeaseAgreement.PlaceDlg.ActionArea
-			global::Gtk.HButtonBox w47 = this.ActionArea;
-			w47.Name = "dialog1_ActionArea";
-			w47.Spacing = 10;
-			w47.BorderWidth = ((uint)(5));
-			w47.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w48 = this.ActionArea;
+			w48.Name = "dialog1_ActionArea";
+			w48.Spacing = 10;
+			w48.BorderWidth = ((uint)(5));
+			w48.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
@@ -594,13 +607,13 @@ namespace LeaseAgreement
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = global::Mono.Unix.Catalog.GetString ("О_тменить");
-			global::Gtk.Image w48 = new global::Gtk.Image ();
-			w48.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
-			this.buttonCancel.Image = w48;
+			global::Gtk.Image w49 = new global::Gtk.Image ();
+			w49.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
+			this.buttonCancel.Image = w49;
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w49 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w47 [this.buttonCancel]));
-			w49.Expand = false;
-			w49.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w50 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w48 [this.buttonCancel]));
+			w50.Expand = false;
+			w50.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.Sensitive = false;
@@ -609,14 +622,14 @@ namespace LeaseAgreement
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = global::Mono.Unix.Catalog.GetString ("_OK");
-			global::Gtk.Image w50 = new global::Gtk.Image ();
-			w50.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Menu);
-			this.buttonOk.Image = w50;
-			w47.Add (this.buttonOk);
-			global::Gtk.ButtonBox.ButtonBoxChild w51 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w47 [this.buttonOk]));
-			w51.Position = 1;
-			w51.Expand = false;
-			w51.Fill = false;
+			global::Gtk.Image w51 = new global::Gtk.Image ();
+			w51.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Menu);
+			this.buttonOk.Image = w51;
+			w48.Add (this.buttonOk);
+			global::Gtk.ButtonBox.ButtonBoxChild w52 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w48 [this.buttonOk]));
+			w52.Position = 1;
+			w52.Expand = false;
+			w52.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
@@ -628,6 +641,7 @@ namespace LeaseAgreement
 			this.buttonContract.Clicked += new global::System.EventHandler (this.OnButtonContractClicked);
 			this.buttonLessee.Clicked += new global::System.EventHandler (this.OnButtonLesseeClicked);
 			this.buttonNewContract.Clicked += new global::System.EventHandler (this.OnButtonNewContractClicked);
+			this.buttonMap.Clicked += new global::System.EventHandler (this.OnButtonMapClicked);
 			this.treeviewHistory.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnTreeviewHistoryButtonPressEvent);
 			this.treeviewHistory.PopupMenu += new global::Gtk.PopupMenuHandler (this.OnTreeviewHistoryPopupMenu);
 			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkClicked);
