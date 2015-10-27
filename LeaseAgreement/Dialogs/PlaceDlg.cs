@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data.Bindings;
 using Gtk;
 using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
+using QSOrmProject;
 
 namespace LeaseAgreement
 {
@@ -18,6 +20,7 @@ namespace LeaseAgreement
 		private List<PlaceType> typesList;
 		private List<Stead> steadsList;
 		private List<Organization> orgList;
+		private List<Polygon> polygonList;
 		int lessee_id, ContractId;
 
 		Gtk.ListStore HistoryStore;
@@ -91,6 +94,12 @@ namespace LeaseAgreement
 				subject.PlaceNumber = rdr ["place_no"].ToString ();
 				subject.Area = DBWorks.GetDecimal (rdr, "area", default(decimal));
 				subject.Comment = rdr ["comments"].ToString ();
+				int? id = DBWorks.GetInt(rdr,"polygon_id");
+				if (id.HasValue) {
+					var temp = UnitOfWorkFactory.CreateWithoutRoot ();
+					subject.Polygon = temp.Session.QueryOver<Polygon> ().Where (p => p.Id == id.Value).List ().ToArray () [0];
+					temp.Dispose ();
+				}
 			}
 			FillCurrentContract ();
 			customPlace.LoadDataFromDB (subject.Id);
@@ -190,13 +199,13 @@ namespace LeaseAgreement
 			MySqlTransaction trans = (MySqlTransaction)QSMain.ConnectionDB.BeginTransaction ();
 			if(newItem)
 			{
-				sql = "INSERT INTO places (type_id, place_no, name, area, stead_id, org_id, comments) " +
-					"VALUES (@type_id, @place_no, @name, @area, @stead_id, @org, @comments)";
+				sql = "INSERT INTO places (type_id, place_no, name, area, stead_id, org_id, comments, polygon_id) " +
+					"VALUES (@type_id, @place_no, @name, @area, @stead_id, @org, @comments, @polygon)";
 			}
 			else
 			{
 				sql = "UPDATE places SET name = @name, area = @area, stead_id = @stead_id, " +
-					"org_id = @org, comments = @comments " +
+					"org_id = @org, comments = @comments, polygon_id=@polygon " +
 					"WHERE type_id = @type_id and place_no = @place_no";
 			}
 			try 
@@ -210,6 +219,7 @@ namespace LeaseAgreement
 				cmd.Parameters.AddWithValue("@area", subject.Area);
 				cmd.Parameters.AddWithValue("@comments", subject.Comment);
 				cmd.Parameters.AddWithValue("@stead_id", DBWorks.IdPropertyOrNull (subject.Stead));
+				cmd.Parameters.AddWithValue("@polygon", DBWorks.IdPropertyOrNull (subject.Polygon));
 
 				cmd.ExecuteNonQuery();
 
@@ -360,6 +370,19 @@ namespace LeaseAgreement
 			winContract.Run();
 			winContract.Destroy();
 			FillCurrentContract ();
+		}
+
+		protected void OnButtonMapClicked (object sender, EventArgs e)
+		{	
+			PolygonDlg dlg;
+			if (subject.Polygon == null)
+				dlg = new PolygonDlg ();
+			else dlg = new PolygonDlg (subject.Polygon);
+			dlg.Show ();
+			if ((ResponseType)dlg.Run () == ResponseType.Ok) {
+				subject.Polygon = dlg.Polygon;
+			};
+			dlg.Destroy ();			
 		}
 	}
 }

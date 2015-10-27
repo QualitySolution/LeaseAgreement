@@ -247,15 +247,20 @@ namespace LeaseAgreement
 			cairo.LineCap = LineCap.Round;
 			cairo.LineWidth = SCREEN_POINT_SIZE / gScaleX;
 			foreach (PointD p in polygon.Vertices) {
-				if(selected.HasValue && (p.Equals(selected.Value)))
-					cairo.SetSourceRGBA (0, 0.8, 0.3, 0.8);
-				else 
-					cairo.SetSourceRGBA (0.8, 0, 0.3, 0.8);
+				cairo.SetSourceRGBA (0, 0.8, 0.3, 0.8);
 				cairo.MoveTo (p);
 				cairo.LineTo (p);
 				cairo.ClosePath ();
 			}
-			cairo.Stroke ();	
+			cairo.Stroke ();
+			if (selected.HasValue) {
+				cairo.SetSourceRGBA (0.8, 0, 0.3, 0.8);
+				cairo.MoveTo (selected.Value);
+				cairo.LineTo (selected.Value);
+				cairo.ClosePath ();
+				cairo.Stroke ();
+			}
+
 
 		}
 
@@ -335,7 +340,8 @@ namespace LeaseAgreement
 					SelectedVertex = editPolygon.Vertices
 						.Where (x => 
 						        MathHelper.DistanceSquared (x, mouseCoords) < SCREEN_POINT_SIZE / gScaleX * SCREEN_POINT_SIZE / gScaleX)
-						.ToList ().FirstOrDefault (null);					
+						.ToList ().FirstOrDefault ();
+					drawingarea1.QueueDraw ();
 				}
 			}
 		}
@@ -371,6 +377,25 @@ namespace LeaseAgreement
 		private void FinishEditing ()
 		{			
 			Mode = PlanViewMode.Selection;	
+			drawingarea1.QueueDraw ();
+		}
+
+		public void RemoveSelectedVertex ()
+		{
+			if (SelectedVertex.HasValue) {
+				if (CurrentPolygon.Vertices.Count > 3) {
+					CurrentPolygon.Vertices.Remove (SelectedVertex.Value);
+					SelectedVertex = null;
+					drawingarea1.QueueDraw ();
+				} else {
+					RemoveAllVertices ();
+				}
+			}
+		}
+
+		public void RemoveAllVertices(){
+			CurrentPolygon.Vertices = new List<PointD> ();
+			Mode = PlanViewMode.Edit;
 			drawingarea1.QueueDraw ();
 		}
 	}

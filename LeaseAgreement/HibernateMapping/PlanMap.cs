@@ -11,7 +11,6 @@ namespace LeaseAgreement
 			Not.LazyLoad ();
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
-			Map (x => x.Image).Column ("image");
 			Map (x => x.Image).Column ("image").LazyLoad();
 			Map (x => x.Filename).Column ("filename");
 			Map (x => x.Name).Column ("name");

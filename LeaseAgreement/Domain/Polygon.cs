@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 
 namespace LeaseAgreement
 {
-	public class Polygon : PropertyChangedBase
 	public class Polygon : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id{ get; set; }
@@ -31,7 +30,7 @@ namespace LeaseAgreement
 			set{Vertices = (List<PointD>)JsonConvert.DeserializeObject (value, typeof(List<PointD>));} 
 		}
 
-		public virtual Place Place{ get; set; }
+		//public virtual Place Place{ get; set; }
 
 		public virtual bool Hightlighted{ get; set;}
 

@@ -13,6 +13,7 @@ namespace LeaseAgreement
 		private IUnitOfWorkGeneric<Polygon> UoW;
 		public Polygon Polygon{ get{ return polygon;}}
 		private Polygon polygon;
+		private bool initialized;
 
 		public PolygonDlg (Polygon polygon)
 		{
@@ -36,6 +37,8 @@ namespace LeaseAgreement
 			planEntryReference.SubjectType = typeof(Plan);
 			planEntryReference.Binding.AddBinding (polygon, p => p.Plan, w => w.Subject);	
 			planEntryReference.Binding.InitializeFromSource ();
+			initialized = true;
+
 			if (polygon.Plan!=null) {				
 				planviewwidget1.Plan = polygon.Plan;		
 				planviewwidget1.CurrentPolygon = polygon;
@@ -48,10 +51,11 @@ namespace LeaseAgreement
 		}
 
 		protected void OnPlanEntryReferenceChanged (object sender, EventArgs e)
-		{
-			planviewwidget1.Plan = (Plan)planEntryReference.Subject;
-			planviewwidget1.CurrentPolygon = polygon; // FIX Лишнее??
-			planviewwidget1.Mode=PlanViewMode.Edit;
+		{			
+			if (initialized) {
+				planviewwidget1.Plan = (Plan)planEntryReference.Subject;
+				planviewwidget1.Mode = PlanViewMode.Edit;
+			}
 		}
 
 		public void OnButtonOkClicked(object sender, EventArgs args)
@@ -61,18 +65,13 @@ namespace LeaseAgreement
 
 		protected void OnButtonDeleteClicked (object sender, EventArgs e)
 		{			
-			var currentPolygon = planviewwidget1.CurrentPolygon;
-			if (planviewwidget1.SelectedVertex.HasValue) {
-				if (currentPolygon.Vertices.Count>3) {
-					currentPolygon.Vertices.Remove (planviewwidget1.SelectedVertex.Value);
-				}else
-					currentPolygon.Vertices = new List<PointD>();
-			}
+			planviewwidget1.RemoveSelectedVertex ();
 		}
 
 		protected void OnButtonDeletePolygonClicked (object sender, EventArgs e)
 		{
-			polygon.Vertices=new List<PointD>();
+			planviewwidget1.RemoveAllVertices ();
+
 		}
 	}
 }

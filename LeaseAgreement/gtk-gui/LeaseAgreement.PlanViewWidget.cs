@@ -17,6 +17,7 @@ namespace LeaseAgreement
 			global::Stetic.Gui.Initialize (this);
 			// Widget LeaseAgreement.PlanViewWidget
 			global::Stetic.BinContainer.Attach (this);
+			this.Sensitive = false;
 			this.Name = "LeaseAgreement.PlanViewWidget";
 			// Container child LeaseAgreement.PlanViewWidget.Gtk.Container+ContainerChild
 			this.table1 = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
