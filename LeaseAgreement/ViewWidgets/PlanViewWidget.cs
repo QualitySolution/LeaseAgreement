@@ -171,9 +171,9 @@ namespace LeaseAgreement
 			if (plan == null)
 				return;
 			DrawingArea area = (DrawingArea)o;
-			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {			 	
+			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {						
 				cairo.Rectangle (0, 0, area.Allocation.Width,area.Allocation.Height);
-			
+
 				cairo.Translate (-scrollAdjX.Value, -scrollAdjY.Value);
 				cairo.Scale(gScaleX,gScaleY);
 
@@ -191,12 +191,12 @@ namespace LeaseAgreement
 					}
 				}
 
-				if (Mode == PlanViewMode.View) {
+				if (Mode == PlanViewMode.Selection) {
 					var color = editPolygon.Hightlighted ? new Cairo.Color (0, 0.5, 0.3, 0.8) : new Cairo.Color (0, 0.3, 0.8, 0.8);
 					editPolygon.draw (cairo, color);
 				}
 
-				if (Mode == PlanViewMode.View) {
+				if (Mode == PlanViewMode.Selection) {
 					cairo.SetSourceRGBA (0, 1, 0, 1);
 					DrawVertices (cairo,editPolygon);
 				}
@@ -350,6 +350,7 @@ namespace LeaseAgreement
 						           MathHelper.DistanceSquared (x, mouseCoords) < SCREEN_POINT_SIZE / gScaleX * SCREEN_POINT_SIZE / gScaleX);
 					if (selectedVertexIndex != -1) {
 						isDraggingVertex = true;
+						drawingarea1.QueueDraw ();
 						return;
 					}
 					
