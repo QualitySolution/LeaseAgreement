@@ -30,11 +30,12 @@ namespace LeaseAgreement
 			set{Vertices = (List<PointD>)JsonConvert.DeserializeObject (value, typeof(List<PointD>));} 
 		}
 
-		//public virtual Place Place{ get; set; }
-
 		public virtual bool Hightlighted{ get; set;}
 
-		public virtual void draw(Context cairo,Cairo.Color color){
+		public virtual void draw(Context cairo,DrawingStyle style, double zoom){
+			cairo.LineWidth = style.ScreenEditLineSize / zoom;
+			cairo.LineJoin = LineJoin.Round;
+			cairo.LineCap = LineCap.Round;
 			bool first = true;
 			PointD firstPoint = new PointD (0, 0);
 			foreach (PointD point in Vertices) {
@@ -46,13 +47,16 @@ namespace LeaseAgreement
 					cairo.LineTo (point);
 			}
 			cairo.LineTo (firstPoint);
-			cairo.SetSourceRGBA (color.R, color.G, color.B, color.A);
+			var color = Hightlighted ? style.PolygonHighlightedColor : style.PolygonColor;
+			cairo.SetSourceColor (color);
 			cairo.StrokePreserve ();
 			cairo.SetSourceRGBA (color.R * 0.8125, color.G * 0.8125, color.B * 0.8125, color.A * 0.8125);
 			cairo.Fill ();
 		}
 
-		public virtual void drawCrosses(Context cairo, Cairo.Color color,double size){
+		public virtual void drawCrosses(Context cairo, DrawingStyle style, double zoom){
+			double crossSize = style.ScreenCrossLineSize/zoom;
+			cairo.LineWidth = style.ScreenCrossLineWidth/zoom;
 			var verticesArray = Vertices.ToArray ();
 			for (int i = 0; i < verticesArray.Length; i++) {
 				int first = i;
@@ -63,17 +67,45 @@ namespace LeaseAgreement
 				);
 				double angle = Math.Atan2 (vector.Y, vector.X);
 				cairo.Save ();
-				cairo.SetSourceRGBA (color.R, color.G, color.B, color.A);
+				cairo.SetSourceColor (style.CrossColor);
 				cairo.Translate (verticesArray[first].X+(vector.X/2),verticesArray[first].Y+(vector.Y/2));
 				cairo.Rotate (angle);
-				cairo.MoveTo (-size,0);
-				cairo.LineTo (size, 0);
-				cairo.MoveTo (0, -size);
-				cairo.LineTo (0, size);
+				cairo.MoveTo (-crossSize,0);
+				cairo.LineTo (crossSize, 0);
+				cairo.MoveTo (0, -crossSize);
+				cairo.LineTo (0, crossSize);
 				cairo.Stroke ();
 				cairo.Restore ();				                      
 			}
 		}
+
+
+		public virtual void DrawVertices(Context cairo, DrawingStyle style, double zoom)
+		{
+			DrawVertices (cairo, style, zoom, null);
+		}
+
+		public virtual void DrawVertices(Context cairo, DrawingStyle style, double zoom, PointD? selected)
+		{
+			cairo.NewPath ();
+			cairo.LineCap = LineCap.Round;
+			cairo.LineWidth = style.ScreenEditPointSize / zoom;
+			foreach (PointD p in Vertices) {
+				cairo.SetSourceColor (style.PolygonVertexColor);
+				cairo.MoveTo (p);
+				cairo.LineTo (p);
+				cairo.ClosePath ();
+			}
+			cairo.Stroke ();
+			if (selected.HasValue) {
+				cairo.SetSourceColor (style.PolygonVertexSelectedColor);
+				cairo.MoveTo (selected.Value);
+				cairo.LineTo (selected.Value);
+				cairo.ClosePath ();
+				cairo.Stroke ();
+			}
+		}
+
 
 		public virtual bool Contains(PointD mouseCoords){
 			return MathHelper.Contains (Vertices, mouseCoords);

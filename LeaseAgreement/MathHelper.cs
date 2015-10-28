@@ -33,7 +33,6 @@ namespace LeaseAgreement
 			return result;
 		}
 
-
 		private static bool Cross(PointD a, PointD b, PointD point){
 			double y = (point.X - a.X) * (b.Y - a.Y) / (b.X - a.X) + a.Y;
 			double minimal = Math.Min(a.X, b.X);
