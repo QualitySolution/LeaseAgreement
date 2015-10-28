@@ -24,6 +24,7 @@ namespace LeaseAgreement
 			// Widget LeaseAgreement.PolygonDlg
 			this.Events = ((global::Gdk.EventMask)(1024));
 			this.Name = "LeaseAgreement.PolygonDlg";
+			this.Title = global::Mono.Unix.Catalog.GetString ("Место на карте");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.PolygonDlg.VBox
 			global::Gtk.VBox w1 = this.VBox;
