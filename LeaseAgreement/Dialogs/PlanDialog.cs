@@ -22,7 +22,6 @@ namespace LeaseAgreement
 			plan = UoW.Root;
 			Title = "Новая схема";		
 			planViewWidget.Plan = plan;
-			//planViewWidget.StartEdit (UoW.Session.QueryOver<Place>().Where(p=>p.Id==2).List().First());
 		}
 
 		public PlanDialog(Plan plan):this(plan.Id)
@@ -39,7 +38,6 @@ namespace LeaseAgreement
 			nameEntry.Text = plan.Name;
 			Validate ();
 			planViewWidget.Plan=plan;
-			//planViewWidget.StartEdit (2);//TODO Убрать
 		}
 
 		protected void OnButtonOkClicked (object sender, EventArgs e)

@@ -44,9 +44,9 @@ namespace LeaseAgreement
 				planviewwidget1.Plan = polygon.Plan;		
 				planviewwidget1.CurrentPolygon = polygon;
 				if (polygon.Vertices.Count == 0) {
-					planviewwidget1.Mode = PlanViewMode.Edit;				
+					planviewwidget1.Mode = PlanViewMode.Add;				
 				} else {
-					planviewwidget1.Mode = PlanViewMode.Selection;
+					planviewwidget1.Mode = PlanViewMode.Edit;
 				}
 			}
 		}
@@ -55,7 +55,7 @@ namespace LeaseAgreement
 		{			
 			if (initialized) {
 				planviewwidget1.Plan = (Plan)planEntryReference.Subject;
-				planviewwidget1.Mode = PlanViewMode.Edit;
+				planviewwidget1.Mode = PlanViewMode.Add;
 			}
 		}
 
