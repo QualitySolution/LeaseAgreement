@@ -23,14 +23,14 @@ namespace LeaseAgreement
 		[Display (Name = "Подложка")]
 		public virtual byte[] Image {
 			get { return image; }
-			set { SetField (ref image, value, () => image); }
+			set { SetField (ref image, value, () => Image); }
 		}
 
 		string filename;
 		[Display (Name = "Файл")]
 		public virtual string Filename{
 			get{ return filename; }
-			set{ SetField (ref filename, value, () => filename); }
+			set{ SetField (ref filename, value, () => Filename); }
 		}
 
 
