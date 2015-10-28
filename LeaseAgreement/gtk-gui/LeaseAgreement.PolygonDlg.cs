@@ -41,6 +41,8 @@ namespace LeaseAgreement
 			w2.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
 			this.planviewwidget1 = new global::LeaseAgreement.PlanViewWidget ();
+			this.planviewwidget1.WidthRequest = 400;
+			this.planviewwidget1.HeightRequest = 300;
 			this.planviewwidget1.Sensitive = false;
 			this.planviewwidget1.Events = ((global::Gdk.EventMask)(256));
 			this.planviewwidget1.Name = "planviewwidget1";
@@ -113,8 +115,8 @@ namespace LeaseAgreement
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 400;
-			this.DefaultHeight = 300;
+			this.DefaultWidth = 404;
+			this.DefaultHeight = 395;
 			this.Show ();
 			this.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnKeyPressEvent);
 			this.planEntryReference.Changed += new global::System.EventHandler (this.OnPlanEntryReferenceChanged);

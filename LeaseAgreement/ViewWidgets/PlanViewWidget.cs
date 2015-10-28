@@ -34,9 +34,9 @@ namespace LeaseAgreement
 			get{ return mode;}
 			set{ 
 				mode = value;
-				if (mode == PlanViewMode.Selection) {
+				if (mode == PlanViewMode.Edit) {
 					selectedVertexIndex = -1;
-				} else if (mode == PlanViewMode.Edit) {
+				} else if (mode == PlanViewMode.Add) {
 					editPolygon.Vertices = new List<PointD> ();
 					editPolygon.Plan = plan;
 				} 
@@ -76,11 +76,6 @@ namespace LeaseAgreement
 			gScaleX = gScaleY = MinScale;
 			ReconfigureScrollbars();
 		}			
-
-		public bool tick(){
-			drawingarea1.QueueDraw ();
-			return true;
-		}
 
 		private ImageSurface GenerateStub(){
 			ImageSurface stub = new ImageSurface (Format.ARGB32, 600, 300);
@@ -123,7 +118,7 @@ namespace LeaseAgreement
 				drawingarea1.QueueDraw ();
 			} else {
 				image = GenerateStub ();
-			}
+			}   
 		}
 
 		private void SetImage(ImageDataWrapper data){			
@@ -158,11 +153,6 @@ namespace LeaseAgreement
 			get{ return Math.Min (drawingarea1.Allocation.Width / CanvasWidth, drawingarea1.Allocation.Height / CanvasHeight); }
 		}
 			
-		protected override bool OnButtonPressEvent(EventButton e)
-		{			
-			return false;
-		}
-			
 		protected void OnDrawingAreaExposed (object o, ExposeEventArgs args)
 		{			
 			if (plan == null)
@@ -182,15 +172,15 @@ namespace LeaseAgreement
 					}
 				}
 
-				if (Mode == PlanViewMode.Selection) {					
+				if (Mode == PlanViewMode.Edit) {					
 					editPolygon.draw (cairo, style, gScaleX);
 				}
 
-				if (Mode == PlanViewMode.Selection) {					
+				if (Mode == PlanViewMode.Edit) {					
 					editPolygon.DrawVertices (cairo, style, gScaleX);
 				}
 					
-				if (Mode == PlanViewMode.Selection) {
+				if (Mode == PlanViewMode.Edit) {
 					editPolygon.draw (cairo, style, gScaleX);
 					PointD? maybeSelectedVertex = null;
 					if(selectedVertexIndex != -1) maybeSelectedVertex = editPolygon.Vertices [selectedVertexIndex];
@@ -198,7 +188,7 @@ namespace LeaseAgreement
 					editPolygon.drawCrosses (cairo, style, gScaleX);
 				}
 
-				if (Mode == PlanViewMode.Edit) {
+				if (Mode == PlanViewMode.Add) {
 					// draw lines
 					cairo.LineCap = LineCap.Round;
 					cairo.LineWidth = style.ScreenEditLineSize/gScaleX;
@@ -279,17 +269,16 @@ namespace LeaseAgreement
 		}
 
 		protected void OnButtonPressed(object o, ButtonPressEventArgs args){
+			mouseCoords = ScreenToWorld (new PointD (args.Event.X, args.Event.Y));
 			if (args.Event.Button == 3) {
 				isDragging = true;
 				dragStartX = args.Event.X;
 				dragStartY = args.Event.Y;
 				dragStartScrollX = scrollAdjX.Value;
 				dragStartScrollY = scrollAdjY.Value;
-				Console.WriteLine ("Clicked (" + dragStartScrollX + ", " + dragStartScrollY + ")");
 			}
-			if (args.Event.Button == 1) {
-				Console.WriteLine ("Left click at world coords = {" + mouseCoords.X + ", " + mouseCoords.Y + "}");
-				if (Mode == PlanViewMode.Edit) {
+			if (args.Event.Button == 1) {				
+				if (Mode == PlanViewMode.Add) {
 					bool vertexClicked = editPolygon.Vertices
 						.Where (x => 
 						        MathHelper.DistanceSquared (x, mouseCoords) < (style.ScreenEditPointSize /gScaleX) * (style.ScreenEditPointSize /gScaleX)
@@ -301,7 +290,7 @@ namespace LeaseAgreement
 						drawingarea1.QueueDraw ();
 					}
 				}
-				if (Mode == PlanViewMode.Selection) {
+				if (Mode == PlanViewMode.Edit) {
 					selectedVertexIndex = editPolygon.Vertices
 						.FindIndex (x =>
 						            MathHelper.DistanceSquared (x, mouseCoords) < (style.ScreenEditLineSize / gScaleX) * (style.ScreenEditPointSize / gScaleX));
@@ -318,7 +307,7 @@ namespace LeaseAgreement
 							(editPolygon.Vertices [second].X + editPolygon.Vertices [first].X) / 2,
 							(editPolygon.Vertices [second].Y + editPolygon.Vertices [first].Y) / 2
 						                );
-						if (MathHelper.DistanceSquared (vector, mouseCoords) < (style.ScreenEditLineSize / gScaleX) * (style.ScreenEditLineSize / gScaleX)) {							
+						if (MathHelper.DistanceSquared (vector, mouseCoords) < (style.ScreenCrossLineSize / gScaleX) * (style.ScreenCrossLineSize / gScaleX)) {							
 							int insertPosition = second;
 							editPolygon.Vertices.Insert (insertPosition,mouseCoords);
 							selectedVertexIndex = insertPosition;
@@ -337,16 +326,20 @@ namespace LeaseAgreement
 			isDraggingVertex = false;
 		}
 
-		protected void OnPointerMotion(object o, MotionNotifyEventArgs args){
+		protected void OnPointerMotion(object o, MotionNotifyEventArgs args){			
 			mouseCoords = ScreenToWorld (new PointD(args.Event.X, args.Event.Y));
-			if (Mode == PlanViewMode.Edit) {
+			if (Mode == PlanViewMode.Add) {
 				drawingarea1.QueueDraw ();
 			}
 			foreach (Polygon polygon in plan.Polygons) {
-				bool highlighted = polygon.Contains (mouseCoords);
-				if (highlighted ^ polygon.Hightlighted) {
-					drawingarea1.QueueDraw ();
-					polygon.Hightlighted = highlighted;
+				if (polygon == editPolygon) {
+					editPolygon.Hightlighted = true;
+				} else {
+					bool highlighted = polygon.Contains (mouseCoords);
+					if (highlighted ^ polygon.Hightlighted) {
+						drawingarea1.QueueDraw ();
+						polygon.Hightlighted = highlighted;
+					}
 				}
 			}
 			if (isDragging) {								
@@ -366,7 +359,7 @@ namespace LeaseAgreement
 			
 		private void FinishEditing ()
 		{			
-			Mode = PlanViewMode.Selection;	
+			Mode = PlanViewMode.Edit;	
 			drawingarea1.QueueDraw ();
 		}
 
@@ -385,15 +378,15 @@ namespace LeaseAgreement
 
 		public void RemoveAllVertices(){
 			CurrentPolygon.Vertices = new List<PointD> ();
-			Mode = PlanViewMode.Edit;
+			Mode = PlanViewMode.Add;
 			drawingarea1.QueueDraw ();
 		}
 	}
 
 	public enum PlanViewMode{
-		Selection,
+		Edit,
 		View,
-		Edit
+		Add
 	}
 }
 

@@ -20,7 +20,6 @@ namespace LeaseAgreement
 		private List<PlaceType> typesList;
 		private List<Stead> steadsList;
 		private List<Organization> orgList;
-		private List<Polygon> polygonList;
 		int lessee_id, ContractId;
 
 		Gtk.ListStore HistoryStore;
