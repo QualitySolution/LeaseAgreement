@@ -52,15 +52,15 @@ namespace LeaseAgreement
 			}
 		}
 
+
 		bool isDragging;
 		bool isDraggingVertex = false;
 		double dragStartX;
 		double dragStartY;
 		double dragStartScrollX;
 		double dragStartScrollY;
-
-		double gScaleX=.3;
-		double gScaleY = .3;
+		double ScrollSpeed = 1.05;
+		double gScale=.3;
 		Adjustment scrollAdjX;
 		Adjustment scrollAdjY;
 
@@ -73,7 +73,7 @@ namespace LeaseAgreement
 			hscrollbar1.Adjustment = scrollAdjX;
 			vscrollbar1.Adjustment = scrollAdjY;
 			image = GenerateStub ();
-			gScaleX = gScaleY = MinScale;
+			gScale = MinScale;
 			ReconfigureScrollbars();
 		}			
 
@@ -103,8 +103,8 @@ namespace LeaseAgreement
 			scrollAdjY.PageIncrement = drawingarea1.Allocation.Height;
 			scrollAdjY.PageSize = drawingarea1.Allocation.Height;
 
-			scrollAdjX.Upper = CanvasWidth * gScaleX;
-			scrollAdjY.Upper = CanvasHeight * gScaleY;
+			scrollAdjX.Upper = CanvasWidth * gScale;
+			scrollAdjY.Upper = CanvasHeight * gScale;
 		}
 
 		public void OnPlanImageChanged(){
@@ -113,7 +113,7 @@ namespace LeaseAgreement
 				using (var dataStream = new MemoryStream (plan.Image)) {
 					SetImage (dataStream);
 				}
-				gScaleX = gScaleY = MinScale;
+				gScale = MinScale;
 				ReconfigureScrollbars ();
 				drawingarea1.QueueDraw ();
 			} else {
@@ -124,7 +124,7 @@ namespace LeaseAgreement
 		private void SetImage(ImageDataWrapper data){			
 			image.Dispose ();
 			image = new ImageSurface (data.Pointer, Format.Argb32, data.Width, data.Height,data.Stride); 			
-			gScaleX = gScaleY = MinScale;
+			gScale = MinScale;
 			ReconfigureScrollbars();
 			drawingarea1.QueueDraw ();
 		}			
@@ -146,7 +146,7 @@ namespace LeaseAgreement
 
 		PointD ScreenToWorld (PointD point)
 		{
-			return new PointD ((point.X + scrollAdjX.Value) / gScaleX, (point.Y+scrollAdjY.Value)/ gScaleY);
+			return new PointD ((point.X + scrollAdjX.Value) / gScale, (point.Y+scrollAdjY.Value)/ gScale);
 		}
 
 		protected double MinScale{
@@ -162,36 +162,36 @@ namespace LeaseAgreement
 				cairo.Rectangle (0, 0, area.Allocation.Width,area.Allocation.Height);
 
 				cairo.Translate (-scrollAdjX.Value, -scrollAdjY.Value);
-				cairo.Scale(gScaleX,gScaleY);
+				cairo.Scale(gScale,gScale);
 				cairo.SetSource (image);
 				cairo.Fill ();
 
 				foreach(Polygon polygon in plan.Polygons){
 					if (polygon != editPolygon) {						
-						polygon.draw (cairo, style, gScaleX);
+						polygon.draw (cairo, style, gScale);
 					}
 				}
 
 				if (Mode == PlanViewMode.Edit) {					
-					editPolygon.draw (cairo, style, gScaleX);
+					editPolygon.draw (cairo, style, gScale);
 				}
 
 				if (Mode == PlanViewMode.Edit) {					
-					editPolygon.DrawVertices (cairo, style, gScaleX);
+					editPolygon.DrawVertices (cairo, style, gScale);
 				}
 					
 				if (Mode == PlanViewMode.Edit) {
-					editPolygon.draw (cairo, style, gScaleX);
+					editPolygon.draw (cairo, style, gScale);
 					PointD? maybeSelectedVertex = null;
 					if(selectedVertexIndex != -1) maybeSelectedVertex = editPolygon.Vertices [selectedVertexIndex];
-					editPolygon.DrawVertices (cairo, style, gScaleX, maybeSelectedVertex);							
-					editPolygon.drawCrosses (cairo, style, gScaleX);
+					editPolygon.DrawVertices (cairo, style, gScale, maybeSelectedVertex);							
+					editPolygon.drawCrosses (cairo, style, gScale);
 				}
 
 				if (Mode == PlanViewMode.Add) {
 					// draw lines
 					cairo.LineCap = LineCap.Round;
-					cairo.LineWidth = style.ScreenEditLineSize/gScaleX;
+					cairo.LineWidth = style.ScreenEditLineSize/gScale;
 					var iter = editPolygon.Vertices.GetEnumerator ();
 					if (iter.MoveNext ()) {
 						cairo.MoveTo (iter.Current);
@@ -203,7 +203,7 @@ namespace LeaseAgreement
 						cairo.Stroke ();
 					}
 					// draw vertices
-					editPolygon.DrawVertices(cairo, style, gScaleX);
+					editPolygon.DrawVertices(cairo, style, gScale);
 					// draw first point
 					cairo.SetSourceColor (style.PolygonVertexColor);
 					if (editPolygon.Vertices.Count == 0) 
@@ -218,32 +218,28 @@ namespace LeaseAgreement
 
 		protected void OnDrawingAreaScroll (object o, ScrollEventArgs args)
 		{
-			double oldScaleX = gScaleX;
-			double oldScaleY = gScaleY;
+			double oldScale = gScale;
 			double oldTranslationX = scrollAdjX.Value;
 			double oldTranslationY = scrollAdjY.Value;
 			double viewPortWidth = drawingarea1.Allocation.Width;
 			double viewPortHeight = drawingarea1.Allocation.Height;
 
 			if (args.Event.Direction == ScrollDirection.Up) {
-				gScaleX *= 1.05;
-				gScaleY *= 1.05;
+				gScale *= ScrollSpeed;
 			}
 			if (args.Event.Direction == ScrollDirection.Down) {
-				gScaleX /= 1.05;
-				gScaleY /= 1.05;
+				gScale /= ScrollSpeed;
 			}
-			if (gScaleX < MinScale || gScaleY < MinScale) {
-				gScaleX = oldScaleX;
-				gScaleY = oldScaleY;
+			if (gScale < MinScale) {
+				gScale = oldScale;
 			}else{
-				scrollAdjX.Upper = CanvasWidth * gScaleX;
-				scrollAdjY.Upper = CanvasHeight * gScaleY;
+				scrollAdjX.Upper = CanvasWidth * gScale;
+				scrollAdjY.Upper = CanvasHeight * gScale;
 				scrollAdjX.Upper = MathHelper.Clamp (scrollAdjX.Upper, scrollAdjX.Lower, scrollAdjX.Upper);
 				scrollAdjY.Upper = MathHelper.Clamp (scrollAdjY.Upper, scrollAdjY.Lower, scrollAdjY.Upper);
 
-				scrollAdjX.Value = viewPortWidth / 2 * (gScaleX / oldScaleX - 1) + oldTranslationX * gScaleX / oldScaleX;
-				scrollAdjY.Value = viewPortHeight / 2 * (gScaleY / oldScaleY - 1) + oldTranslationY * gScaleY / oldScaleY;
+				scrollAdjX.Value = viewPortWidth / 2 * (gScale / oldScale - 1) + oldTranslationX * gScale / oldScale;
+				scrollAdjY.Value = viewPortHeight / 2 * (gScale / oldScale - 1) + oldTranslationY * gScale / oldScale;
 				scrollAdjX.Value = MathHelper.Clamp (scrollAdjX.Value, scrollAdjX.Lower, scrollAdjX.Upper - scrollAdjX.PageSize);
 				scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper - scrollAdjY.PageSize);			
 				drawingarea1.QueueDraw ();
@@ -263,8 +259,7 @@ namespace LeaseAgreement
 
 		protected void OnDrawingAreaSizeAllocated (object o, SizeAllocatedArgs args)
 		{
-			gScaleX = Math.Max (MinScale, gScaleX);
-			gScaleY = Math.Max (MinScale, gScaleY);
+			gScale = Math.Max (MinScale, gScale);
 			ReconfigureScrollbars ();		
 		}
 
@@ -281,10 +276,10 @@ namespace LeaseAgreement
 				if (Mode == PlanViewMode.Add) {
 					bool vertexClicked = editPolygon.Vertices
 						.Where (x => 
-						        MathHelper.DistanceSquared (x, mouseCoords) < (style.ScreenEditPointSize /gScaleX) * (style.ScreenEditPointSize /gScaleX)
+						        MathHelper.DistanceSquared (x, mouseCoords) < (style.ScreenEditPointSize /gScale) * (style.ScreenEditPointSize /gScale)
 					                     ).Count () > 0;
 					if (vertexClicked && editPolygon.Vertices.Count > 2) {
-						FinishEditing ();
+						FinishAdding ();
 					} else {
 						editPolygon.Vertices.Add (mouseCoords);
 						drawingarea1.QueueDraw ();
@@ -293,7 +288,7 @@ namespace LeaseAgreement
 				if (Mode == PlanViewMode.Edit) {
 					selectedVertexIndex = editPolygon.Vertices
 						.FindIndex (x =>
-						            MathHelper.DistanceSquared (x, mouseCoords) < (style.ScreenEditLineSize / gScaleX) * (style.ScreenEditPointSize / gScaleX));
+						            MathHelper.DistanceSquared (x, mouseCoords) < (style.ScreenEditLineSize / gScale) * (style.ScreenEditPointSize / gScale));
 					if (selectedVertexIndex != -1) {
 						isDraggingVertex = true;
 						drawingarea1.QueueDraw ();
@@ -307,7 +302,7 @@ namespace LeaseAgreement
 							(editPolygon.Vertices [second].X + editPolygon.Vertices [first].X) / 2,
 							(editPolygon.Vertices [second].Y + editPolygon.Vertices [first].Y) / 2
 						                );
-						if (MathHelper.DistanceSquared (vector, mouseCoords) < (style.ScreenCrossLineSize / gScaleX) * (style.ScreenCrossLineSize / gScaleX)) {							
+						if (MathHelper.DistanceSquared (vector, mouseCoords) < (style.ScreenCrossLineSize / gScale) * (style.ScreenCrossLineSize / gScale)) {							
 							int insertPosition = second;
 							editPolygon.Vertices.Insert (insertPosition,mouseCoords);
 							selectedVertexIndex = insertPosition;
@@ -318,6 +313,7 @@ namespace LeaseAgreement
 					drawingarea1.QueueDraw ();
 				}
 			}
+			HasFocus = true;
 		}
 
 		protected void OnButtonReleased(object o, ButtonReleaseEventArgs args){
@@ -357,8 +353,9 @@ namespace LeaseAgreement
 			if(image!=null) image.Dispose ();
 		}
 			
-		private void FinishEditing ()
+		private void FinishAdding ()
 		{			
+			editPolygon.FixVertexOrder ();
 			Mode = PlanViewMode.Edit;	
 			drawingarea1.QueueDraw ();
 		}

@@ -26,6 +26,18 @@ namespace LeaseAgreement
 			PolygonVertexSelectedColor = new Cairo.Color(0.8,0,0,1),
 			CrossColor = new Cairo.Color(1,1,0,1)
 		};
+
+		public static DrawingStyle TouchStyle = new DrawingStyle{
+			ScreenEditLineSize=5,
+			ScreenEditPointSize=30,
+			ScreenCrossLineSize=15,
+			ScreenCrossLineWidth=3,
+			PolygonColor=new Cairo.Color(0,0.3,0.8,0.8),
+			PolygonHighlightedColor = new Cairo.Color(0,0.5,0.3,0.8),
+			PolygonVertexColor = new Cairo.Color(0,0.8,0.3,1),
+			PolygonVertexSelectedColor = new Cairo.Color(0.8,0,0,1),
+			CrossColor = new Cairo.Color(1,1,0,1)
+		};
 			
 		public DrawingStyle ()
 		{

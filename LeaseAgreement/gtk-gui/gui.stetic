@@ -1264,7 +1264,62 @@
               </packing>
             </child>
             <child>
-              <placeholder />
+              <widget class="Gtk.VBox" id="vbox4">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.HBox" id="hbox2">
+                    <property name="MemberName" />
+                    <property name="Spacing">6</property>
+                    <child>
+                      <widget class="Gtk.Label" id="label10">
+                        <property name="MemberName" />
+                        <property name="LabelProp" translatable="yes">Схема:</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">0</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="QSOrmProject.EntryReference" id="entryreferencePlan">
+                        <property name="MemberName" />
+                        <property name="Events">ButtonPressMask</property>
+                        <signal name="Changed" handler="OnEntryreferencePlanChanged" />
+                      </widget>
+                      <packing>
+                        <property name="Position">1</property>
+                        <property name="AutoSize">True</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="LeaseAgreement.PlanViewWidget" id="planviewwidget1">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="HeightRequest">300</property>
+                    <property name="Sensitive">False</property>
+                    <property name="Events">ButtonPressMask</property>
+                    <property name="VisibleWindow">False</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">True</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">3</property>
+              </packing>
             </child>
             <child>
               <widget class="Gtk.Label" id="label9">
@@ -1287,7 +1342,7 @@
             <property name="Spacing">6</property>
             <property name="BorderWidth">6</property>
             <child>
-              <widget class="Gtk.Button" id="buttonOpen">
+              <widget class="Gtk.Button" id="buttonOpen1">
                 <property name="MemberName" />
                 <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
@@ -6867,7 +6922,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.PlanDialog" design-size="396 307">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.PlanDialog" design-size="464 418">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -7069,6 +7124,7 @@
         <child>
           <widget class="Gtk.DrawingArea" id="drawingarea1">
             <property name="MemberName" />
+            <property name="CanFocus">True</property>
             <property name="Events">PointerMotionMask, ButtonPressMask, ButtonReleaseMask, KeyPressMask, ScrollMask</property>
             <signal name="ExposeEvent" handler="OnDrawingAreaExposed" />
             <signal name="ScrollEvent" handler="OnDrawingAreaScroll" />

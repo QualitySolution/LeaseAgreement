@@ -68,13 +68,6 @@ namespace LeaseAgreement.Domain
 			set { SetField(ref customs, value, () => Customs);}
 		}
 
-		Polygon polygon;
-		[Display(Name = "Отметка на карте")]
-		public virtual Polygon Polygon {
-			get {return polygon;}
-			set {SetField(ref polygon,value,()=>Polygon);}
-		}
-
 		public string Title {
 			get { return PlaceType != null && !String.IsNullOrEmpty (PlaceNumber)  
 				? String.Format ("Место {0}-{1}", PlaceType.Name, PlaceNumber)

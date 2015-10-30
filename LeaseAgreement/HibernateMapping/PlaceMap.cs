@@ -19,7 +19,8 @@ namespace LeaseAgreement.HMap
 
 			References (x => x.PlaceType).Column ("type_id");
 			References (x => x.Organization).Column ("org_id");
-			References (x => x.Polygon).Column ("polygon_id");
+			//References (x => x.Polygon).Column ("polygon_id");	
+
 			//References (x => x.Stead).Column ("stead_id");
 		}
 	}

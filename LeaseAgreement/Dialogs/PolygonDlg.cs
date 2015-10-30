@@ -16,20 +16,21 @@ namespace LeaseAgreement
 		private Polygon polygon;
 		private bool initialized;
 
+		public PolygonDlg (Place place)
+		{
+			this.Build ();
+			UoW = UnitOfWorkFactory.CreateWithNewRoot<Polygon> ();
+			UoW.Root.Place = place;
+			Configure ();
+		}
+
 		public PolygonDlg (Polygon polygon)
 		{
 			this.Build ();
 			UoW = UnitOfWorkFactory.CreateForRoot<Polygon> (polygon.Id);
 			Configure ();
 		}
-
-		public PolygonDlg()
-		{
-			this.Build ();
-			UoW = UnitOfWorkFactory.CreateWithNewRoot<Polygon> ();
-			Configure ();
-		}
-
+			
 		public void Configure()
 		{			
 			polygon = UoW.Root;
@@ -72,12 +73,12 @@ namespace LeaseAgreement
 		protected void OnButtonDeletePolygonClicked (object sender, EventArgs e)
 		{
 			planviewwidget1.RemoveAllVertices ();
-
 		}
 
 		protected void OnKeyPressEvent(object sender, KeyPressEventArgs e)
 		{
 			if (e.Event.Key == Gdk.Key.Delete || e.Event.Key == Gdk.Key.KP_Delete) {				
+				e.RetVal = true;
 				if (e.Event.State.HasFlag (Gdk.ModifierType.ShiftMask))
 					OnButtonDeletePolygonClicked (this, null);
 				else

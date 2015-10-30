@@ -7,7 +7,7 @@ using QSProjectsLib;
 using QSSupportLib;
 using QSUpdater;
 
-public partial class MainWindow : Gtk.Window
+public partial class MainWindow : FakeTDITabGtkWindowBase
 {
 	private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 	AccelGroup grup;
@@ -77,6 +77,7 @@ public partial class MainWindow : Gtk.Window
 		PreparePlaces ();
 		PrepareLessee ();
 		PrepareContract ();
+		ConfigureMap ();
 		notebookMain.CurrentPage = 0;
 		UpdatePlaces ();
 		CheckUpdate.StartCheckUpdateThread (UpdaterFlags.StartInThread);

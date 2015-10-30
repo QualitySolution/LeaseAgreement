@@ -28,6 +28,7 @@ namespace LeaseAgreement
 			this.table1.ColumnSpacing = ((uint)(6));
 			// Container child table1.Gtk.Table+TableChild
 			this.drawingarea1 = new global::Gtk.DrawingArea ();
+			this.drawingarea1.CanFocus = true;
 			this.drawingarea1.Events = ((global::Gdk.EventMask)(2098948));
 			this.drawingarea1.Name = "drawingarea1";
 			this.table1.Add (this.drawingarea1);

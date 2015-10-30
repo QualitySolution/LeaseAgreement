@@ -3,8 +3,9 @@ using Gtk;
 using MySql.Data.MySqlClient;
 using LeaseAgreement;
 using QSProjectsLib;
+using QSOrmProject;
 
-public partial class MainWindow : Gtk.Window
+public partial class MainWindow : FakeTDITabGtkWindowBase
 {
 	Gtk.ListStore PlacesListStore;
 	Gtk.TreeModelFilter Placefilter;
@@ -120,7 +121,7 @@ public partial class MainWindow : Gtk.Window
 		logger.Info("Ok");
 		
 		bool isSelect = treeviewPlaces.Selection.CountSelectedRows() == 1;
-		buttonOpen.Sensitive = isSelect;
+		buttonOpen1.Sensitive = isSelect;
 		buttonDel.Sensitive = isSelect;
 		CalculateAreaSum();
 	}
@@ -172,7 +173,7 @@ public partial class MainWindow : Gtk.Window
 	protected virtual void OnTreeviewPlacesCursorChanged (object sender, System.EventArgs e)
 	{
 		bool isSelect = treeviewPlaces.Selection.CountSelectedRows() == 1;
-		buttonOpen.Sensitive = isSelect;
+		buttonOpen1.Sensitive = isSelect;
 		buttonDel.Sensitive = isSelect;
 	}
 

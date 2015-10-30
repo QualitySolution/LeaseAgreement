@@ -3,8 +3,9 @@ using Gtk;
 using MySql.Data.MySqlClient;
 using LeaseAgreement;
 using QSProjectsLib;
+using QSOrmProject;
 
-public partial class MainWindow : Gtk.Window
+public partial class MainWindow : FakeTDITabGtkWindowBase
 {
 	Gtk.ListStore LesseesListStore;
 	Gtk.TreeModelFilter Lesseesfilter;
@@ -57,7 +58,7 @@ public partial class MainWindow : Gtk.Window
 		}
 		logger.Info("Ok");
 		bool isSelect = treeviewLessees.Selection.CountSelectedRows() == 1;
-		buttonOpen.Sensitive = isSelect;
+		buttonOpen1.Sensitive = isSelect;
 		buttonDel.Sensitive = isSelect;
 	}
 
@@ -124,7 +125,7 @@ public partial class MainWindow : Gtk.Window
 	protected virtual void OnTreeviewLesseesCursorChanged (object sender, System.EventArgs e)
 	{
 		bool isSelect = treeviewLessees.Selection.CountSelectedRows() == 1;
-		buttonOpen.Sensitive = isSelect;
+		buttonOpen1.Sensitive = isSelect;
 		buttonDel.Sensitive = isSelect;
 	}
 
