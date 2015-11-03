@@ -77,7 +77,7 @@ namespace LeaseAgreement
 		}
 
 		protected void Validate(){
-			buttonOk.Sensitive = nameEntry.Text.Length > 0 && (plan.Filename != null);
+			buttonOk.Sensitive = nameEntry.Text.Length > 0 && (plan.Filename != null) && (spinbutton1.ValueAsInt>0);
 		}
 			
 		protected void OnNameEntryChanged (object sender, EventArgs e)
@@ -138,6 +138,7 @@ namespace LeaseAgreement
 					plan.Floors.RemoveAt (i-1);
 				}
 				oldFloorCount = newFloorCount;
+				Validate ();
 			}
 		}
 	}
