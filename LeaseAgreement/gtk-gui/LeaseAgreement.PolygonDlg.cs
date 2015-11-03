@@ -50,6 +50,8 @@ namespace LeaseAgreement
 			w1.Add (this.planviewwidget1);
 			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(w1 [this.planviewwidget1]));
 			w3.Position = 1;
+			w3.Expand = false;
+			w3.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
 			this.hbox2 = new global::Gtk.HBox ();
 			this.hbox2.Name = "hbox2";

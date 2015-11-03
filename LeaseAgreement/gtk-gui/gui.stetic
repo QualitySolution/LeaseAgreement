@@ -7181,7 +7181,6 @@
     <property name="HeightRequest">300</property>
     <property name="Visible">False</property>
     <property name="Sensitive">False</property>
-    <signal name="DestroyEvent" handler="OnDestroyEvent" />
     <child>
       <widget class="Gtk.Table" id="table1">
         <property name="MemberName" />
@@ -7194,6 +7193,28 @@
         </child>
         <child>
           <placeholder />
+        </child>
+        <child>
+          <widget class="Gamma.Widgets.ySpecComboBox" id="comboBoxFloor">
+            <property name="MemberName" />
+            <property name="IsTextCombo">False</property>
+            <property name="Items" translatable="yes" />
+            <property name="AddIfNotExist">False</property>
+            <property name="ShowSpecialStateAll">False</property>
+            <property name="ShowSpecialStateNot">True</property>
+            <signal name="Changed" handler="OnComboBoxFloorChanged" />
+          </widget>
+          <packing>
+            <property name="AutoSize">True</property>
+            <property name="XOptions">Fill</property>
+            <property name="YOptions">Fill</property>
+            <property name="XExpand">False</property>
+            <property name="XFill">True</property>
+            <property name="XShrink">False</property>
+            <property name="YExpand">False</property>
+            <property name="YFill">True</property>
+            <property name="YShrink">False</property>
+          </packing>
         </child>
         <child>
           <widget class="Gtk.DrawingArea" id="drawingarea1">
@@ -7215,28 +7236,6 @@
             <property name="XFill">True</property>
             <property name="XShrink">False</property>
             <property name="YExpand">True</property>
-            <property name="YFill">True</property>
-            <property name="YShrink">False</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gamma.Widgets.ySpecComboBox" id="entryreferenceFloor">
-            <property name="MemberName" />
-            <property name="IsTextCombo">False</property>
-            <property name="Items" translatable="yes" />
-            <property name="AddIfNotExist">False</property>
-            <property name="ShowSpecialStateAll">False</property>
-            <property name="ShowSpecialStateNot">True</property>
-            <signal name="Changed" handler="OnEntryReferenceFloorChanged" />
-          </widget>
-          <packing>
-            <property name="AutoSize">True</property>
-            <property name="XOptions">Fill</property>
-            <property name="YOptions">Fill</property>
-            <property name="XExpand">False</property>
-            <property name="XFill">True</property>
-            <property name="XShrink">False</property>
-            <property name="YExpand">False</property>
             <property name="YFill">True</property>
             <property name="YShrink">False</property>
           </packing>
@@ -7330,6 +7329,8 @@
           <packing>
             <property name="Position">1</property>
             <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
         <child>

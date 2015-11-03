@@ -38,8 +38,6 @@ namespace LeaseAgreement
 			planviewwidget1.CurrentPolygon = polygon;
 			planEntryReference.ItemsQuery = QueryOver.Of<Plan> ();
 			planEntryReference.SubjectType = typeof(Plan);
-	
-
 
 			if (polygon.Floor!=null) {		
 				planEntryReference.Subject = polygon.Floor.Plan;
@@ -92,7 +90,12 @@ namespace LeaseAgreement
 					OnButtonDeleteClicked (this, null);
 			}
 		}
-				
+			
+		public override void Destroy ()
+		{
+			planviewwidget1.Dispose ();
+			base.Destroy ();
+		}
 	}
 }
 

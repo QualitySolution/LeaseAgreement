@@ -6,9 +6,9 @@ namespace LeaseAgreement
 	{
 		private global::Gtk.Table table1;
 		
-		private global::Gtk.DrawingArea drawingarea1;
+		private global::Gamma.Widgets.ySpecComboBox comboBoxFloor;
 		
-		private global::Gamma.Widgets.ySpecComboBox entryreferenceFloor;
+		private global::Gtk.DrawingArea drawingarea1;
 		
 		private global::Gtk.HScrollbar hscrollbar1;
 		
@@ -29,24 +29,24 @@ namespace LeaseAgreement
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(6));
 			// Container child table1.Gtk.Table+TableChild
+			this.comboBoxFloor = new global::Gamma.Widgets.ySpecComboBox ();
+			this.comboBoxFloor.Name = "comboBoxFloor";
+			this.comboBoxFloor.AddIfNotExist = false;
+			this.comboBoxFloor.ShowSpecialStateAll = false;
+			this.comboBoxFloor.ShowSpecialStateNot = true;
+			this.table1.Add (this.comboBoxFloor);
+			global::Gtk.Table.TableChild w1 = ((global::Gtk.Table.TableChild)(this.table1 [this.comboBoxFloor]));
+			w1.XOptions = ((global::Gtk.AttachOptions)(4));
+			w1.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
 			this.drawingarea1 = new global::Gtk.DrawingArea ();
 			this.drawingarea1.CanFocus = true;
 			this.drawingarea1.Events = ((global::Gdk.EventMask)(2098948));
 			this.drawingarea1.Name = "drawingarea1";
 			this.table1.Add (this.drawingarea1);
-			global::Gtk.Table.TableChild w1 = ((global::Gtk.Table.TableChild)(this.table1 [this.drawingarea1]));
-			w1.TopAttach = ((uint)(1));
-			w1.BottomAttach = ((uint)(2));
-			// Container child table1.Gtk.Table+TableChild
-			this.entryreferenceFloor = new global::Gamma.Widgets.ySpecComboBox ();
-			this.entryreferenceFloor.Name = "entryreferenceFloor";
-			this.entryreferenceFloor.AddIfNotExist = false;
-			this.entryreferenceFloor.ShowSpecialStateAll = false;
-			this.entryreferenceFloor.ShowSpecialStateNot = true;
-			this.table1.Add (this.entryreferenceFloor);
-			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table1 [this.entryreferenceFloor]));
-			w2.XOptions = ((global::Gtk.AttachOptions)(4));
-			w2.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table1 [this.drawingarea1]));
+			w2.TopAttach = ((uint)(1));
+			w2.BottomAttach = ((uint)(2));
 			// Container child table1.Gtk.Table+TableChild
 			this.hscrollbar1 = new global::Gtk.HScrollbar (null);
 			this.hscrollbar1.Name = "hscrollbar1";
@@ -81,16 +81,15 @@ namespace LeaseAgreement
 				this.Child.ShowAll ();
 			}
 			this.Hide ();
-			this.DestroyEvent += new global::Gtk.DestroyEventHandler (this.OnDestroyEvent);
 			this.vscrollbar1.ValueChanged += new global::System.EventHandler (this.OnVscrollbar1ValueChanged);
 			this.hscrollbar1.ValueChanged += new global::System.EventHandler (this.OnHscrollbar1ValueChanged);
-			this.entryreferenceFloor.Changed += new global::System.EventHandler (this.OnEntryReferenceFloorChanged);
 			this.drawingarea1.ExposeEvent += new global::Gtk.ExposeEventHandler (this.OnDrawingAreaExposed);
 			this.drawingarea1.ScrollEvent += new global::Gtk.ScrollEventHandler (this.OnDrawingAreaScroll);
 			this.drawingarea1.SizeAllocated += new global::Gtk.SizeAllocatedHandler (this.OnDrawingAreaSizeAllocated);
 			this.drawingarea1.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnButtonPressed);
 			this.drawingarea1.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler (this.OnButtonReleased);
 			this.drawingarea1.MotionNotifyEvent += new global::Gtk.MotionNotifyEventHandler (this.OnPointerMotion);
+			this.comboBoxFloor.Changed += new global::System.EventHandler (this.OnComboBoxFloorChanged);
 		}
 	}
 }
