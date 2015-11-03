@@ -3,6 +3,7 @@ using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using NHibernate.Criterion;
+using LeaseAgreement.Domain;
 
 namespace LeaseAgreement
 {
@@ -32,13 +33,12 @@ namespace LeaseAgreement
 			get{ return filename; }
 			set{ SetField (ref filename, value, () => Filename); }
 		}
-
-
-		public virtual IList<Polygon> Polygons{ get; set;}
+			
+		public virtual IList<Floor> Floors{ get; set; }
 
 		public Plan ()
 		{
-			Polygons = new List<Polygon> ();
+			
 		}
 	}
 }

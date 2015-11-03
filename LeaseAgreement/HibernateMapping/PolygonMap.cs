@@ -13,7 +13,7 @@ namespace LeaseAgreement
 			Table ("polygons");
 
 			Id (x => x.Id).Column("id").GeneratedBy.Native();
-			References (x => x.Plan).Column ("plan_id");
+			References (x => x.Floor).Column ("floor_id");
 			References (x => x.Place).Column ("place_id");
 			Map (x => x.Points).Column ("vertices");
 

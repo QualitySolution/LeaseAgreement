@@ -12,12 +12,12 @@ namespace LeaseAgreement
 	{
 		public virtual int Id{ get; set; }
 
-		Plan plan;
-
-		public virtual Plan Plan{
-			get{ return plan;}
-			set{ SetField (ref plan, value, () => Plan);}
+		Floor floor;
+		public virtual Floor Floor{
+			get{ return floor;}
+			set{ SetField (ref floor, value, () => Floor);}
 		}
+
 
 		private List<PointD> vertices;
 		public virtual List<PointD> Vertices{ 

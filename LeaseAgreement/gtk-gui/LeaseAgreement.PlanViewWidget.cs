@@ -8,6 +8,8 @@ namespace LeaseAgreement
 		
 		private global::Gtk.DrawingArea drawingarea1;
 		
+		private global::Gamma.Widgets.ySpecComboBox entryreferenceFloor;
+		
 		private global::Gtk.HScrollbar hscrollbar1;
 		
 		private global::Gtk.VScrollbar vscrollbar1;
@@ -22,7 +24,7 @@ namespace LeaseAgreement
 			this.Sensitive = false;
 			this.Name = "LeaseAgreement.PlanViewWidget";
 			// Container child LeaseAgreement.PlanViewWidget.Gtk.Container+ContainerChild
-			this.table1 = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
+			this.table1 = new global::Gtk.Table (((uint)(3)), ((uint)(2)), false);
 			this.table1.Name = "table1";
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(6));
@@ -32,6 +34,19 @@ namespace LeaseAgreement
 			this.drawingarea1.Events = ((global::Gdk.EventMask)(2098948));
 			this.drawingarea1.Name = "drawingarea1";
 			this.table1.Add (this.drawingarea1);
+			global::Gtk.Table.TableChild w1 = ((global::Gtk.Table.TableChild)(this.table1 [this.drawingarea1]));
+			w1.TopAttach = ((uint)(1));
+			w1.BottomAttach = ((uint)(2));
+			// Container child table1.Gtk.Table+TableChild
+			this.entryreferenceFloor = new global::Gamma.Widgets.ySpecComboBox ();
+			this.entryreferenceFloor.Name = "entryreferenceFloor";
+			this.entryreferenceFloor.AddIfNotExist = false;
+			this.entryreferenceFloor.ShowSpecialStateAll = false;
+			this.entryreferenceFloor.ShowSpecialStateNot = true;
+			this.table1.Add (this.entryreferenceFloor);
+			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table1 [this.entryreferenceFloor]));
+			w2.XOptions = ((global::Gtk.AttachOptions)(4));
+			w2.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.hscrollbar1 = new global::Gtk.HScrollbar (null);
 			this.hscrollbar1.Name = "hscrollbar1";
@@ -41,10 +56,11 @@ namespace LeaseAgreement
 			this.hscrollbar1.Adjustment.StepIncrement = 1D;
 			this.hscrollbar1.Adjustment.Value = 20D;
 			this.table1.Add (this.hscrollbar1);
-			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table1 [this.hscrollbar1]));
-			w2.TopAttach = ((uint)(1));
-			w2.BottomAttach = ((uint)(2));
-			w2.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table1 [this.hscrollbar1]));
+			w3.TopAttach = ((uint)(2));
+			w3.BottomAttach = ((uint)(3));
+			w3.XOptions = ((global::Gtk.AttachOptions)(4));
+			w3.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.vscrollbar1 = new global::Gtk.VScrollbar (null);
 			this.vscrollbar1.Name = "vscrollbar1";
@@ -53,10 +69,13 @@ namespace LeaseAgreement
 			this.vscrollbar1.Adjustment.PageSize = 10D;
 			this.vscrollbar1.Adjustment.StepIncrement = 1D;
 			this.table1.Add (this.vscrollbar1);
-			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table1 [this.vscrollbar1]));
-			w3.LeftAttach = ((uint)(1));
-			w3.RightAttach = ((uint)(2));
-			w3.XOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table1 [this.vscrollbar1]));
+			w4.TopAttach = ((uint)(1));
+			w4.BottomAttach = ((uint)(2));
+			w4.LeftAttach = ((uint)(1));
+			w4.RightAttach = ((uint)(2));
+			w4.XOptions = ((global::Gtk.AttachOptions)(4));
+			w4.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.Add (this.table1);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
@@ -65,6 +84,7 @@ namespace LeaseAgreement
 			this.DestroyEvent += new global::Gtk.DestroyEventHandler (this.OnDestroyEvent);
 			this.vscrollbar1.ValueChanged += new global::System.EventHandler (this.OnVscrollbar1ValueChanged);
 			this.hscrollbar1.ValueChanged += new global::System.EventHandler (this.OnHscrollbar1ValueChanged);
+			this.entryreferenceFloor.Changed += new global::System.EventHandler (this.OnEntryReferenceFloorChanged);
 			this.drawingarea1.ExposeEvent += new global::Gtk.ExposeEventHandler (this.OnDrawingAreaExposed);
 			this.drawingarea1.ScrollEvent += new global::Gtk.ScrollEventHandler (this.OnDrawingAreaScroll);
 			this.drawingarea1.SizeAllocated += new global::Gtk.SizeAllocatedHandler (this.OnDrawingAreaSizeAllocated);

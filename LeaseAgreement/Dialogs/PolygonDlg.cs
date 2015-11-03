@@ -15,6 +15,7 @@ namespace LeaseAgreement
 		public Polygon Polygon{ get{ return polygon;}}
 		private Polygon polygon;
 		private bool initialized;
+		private Plan plan;
 
 		public PolygonDlg (Place place)
 		{
@@ -37,12 +38,13 @@ namespace LeaseAgreement
 			planviewwidget1.CurrentPolygon = polygon;
 			planEntryReference.ItemsQuery = QueryOver.Of<Plan> ();
 			planEntryReference.SubjectType = typeof(Plan);
-			planEntryReference.Binding.AddBinding (polygon, p => p.Plan, w => w.Subject);	
-			planEntryReference.Binding.InitializeFromSource ();
-			initialized = true;
+	
 
-			if (polygon.Plan!=null) {				
-				planviewwidget1.Plan = polygon.Plan;		
+
+			if (polygon.Floor!=null) {		
+				planEntryReference.Subject = polygon.Floor.Plan;
+				planviewwidget1.Plan = polygon.Floor.Plan;
+				planviewwidget1.Floor = polygon.Floor;
 				planviewwidget1.CurrentPolygon = polygon;
 				if (polygon.Vertices.Count == 0) {
 					planviewwidget1.Mode = PlanViewMode.Add;				
@@ -50,18 +52,23 @@ namespace LeaseAgreement
 					planviewwidget1.Mode = PlanViewMode.Edit;
 				}
 			}
+			initialized = true;
 		}
 
 		protected void OnPlanEntryReferenceChanged (object sender, EventArgs e)
 		{			
 			if (initialized) {
-				planviewwidget1.Plan = (Plan)planEntryReference.Subject;
+				planviewwidget1.CurrentPolygon = polygon;
+				planviewwidget1.Plan = (Plan)planEntryReference.Subject;			
 				planviewwidget1.Mode = PlanViewMode.Add;
 			}
 		}
 
 		public void OnButtonOkClicked(object sender, EventArgs args)
 		{
+			if (polygon.Vertices.Count == 0) {
+				polygon.Floor.Polygons.Remove (polygon);
+			}
 			UoW.Save ();
 		}
 

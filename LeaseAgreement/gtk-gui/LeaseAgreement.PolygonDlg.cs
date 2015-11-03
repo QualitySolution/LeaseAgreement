@@ -4,7 +4,7 @@ namespace LeaseAgreement
 {
 	public partial class PolygonDlg
 	{
-		private global::Gamma.Widgets.yEntryReference planEntryReference;
+		private global::QSOrmProject.EntryReference planEntryReference;
 		
 		private global::LeaseAgreement.PlanViewWidget planviewwidget1;
 		
@@ -31,7 +31,7 @@ namespace LeaseAgreement
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.planEntryReference = new global::Gamma.Widgets.yEntryReference ();
+			this.planEntryReference = new global::QSOrmProject.EntryReference ();
 			this.planEntryReference.Events = ((global::Gdk.EventMask)(256));
 			this.planEntryReference.Name = "planEntryReference";
 			w1.Add (this.planEntryReference);

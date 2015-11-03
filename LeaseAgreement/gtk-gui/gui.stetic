@@ -14,8 +14,8 @@
     <widget-library name="../../../QSProjects/QSOrmProject/bin/Debug/QSOrmProject.dll" />
     <widget-library name="../../../QSProjects/QSHistoryLog/bin/Debug/QSHistoryLog.dll" />
     <widget-library name="../../../QSProjects/QSUpdater/bin/Debug/QSUpdater.dll" />
-    <widget-library name="../bin/Debug/LeaseAgreement.exe" internal="true" />
     <widget-library name="../../../QSProjects/QSTDI/bin/Debug/QSTDI.dll" />
+    <widget-library name="../bin/Debug/LeaseAgreement.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="875 590">
     <action-group name="Default">
@@ -6922,7 +6922,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.PlanDialog" design-size="464 418">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.PlanDialog" design-size="464 437">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -6936,12 +6936,9 @@
           <widget class="Gtk.Table" id="table1">
             <property name="MemberName" />
             <property name="NRows">2</property>
-            <property name="NColumns">3</property>
+            <property name="NColumns">4</property>
             <property name="RowSpacing">6</property>
             <property name="ColumnSpacing">6</property>
-            <child>
-              <placeholder />
-            </child>
             <child>
               <placeholder />
             </child>
@@ -6967,6 +6964,33 @@
                 <property name="XFill">True</property>
                 <property name="XShrink">False</property>
                 <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
+                <property name="MemberName" />
+                <property name="ShadowType">In</property>
+                <child>
+                  <widget class="Gtk.TreeView" id="treeview1">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="ShowScrollbars">True</property>
+                    <property name="EnableSearch">False</property>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="TopAttach">1</property>
+                <property name="BottomAttach">2</property>
+                <property name="LeftAttach">3</property>
+                <property name="RightAttach">4</property>
+                <property name="AutoSize">False</property>
+                <property name="XExpand">True</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">True</property>
                 <property name="YFill">True</property>
                 <property name="YShrink">False</property>
               </packing>
@@ -7010,6 +7034,25 @@
               </packing>
             </child>
             <child>
+              <widget class="Gtk.Label" id="label3">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Этажи:</property>
+              </widget>
+              <packing>
+                <property name="LeftAttach">2</property>
+                <property name="RightAttach">3</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
               <widget class="Gtk.DataBindings.DataEntry" id="nameEntry">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
@@ -7024,6 +7067,31 @@
               <packing>
                 <property name="LeftAttach">1</property>
                 <property name="RightAttach">2</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.SpinButton" id="spinbutton1">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Upper">100</property>
+                <property name="PageIncrement">10</property>
+                <property name="StepIncrement">1</property>
+                <property name="ClimbRate">1</property>
+                <property name="Numeric">True</property>
+                <signal name="Changed" handler="OnSpinbutton1Changed" />
+              </widget>
+              <packing>
+                <property name="LeftAttach">3</property>
+                <property name="RightAttach">4</property>
                 <property name="AutoSize">True</property>
                 <property name="XOptions">Fill</property>
                 <property name="YOptions">Fill</property>
@@ -7055,6 +7123,8 @@
           <packing>
             <property name="Position">1</property>
             <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
       </widget>
@@ -7114,10 +7184,13 @@
     <child>
       <widget class="Gtk.Table" id="table1">
         <property name="MemberName" />
-        <property name="NRows">2</property>
+        <property name="NRows">3</property>
         <property name="NColumns">2</property>
         <property name="RowSpacing">6</property>
         <property name="ColumnSpacing">6</property>
+        <child>
+          <placeholder />
+        </child>
         <child>
           <placeholder />
         </child>
@@ -7134,11 +7207,35 @@
             <signal name="MotionNotifyEvent" handler="OnPointerMotion" />
           </widget>
           <packing>
-            <property name="AutoSize">True</property>
+            <property name="TopAttach">1</property>
+            <property name="BottomAttach">2</property>
+            <property name="AutoSize">False</property>
             <property name="XExpand">True</property>
             <property name="XFill">True</property>
             <property name="XShrink">False</property>
             <property name="YExpand">True</property>
+            <property name="YFill">True</property>
+            <property name="YShrink">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gamma.Widgets.ySpecComboBox" id="entryreferenceFloor">
+            <property name="MemberName" />
+            <property name="IsTextCombo">False</property>
+            <property name="Items" translatable="yes" />
+            <property name="AddIfNotExist">False</property>
+            <property name="ShowSpecialStateAll">False</property>
+            <property name="ShowSpecialStateNot">True</property>
+            <signal name="Changed" handler="OnEntryReferenceFloorChanged" />
+          </widget>
+          <packing>
+            <property name="AutoSize">True</property>
+            <property name="XOptions">Fill</property>
+            <property name="YOptions">Fill</property>
+            <property name="XExpand">False</property>
+            <property name="XFill">True</property>
+            <property name="XShrink">False</property>
+            <property name="YExpand">False</property>
             <property name="YFill">True</property>
             <property name="YShrink">False</property>
           </packing>
@@ -7154,11 +7251,12 @@
             <signal name="ValueChanged" handler="OnHscrollbar1ValueChanged" />
           </widget>
           <packing>
-            <property name="TopAttach">1</property>
-            <property name="BottomAttach">2</property>
+            <property name="TopAttach">2</property>
+            <property name="BottomAttach">3</property>
             <property name="AutoSize">True</property>
+            <property name="XOptions">Fill</property>
             <property name="YOptions">Fill</property>
-            <property name="XExpand">True</property>
+            <property name="XExpand">False</property>
             <property name="XFill">True</property>
             <property name="XShrink">False</property>
             <property name="YExpand">False</property>
@@ -7176,14 +7274,17 @@
             <signal name="ValueChanged" handler="OnVscrollbar1ValueChanged" />
           </widget>
           <packing>
+            <property name="TopAttach">1</property>
+            <property name="BottomAttach">2</property>
             <property name="LeftAttach">1</property>
             <property name="RightAttach">2</property>
             <property name="AutoSize">True</property>
             <property name="XOptions">Fill</property>
+            <property name="YOptions">Fill</property>
             <property name="XExpand">False</property>
             <property name="XFill">True</property>
             <property name="XShrink">False</property>
-            <property name="YExpand">True</property>
+            <property name="YExpand">False</property>
             <property name="YFill">True</property>
             <property name="YShrink">False</property>
           </packing>
@@ -7204,7 +7305,7 @@
         <property name="MemberName" />
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gamma.Widgets.yEntryReference" id="planEntryReference">
+          <widget class="QSOrmProject.EntryReference" id="planEntryReference">
             <property name="MemberName" />
             <property name="Events">ButtonPressMask</property>
             <signal name="Changed" handler="OnPlanEntryReferenceChanged" />
