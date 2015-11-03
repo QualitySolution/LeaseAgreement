@@ -38,7 +38,7 @@ namespace LeaseAgreement
 
 		public Plan ()
 		{
-			
+			Floors = new List<Floor>();
 		}
 	}
 }

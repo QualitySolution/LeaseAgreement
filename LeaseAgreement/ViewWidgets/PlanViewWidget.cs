@@ -102,7 +102,7 @@ namespace LeaseAgreement
 			cairo.Rectangle (0, 0, 1, 1);
 			cairo.SetSourceRGB (1,1,1);
 			cairo.Fill ();
-			cairo.MoveTo (0, 0.5);
+			cairo.MoveTo (0.14, 0.5);
 			cairo.SetFontSize (0.08);
 			cairo.SetSourceRGB (0, 0, 0);
 			cairo.ShowText ("Загрузите подложку");
