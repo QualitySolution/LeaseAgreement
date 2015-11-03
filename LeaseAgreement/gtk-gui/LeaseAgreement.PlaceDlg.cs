@@ -406,7 +406,6 @@ namespace LeaseAgreement
 			this.vbox4.Spacing = 6;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.table1 = new global::Gtk.Table (((uint)(3)), ((uint)(2)), false);
-			this.table1.Name = "table1";
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(6));
 			// Container child table1.Gtk.Table+TableChild
@@ -533,6 +532,7 @@ namespace LeaseAgreement
 			w36.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.buttonMap = new global::Gtk.Button ();
+			this.buttonMap.Sensitive = false;
 			this.buttonMap.CanFocus = true;
 			this.buttonMap.Name = "buttonMap";
 			this.buttonMap.UseUnderline = true;

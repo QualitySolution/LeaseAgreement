@@ -74,6 +74,7 @@ namespace LeaseAgreement
 			comboPType.Sensitive = false;
 			entryNumber.Sensitive = false;
 			buttonNewContract.Sensitive = true;
+			buttonMap.Sensitive = true;
 			
 			logger.Info("Запрос сдаваемого места...");
 			string sql = "SELECT places.* FROM places " +

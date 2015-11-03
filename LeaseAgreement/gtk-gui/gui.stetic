@@ -2147,6 +2147,7 @@
                                     <child>
                                       <widget class="Gtk.Button" id="buttonMap">
                                         <property name="MemberName" />
+                                        <property name="Sensitive">False</property>
                                         <property name="CanFocus">True</property>
                                         <property name="Type">TextOnly</property>
                                         <property name="Label" translatable="yes">На карте</property>
