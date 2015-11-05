@@ -16,4 +16,11 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 		planviewwidget1.Plan = (Plan)entryreferencePlan.Subject;
 		planviewwidget1.Mode = LeaseAgreement.PlanViewMode.View;
 	}
+
+	protected void UpdateMap()
+	{		
+		if (entryreferencePlan.Subject != null) {
+			planviewwidget1.Plan = UnitOfWorkFactory.CreateWithoutRoot ().Session.Get<Plan> (((Plan)entryreferencePlan.Subject).Id);
+		}
+	}
 }

@@ -216,6 +216,12 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			labelSum.Visible = false;
 			buttonCopy.Visible = true;
 			break;
+		case 3:
+			UpdateMap ();
+			buttonOpen1.Sensitive = false;
+			buttonDel.Sensitive = false;
+			buttonAdd.Sensitive = false;
+			break;
 		default:
 			break;
 		}
@@ -384,6 +390,9 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			break;
 		case 2:
 			UpdateContract ();
+			break;
+		case 3:
+			UpdateMap ();
 			break;
 		default:
 			break;
