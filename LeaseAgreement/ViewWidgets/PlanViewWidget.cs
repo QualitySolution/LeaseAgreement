@@ -153,8 +153,10 @@ namespace LeaseAgreement
 		}			
 
 		public void SetImage(Stream dataStream){
-			if (imageWrapper != null)
+			if (imageWrapper != null) {
 				imageWrapper.Dispose ();
+				imageWrapper = null;
+			}
 			imageWrapper = new ImageDataWrapper (dataStream,System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
 			SetImage (imageWrapper);
 		}
@@ -381,13 +383,9 @@ namespace LeaseAgreement
 		{
 			Console.WriteLine ("PlanView disposed!");
 			imageWrapper.Dispose ();
+			imageWrapper = null;
 			if(imageSurface!=null) imageSurface.Dispose ();
 			base.Dispose ();
-		}
-
-		protected void OnDeleteEvent(object o, DeleteEventArgs args){
-			imageWrapper.Dispose ();
-			if(imageSurface!=null) imageSurface.Dispose ();
 		}
 			
 		private void FinishAdding ()
