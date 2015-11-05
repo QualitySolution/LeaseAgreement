@@ -131,13 +131,10 @@ namespace LeaseAgreement
 
 		public void OnPlanImageChanged(){
 			imageSurface.Dispose ();
-			//if(imageWrapper!=null) imageWrapper.Dispose ();
 			if ((plan!=null)&&(plan.Image != null)) {				
 				using (var dataStream = new MemoryStream (plan.Image)) {
 					SetImage (dataStream);
 				}
-				gScale = MinScale;
-				ReconfigureScrollbars ();
 				drawingarea1.QueueDraw ();
 			} else {
 				imageSurface = GenerateStub ();
