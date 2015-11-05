@@ -87,6 +87,7 @@ namespace LeaseAgreement
 
 		protected void OnDestroyEvent(object sender, DestroyEventArgs args){
 			UoW.Dispose ();
+			planViewWidget.Dispose ();
 		}
 
 		protected void OnButtonUploadClicked (object sender, EventArgs e)

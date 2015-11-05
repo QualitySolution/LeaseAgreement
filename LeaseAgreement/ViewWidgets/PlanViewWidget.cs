@@ -21,11 +21,16 @@ namespace LeaseAgreement
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
 		private DrawingStyle style = DrawingStyle.DefaultStyle;
 
-		private ImageSurface image;
+		private ImageSurface imageSurface;
 		private ImageDataWrapper imageWrapper;
 
 		private Plan plan;
-		public Polygon CurrentPolygon{ get{ return editPolygon; } set{ editPolygon = value; }}
+		public Polygon CurrentPolygon{ 
+			get{ return editPolygon; } 
+			set{
+				editPolygon = value; 
+				comboBoxFloor.SelectedItem = editPolygon.Floor;
+			}}
 		private Polygon editPolygon;
 		public int selectedVertexIndex;
 
@@ -51,8 +56,8 @@ namespace LeaseAgreement
 			get{ return plan;}
 			set {
 				plan = value;
-				entryreferenceFloor.ItemsList = plan.Floors;
-				entryreferenceFloor.Binding.AddBinding (editPolygon,p=>p.Floor, w => w.SelectedItem);   
+				comboBoxFloor.ItemsList = plan.Floors;
+				comboBoxFloor.Binding.AddBinding (editPolygon,p=>p.Floor, w => w.SelectedItem);   
 				Sensitive = (plan != null);
 				OnPlanImageChanged ();
 			}
@@ -89,7 +94,7 @@ namespace LeaseAgreement
 			scrollAdjY = new Adjustment (0, 0, 0, 20, 0, 0);
 			hscrollbar1.Adjustment = scrollAdjX;
 			vscrollbar1.Adjustment = scrollAdjY;
-			image = GenerateStub ();
+			imageSurface = GenerateStub ();
 			gScale = MinScale;
 			ReconfigureScrollbars();
 		}			
@@ -125,7 +130,8 @@ namespace LeaseAgreement
 		}
 
 		public void OnPlanImageChanged(){
-			image.Dispose ();
+			imageSurface.Dispose ();
+			//if(imageWrapper!=null) imageWrapper.Dispose ();
 			if ((plan!=null)&&(plan.Image != null)) {				
 				using (var dataStream = new MemoryStream (plan.Image)) {
 					SetImage (dataStream);
@@ -134,13 +140,13 @@ namespace LeaseAgreement
 				ReconfigureScrollbars ();
 				drawingarea1.QueueDraw ();
 			} else {
-				image = GenerateStub ();
+				imageSurface = GenerateStub ();
 			}   
 		}
 
 		private void SetImage(ImageDataWrapper data){			
-			image.Dispose ();
-			image = new ImageSurface (data.Pointer, Format.Argb32, data.Width, data.Height,data.Stride); 			
+			imageSurface.Dispose ();
+			imageSurface = new ImageSurface (data.Pointer, Format.Argb32, data.Width, data.Height,data.Stride); 			
 			gScale = MinScale;
 			ReconfigureScrollbars();
 			drawingarea1.QueueDraw ();
@@ -154,11 +160,11 @@ namespace LeaseAgreement
 		}
 			
 		protected double CanvasWidth{
-			get{ return image.Width;}
+			get{ return imageSurface.Width;}
 		}
 
 		protected double CanvasHeight{
-			get{ return image.Height;}
+			get{ return imageSurface.Height;}
 		}
 
 		PointD ScreenToWorld (PointD point)
@@ -180,7 +186,7 @@ namespace LeaseAgreement
 
 				cairo.Translate (-scrollAdjX.Value, -scrollAdjY.Value);
 				cairo.Scale(gScale,gScale);
-				cairo.SetSource (image);
+				cairo.SetSource (imageSurface);
 				cairo.Fill ();
 
 				if (floor != null) {
@@ -371,9 +377,17 @@ namespace LeaseAgreement
 			}
 		}
 
-		protected void OnDestroyEvent(object o, DestroyEventArgs args){
+		public override void Dispose ()
+		{
+			Console.WriteLine ("PlanView disposed!");
 			imageWrapper.Dispose ();
-			if(image!=null) image.Dispose ();
+			if(imageSurface!=null) imageSurface.Dispose ();
+			base.Dispose ();
+		}
+
+		protected void OnDeleteEvent(object o, DeleteEventArgs args){
+			imageWrapper.Dispose ();
+			if(imageSurface!=null) imageSurface.Dispose ();
 		}
 			
 		private void FinishAdding ()
@@ -403,9 +417,9 @@ namespace LeaseAgreement
 			drawingarea1.QueueDraw ();
 		}
 
-		public void OnEntryReferenceFloorChanged(object sender, EventArgs args)
+		public void OnComboBoxFloorChanged(object sender, EventArgs args)
 		{
-			Floor = (Floor)entryreferenceFloor.SelectedItem;
+			Floor = (Floor)comboBoxFloor.SelectedItem;
 		}
 	}
 
