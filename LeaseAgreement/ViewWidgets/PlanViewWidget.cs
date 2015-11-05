@@ -415,6 +415,7 @@ namespace LeaseAgreement
 		public void OnComboBoxFloorChanged(object sender, EventArgs args)
 		{
 			Floor = (Floor)comboBoxFloor.SelectedItem;
+			drawingarea1.QueueDraw ();
 		}
 	}
 
