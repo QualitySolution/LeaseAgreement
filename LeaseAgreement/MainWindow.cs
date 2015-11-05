@@ -203,18 +203,21 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			OnTreeviewPlacesCursorChanged (o, EventArgs.Empty);
 			labelSum.Visible = true;
 			buttonCopy.Visible = false;
+			buttonAdd.Sensitive = true;
 			break;
 		case 1:
 			UpdateLessees ();
 			OnTreeviewLesseesCursorChanged (o, EventArgs.Empty);
 			labelSum.Visible = false;
 			buttonCopy.Visible = false;
+			buttonAdd.Sensitive = true;
 			break;
 		case 2:
 			UpdateContract ();
 			OnTreeviewContractCursorChanged (o, EventArgs.Empty);
 			labelSum.Visible = false;
 			buttonCopy.Visible = true;
+			buttonAdd.Sensitive = true;
 			break;
 		case 3:
 			UpdateMap ();

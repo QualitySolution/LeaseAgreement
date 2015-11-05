@@ -38,7 +38,7 @@ namespace LeaseAgreement
 			planviewwidget1.CurrentPolygon = polygon;
 			planEntryReference.ItemsQuery = QueryOver.Of<Plan> ();
 			planEntryReference.SubjectType = typeof(Plan);
-
+			planviewwidget1.FloorChanged += OnFloorChanged;
 			if (polygon.Floor!=null) {		
 				planEntryReference.Subject = polygon.Floor.Plan;
 				planviewwidget1.Plan = polygon.Floor.Plan;
@@ -89,6 +89,11 @@ namespace LeaseAgreement
 				else
 					OnButtonDeleteClicked (this, null);
 			}
+		}
+
+		public void OnFloorChanged(object sender, EventArgs args)
+		{
+			buttonOk.Sensitive = planviewwidget1.Floor != null;
 		}
 			
 		public override void Destroy ()

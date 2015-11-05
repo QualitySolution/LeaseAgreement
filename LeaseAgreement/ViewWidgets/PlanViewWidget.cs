@@ -34,6 +34,8 @@ namespace LeaseAgreement
 		private Polygon editPolygon;
 		public int selectedVertexIndex;
 
+		public event FloorChangedEvent FloorChanged;
+
 		private PointD mouseCoords;
 		private PlanViewMode mode;
 		/// <summary>
@@ -56,8 +58,12 @@ namespace LeaseAgreement
 			get{ return plan;}
 			set {
 				plan = value;
-				comboBoxFloor.ItemsList = plan.Floors;
-				comboBoxFloor.Binding.AddBinding (editPolygon,p=>p.Floor, w => w.SelectedItem);   
+				if (plan != null) {
+					comboBoxFloor.ItemsList = plan.Floors;
+					if (plan.Floors.Count > 0)
+						comboBoxFloor.SelectedItem = plan.Floors [0];
+					comboBoxFloor.Binding.AddBinding (editPolygon, p => p.Floor, w => w.SelectedItem);   
+				}
 				Sensitive = (plan != null);
 				OnPlanImageChanged ();
 			}
@@ -416,6 +422,9 @@ namespace LeaseAgreement
 		{
 			Floor = (Floor)comboBoxFloor.SelectedItem;
 			drawingarea1.QueueDraw ();
+			if (FloorChanged != null) {
+				FloorChanged (this, EventArgs.Empty);
+			}
 		}
 	}
 
@@ -424,5 +433,7 @@ namespace LeaseAgreement
 		View,
 		Add
 	}
+
+	public delegate void FloorChangedEvent(object sender, EventArgs args);
 }
 
