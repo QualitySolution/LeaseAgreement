@@ -59,9 +59,10 @@ namespace LeaseAgreement
 			}
 			tooltip = Place.Comment;
 			if (status==PlaceStatus.Full || status==PlaceStatus.SoonToBeVacant) {
-				if(tooltip.Length>0) 
-					tooltip+="\n";
-				tooltip +="Арендатор: " + contract.Lessee.FullName;			
+				tooltip+="Договор №"+contract.Number;
+				tooltip +="\n"+"Арендатор: " + contract.Lessee.FullName;		
+				string phone = contract.Lessee.Phone!=null ? contract.Lessee.Phone : "(не указан)";
+				tooltip += "\n" + "<u>Телефон</u>: " + phone; 
 			}
 			if (status == PlaceStatus.SoonToBeVacant) {
 				tooltip += "\n" + "Договор до: " + contract.CancelDate.Value.ToShortDateString();
