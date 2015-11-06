@@ -87,7 +87,16 @@ namespace LeaseAgreement
 		double dragStartScrollX;
 		double dragStartScrollY;
 		double ScrollSpeed = 1.05;
-		double gScale=.3;
+		double scale=.3;
+		double scaleSpeed=0;
+		const double MAX_SCROLL_SPEED=2;
+		double scaleFunction(double s)
+		{
+			return Math.Pow(ScrollSpeed,s)*MinScale;
+		}
+		double gScale{
+			get{return scaleFunction (scale);}
+		}
 		Adjustment scrollAdjX;
 		Adjustment scrollAdjY;
 
@@ -101,9 +110,42 @@ namespace LeaseAgreement
 			hscrollbar1.Adjustment = scrollAdjX;
 			vscrollbar1.Adjustment = scrollAdjY;
 			imageSurface = GenerateStub ();
-			gScale = MinScale;
+			//gScale = MinScale;
+			scale=0;
 			ReconfigureScrollbars();
+			GLib.Timeout.Add (20, OnTimeout);
 		}			
+
+		public bool OnTimeout(){				
+			double m = 3;
+			double mu = 0.75;
+
+			scaleSpeed = MathHelper.Clamp(scaleSpeed - scaleSpeed*mu/m,-MAX_SCROLL_SPEED,MAX_SCROLL_SPEED);
+
+			if (Math.Abs (scaleSpeed) < 0.05)
+				scaleSpeed = 0;
+			if (scaleSpeed != 0) {
+				double oldScale = scale;
+				double oldTranslationX = scrollAdjX.Value;
+				double oldTranslationY = scrollAdjY.Value;
+				double viewPortWidth = drawingarea1.Allocation.Width;
+				double viewPortHeight = drawingarea1.Allocation.Height;
+
+				scale += scaleSpeed;
+				scrollAdjX.Upper = CanvasWidth * gScale;
+				scrollAdjY.Upper = CanvasHeight * gScale;
+				scrollAdjX.Upper = MathHelper.Clamp (scrollAdjX.Upper, scrollAdjX.Lower, scrollAdjX.Upper);
+				scrollAdjY.Upper = MathHelper.Clamp (scrollAdjY.Upper, scrollAdjY.Lower, scrollAdjY.Upper);
+
+				scrollAdjX.Value = viewPortWidth / 2 * (gScale / scaleFunction(oldScale) - 1) + oldTranslationX * gScale / scaleFunction(oldScale);
+				scrollAdjY.Value = viewPortHeight / 2 * (gScale / scaleFunction(oldScale) - 1) + oldTranslationY * gScale / scaleFunction(oldScale);
+				scrollAdjX.Value = MathHelper.Clamp (scrollAdjX.Value, scrollAdjX.Lower, scrollAdjX.Upper - scrollAdjX.PageSize);
+				scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper - scrollAdjY.PageSize);			
+				drawingarea1.QueueDraw ();
+				drawingarea1.QueueDraw ();
+			}
+			return true;
+		}
 
 		private ImageSurface GenerateStub(){
 			ImageSurface stub = new ImageSurface (Format.ARGB32, 600, 300);
@@ -150,7 +192,8 @@ namespace LeaseAgreement
 		private void SetImage(ImageDataWrapper data){			
 			imageSurface.Dispose ();
 			imageSurface = new ImageSurface (data.Pointer, Format.Argb32, data.Width, data.Height,data.Stride); 			
-			gScale = MinScale;
+			//gScale = MinScale;
+			scale=0;
 			ReconfigureScrollbars();
 			drawingarea1.QueueDraw ();
 		}			
@@ -188,12 +231,14 @@ namespace LeaseAgreement
 			DrawingArea area = (DrawingArea)o;
 			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {						
 				cairo.Rectangle (0, 0, area.Allocation.Width,area.Allocation.Height);
-
 				cairo.Translate (-scrollAdjX.Value, -scrollAdjY.Value);
 				cairo.Scale(gScale,gScale);
 				cairo.SetSource (imageSurface);
 				cairo.Fill ();
-
+				cairo.MoveTo (100, 100);
+				cairo.SetSourceRGB (1, 0, 0);
+				cairo.ShowText (gScale.ToString());
+				cairo.Fill ();
 				if (floor != null) {
 					foreach (Polygon polygon in floor.Polygons) {
 						if (polygon != editPolygon) {						
@@ -248,32 +293,24 @@ namespace LeaseAgreement
 
 		protected void OnDrawingAreaScroll (object o, ScrollEventArgs args)
 		{
-			double oldScale = gScale;
-			double oldTranslationX = scrollAdjX.Value;
-			double oldTranslationY = scrollAdjY.Value;
-			double viewPortWidth = drawingarea1.Allocation.Width;
-			double viewPortHeight = drawingarea1.Allocation.Height;
 
 			if (args.Event.Direction == ScrollDirection.Up) {
-				gScale *= ScrollSpeed;
+				//gScale *= ScrollSpeed;
+				//scale+=1;
+				scaleSpeed+=0.35;//*gScale/MinScale;
 			}
 			if (args.Event.Direction == ScrollDirection.Down) {
-				gScale /= ScrollSpeed;
+				//gScale /= ScrollSpeed;
+				//scale-=1;
+				scaleSpeed-=0.35;//*gScale/MinScale;
 			}
-			if (gScale < MinScale) {
-				gScale = oldScale;
+			/*
+			if (scale < 0) {
+				scale = oldScale;
 			}else{
-				scrollAdjX.Upper = CanvasWidth * gScale;
-				scrollAdjY.Upper = CanvasHeight * gScale;
-				scrollAdjX.Upper = MathHelper.Clamp (scrollAdjX.Upper, scrollAdjX.Lower, scrollAdjX.Upper);
-				scrollAdjY.Upper = MathHelper.Clamp (scrollAdjY.Upper, scrollAdjY.Lower, scrollAdjY.Upper);
 
-				scrollAdjX.Value = viewPortWidth / 2 * (gScale / oldScale - 1) + oldTranslationX * gScale / oldScale;
-				scrollAdjY.Value = viewPortHeight / 2 * (gScale / oldScale - 1) + oldTranslationY * gScale / oldScale;
-				scrollAdjX.Value = MathHelper.Clamp (scrollAdjX.Value, scrollAdjX.Lower, scrollAdjX.Upper - scrollAdjX.PageSize);
-				scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper - scrollAdjY.PageSize);			
-				drawingarea1.QueueDraw ();
 			}
+			*/
 			args.RetVal = true;
 		}
 			
@@ -289,7 +326,7 @@ namespace LeaseAgreement
 
 		protected void OnDrawingAreaSizeAllocated (object o, SizeAllocatedArgs args)
 		{
-			gScale = Math.Max (MinScale, gScale);
+			scale = Math.Max (0, scale);
 			ReconfigureScrollbars ();		
 		}
 
