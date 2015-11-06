@@ -74,7 +74,7 @@ namespace LeaseAgreement
 			get{ return floor; }
 			set{
 				floor = value;
-				//Mode = PlanViewMode.Edit;
+				UpdatePolygons ();
 				drawingarea1.QueueDraw ();
 			}
 		}
@@ -397,6 +397,7 @@ namespace LeaseAgreement
 				drawingarea1.QueueDraw ();
 			}
 			if (floor != null) {
+				this.HasTooltip = false;
 				foreach (Polygon polygon in floor.Polygons) {
 					if (polygon == editPolygon) {
 						editPolygon.Hightlighted = true;
@@ -405,6 +406,10 @@ namespace LeaseAgreement
 						if (highlighted ^ polygon.Hightlighted) {
 							drawingarea1.QueueDraw ();
 							polygon.Hightlighted = highlighted;
+						}
+						if (highlighted) {
+							this.TooltipText = polygon.Tooltip;
+							this.HasTooltip = true;
 						}
 					}
 				}
@@ -461,6 +466,16 @@ namespace LeaseAgreement
 			drawingarea1.QueueDraw ();
 			if (FloorChanged != null) {
 				FloorChanged (this, EventArgs.Empty);
+			}
+		}
+
+		public void UpdatePolygons ()
+		{
+			var uow = UnitOfWorkFactory.CreateWithoutRoot ();
+			if (floor != null) {
+				foreach (var p in floor.Polygons) {
+					p.UpdateInfo (uow);
+				}
 			}
 		}
 	}
