@@ -23,6 +23,8 @@ namespace LeaseAgreement
 
 		private ImageSurface imageSurface;
 		private ImageDataWrapper imageWrapper;
+		private Rsvg.Handle svg;
+
 
 		private Plan plan;
 		public Polygon CurrentPolygon{ 
@@ -139,12 +141,25 @@ namespace LeaseAgreement
 			imageSurface.Dispose ();
 			if ((plan!=null)&&(plan.Image != null)) {				
 				using (var dataStream = new MemoryStream (plan.Image)) {
-					SetImage (dataStream);
+					if (plan.Filename.EndsWith (".svg")) {
+						SetSvg (dataStream);
+					}else{
+						SetImage (dataStream);
+					}
 				}
 				drawingarea1.QueueDraw ();
 			} else {
 				imageSurface = GenerateStub ();
 			}   
+		}
+
+		public void SetSvg(Stream dataStream){
+			imageSurface.Dispose ();
+			imageWrapper.Dispose ();
+			byte[] data = new byte[dataStream.Length];
+			dataStream.Read(data,0,dataStream.Length);
+			svg = new Rsvg.Handle (data);
+			svg.Dpi = 200;
 		}
 
 		private void SetImage(ImageDataWrapper data){			
@@ -188,11 +203,14 @@ namespace LeaseAgreement
 			DrawingArea area = (DrawingArea)o;
 			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {						
 				cairo.Rectangle (0, 0, area.Allocation.Width,area.Allocation.Height);
-
 				cairo.Translate (-scrollAdjX.Value, -scrollAdjY.Value);
 				cairo.Scale(gScale,gScale);
-				cairo.SetSource (imageSurface);
-				cairo.Fill ();
+				if (imageSurface != null) {
+					cairo.SetSource (imageSurface);
+					cairo.Fill ();
+				} else {					
+					svg.RenderCairo (cairo);
+				}
 
 				if (floor != null) {
 					foreach (Polygon polygon in floor.Polygons) {
