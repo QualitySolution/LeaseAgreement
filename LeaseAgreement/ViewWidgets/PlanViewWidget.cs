@@ -157,7 +157,7 @@ namespace LeaseAgreement
 			imageSurface.Dispose ();
 			imageWrapper.Dispose ();
 			byte[] data = new byte[dataStream.Length];
-			dataStream.Read(data,0,dataStream.Length);
+			dataStream.Read(data,0,(int)dataStream.Length);
 			svg = new Rsvg.Handle (data);
 			svg.Dpi = 200;
 		}
