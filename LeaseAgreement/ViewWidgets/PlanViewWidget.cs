@@ -360,6 +360,7 @@ namespace LeaseAgreement
 				drawingarea1.QueueDraw ();
 			}
 			if (floor != null) {
+				this.HasTooltip = false;
 				foreach (Polygon polygon in floor.Polygons) {
 					if (polygon == editPolygon) {
 						editPolygon.Hightlighted = true;
@@ -368,6 +369,10 @@ namespace LeaseAgreement
 						if (highlighted ^ polygon.Hightlighted) {
 							drawingarea1.QueueDraw ();
 							polygon.Hightlighted = highlighted;
+						}
+						if (highlighted) {
+							this.TooltipText = polygon.Tooltip;
+							this.HasTooltip = true;
 						}
 					}
 				}

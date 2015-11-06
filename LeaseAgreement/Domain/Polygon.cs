@@ -43,6 +43,7 @@ namespace LeaseAgreement
 		}
 
 		public virtual void UpdateInfo(IUnitOfWork uow){
+			Contract contract=null;
 			DateTime today = DateTime.Now;
 			IList<ContractPlace> contractPlaces = uow.Session.QueryOver<ContractPlace> ().Where (cp => cp.Place.Id == Place.Id)
 				.And (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).List();			
@@ -52,10 +53,28 @@ namespace LeaseAgreement
 				if (place.Name.StartsWith ("RESERVED")) // TODO Placeholder for testing
 					status = PlaceStatus.Reserved;
 			} else {
-				Contract contract = contractPlaces.Single ().Contract;
+				contract = contractPlaces.Single ().Contract;
 				if (contract.CancelDate.HasValue)
 					status = PlaceStatus.SoonToBeVacant;
 			}
+			tooltip = Place.Comment;
+			if (status==PlaceStatus.Full || status==PlaceStatus.SoonToBeVacant) {
+				if(tooltip.Length>0) 
+					tooltip+="\n";
+				tooltip +="Арендатор: " + contract.Lessee.FullName;			
+			}
+			if (status == PlaceStatus.SoonToBeVacant) {
+				tooltip += "\n" + "Договор до: " + contract.CancelDate.Value.ToShortDateString();
+			}
+			if(status==PlaceStatus.Vacant)
+			{
+				tooltip = "Место свободно";
+			}
+		}
+
+		string tooltip;
+		public virtual string Tooltip{ 
+			get{ return tooltip;} 
 		}
 
 		public virtual bool Hightlighted{ get; set;}
