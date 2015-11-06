@@ -62,7 +62,7 @@ namespace LeaseAgreement
 				tooltip+="Договор №"+contract.Number;
 				tooltip +="\n"+"Арендатор: " + contract.Lessee.FullName;		
 				string phone = contract.Lessee.Phone!=null ? contract.Lessee.Phone : "(не указан)";
-				tooltip += "\n" + "<u>Телефон</u>: " + phone; 
+				tooltip += "\n" + "Телефон: " + phone; 
 			}
 			if (status == PlaceStatus.SoonToBeVacant) {
 				tooltip += "\n" + "Договор до: " + contract.CancelDate.Value.ToShortDateString();
