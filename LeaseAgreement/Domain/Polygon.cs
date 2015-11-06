@@ -36,6 +36,28 @@ namespace LeaseAgreement
 			set{ SetField(ref place, value, () =>Place);}
 		}
 
+		PlaceStatus status = PlaceStatus.Vacant;
+		public virtual PlaceStatus Status {
+			get{return status;}
+			set{status=value;}
+		}
+
+		public virtual void UpdateInfo(IUnitOfWork uow){
+			DateTime today = DateTime.Now;
+			IList<ContractPlace> contractPlaces = uow.Session.QueryOver<ContractPlace> ().Where (cp => cp.Place.Id == Place.Id)
+				.And (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).List();			
+			status = (contractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
+			if (contractPlaces.Count == 0) {
+				status = PlaceStatus.Vacant;
+				if (place.Name.StartsWith ("RESERVED")) // TODO Placeholder for testing
+					status = PlaceStatus.Reserved;
+			} else {
+				Contract contract = contractPlaces.Single ().Contract;
+				if (contract.CancelDate.HasValue)
+					status = PlaceStatus.SoonToBeVacant;
+			}
+		}
+
 		public virtual bool Hightlighted{ get; set;}
 
 		public virtual void FixVertexOrder()
@@ -66,11 +88,44 @@ namespace LeaseAgreement
 					cairo.LineTo (point);
 			}
 			cairo.LineTo (firstPoint);
-			var color = Hightlighted ? style.PolygonHighlightedColor : style.PolygonColor;
-			cairo.SetSourceColor (color);
+			Cairo.Color color;
+			switch(Status){
+			case PlaceStatus.Full:
+				color = style.PolygonFullColor;
+				break;
+			case PlaceStatus.Vacant:
+				color = style.PolygonVacantColor;
+				break;	
+			case PlaceStatus.Reserved:
+				color = style.PolygonReservedColor;
+				break;
+			case PlaceStatus.SoonToBeVacant:
+				color = style.PolygonSoonToBeVacantColor;
+				break;
+			default:
+				color = style.PolygonColor;
+				break;
+			}
+			//var color = Hightlighted ? style.PolygonHighlightedColor : style.PolygonColor;
+			//cairo.Operator = Operator.
+			cairo.SetSourceColor (style.PolygonColor);
 			cairo.StrokePreserve ();
+			if (Hightlighted) {
+				cairo.Operator = Operator.Add;
+				cairo.SetSourceColor (style.PolygonHighlightedTint);
+				cairo.StrokePreserve ();
+				cairo.Operator = Operator.Over;
+			}
+
 			cairo.SetSourceRGBA (color.R * 0.8125, color.G * 0.8125, color.B * 0.8125, color.A * 0.8125);
-			cairo.Fill ();
+			cairo.FillPreserve ();
+			if (Hightlighted) {
+				cairo.Operator = Operator.Add;
+				cairo.SetSourceColor (style.PolygonHighlightedTint);
+				cairo.Fill ();
+				cairo.Operator = Operator.Over;
+			}
+			cairo.NewPath ();
 
 			PointD textPosition = GetTextPosition ();
 			cairo.MoveTo (textPosition);
@@ -249,6 +304,9 @@ namespace LeaseAgreement
 			vertices = new List<PointD> ();
 		}
 
+	}
+	public enum PlaceStatus{
+		Vacant,SoonToBeVacant,Full,Reserved
 	}
 }
 
