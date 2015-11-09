@@ -155,11 +155,14 @@ namespace LeaseAgreement
 
 		public void SetSvg(Stream dataStream){
 			imageSurface.Dispose ();
-			imageWrapper.Dispose ();
+			imageSurface = null;
+			if(imageWrapper!=null) imageWrapper.Dispose ();
 			byte[] data = new byte[dataStream.Length];
 			dataStream.Read(data,0,(int)dataStream.Length);
 			svg = new Rsvg.Handle (data);
 			svg.Dpi = 200;
+			gScale = MinScale;
+			ReconfigureScrollbars ();
 		}
 
 		private void SetImage(ImageDataWrapper data){			
@@ -180,11 +183,19 @@ namespace LeaseAgreement
 		}
 			
 		protected double CanvasWidth{
-			get{ return imageSurface.Width;}
+			get{
+				if (svg != null)
+					return svg.Dimensions.Width;
+				return imageSurface.Width;
+			}
 		}
 
 		protected double CanvasHeight{
-			get{ return imageSurface.Height;}
+			get{
+				if (svg != null)
+					return svg.Dimensions.Height;
+				return imageSurface.Height;
+			}
 		}
 
 		PointD ScreenToWorld (PointD point)
@@ -197,12 +208,13 @@ namespace LeaseAgreement
 		}
 			
 		protected void OnDrawingAreaExposed (object o, ExposeEventArgs args)
-		{			
+		{
 			if (plan == null)
 				return;
 			DrawingArea area = (DrawingArea)o;
-			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {						
+			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {		
 				cairo.Rectangle (0, 0, area.Allocation.Width,area.Allocation.Height);
+				cairo.ClipPreserve ();
 				cairo.Translate (-scrollAdjX.Value, -scrollAdjY.Value);
 				cairo.Scale(gScale,gScale);
 				if (imageSurface != null) {
