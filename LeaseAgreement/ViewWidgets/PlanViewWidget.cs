@@ -86,13 +86,17 @@ namespace LeaseAgreement
 		double dragStartY;
 		double dragStartScrollX;
 		double dragStartScrollY;
-		double ScrollSpeed = 1.05;
-		double scale=.3;
-		double scaleSpeed=0;
-		const double MAX_SCROLL_SPEED=4;
+		const double ZoomIncrement = 1.05;
+		const double ZoomSpeedIncrement=1;
+		double scale=0;
+		double zoomSpeed=0;
+		const double MaxZoomSpeed=4;
+		const double ZoomMu = 0.35;
+		double MaxZoom{ get{ return Math.Log (100) / Math.Log (ZoomIncrement); }}
+
 		double scaleFunction(double s)
 		{
-			return Math.Pow(ScrollSpeed,s)*MinScale;
+			return Math.Pow(ZoomIncrement,s)*MinScale;
 		}
 		double gScale{
 			get{return scaleFunction (scale);}
@@ -116,21 +120,20 @@ namespace LeaseAgreement
 			GLib.Timeout.Add (20, OnTimeout);
 		}			
 
-		public bool OnTimeout(){					
-			double mu = 0.35;
-
-			scaleSpeed = MathHelper.Clamp(scaleSpeed - scaleSpeed*mu,-MAX_SCROLL_SPEED,MAX_SCROLL_SPEED);
-
-			if (Math.Abs (scaleSpeed) < 0.05)
-				scaleSpeed = 0;
-			if (scaleSpeed != 0) {
+		public bool OnTimeout(){	
+			zoomSpeed = MathHelper.Clamp(zoomSpeed - zoomSpeed*ZoomMu,-MaxZoomSpeed,MaxZoomSpeed);
+			if (Math.Abs (zoomSpeed) < 0.05)
+				zoomSpeed = 0;
+			if (isDragging)
+				zoomSpeed = 0;
+			if (zoomSpeed != 0) {
 				double oldScale = scale;
 				double oldTranslationX = scrollAdjX.Value;
 				double oldTranslationY = scrollAdjY.Value;
 				double viewPortWidth = drawingarea1.Allocation.Width;
 				double viewPortHeight = drawingarea1.Allocation.Height;
 
-				scale += scaleSpeed;
+				scale = MathHelper.Clamp (scale + zoomSpeed, 0, MaxZoom);
 				scrollAdjX.Upper = CanvasWidth * gScale;
 				scrollAdjY.Upper = CanvasHeight * gScale;
 				scrollAdjX.Upper = MathHelper.Clamp (scrollAdjX.Upper, scrollAdjX.Lower, scrollAdjX.Upper);
@@ -294,22 +297,11 @@ namespace LeaseAgreement
 		{
 
 			if (args.Event.Direction == ScrollDirection.Up) {
-				//gScale *= ScrollSpeed;
-				//scale+=1;
-				scaleSpeed+=1;//*gScale/MinScale;
+				zoomSpeed+=ZoomSpeedIncrement;
 			}
 			if (args.Event.Direction == ScrollDirection.Down) {
-				//gScale /= ScrollSpeed;
-				//scale-=1;
-				scaleSpeed-=1;//*gScale/MinScale;
+				zoomSpeed-=ZoomSpeedIncrement;
 			}
-			/*
-			if (scale < 0) {
-				scale = oldScale;
-			}else{
-
-			}
-			*/
 			args.RetVal = true;
 		}
 			
