@@ -89,7 +89,7 @@ namespace LeaseAgreement
 		double ScrollSpeed = 1.05;
 		double scale=.3;
 		double scaleSpeed=0;
-		const double MAX_SCROLL_SPEED=2;
+		const double MAX_SCROLL_SPEED=4;
 		double scaleFunction(double s)
 		{
 			return Math.Pow(ScrollSpeed,s)*MinScale;
@@ -116,11 +116,10 @@ namespace LeaseAgreement
 			GLib.Timeout.Add (20, OnTimeout);
 		}			
 
-		public bool OnTimeout(){				
-			double m = 3;
-			double mu = 0.75;
+		public bool OnTimeout(){					
+			double mu = 0.35;
 
-			scaleSpeed = MathHelper.Clamp(scaleSpeed - scaleSpeed*mu/m,-MAX_SCROLL_SPEED,MAX_SCROLL_SPEED);
+			scaleSpeed = MathHelper.Clamp(scaleSpeed - scaleSpeed*mu,-MAX_SCROLL_SPEED,MAX_SCROLL_SPEED);
 
 			if (Math.Abs (scaleSpeed) < 0.05)
 				scaleSpeed = 0;
@@ -297,12 +296,12 @@ namespace LeaseAgreement
 			if (args.Event.Direction == ScrollDirection.Up) {
 				//gScale *= ScrollSpeed;
 				//scale+=1;
-				scaleSpeed+=0.35;//*gScale/MinScale;
+				scaleSpeed+=1;//*gScale/MinScale;
 			}
 			if (args.Event.Direction == ScrollDirection.Down) {
 				//gScale /= ScrollSpeed;
 				//scale-=1;
-				scaleSpeed-=0.35;//*gScale/MinScale;
+				scaleSpeed-=1;//*gScale/MinScale;
 			}
 			/*
 			if (scale < 0) {
