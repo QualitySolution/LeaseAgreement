@@ -237,10 +237,6 @@ namespace LeaseAgreement
 				cairo.Scale(gScale,gScale);
 				cairo.SetSource (imageSurface);
 				cairo.Fill ();
-				cairo.MoveTo (100, 100);
-				cairo.SetSourceRGB (1, 0, 0);
-				cairo.ShowText (gScale.ToString());
-				cairo.Fill ();
 				if (floor != null) {
 					foreach (Polygon polygon in floor.Polygons) {
 						if (polygon != editPolygon) {						
