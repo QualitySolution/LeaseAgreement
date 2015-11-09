@@ -144,7 +144,6 @@ namespace LeaseAgreement
 				scrollAdjX.Value = MathHelper.Clamp (scrollAdjX.Value, scrollAdjX.Lower, scrollAdjX.Upper - scrollAdjX.PageSize);
 				scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper - scrollAdjY.PageSize);			
 				drawingarea1.QueueDraw ();
-				drawingarea1.QueueDraw ();
 			}
 			return true;
 		}
