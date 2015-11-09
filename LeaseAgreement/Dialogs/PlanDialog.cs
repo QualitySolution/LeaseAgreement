@@ -99,6 +99,7 @@ namespace LeaseAgreement
 			                                                       "Загрузить", ResponseType.Accept);
 			fileChooser.Filter = new Gtk.FileFilter ();
 			fileChooser.Filter.AddPixbufFormats ();
+			fileChooser.Filter.AddPattern ("*.svg");
 			if ((ResponseType)fileChooser.Run () == ResponseType.Accept) {
 				fileChooser.Hide ();
 
