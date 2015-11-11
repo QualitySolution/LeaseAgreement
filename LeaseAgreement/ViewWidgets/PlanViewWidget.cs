@@ -25,6 +25,8 @@ namespace LeaseAgreement
 
 		private ImageSurface imageSurface;
 		private ImageDataWrapper imageWrapper;
+		private Rsvg.Handle svg;
+
 
 		private Plan plan;
 		public Polygon CurrentPolygon{ 
@@ -199,12 +201,28 @@ namespace LeaseAgreement
 			imageSurface.Dispose ();
 			if ((plan!=null)&&(plan.Image != null)) {				
 				using (var dataStream = new MemoryStream (plan.Image)) {
-					SetImage (dataStream);
+					if (plan.Filename.EndsWith (".svg")) {
+						SetSvg (dataStream);
+					}else{
+						SetImage (dataStream);
+					}
 				}
 				drawingarea1.QueueDraw ();
 			} else {
 				imageSurface = GenerateStub ();
 			}   
+		}
+
+		public void SetSvg(Stream dataStream){
+			imageSurface.Dispose ();
+			imageSurface = null;
+			if(imageWrapper!=null) imageWrapper.Dispose ();
+			byte[] data = new byte[dataStream.Length];
+			dataStream.Read(data,0,(int)dataStream.Length);
+			svg = new Rsvg.Handle (data);
+			svg.Dpi = 200;
+			scale = 0;
+			ReconfigureScrollbars ();
 		}
 
 		private void SetImage(ImageDataWrapper data){			
@@ -226,11 +244,19 @@ namespace LeaseAgreement
 		}
 			
 		protected double CanvasWidth{
-			get{ return imageSurface.Width;}
+			get{
+				if (svg != null)
+					return svg.Dimensions.Width;
+				return imageSurface.Width;
+			}
 		}
 
 		protected double CanvasHeight{
-			get{ return imageSurface.Height;}
+			get{
+				if (svg != null)
+					return svg.Dimensions.Height;
+				return imageSurface.Height;
+			}
 		}
 
 		PointD ScreenToWorld (PointD point)
@@ -243,16 +269,21 @@ namespace LeaseAgreement
 		}
 			
 		protected void OnDrawingAreaExposed (object o, ExposeEventArgs args)
-		{			
+		{
 			if (plan == null)
 				return;
 			DrawingArea area = (DrawingArea)o;
-			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {						
+			using (Cairo.Context cairo = CairoHelper.Create (area.GdkWindow)) {		
 				cairo.Rectangle (0, 0, area.Allocation.Width,area.Allocation.Height);
+				cairo.ClipPreserve ();
 				cairo.Translate (-scrollAdjX.Value, -scrollAdjY.Value);
 				cairo.Scale(gScale,gScale);
-				cairo.SetSource (imageSurface);
-				cairo.Fill ();
+				if (imageSurface != null) {
+					cairo.SetSource (imageSurface);
+					cairo.Fill ();
+				} else {					
+					svg.RenderCairo (cairo);
+				}
 				if (floor != null) {
 					foreach (Polygon polygon in floor.Polygons) {
 						if (polygon != editPolygon) {						
