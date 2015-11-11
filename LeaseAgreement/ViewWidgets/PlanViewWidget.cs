@@ -80,7 +80,7 @@ namespace LeaseAgreement
 			get{ return floor; }
 			set{
 				floor = value;
-				UpdatePolygons ();
+				UpdatePolygonInfo ();
 				drawingarea1.QueueDraw ();
 			}
 		}
@@ -525,7 +525,7 @@ namespace LeaseAgreement
 			}
 		}
 
-		public void UpdatePolygons ()
+		public void UpdatePolygonInfo ()
 		{
 			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
 				if (floor != null) {
@@ -533,6 +533,15 @@ namespace LeaseAgreement
 						p.UpdateInfo (uow);
 					}
 				}
+			}
+		}
+
+		public void UpdatePolygons()
+		{
+			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
+				floor.Polygons = uow.Session.QueryOver<Polygon> ().Where(p=>p.Floor.Id==floor.Id).List ();
+				UpdatePolygonInfo ();
+				drawingarea1.QueueDraw ();
 			}
 		}
 	}

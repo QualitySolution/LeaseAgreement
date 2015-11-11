@@ -1318,6 +1318,7 @@ public partial class MainWindow
 		this.DefaultHeight = 590;
 		this.vbox4.Hide ();
 		this.buttonCopy.Hide ();
+		this.newReserveButton.Hide ();
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.Action10.Activated += new global::System.EventHandler (this.OnAction10Activated);

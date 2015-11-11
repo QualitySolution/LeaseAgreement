@@ -48,8 +48,8 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 
 	protected void UpdateMap()
 	{		
-		if (entryreferencePlan.Subject != null) {
-			planviewwidget1.Plan = UnitOfWorkFactory.CreateWithoutRoot ().Session.Get<Plan> (((Plan)entryreferencePlan.Subject).Id);
+		if (entryreferencePlan.Subject != null) {			
+			planviewwidget1.UpdatePolygons();
 		}
 	}
 
@@ -87,6 +87,7 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 			p.Reserve = uow.Root;
 		}
 		uow.Dispose ();
+		UpdateMap ();
 		planviewwidget1.CurrentReserve = null;
 		vbox4.Visible = false;
 	}
@@ -167,9 +168,11 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 
 	protected void OnReserveDeleteButtonClicked (object sender, EventArgs e)
 	{
+		planviewwidget1.CurrentReserve = null;
 		uow.Delete (uow.Root);
 		uow.Commit ();
 		uow.Dispose ();
+		UpdateMap ();
 		vbox4.Visible = false;
 	}
 
