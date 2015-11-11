@@ -204,6 +204,7 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			labelSum.Visible = true;
 			buttonCopy.Visible = false;
 			buttonAdd.Sensitive = true;
+			newReserveButton.Visible = false;
 			break;
 		case 1:
 			UpdateLessees ();
@@ -211,6 +212,7 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			labelSum.Visible = false;
 			buttonCopy.Visible = false;
 			buttonAdd.Sensitive = true;
+			newReserveButton.Visible = false;
 			break;
 		case 2:
 			UpdateContract ();
@@ -218,12 +220,14 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			labelSum.Visible = false;
 			buttonCopy.Visible = true;
 			buttonAdd.Sensitive = true;
+			newReserveButton.Visible = false;
 			break;
 		case 3:
 			UpdateMap ();
 			buttonOpen1.Sensitive = false;
 			buttonDel.Sensitive = false;
 			buttonAdd.Sensitive = false;
+			newReserveButton.Visible = true;
 			break;
 		default:
 			break;
