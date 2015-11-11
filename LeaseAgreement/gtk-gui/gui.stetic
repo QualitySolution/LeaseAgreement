@@ -1264,17 +1264,40 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.VBox" id="vbox4">
+              <widget class="Gtk.HBox" id="hbox2">
                 <property name="MemberName" />
                 <property name="Spacing">6</property>
                 <child>
-                  <widget class="Gtk.HBox" id="hbox2">
+                  <widget class="Gtk.VBox" id="vbox5">
                     <property name="MemberName" />
                     <property name="Spacing">6</property>
                     <child>
-                      <widget class="Gtk.Label" id="label10">
+                      <widget class="Gtk.HBox" id="hbox4">
                         <property name="MemberName" />
-                        <property name="LabelProp" translatable="yes">Схема:</property>
+                        <property name="Spacing">6</property>
+                        <child>
+                          <widget class="Gtk.Label" id="label10">
+                            <property name="MemberName" />
+                            <property name="LabelProp" translatable="yes">Схема:</property>
+                          </widget>
+                          <packing>
+                            <property name="Position">0</property>
+                            <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="QSOrmProject.EntryReference" id="entryreferencePlan">
+                            <property name="MemberName" />
+                            <property name="Events">ButtonPressMask</property>
+                            <signal name="Changed" handler="OnEntryreferencePlanChanged" />
+                          </widget>
+                          <packing>
+                            <property name="Position">1</property>
+                            <property name="AutoSize">True</property>
+                          </packing>
+                        </child>
                       </widget>
                       <packing>
                         <property name="Position">0</property>
@@ -1284,36 +1307,199 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="QSOrmProject.EntryReference" id="entryreferencePlan">
+                      <widget class="LeaseAgreement.PlanViewWidget" id="planviewwidget1">
                         <property name="MemberName" />
+                        <property name="WidthRequest">400</property>
+                        <property name="HeightRequest">300</property>
+                        <property name="Sensitive">False</property>
                         <property name="Events">ButtonPressMask</property>
-                        <signal name="Changed" handler="OnEntryreferencePlanChanged" />
+                        <property name="VisibleWindow">False</property>
                       </widget>
                       <packing>
                         <property name="Position">1</property>
-                        <property name="AutoSize">True</property>
+                        <property name="AutoSize">False</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
                     <property name="Position">0</property>
-                    <property name="AutoSize">True</property>
-                    <property name="Expand">False</property>
-                    <property name="Fill">False</property>
+                    <property name="AutoSize">False</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="LeaseAgreement.PlanViewWidget" id="planviewwidget1">
+                  <widget class="Gtk.VBox" id="vbox4">
                     <property name="MemberName" />
-                    <property name="WidthRequest">400</property>
-                    <property name="HeightRequest">300</property>
-                    <property name="Sensitive">False</property>
-                    <property name="Events">ButtonPressMask</property>
-                    <property name="VisibleWindow">False</property>
+                    <property name="Visible">False</property>
+                    <property name="Spacing">6</property>
+                    <child>
+                      <widget class="Gtk.Label" id="label13">
+                        <property name="MemberName" />
+                        <property name="LabelProp" translatable="yes">Резерв до:</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">0</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="QSOrmProject.DataDatePicker" id="reserveDatePicker">
+                        <property name="MemberName" />
+                        <property name="Events">ButtonPressMask</property>
+                        <property name="Date">0</property>
+                        <property name="IsEditable">True</property>
+                        <property name="AutoSeparation">False</property>
+                        <property name="InheritedDataSource">False</property>
+                        <property name="InheritedBoundaryDataSource">False</property>
+                        <signal name="DateChanged" handler="OnReserveDatePickerChanged" />
+                      </widget>
+                      <packing>
+                        <property name="Position">1</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="label12">
+                        <property name="MemberName" />
+                        <property name="LabelProp" translatable="yes">Комментарий:</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">2</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow2">
+                        <property name="MemberName" />
+                        <property name="ShadowType">In</property>
+                        <child>
+                          <widget class="Gtk.TextView" id="reserveCommentTextView">
+                            <property name="MemberName" />
+                            <property name="CanFocus">True</property>
+                            <property name="ShowScrollbars">True</property>
+                            <property name="Text" translatable="yes" />
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="Position">3</property>
+                        <property name="AutoSize">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="label11">
+                        <property name="MemberName" />
+                        <property name="LabelProp" translatable="yes">Места в резерве:</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">4</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow4">
+                        <property name="MemberName" />
+                        <property name="ShadowType">In</property>
+                        <child>
+                          <widget class="Gtk.TreeView" id="reserveTreeView">
+                            <property name="MemberName" />
+                            <property name="CanFocus">True</property>
+                            <property name="Events">ButtonPressMask</property>
+                            <property name="ShowScrollbars">True</property>
+                            <signal name="ButtonPressEvent" handler="OnReserveTreeViewButtonPress" />
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="Position">5</property>
+                        <property name="AutoSize">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.HBox" id="hbox13">
+                        <property name="MemberName" />
+                        <property name="Spacing">6</property>
+                        <child>
+                          <widget class="Gtk.Button" id="reserveSaveButton">
+                            <property name="MemberName" />
+                            <property name="CanFocus">True</property>
+                            <property name="Type">TextOnly</property>
+                            <property name="Label" translatable="yes">Сохранить</property>
+                            <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnReserveSaveButtonClicked" />
+                          </widget>
+                          <packing>
+                            <property name="Position">0</property>
+                            <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="Gtk.Button" id="button906">
+                            <property name="MemberName" />
+                            <property name="CanFocus">True</property>
+                            <property name="Type">TextOnly</property>
+                            <property name="Label" translatable="yes">Отменить</property>
+                            <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnReserveCancelButtonClicked" />
+                          </widget>
+                          <packing>
+                            <property name="Position">1</property>
+                            <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="Gtk.Button" id="reserveDeleteButton">
+                            <property name="MemberName" />
+                            <property name="CanFocus">True</property>
+                            <property name="Type">TextOnly</property>
+                            <property name="Label" translatable="yes">Удалить</property>
+                            <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnReserveDeleteButtonClicked" />
+                          </widget>
+                          <packing>
+                            <property name="PackType">End</property>
+                            <property name="Position">2</property>
+                            <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="Position">6</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
+                    <property name="PackType">End</property>
                     <property name="Position">1</property>
+                    <property name="AutoSize">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.VSeparator" id="vseparator1">
+                    <property name="MemberName" />
+                  </widget>
+                  <packing>
+                    <property name="PackType">End</property>
+                    <property name="Position">2</property>
                     <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
                   </packing>
                 </child>
               </widget>
@@ -1413,11 +1599,27 @@
               </packing>
             </child>
             <child>
+              <widget class="Gtk.Button" id="newReserveButton">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Type">TextOnly</property>
+                <property name="Label" translatable="yes">Новый резерв</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Clicked" handler="OnNewReserveButtonClicked" />
+              </widget>
+              <packing>
+                <property name="Position">4</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
               <widget class="Gtk.VSeparator" id="vseparator2">
                 <property name="MemberName" />
               </widget>
               <packing>
-                <property name="Position">4</property>
+                <property name="Position">5</property>
                 <property name="AutoSize">False</property>
                 <property name="Expand">False</property>
                 <property name="Fill">False</property>
@@ -1435,7 +1637,7 @@
               </widget>
               <packing>
                 <property name="PackType">End</property>
-                <property name="Position">5</property>
+                <property name="Position">6</property>
                 <property name="AutoSize">True</property>
                 <property name="Expand">False</property>
                 <property name="Fill">False</property>

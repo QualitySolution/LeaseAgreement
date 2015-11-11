@@ -50,13 +50,15 @@ namespace LeaseAgreement
 			status = (contractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
 			if (contractPlaces.Count == 0) {
 				status = PlaceStatus.Vacant;
-				if (place.Name.StartsWith ("RESERVED")) // TODO Placeholder for testing
-					status = PlaceStatus.Reserved;
 			} else {
 				contract = contractPlaces.Single ().Contract;
 				if (contract.CancelDate.HasValue)
 					status = PlaceStatus.SoonToBeVacant;
 			}
+			Reserve reserve;
+			reserve=uow.Session.QueryOver<Reserve>().JoinQueryOver<Place>(r=>r.Places).Where(p=>p.Id==place.Id).SingleOrDefault();
+			if(reserve!=null)
+				status = PlaceStatus.Reserved;
 			tooltip = Place.Comment;
 			if (status==PlaceStatus.Full || status==PlaceStatus.SoonToBeVacant) {
 				tooltip+="Договор №"+contract.Number;
@@ -70,6 +72,10 @@ namespace LeaseAgreement
 			if(status==PlaceStatus.Vacant)
 			{
 				tooltip = "Место свободно";
+			}
+			if (status == PlaceStatus.Reserved) {
+				tooltip = "Зарезервировано до " + reserve.Date.Value.ToShortDateString();
+				if(reserve.Comment!=string.Empty) tooltip +="\n"+ reserve.Comment;
 			}
 		}
 

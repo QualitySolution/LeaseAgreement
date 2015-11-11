@@ -171,6 +171,9 @@
     <Compile Include="MainWinMap.cs" />
     <Compile Include="Domain\Floor.cs" />
     <Compile Include="HibernateMapping\FloorMap.cs" />
+    <Compile Include="Domain\Reserve.cs" />
+    <Compile Include="HibernateMapping\ReserveMap.cs" />
+    <Compile Include="ViewWidgets\PolygonRightClickedEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

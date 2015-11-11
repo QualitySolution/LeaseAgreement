@@ -36,9 +36,11 @@ namespace LeaseAgreement
 				comboBoxFloor.SelectedItem = editPolygon.Floor;
 			}}
 		private Polygon editPolygon;
+		public Reserve CurrentReserve{ get; set;}
 		public int selectedVertexIndex;
 
 		public event FloorChangedEvent FloorChanged;
+		public event PolygonRightClickedEvent PolygonRightClicked;
 
 		private PointD mouseCoords;
 		private PlanViewMode mode;
@@ -264,6 +266,11 @@ namespace LeaseAgreement
 			return new PointD ((point.X + scrollAdjX.Value) / gScale, (point.Y+scrollAdjY.Value)/ gScale);
 		}
 
+		PointD WorldToScreen(PointD world)
+		{
+			return new PointD (world.X * gScale - scrollAdjX.Value, world.Y * gScale - scrollAdjY.Value);
+		}
+
 		protected double MinScale{
 			get{ return Math.Min (drawingarea1.Allocation.Width / CanvasWidth, drawingarea1.Allocation.Height / CanvasHeight); }
 		}
@@ -290,6 +297,7 @@ namespace LeaseAgreement
 							polygon.draw (cairo, style, gScale);
 						}
 					}
+
 
 					if (Mode == PlanViewMode.Edit) {					
 						editPolygon.draw (cairo, style, gScale);
@@ -366,7 +374,7 @@ namespace LeaseAgreement
 
 		protected void OnButtonPressed(object o, ButtonPressEventArgs args){
 			mouseCoords = ScreenToWorld (new PointD (args.Event.X, args.Event.Y));
-			if (args.Event.Button == 3) {
+			if (args.Event.Button == 1) {
 				isDragging = true;
 				dragStartX = args.Event.X;
 				dragStartY = args.Event.Y;
@@ -374,7 +382,7 @@ namespace LeaseAgreement
 				dragStartScrollY = scrollAdjY.Value;
 			}
 			if (floor != null) {
-				if (args.Event.Button == 1) {				
+				if (args.Event.Button == 3) {				
 					if (Mode == PlanViewMode.Add) {
 						bool vertexClicked = editPolygon.Vertices
 						.Where (x => 
@@ -414,34 +422,48 @@ namespace LeaseAgreement
 						}
 						drawingarea1.QueueDraw ();
 					}
+					if (Mode == PlanViewMode.View) {
+						if (floor != null) {
+							var clickedPolygon = floor.Polygons.FirstOrDefault (polygon => polygon.Contains (mouseCoords));
+							if (clickedPolygon != null)
+								PolygonRightClicked (this, new PolygonRightClickedEventArgs (clickedPolygon));
+						}
+					}
 				}
-				HasFocus = true; // FIX Оно вообще работает??
+				HasFocus = true;
 			}
 		}
 
 		protected void OnButtonReleased(object o, ButtonReleaseEventArgs args){
-			if (isDragging && args.Event.Button == 3)
+			if (isDragging && args.Event.Button == 1)
 				isDragging = false;
 			isDraggingVertex = false;
 		}
 
-		protected void OnPointerMotion(object o, MotionNotifyEventArgs args){			
+		protected void OnPointerMotion(object o, MotionNotifyEventArgs args){	
 			mouseCoords = ScreenToWorld (new PointD(args.Event.X, args.Event.Y));
 			if (Mode == PlanViewMode.Add) {
 				drawingarea1.QueueDraw ();
 			}
 			if (floor != null) {
 				this.HasTooltip = false;
+				Reserve hightlightedReserve = null;
+				foreach (Polygon polygon in floor.Polygons) {					
+					if (polygon.Contains(mouseCoords))
+						hightlightedReserve = polygon.Place.Reserve; 
+				}
 				foreach (Polygon polygon in floor.Polygons) {
 					if (polygon == editPolygon) {
 						editPolygon.Hightlighted = true;
 					} else {
-						bool highlighted = polygon.Contains (mouseCoords);
+						bool contains = polygon.Contains (mouseCoords);
+						bool highlighted = contains || (polygon.Place.Reserve == hightlightedReserve && hightlightedReserve!=null);
+
 						if (highlighted ^ polygon.Hightlighted) {
 							drawingarea1.QueueDraw ();
 							polygon.Hightlighted = highlighted;
 						}
-						if (highlighted) {
+						if (contains) {
 							this.TooltipText = polygon.Tooltip;
 							this.HasTooltip = true;
 						}
@@ -505,10 +527,11 @@ namespace LeaseAgreement
 
 		public void UpdatePolygons ()
 		{
-			var uow = UnitOfWorkFactory.CreateWithoutRoot ();
-			if (floor != null) {
-				foreach (var p in floor.Polygons) {
-					p.UpdateInfo (uow);
+			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
+				if (floor != null) {
+					foreach (var p in floor.Polygons) {
+						p.UpdateInfo (uow);
+					}
 				}
 			}
 		}

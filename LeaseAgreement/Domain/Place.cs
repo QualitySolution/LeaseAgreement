@@ -74,6 +74,12 @@ namespace LeaseAgreement.Domain
 					: String.Empty ;}
 		}
 
+		Reserve reserve;
+		public virtual Reserve Reserve{
+			get{ return reserve; }
+			set{ SetField (ref reserve, value, () => Reserve);}
+		}
+
 		public Place ()
 		{
 		}
