@@ -11,6 +11,8 @@ using QSOrmProject;
 using System.Collections.Generic;
 using LeaseAgreement.Domain;
 using NHibernate.Criterion;
+using System.Diagnostics;
+using System.Threading;
 
 
 namespace LeaseAgreement
@@ -92,7 +94,9 @@ namespace LeaseAgreement
 		double zoomSpeed=0;
 		const double MaxZoomSpeed=4;
 		const double ZoomMu = 0.35;
+		const int TimeOutInterval = 20;
 		double MaxZoom{ get{ return Math.Log (100) / Math.Log (ZoomIncrement); }}
+		private Stopwatch stopwatch;
 
 		double scaleFunction(double s)
 		{
@@ -117,14 +121,28 @@ namespace LeaseAgreement
 			//gScale = MinScale;
 			scale=0;
 			ReconfigureScrollbars();
-			GLib.Timeout.Add (20, OnTimeout);
+			GLib.Timeout.Add (TimeOutInterval, OnTimeout);
+			stopwatch = new Stopwatch ();
+			stopwatch.Start ();
 		}			
 
-		public bool OnTimeout(){	
-			zoomSpeed = MathHelper.Clamp(zoomSpeed - zoomSpeed*ZoomMu,-MaxZoomSpeed,MaxZoomSpeed);
+		public bool OnTimeout(){
+			int timeElapsed = (int)stopwatch.ElapsedMilliseconds;
+			stopwatch.Restart ();
+			int lag = timeElapsed / TimeOutInterval;
+			for (int i = 0; i < lag; i++) {
+				MoveCamera (TimeOutInterval);
+			}   
+			int partialInterval = timeElapsed % TimeOutInterval;
+			MoveCamera (partialInterval);		
+			return true;
+		}
+
+		private void MoveCamera(int timeElapsed)
+		{
+			double delta = timeElapsed / (double)TimeOutInterval;
+			zoomSpeed = MathHelper.Clamp (zoomSpeed - zoomSpeed * ZoomMu*delta, -MaxZoomSpeed, MaxZoomSpeed);
 			if (Math.Abs (zoomSpeed) < 0.05)
-				zoomSpeed = 0;
-			if (isDragging)
 				zoomSpeed = 0;
 			if (zoomSpeed != 0) {
 				double oldScale = scale;
@@ -133,19 +151,18 @@ namespace LeaseAgreement
 				double viewPortWidth = drawingarea1.Allocation.Width;
 				double viewPortHeight = drawingarea1.Allocation.Height;
 
-				scale = MathHelper.Clamp (scale + zoomSpeed, 0, MaxZoom);
+				scale = MathHelper.Clamp (scale + zoomSpeed * delta, 0, MaxZoom);
 				scrollAdjX.Upper = CanvasWidth * gScale;
 				scrollAdjY.Upper = CanvasHeight * gScale;
 				scrollAdjX.Upper = MathHelper.Clamp (scrollAdjX.Upper, scrollAdjX.Lower, scrollAdjX.Upper);
 				scrollAdjY.Upper = MathHelper.Clamp (scrollAdjY.Upper, scrollAdjY.Lower, scrollAdjY.Upper);
 
-				scrollAdjX.Value = viewPortWidth / 2 * (gScale / scaleFunction(oldScale) - 1) + oldTranslationX * gScale / scaleFunction(oldScale);
-				scrollAdjY.Value = viewPortHeight / 2 * (gScale / scaleFunction(oldScale) - 1) + oldTranslationY * gScale / scaleFunction(oldScale);
+				scrollAdjX.Value = viewPortWidth / 2 * (gScale / scaleFunction (oldScale) - 1) + oldTranslationX * gScale / scaleFunction (oldScale);
+				scrollAdjY.Value = viewPortHeight / 2 * (gScale / scaleFunction (oldScale) - 1) + oldTranslationY * gScale / scaleFunction (oldScale);
 				scrollAdjX.Value = MathHelper.Clamp (scrollAdjX.Value, scrollAdjX.Lower, scrollAdjX.Upper - scrollAdjX.PageSize);
-				scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper - scrollAdjY.PageSize);			
+				scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper - scrollAdjY.PageSize);
 				drawingarea1.QueueDraw ();
 			}
-			return true;
 		}
 
 		private ImageSurface GenerateStub(){
