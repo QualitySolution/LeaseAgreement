@@ -51,7 +51,11 @@ namespace LeaseAgreement
 			}
 		}
 
-		public virtual void draw(Context cairo,DrawingStyle style, double zoom){
+		public virtual void draw(Context cairo,DrawingStyle style,double zoom){
+			draw (cairo, style, zoom, false);
+		}
+
+		public virtual void draw(Context cairo,DrawingStyle style, double zoom, bool selected){
 			cairo.LineWidth = style.ScreenEditLineSize / zoom;
 			cairo.LineJoin = LineJoin.Round;
 			cairo.LineCap = LineCap.Round;
@@ -66,28 +70,30 @@ namespace LeaseAgreement
 					cairo.LineTo (point);
 			}
 			cairo.LineTo (firstPoint);
-			Cairo.Color color;
+			if (selected)
+				cairo.SetSourceColor (style.SelectedPolygonColor);
+			else
+				cairo.SetSourceColor (style.PolygonColor);
+			cairo.StrokePreserve ();
+
+			Cairo.Color fillColor;
 			switch(Place.Status){
 			case PlaceStatus.Full:
-				color = style.PolygonFullColor;
+				fillColor = style.PolygonFullColor;
 				break;
 			case PlaceStatus.Vacant:
-				color = style.PolygonVacantColor;
+				fillColor = style.PolygonVacantColor;
 				break;	
 			case PlaceStatus.Reserved:
-				color = style.PolygonReservedColor;
+				fillColor = style.PolygonReservedColor;
 				break;
 			case PlaceStatus.SoonToBeVacant:
-				color = style.PolygonSoonToBeVacantColor;
+				fillColor = style.PolygonSoonToBeVacantColor;
 				break;
 			default:
-				color = style.PolygonColor;
+				fillColor = style.PolygonColor;
 				break;
 			}
-			//var color = Hightlighted ? style.PolygonHighlightedColor : style.PolygonColor;
-			//cairo.Operator = Operator.
-			cairo.SetSourceColor (style.PolygonColor);
-			cairo.StrokePreserve ();
 			if (Hightlighted) {
 				cairo.Operator = Operator.Add;
 				cairo.SetSourceColor (style.PolygonHighlightedTint);
@@ -95,7 +101,7 @@ namespace LeaseAgreement
 				cairo.Operator = Operator.Over;
 			}
 
-			cairo.SetSourceRGBA (color.R * 0.8125, color.G * 0.8125, color.B * 0.8125, color.A * 0.8125);
+			cairo.SetSourceRGBA (fillColor.R * 0.8125, fillColor.G * 0.8125, fillColor.B * 0.8125, fillColor.A * 0.8125);
 			cairo.FillPreserve ();
 			if (Hightlighted) {
 				cairo.Operator = Operator.Add;

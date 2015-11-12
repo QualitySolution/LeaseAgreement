@@ -10,6 +10,7 @@ namespace LeaseAgreement
 		public double ScreenCrossLineSize{ get; private set; }
 		public double ScreenCrossLineWidth { get; private set; }
 		public Cairo.Color PolygonColor{ get; private set; }
+		public Cairo.Color SelectedPolygonColor{ get; private set;}
 		public Cairo.Color PolygonHighlightedColor{ get; private set; }
 		public Cairo.Color PolygonVertexColor{ get; private set;}
 		public Cairo.Color PolygonVertexSelectedColor{ get; private set; }
@@ -26,6 +27,7 @@ namespace LeaseAgreement
 			ScreenCrossLineSize=5,
 			ScreenCrossLineWidth=1,
 			PolygonColor=new Cairo.Color(0,0.3,0.8,0.8),
+			SelectedPolygonColor = new Cairo.Color(0.8,0.3,0,0.8),
 			PolygonHighlightedColor = new Cairo.Color(0,0.5,0.3,0.8),
 			PolygonHighlightedTint = new Cairo.Color(0.15,0.15,0.15,0.8),
 			PolygonVacantColor = new Cairo.Color(0,0.5,0.3,0.8),

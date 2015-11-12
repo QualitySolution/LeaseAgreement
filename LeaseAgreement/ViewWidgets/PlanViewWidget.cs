@@ -293,8 +293,9 @@ namespace LeaseAgreement
 				}
 				if (floor != null) {
 					foreach (Polygon polygon in floor.Polygons) {
-						if (polygon != editPolygon) {						
-							polygon.draw (cairo, style, gScale);
+						if (polygon != editPolygon) {
+							bool selected = CurrentReserve!=null && CurrentReserve.Places.Any(p=>p.Id==polygon.Place.Id);
+							polygon.draw (cairo, style, gScale,selected);
 						}
 					}
 
