@@ -132,13 +132,15 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 				dropDown.Append (removeFromReserve);
 				removeFromReserve.Show ();
 			}else{
-				addToReserve = new MenuItem ("Добавить в резерв");
-				addToReserve.Activated += (s, args) => {
-					planviewwidget1.CurrentReserve.Places.Add (place);
-					OnReserveChanged(this,null);
-				};
-				dropDown.Append (addToReserve);
-				addToReserve.Show ();
+				if (place.Status == PlaceStatus.Vacant) {
+					addToReserve = new MenuItem ("Добавить в резерв");
+					addToReserve.Activated += (s, args) => {
+						planviewwidget1.CurrentReserve.Places.Add (place);
+						OnReserveChanged (this, null);
+					};
+					dropDown.Append (addToReserve);
+					addToReserve.Show ();
+				}
 			}
 		} else {
 			if (place.Reserve != null) {

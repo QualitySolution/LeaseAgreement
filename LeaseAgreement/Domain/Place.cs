@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
@@ -80,6 +81,54 @@ namespace LeaseAgreement.Domain
 			set{ SetField (ref reserve, value, () => Reserve);}
 		}
 
+		PlaceStatus status = PlaceStatus.Vacant;
+		public virtual PlaceStatus Status {
+			get{return status;}
+			set{status=value;}
+		}
+
+		public virtual void UpdateStatus(IUnitOfWork uow){
+			Contract contract=null;
+			DateTime today = DateTime.Now;
+			IList<ContractPlace> contractPlaces = uow.Session.QueryOver<ContractPlace> ().Where (cp => cp.Place.Id == Id)
+				.And (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).List();			
+			status = (contractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
+			if (contractPlaces.Count == 0) {
+				status = PlaceStatus.Vacant;
+			} else {
+				contract = contractPlaces.Single ().Contract;
+				if (contract.CancelDate.HasValue)
+					status = PlaceStatus.SoonToBeVacant;
+			}
+			Reserve reserve;
+			reserve=uow.Session.QueryOver<Reserve>().JoinQueryOver<Place>(r=>r.Places).Where(p=>p.Id==Id).SingleOrDefault();
+			if(reserve!=null)
+				status = PlaceStatus.Reserved;
+			tooltip = Comment;
+			if (status==PlaceStatus.Full || status==PlaceStatus.SoonToBeVacant) {
+				tooltip+="Договор №"+contract.Number;
+				tooltip +="\n"+"Арендатор: " + contract.Lessee.FullName;		
+				string phone = contract.Lessee.Phone!=null ? contract.Lessee.Phone : "(не указан)";
+				tooltip += "\n" + "Телефон: " + phone; 
+			}
+			if (status == PlaceStatus.SoonToBeVacant) {
+				tooltip += "\n" + "Договор до: " + contract.CancelDate.Value.ToShortDateString();
+			}
+			if(status==PlaceStatus.Vacant)
+			{
+				tooltip = "Место свободно";
+			}
+			if (status == PlaceStatus.Reserved) {
+				tooltip = "Зарезервировано до " + reserve.Date.Value.ToShortDateString();
+				if(reserve.Comment!=string.Empty) tooltip +="\n"+ reserve.Comment;
+			}
+		}
+
+		string tooltip;
+		public virtual string Tooltip{ 
+			get{ return tooltip;} 
+		}
+
 		public Place ()
 		{
 		}
@@ -143,6 +192,10 @@ namespace LeaseAgreement.Domain
 			};
 			return this;
 		}
+	}
+
+	public enum PlaceStatus{
+		Vacant,SoonToBeVacant,Full,Reserved
 	}
 }
 

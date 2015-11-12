@@ -464,7 +464,7 @@ namespace LeaseAgreement
 							polygon.Hightlighted = highlighted;
 						}
 						if (contains) {
-							this.TooltipText = polygon.Tooltip;
+							this.TooltipText = polygon.Place.Tooltip;
 							this.HasTooltip = true;
 						}
 					}
@@ -530,7 +530,7 @@ namespace LeaseAgreement
 			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
 				if (floor != null) {
 					foreach (var p in floor.Polygons) {
-						p.UpdateInfo (uow);
+						p.Place.UpdateStatus (uow);
 					}
 				}
 			}
