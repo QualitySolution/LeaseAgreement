@@ -75,10 +75,10 @@ namespace LeaseAgreement.Domain
 					: String.Empty ;}
 		}
 
-		Reserve reserve;
+		public virtual IList<Reserve> Reserves{ get; protected set;}
+
 		public virtual Reserve Reserve{
-			get{ return reserve; }
-			set{ SetField (ref reserve, value, () => Reserve);}
+			get{ return Reserves.SingleOrDefault (r => r.Date.Value > DateTime.Now); }
 		}
 
 		PlaceStatus status = PlaceStatus.Vacant;
@@ -100,9 +100,7 @@ namespace LeaseAgreement.Domain
 				if (contract.CancelDate.HasValue)
 					status = PlaceStatus.SoonToBeVacant;
 			}
-			Reserve reserve;
-			reserve=uow.Session.QueryOver<Reserve>().JoinQueryOver<Place>(r=>r.Places).Where(p=>p.Id==Id).SingleOrDefault();
-			if(reserve!=null)
+			if(Reserve!=null)
 				status = PlaceStatus.Reserved;
 			tooltip = Comment;
 			if (status==PlaceStatus.Full || status==PlaceStatus.SoonToBeVacant) {
@@ -119,8 +117,8 @@ namespace LeaseAgreement.Domain
 				tooltip = "Место свободно";
 			}
 			if (status == PlaceStatus.Reserved) {
-				tooltip = "Зарезервировано до " + reserve.Date.Value.ToShortDateString();
-				if(reserve.Comment!=string.Empty) tooltip +="\n"+ reserve.Comment;
+				tooltip = "Зарезервировано до " + Reserve.Date.Value.ToShortDateString();
+				if(Reserve.Comment!=string.Empty) tooltip +="\n"+ Reserve.Comment;
 			}
 		}
 

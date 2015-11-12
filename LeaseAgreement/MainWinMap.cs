@@ -83,9 +83,6 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 		planviewwidget1.CurrentReserve.Comment = reserveCommentTextView.Buffer.Text;
 		planviewwidget1.CurrentReserve.Date = reserveDatePicker.DateOrNull;
 		uow.Save ();
-		foreach (Place p in uow.Root.Places) {
-			p.Reserve = uow.Root;
-		}
 		uow.Dispose ();
 		UpdateMap ();
 		planviewwidget1.CurrentReserve = null;
