@@ -109,8 +109,7 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 		Menu dropDown = new Menu ();
 		openPlace = new MenuItem ("Открыть место");
 		openPlace.Activated += (s,args) => {
-			var dlg = new PlaceDlg ();
-			dlg.Fill (place.PlaceType.Id, place.PlaceNumber);
+			var dlg = new PlaceDlg (place.Id);
 			dlg.Show();
 			dlg.Run();
 			dlg.Destroy();

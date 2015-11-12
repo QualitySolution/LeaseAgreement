@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using QSProjectsLib;
+using QSHistoryLog;
 
 namespace LeaseAgreement.Domain
 {
@@ -77,6 +78,7 @@ namespace LeaseAgreement.Domain
 
 		public virtual IList<Reserve> Reserves{ get; protected set;}
 
+		[IgnoreHistoryTrace]
 		public virtual Reserve Reserve{
 			get{ return Reserves.SingleOrDefault (r => r.Date.Value > DateTime.Now); }
 		}

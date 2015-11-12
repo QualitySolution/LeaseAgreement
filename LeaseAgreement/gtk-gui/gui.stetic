@@ -1705,7 +1705,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.PlaceDlg" design-size="770 437">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.PlaceDlg" design-size="770 439">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новое место</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -2221,6 +2221,7 @@
                                       <widget class="Gtk.Label" id="labelContractDates">
                                         <property name="MemberName" />
                                         <property name="Xalign">0</property>
+                                        <property name="LabelProp" translatable="yes" />
                                       </widget>
                                       <packing>
                                         <property name="TopAttach">1</property>
@@ -2287,6 +2288,45 @@
                                     <property name="AutoSize">True</property>
                                     <property name="Expand">False</property>
                                     <property name="Fill">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="Gtk.Frame" id="reserveFrame">
+                                    <property name="MemberName" />
+                                    <child>
+                                      <widget class="Gtk.Alignment" id="GtkAlignment11">
+                                        <property name="MemberName" />
+                                        <property name="Xalign">0</property>
+                                        <property name="Yalign">0</property>
+                                        <property name="LeftPadding">12</property>
+                                        <property name="BorderWidth">6</property>
+                                        <child>
+                                          <widget class="Gtk.TextView" id="reserveTextView">
+                                            <property name="MemberName" />
+                                            <property name="Sensitive">False</property>
+                                            <property name="CanFocus">True</property>
+                                            <property name="Editable">False</property>
+                                            <property name="CursorVisible">False</property>
+                                            <property name="Text" translatable="yes" />
+                                            <property name="WrapMode">WordChar</property>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="Gtk.Label" id="GtkLabel11">
+                                        <property name="MemberName" />
+                                        <property name="LabelProp" translatable="yes">&lt;b&gt;Резерв&lt;/b&gt;</property>
+                                        <property name="UseMarkup">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="type">label_item</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="Position">1</property>
+                                    <property name="AutoSize">True</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -2366,7 +2406,7 @@
                                     </child>
                                   </widget>
                                   <packing>
-                                    <property name="Position">1</property>
+                                    <property name="Position">2</property>
                                     <property name="AutoSize">True</property>
                                     <property name="Expand">False</property>
                                     <property name="Fill">False</property>
@@ -2390,8 +2430,6 @@
                       <packing>
                         <property name="Position">1</property>
                         <property name="AutoSize">True</property>
-                        <property name="Expand">False</property>
-                        <property name="Fill">False</property>
                       </packing>
                     </child>
                   </widget>
@@ -7052,7 +7090,7 @@
           <widget class="Gtk.Label" id="label1">
             <property name="MemberName" />
             <property name="Xalign">0</property>
-            <property name="LabelProp" translatable="yes">label1</property>
+            <property name="LabelProp" translatable="yes" />
             <property name="Wrap">True</property>
           </widget>
           <packing>

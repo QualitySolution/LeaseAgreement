@@ -247,8 +247,8 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		treeviewPlaces.Selection.GetSelected(out iter);
 		place = PlaceSort.GetValue(iter, (int)PlaceCol.place_no).ToString ();
 		type = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.type_place_id));
-		PlaceDlg winPlace = new PlaceDlg();
-		winPlace.Fill(type, place);
+		int id = Convert.ToInt32(PlaceSort.GetValue(iter, (int)PlaceCol.id));
+		PlaceDlg winPlace = new PlaceDlg(id);
 		winPlace.Show();
 		result = winPlace.Run();
 		winPlace.Destroy();

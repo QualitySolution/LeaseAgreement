@@ -20,6 +20,7 @@ namespace LeaseAgreement
 		private List<PlaceType> typesList;
 		private List<Stead> steadsList;
 		private List<Organization> orgList;
+		private IUnitOfWorkGeneric<Place> UoW;
 		int lessee_id, ContractId;
 
 		Gtk.ListStore HistoryStore;
@@ -29,72 +30,22 @@ namespace LeaseAgreement
 		public PlaceDlg ()
 		{
 			this.Build ();
-			adaptorPlace.Target = subject;
-			table2.DataSource = adaptorPlace;
-			textviewComments.DataSource = adaptorPlace;
-
-			comboPType.ItemsDataSource = typesList = PlaceType.LoadList ();
-			comboStead.ItemsDataSource = steadsList = Stead.LoadList ();
-			comboOrg.ItemsDataSource = orgList = Organization.LoadList ();
-
-			grup = new AccelGroup ();
-			this.AddAccelGroup(grup);
-			
-			//Создаем таблицу "История"
-			HistoryStore = new Gtk.ListStore (typeof(int), typeof (string), typeof (string), typeof (string), typeof (string),
-			                                  typeof (int), typeof (string), typeof (string));
-	 
-			Gtk.TreeViewColumn CommentsColumn = new Gtk.TreeViewColumn ();
-			CommentsColumn.Title = "Комментарии";
-			Gtk.CellRendererText CommentsCell = new Gtk.CellRendererText ();
-			CommentsCell.WrapMode = Pango.WrapMode.WordChar;
-			CommentsCell.WrapWidth = 500;
-			CommentsColumn.MaxWidth = 500;
-			CommentsColumn.PackStart (CommentsCell, true);
-			
-			treeviewHistory.AppendColumn ("Договор", new Gtk.CellRendererText (), "text", 1);
-			treeviewHistory.AppendColumn ("с", new Gtk.CellRendererText (), "text", 2);
-			treeviewHistory.AppendColumn ("по", new Gtk.CellRendererText (), "text", 3);
-			treeviewHistory.AppendColumn ("Арендатор", new Gtk.CellRendererText (), "text", 6);
-			treeviewHistory.AppendColumn(CommentsColumn);
-			CommentsColumn.AddAttribute(CommentsCell, "text" , 7);
-			
-			treeviewHistory.Model = HistoryStore;
-			treeviewHistory.ShowAll();
-
-			customPlace.UsedTable = QSCustomFields.CFMain.GetTableByName ("places");
-			subject.Customs = customPlace.FieldsValues;
-			tracker = new QSHistoryLog.ObjectTracker<Place> (subject);
+			UoW = UnitOfWorkFactory.CreateWithNewRoot<Place> ();
+			ConfigureDlg ();
 		}
 
-		public void Fill(int type, string place)
+		public PlaceDlg(int id)
 		{
+			this.Build ();
+			UoW = UnitOfWorkFactory.CreateForRoot<Place> (id);
+			ConfigureDlg ();
+
 			newItem = false;
 			buttonOk.Sensitive = true;
 			comboPType.Sensitive = false;
 			entryNumber.Sensitive = false;
 			buttonNewContract.Sensitive = true;
 			buttonMap.Sensitive = true;
-			
-			logger.Info("Запрос сдаваемого места...");
-			string sql = "SELECT places.* FROM places " +
-				"WHERE places.type_id = @type_id AND places.place_no = @place";
-			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
-			cmd.Parameters.AddWithValue("@type_id", type);
-			cmd.Parameters.AddWithValue("@place", place);
-			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
-			{
-				rdr.Read ();
-
-				subject.Id = rdr.GetInt32 ("id");
-				subject.Name = rdr ["name"].ToString ();
-				subject.PlaceType = DBWorks.FineById (typesList, rdr ["type_id"]);
-				subject.Stead = DBWorks.FineById (steadsList, rdr["stead_id"]);
-				subject.Organization = DBWorks.FineById(orgList, rdr["org_id"]);
-				subject.PlaceNumber = rdr ["place_no"].ToString ();
-				subject.Area = DBWorks.GetDecimal (rdr, "area", default(decimal));
-				subject.Comment = rdr ["comments"].ToString ();
-			}
 			FillCurrentContract ();
 			customPlace.LoadDataFromDB (subject.Id);
 			subject.Customs = customPlace.FieldsValues;
@@ -103,8 +54,53 @@ namespace LeaseAgreement
 			this.Title = subject.Title;
 			TestCanSave();
 			UpdateHistory();
+			var reserve = subject.Reserve;
+			reserveFrame.Visible = reserve != null;
+			if (reserve != null) {
+				reserveTextView.Buffer.Text = "Зарезервировано до: " + reserve.Date.Value.ToShortDateString () + "\n" + reserve.Comment;
+			}
 		}
 
+		private void ConfigureDlg()
+		{
+			subject = UoW.Root;
+			adaptorPlace.Target = subject;
+			table2.DataSource = adaptorPlace;
+			textviewComments.DataSource = adaptorPlace;
+
+			comboPType.ItemsDataSource = typesList = UoW.Session.QueryOver<PlaceType> ().List ().ToList();
+			comboStead.ItemsDataSource = steadsList = UoW.Session.QueryOver<Stead> ().List ().ToList();
+			comboOrg.ItemsDataSource = orgList = UoW.Session.QueryOver<Organization> ().List ().ToList();
+			grup = new AccelGroup ();
+			this.AddAccelGroup(grup);
+
+			//Создаем таблицу "История"
+			HistoryStore = new Gtk.ListStore (typeof(int), typeof (string), typeof (string), typeof (string), typeof (string),
+			                                  typeof (int), typeof (string), typeof (string));
+
+			Gtk.TreeViewColumn CommentsColumn = new Gtk.TreeViewColumn ();
+			CommentsColumn.Title = "Комментарии";
+			Gtk.CellRendererText CommentsCell = new Gtk.CellRendererText ();
+			CommentsCell.WrapMode = Pango.WrapMode.WordChar;
+			CommentsCell.WrapWidth = 500;
+			CommentsColumn.MaxWidth = 500;
+			CommentsColumn.PackStart (CommentsCell, true);
+
+			treeviewHistory.AppendColumn ("Договор", new Gtk.CellRendererText (), "text", 1);
+			treeviewHistory.AppendColumn ("с", new Gtk.CellRendererText (), "text", 2);
+			treeviewHistory.AppendColumn ("по", new Gtk.CellRendererText (), "text", 3);
+			treeviewHistory.AppendColumn ("Арендатор", new Gtk.CellRendererText (), "text", 6);
+			treeviewHistory.AppendColumn(CommentsColumn);
+			CommentsColumn.AddAttribute(CommentsCell, "text" , 7);
+
+			treeviewHistory.Model = HistoryStore;
+			treeviewHistory.ShowAll();
+
+			customPlace.UsedTable = QSCustomFields.CFMain.GetTableByName ("places");
+			subject.Customs = customPlace.FieldsValues;
+			tracker = new QSHistoryLog.ObjectTracker<Place> (subject);
+		}
+			
 		void FillCurrentContract()
 		{
 			string sql = "SELECT lessees.name as lessee, lessees.comments as l_comments, " +

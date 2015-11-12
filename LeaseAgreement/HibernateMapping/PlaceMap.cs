@@ -19,9 +19,8 @@ namespace LeaseAgreement.HMap
 
 			References (x => x.PlaceType).Column ("type_id");
 			References (x => x.Organization).Column ("org_id");
-			HasManyToMany (x => x.Reserves).Table ("reserve_items").Cascade.None ().ChildKeyColumn ("reserve_id").Not.LazyLoad();	
-
-			//References (x => x.Stead).Column ("stead_id");
+			HasManyToMany (x => x.Reserves).Table ("reserve_items").Cascade.None ().ChildKeyColumn ("reserve_id").Not.LazyLoad();
+			References (x => x.Stead).Column ("stead_id");
 		}
 	}
 }
