@@ -426,7 +426,7 @@ namespace LeaseAgreement
 					if (Mode == PlanViewMode.View) {
 						if (floor != null) {
 							var clickedPolygon = floor.Polygons.FirstOrDefault (polygon => polygon.Contains (mouseCoords));
-							if (clickedPolygon != null)
+							if (clickedPolygon != null && PolygonRightClicked!=null)
 								PolygonRightClicked (this, new PolygonRightClickedEventArgs (clickedPolygon));
 						}
 					}
