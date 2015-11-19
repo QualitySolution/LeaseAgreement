@@ -126,7 +126,9 @@ namespace LeaseAgreement.Domain
 			}
 			if (Tags.Count > 0) {
 				tooltip += "\n" + "Метки: ";
-				tooltip+=Tags.Select (t => t.Name).Aggregate ((result, next) => result + " " + next);
+				var sortedTagNames = Tags.Select(t=>t.Name).ToList ();
+				sortedTagNames.Sort ();
+				tooltip+=sortedTagNames.Aggregate ((result, next) => result + " " + next);
 			}
 		}
 
