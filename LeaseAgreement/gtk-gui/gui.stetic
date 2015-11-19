@@ -7232,9 +7232,6 @@
               <placeholder />
             </child>
             <child>
-              <placeholder />
-            </child>
-            <child>
               <widget class="Gtk.Button" id="buttonUpload">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
@@ -7245,6 +7242,40 @@
                 <signal name="Clicked" handler="OnButtonUploadClicked" />
               </widget>
               <packing>
+                <property name="LeftAttach">3</property>
+                <property name="RightAttach">4</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.DataBindings.DataCheckButton" id="checkButtonHasLabels">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Label" translatable="yes">Места отмечены</property>
+                <property name="Active">True</property>
+                <property name="DrawIndicator">True</property>
+                <property name="HasLabel">True</property>
+                <property name="UseUnderline">True</property>
+                <property name="InheritedDataSource">False</property>
+                <property name="Mappings">HasLabels</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="Editable">True</property>
+                <property name="AutomaticTitle">False</property>
+                <property name="InheritedBoundaryDataSource">False</property>
+                <property name="InheritedDataSource">False</property>
+                <property name="Mappings">HasLabels</property>
+              </widget>
+              <packing>
+                <property name="TopAttach">1</property>
+                <property name="BottomAttach">2</property>
                 <property name="LeftAttach">3</property>
                 <property name="RightAttach">4</property>
                 <property name="AutoSize">True</property>

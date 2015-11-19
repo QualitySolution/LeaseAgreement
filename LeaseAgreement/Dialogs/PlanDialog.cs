@@ -30,6 +30,7 @@ namespace LeaseAgreement
 		}
 
 		public void Configure(){		
+			checkButtonHasLabels.DataSource = plan;
 			int minFloor = plan.Floors.Count;
 			for (int i = plan.Floors.Count; i > 0; i--) {
 				if (plan.Floors [i-1].Polygons.Count == 0)

@@ -51,11 +51,11 @@ namespace LeaseAgreement
 			}
 		}
 
-		public virtual void draw(Context cairo,DrawingStyle style,double zoom){
-			draw (cairo, style, zoom, false);
+		public virtual void draw(Context cairo,DrawingStyle style,double zoom,bool drawLabels){
+			draw (cairo, style, zoom, drawLabels, false);
 		}
 
-		public virtual void draw(Context cairo,DrawingStyle style, double zoom, bool selected){
+		public virtual void draw(Context cairo,DrawingStyle style, double zoom, bool drawLabels, bool selected){
 			cairo.LineWidth = style.ScreenEditLineSize / zoom;
 			cairo.LineJoin = LineJoin.Round;
 			cairo.LineCap = LineCap.Round;
@@ -111,14 +111,15 @@ namespace LeaseAgreement
 			}
 			cairo.NewPath ();
 
-			PointD textPosition = GetTextPosition ();
-			cairo.MoveTo (textPosition);
+			if (drawLabels) {
+				PointD textPosition = GetTextPosition ();
+				cairo.MoveTo (textPosition);
 
-			cairo.SetFontSize (16/zoom);
-			cairo.TextPath (Place.Name);
-			cairo.SetSourceColor (new Cairo.Color (1, 1, 0, 1));
-			cairo.Fill ();
-
+				cairo.SetFontSize (16 / zoom);
+				cairo.TextPath (Place.Name);
+				cairo.SetSourceColor (new Cairo.Color (1, 1, 0, 1));
+				cairo.Fill ();
+			}
 
 			//drawDiags (cairo, zoom);
 

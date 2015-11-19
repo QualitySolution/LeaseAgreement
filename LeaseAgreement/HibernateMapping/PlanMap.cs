@@ -14,6 +14,7 @@ namespace LeaseAgreement
 			Map (x => x.Image).Column ("image").LazyLoad();
 			Map (x => x.Filename).Column ("filename");
 			Map (x => x.Name).Column ("name");
+			Map (x => x.HasLabels).Column ("has_labels");
 			HasMany (x => x.Floors).Inverse ().Cascade.AllDeleteOrphan ().KeyColumn ("plan_id");
 		}
 

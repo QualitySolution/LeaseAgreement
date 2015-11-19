@@ -33,6 +33,12 @@ namespace LeaseAgreement
 			get{ return filename; }
 			set{ SetField (ref filename, value, () => Filename); }
 		}
+
+		bool hasLabels;
+		public virtual bool HasLabels{
+			get{ return hasLabels; }
+			set{ SetField (ref hasLabels, value, () => HasLabels); }
+		}
 			
 		public virtual IList<Floor> Floors{ get; set; }
 

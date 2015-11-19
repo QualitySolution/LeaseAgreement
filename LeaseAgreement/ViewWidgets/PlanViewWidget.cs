@@ -297,13 +297,13 @@ namespace LeaseAgreement
 					foreach (Polygon polygon in floor.Polygons) {
 						if (polygon != editPolygon) {
 							bool selected = CurrentReserve!=null && CurrentReserve.Places.Any(p=>p.Id==polygon.Place.Id);
-							polygon.draw (cairo, style, gScale,selected);
+							polygon.draw (cairo, style, gScale,!plan.HasLabels, selected);
 						}
 					}
 
 
 					if (Mode == PlanViewMode.Edit) {					
-						editPolygon.draw (cairo, style, gScale);
+						editPolygon.draw (cairo, style, gScale, !plan.HasLabels);
 					}
 
 					if (Mode == PlanViewMode.Edit) {					
@@ -311,7 +311,7 @@ namespace LeaseAgreement
 					}
 					
 					if (Mode == PlanViewMode.Edit) {
-						editPolygon.draw (cairo, style, gScale);
+						editPolygon.draw (cairo, style, gScale, !plan.HasLabels);
 						PointD? maybeSelectedVertex = null;
 						if (selectedVertexIndex != -1)
 							maybeSelectedVertex = editPolygon.Vertices [selectedVertexIndex];
