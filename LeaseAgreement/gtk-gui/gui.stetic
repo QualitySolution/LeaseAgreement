@@ -155,6 +155,12 @@
         <property name="ShortLabel" translatable="yes">Схемы</property>
         <signal name="Activated" handler="OnPlanActionActivated" />
       </action>
+      <action id="TagAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Метки</property>
+        <property name="ShortLabel" translatable="yes">Метки</property>
+        <signal name="Activated" handler="OnTagActionActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">QS: Договора аренды</property>
@@ -189,6 +195,7 @@
                 <node type="Separator" />
                 <node type="Menuitem" action="Action7" />
                 <node type="Menuitem" action="PlanAction" />
+                <node type="Menuitem" action="TagAction" />
               </node>
               <node type="Menu" action="Action45">
                 <node type="Menuitem" action="Action46" />
@@ -1705,7 +1712,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.PlaceDlg" design-size="770 439">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.PlaceDlg" design-size="1002 483">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новое место</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -2221,7 +2228,6 @@
                                       <widget class="Gtk.Label" id="labelContractDates">
                                         <property name="MemberName" />
                                         <property name="Xalign">0</property>
-                                        <property name="LabelProp" translatable="yes" />
                                       </widget>
                                       <packing>
                                         <property name="TopAttach">1</property>
@@ -2326,7 +2332,7 @@
                                   </widget>
                                   <packing>
                                     <property name="Position">1</property>
-                                    <property name="AutoSize">True</property>
+                                    <property name="AutoSize">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -2435,6 +2441,48 @@
                   </widget>
                   <packing>
                     <property name="Position">1</property>
+                    <property name="AutoSize">False</property>
+                    <property name="Expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Frame" id="frame4">
+                    <property name="MemberName" />
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.Alignment" id="GtkAlignment6">
+                        <property name="MemberName" />
+                        <property name="Xalign">0</property>
+                        <property name="Yalign">0</property>
+                        <property name="LeftPadding">12</property>
+                        <child>
+                          <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow2">
+                            <property name="MemberName" />
+                            <property name="ShadowType">In</property>
+                            <child>
+                              <widget class="Gtk.TreeView" id="tagTreeView">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="ShowScrollbars">True</property>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="GtkLabel6">
+                        <property name="MemberName" />
+                        <property name="LabelProp" translatable="yes">&lt;b&gt;Метки&lt;/b&gt;</property>
+                        <property name="UseMarkup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">2</property>
                     <property name="AutoSize">False</property>
                   </packing>
                 </child>
@@ -7090,7 +7138,6 @@
           <widget class="Gtk.Label" id="label1">
             <property name="MemberName" />
             <property name="Xalign">0</property>
-            <property name="LabelProp" translatable="yes" />
             <property name="Wrap">True</property>
           </widget>
           <packing>

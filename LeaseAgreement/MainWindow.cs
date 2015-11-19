@@ -495,4 +495,14 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		dialog.Run ();
 		dialog.Destroy ();
 	}
+
+	protected void OnTagActionActivated (object sender, EventArgs e)
+	{
+		Reference dialog = new Reference ();
+		dialog.SetMode (true, false, true, true, true);
+		dialog.FillList ("tags", "метка", "Метки");
+		dialog.Show ();
+		dialog.Run ();
+		dialog.Destroy ();
+	}
 }

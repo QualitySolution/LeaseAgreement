@@ -17,10 +17,8 @@ namespace LeaseAgreement
 		private Place subject = new Place();
 		private Adaptor adaptorPlace = new Adaptor();
 		private QSHistoryLog.ObjectTracker<Place> tracker;
-		private List<PlaceType> typesList;
-		private List<Stead> steadsList;
-		private List<Organization> orgList;
 		private IUnitOfWorkGeneric<Place> UoW;
+		private List<Tag> tagList;
 		int lessee_id, ContractId;
 
 		Gtk.ListStore HistoryStore;
@@ -61,16 +59,52 @@ namespace LeaseAgreement
 			}
 		}
 
+		protected void OnTagCellToggled(object sender, ToggledArgs args){
+			int tagIndex = Convert.ToInt32(args.Path);
+			Tag toggledTag = tagList[tagIndex];
+			if(subject.Tags.Contains(toggledTag)) 
+				subject.Tags.Remove(toggledTag);
+			else 
+				subject.Tags.Add(toggledTag);
+		}
+
 		private void ConfigureDlg()
 		{
 			subject = UoW.Root;
 			adaptorPlace.Target = subject;
 			table2.DataSource = adaptorPlace;
 			textviewComments.DataSource = adaptorPlace;
+			tagList = UoW.Session.QueryOver<Tag> ().List ().ToList ();
+			var tagNameCell = new CellRendererText ();
+			var tagToggleCell = new CellRendererToggle ();
+			tagToggleCell.Activatable = true;
+			tagToggleCell.Toggled += OnTagCellToggled;
+			tagTreeView.AppendColumn ("",
+			                         tagToggleCell,
+			                         delegate(TreeViewColumn tree_column, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
+				Tag tag = tree_model.GetValue (iter, 0) as Tag;
+				bool active = subject.Tags.Any (t => t.Id == tag.Id);
+				(cell as CellRendererToggle).Active = active;
+			});
+				
 
-			comboPType.ItemsDataSource = typesList = UoW.Session.QueryOver<PlaceType> ().List ().ToList();
-			comboStead.ItemsDataSource = steadsList = UoW.Session.QueryOver<Stead> ().List ().ToList();
-			comboOrg.ItemsDataSource = orgList = UoW.Session.QueryOver<Organization> ().List ().ToList();
+			var nameColumn = new TreeViewColumn ();
+			nameColumn.Title = "Название";
+			nameColumn.PackStart (tagNameCell, true);
+			nameColumn.SetCellDataFunc(tagNameCell, new TreeCellDataFunc(delegate(TreeViewColumn tree_column, CellRenderer cr, TreeModel tree_model, TreeIter iter) {
+				Tag tag =tree_model.GetValue(iter,0) as Tag;
+				(cr as CellRendererText).Text=tag.Name;
+			}));
+			tagTreeView.AppendColumn (nameColumn);		
+
+			var model = new ListStore (typeof(Tag));
+			foreach(Tag tag in tagList)
+				model.AppendValues (tag);
+			tagTreeView.Model = model;
+
+			comboPType.ItemsDataSource = UoW.Session.QueryOver<PlaceType> ().List ().ToList();
+			comboStead.ItemsDataSource = UoW.Session.QueryOver<Stead> ().List ().ToList();
+			comboOrg.ItemsDataSource = UoW.Session.QueryOver<Organization> ().List ().ToList();
 			grup = new AccelGroup ();
 			this.AddAccelGroup(grup);
 
@@ -175,75 +209,8 @@ namespace LeaseAgreement
 		
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
-			string sql;
-			subject.Customs = customPlace.FieldsValues;
-			tracker.TakeLast (subject);
-			if(!tracker.Compare ())
-			{
-				logger.Info ("Нет изменений.");
-				Respond (ResponseType.Reject);
-				return;
-			}
-
-			logger.Info("Запись места...");
-			MySqlTransaction trans = (MySqlTransaction)QSMain.ConnectionDB.BeginTransaction ();
-			if(newItem)
-			{
-				sql = "INSERT INTO places (type_id, place_no, name, area, stead_id, org_id, comments) " +
-					"VALUES (@type_id, @place_no, @name, @area, @stead_id, @org, @comments)";
-			}
-			else
-			{
-				sql = "UPDATE places SET name = @name, area = @area, stead_id = @stead_id, " +
-					"org_id = @org, comments = @comments " +
-					"WHERE type_id = @type_id and place_no = @place_no";
-			}
-			try 
-			{
-				MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB, trans);
-				
-				cmd.Parameters.AddWithValue("@type_id", subject.PlaceType.Id);
-				cmd.Parameters.AddWithValue("@place_no", subject.PlaceNumber);
-				cmd.Parameters.AddWithValue("@name", DBWorks.ValueOrNull (subject.Name != "", subject.Name));
-				cmd.Parameters.AddWithValue("@org", DBWorks.IdPropertyOrNull (subject.Organization));
-				cmd.Parameters.AddWithValue("@area", subject.Area);
-				cmd.Parameters.AddWithValue("@comments", subject.Comment);
-				cmd.Parameters.AddWithValue("@stead_id", DBWorks.IdPropertyOrNull (subject.Stead));
-
-				cmd.ExecuteNonQuery();
-
-				if(newItem)
-				{
-					subject.Id = customPlace.ObjectId = tracker.ObjectId = (int)cmd.LastInsertedId;
-				}
-
-				customPlace.SaveToDB(trans);
-				tracker.SaveChangeSet (trans);
-
-				trans.Commit ();
-				logger.Info("Ok");
-				Respond (ResponseType.Ok);
-				
-			} 
-			catch (MySqlException ex) 
-			{
-				trans.Rollback ();
-				if(ex.Number == 1062)
-				{
-					MessageDialog md = new MessageDialog( this, DialogFlags.Modal,
-                          MessageType.Error, 
-                          ButtonsType.Close,"ошибка");
-					md.UseMarkup = false;
-					md.Text = "Место " + comboPType.ActiveText + " - " + entryNumber.Text + " уже существует в базе данных!";
-					md.Run ();
-					md.Destroy();
-				}
-				else
-				{
-					logger.Error(ex, "Ошибка записи места!");
-					QSMain.ErrorMessage(this,ex);
-				}
-			}
+			UoW.Save ();
+			Respond (ResponseType.Ok);
 		}
 		
 		void UpdateHistory()

@@ -76,6 +76,8 @@ namespace LeaseAgreement.Domain
 					: String.Empty ;}
 		}
 
+		public virtual IList<Tag> Tags{ get; protected set; }
+
 		public virtual IList<Reserve> Reserves{ get; protected set;}
 
 		[IgnoreHistoryTrace]
@@ -121,6 +123,10 @@ namespace LeaseAgreement.Domain
 			if (status == PlaceStatus.Reserved) {
 				tooltip = "Зарезервировано до " + Reserve.Date.Value.ToShortDateString();
 				if(Reserve.Comment!=string.Empty) tooltip +="\n"+ Reserve.Comment;
+			}
+			if (Tags.Count > 0) {
+				tooltip += "\n" + "Метки: ";
+				tooltip+=Tags.Select (t => t.Name).Aggregate ((result, next) => result + " " + next);
 			}
 		}
 
