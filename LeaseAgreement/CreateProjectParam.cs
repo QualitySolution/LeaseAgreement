@@ -61,7 +61,8 @@ namespace LeaseAgreement
 					"LEFT JOIN place_types ON places.type_id = place_types.id ",
 				DisplayString = "Место {0}-{1} с площадью {2} кв.м.",
 				DeleteItems = new List<DeleteDependenceInfo> {
-					DeleteDependenceInfo.Create<ContractPlace>(item => item.Place)
+					DeleteDependenceInfo.Create<ContractPlace>(item => item.Place),
+					DeleteDependenceInfo.Create<Polygon>(item => item.Place)
 				}
 			});
 
@@ -218,7 +219,41 @@ namespace LeaseAgreement
 				DisplayString = "Изменено {1} в {0}"
 			});
 
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
+				ObjectClass=typeof(Tag),
+				SqlSelect = "SELECT id, name FROM @tablename",
+				DisplayString="{1}"
+			}.FillFromMetaInfo()
+			);
+			                            
 
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
+				ObjectClass=typeof(Plan),
+				SqlSelect = "SELECT id, name FROM @tablename",
+				DisplayString="{1}",
+				DeleteItems = new List<DeleteDependenceInfo> {
+					DeleteDependenceInfo.Create<Floor>(floor=>floor.Plan)
+				},
+			}.FillFromMetaInfo()
+			);
+			
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
+				ObjectClass=typeof(Floor),
+				SqlSelect = "SELECT id, name FROM @tablename",
+				DisplayString="{1}",
+				DeleteItems = new List<DeleteDependenceInfo> {
+					DeleteDependenceInfo.Create<Polygon>(polygon=>polygon.Floor)
+				},
+			}.FillFromMetaInfo()
+			);
+
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {
+				ObjectClass=typeof(Polygon),
+				SqlSelect = "SELECT @tablename.id, place_types.name, places.place_no FROM @tablename JOIN places ON @tablename.place_id=places.id "+
+						"JOIN place_types ON place_types.id=places.type_id",
+				DisplayString="Полигон для места {1}-{2}"
+			}.FillFromMetaInfo()
+			                                   );
 		}
 
 		static void CreateBaseConfig ()

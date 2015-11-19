@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 
 namespace LeaseAgreement
 {
+	[OrmSubject(Nominative="полигон",
+	                NominativePlural="полигоны")]
 	public class Polygon : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id{ get; set; }

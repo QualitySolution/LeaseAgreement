@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace LeaseAgreement
 {
+	[OrmSubject(Nominative="этаж",
+	                NominativePlural="этажи")]
 	public class Floor : PropertyChangedBase, IDomainObject
 	{
 		public virtual int Id{ get; set; }
