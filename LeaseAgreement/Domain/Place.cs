@@ -76,9 +76,17 @@ namespace LeaseAgreement.Domain
 					: String.Empty ;}
 		}
 
-		public virtual IList<Tag> Tags{ get; protected set; }
+		IList<Tag> tags;
+		public virtual IList<Tag> Tags{ 
+			get{ return tags; } 
+			protected set{ SetField (ref tags, value, () => Tags); }
+		}
 
-		public virtual IList<Reserve> Reserves{ get; protected set;}
+		IList<Reserve> reserves;
+		public virtual IList<Reserve> Reserves{
+			get{ return reserves; } 
+			protected set{ SetField (ref reserves, value, () => Reserves); }
+		}
 
 		[IgnoreHistoryTrace]
 		public virtual Reserve Reserve{
@@ -139,6 +147,8 @@ namespace LeaseAgreement.Domain
 
 		public Place ()
 		{
+			reserves = new List<Reserve> ();
+			tags = new List<Tag> ();
 		}
 			
 		public static List<Place> LoadList()
