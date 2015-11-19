@@ -73,9 +73,9 @@ namespace LeaseAgreement
 			}
 			cairo.LineTo (firstPoint);
 			if (selected)
-				cairo.SetSourceColor (style.SelectedPolygonColor);
+				cairo.Color = style.SelectedPolygonColor;
 			else
-				cairo.SetSourceColor (style.PolygonColor);
+				cairo.Color = style.PolygonColor;
 			cairo.StrokePreserve ();
 
 			Cairo.Color fillColor;
@@ -98,7 +98,7 @@ namespace LeaseAgreement
 			}
 			if (Hightlighted) {
 				cairo.Operator = Operator.Add;
-				cairo.SetSourceColor (style.PolygonHighlightedTint);
+				cairo.Color = style.PolygonHighlightedTint;
 				cairo.StrokePreserve ();
 				cairo.Operator = Operator.Over;
 			}
@@ -107,7 +107,7 @@ namespace LeaseAgreement
 			cairo.FillPreserve ();
 			if (Hightlighted) {
 				cairo.Operator = Operator.Add;
-				cairo.SetSourceColor (style.PolygonHighlightedTint);
+				cairo.Color = style.PolygonHighlightedTint;
 				cairo.Fill ();
 				cairo.Operator = Operator.Over;
 			}
@@ -119,7 +119,7 @@ namespace LeaseAgreement
 
 				cairo.SetFontSize (16 / zoom);
 				cairo.TextPath (Place.Name);
-				cairo.SetSourceColor (new Cairo.Color (1, 1, 0, 1));
+				cairo.Color = new Cairo.Color (1, 1, 0, 1);
 				cairo.Fill ();
 			}
 
@@ -177,7 +177,7 @@ namespace LeaseAgreement
 							inner = true;						
 					}
 					var color = inner ? new Cairo.Color (0, 0, 1, 1) : new Cairo.Color (1, 0, 0, 1);
-					cairo.SetSourceColor (color);
+					cairo.Color = color;
 					cairo.MoveTo (vertices [i]);
 					cairo.LineTo (vertices [j]);
 					cairo.Stroke ();
@@ -190,7 +190,7 @@ namespace LeaseAgreement
 			double crossSize = style.ScreenCrossLineSize/zoom;
 			cairo.LineWidth = style.ScreenCrossLineWidth/zoom;
 			cairo.LineCap = LineCap.Square;
-			cairo.SetSourceColor (style.CrossColor);
+			cairo.Color = style.CrossColor;
 			cairo.NewPath ();
 			cairo.MoveTo(-crossSize,0);
 			cairo.LineTo (crossSize, 0);
@@ -227,14 +227,14 @@ namespace LeaseAgreement
 			cairo.LineCap = LineCap.Round;
 			cairo.LineWidth = style.ScreenEditPointSize / zoom;
 			foreach (PointD p in Vertices) {
-				cairo.SetSourceColor (style.PolygonVertexColor);
+				cairo.Color = style.PolygonVertexColor;
 				cairo.MoveTo (p);
 				cairo.LineTo (p);
 				cairo.ClosePath ();
 			}
 			cairo.Stroke ();
 			if (selected.HasValue) {
-				cairo.SetSourceColor (style.PolygonVertexSelectedColor);
+				cairo.Color = style.PolygonVertexSelectedColor;
 				cairo.MoveTo (selected.Value);
 				cairo.LineTo (selected.Value);
 				cairo.ClosePath ();

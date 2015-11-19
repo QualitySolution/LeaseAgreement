@@ -330,13 +330,13 @@ namespace LeaseAgreement
 								cairo.LineTo (iter.Current);
 							}
 							cairo.LineTo (mouseCoords);
-							cairo.SetSourceColor (style.PolygonColor);
+							cairo.Color=style.PolygonColor;
 							cairo.Stroke ();
 						}
 						// draw vertices
 						editPolygon.DrawVertices (cairo, style, gScale);
 						// draw first point
-						cairo.SetSourceColor (style.PolygonVertexColor);
+						cairo.Color = style.PolygonVertexColor;
 						if (editPolygon.Vertices.Count == 0) {
 							cairo.MoveTo (mouseCoords);
 							cairo.LineTo (mouseCoords);				
