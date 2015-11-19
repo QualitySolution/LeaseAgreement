@@ -723,6 +723,7 @@ namespace LeaseAgreement
 			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 			odt.DocInfo.LoadValuesFromDB (Subject.Id);
 			odt.FillValues ();
+			FillPlan (odt);
 			file = odt.GetArray ();
 			odt.Close ();
 
@@ -732,6 +733,22 @@ namespace LeaseAgreement
 			logger.Info ("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start (TempFilePath);
 		}
+
+		private void FillPlan(OdtWorks odt)
+		{
+			if (subject.LeasedPlaces.Count > 0) {
+				IList<Polygon> polygons = 
+					UoW.Session.QueryOver<Polygon>().Where(
+						p=>p.Place.Id.IsIn(subject.LeasedPlaces.Select(cp=>cp.Place.Id).ToList())
+					).List();
+				Plan plan = polygons [0].Floor.Plan;
+				double aspectRatio = odt.GetFrameAspectRatio ("Схема");
+				using (var renderer = new PlanRenderer (plan)) {
+					odt.ReplaceFrameContent ("Схема", renderer.RenderToPng (polygons, aspectRatio), "Pictures/plan.png");			
+				}
+			}
+		}
+
 
 		private bool SaveIfNeed ()
 		{
@@ -805,6 +822,7 @@ namespace LeaseAgreement
 			odt.UpdateFields ();
 			odt.DocInfo.LoadValuesFromDB (Subject.Id);
 			odt.FillValues ();
+			FillPlan (odt);
 			file = odt.GetArray ();
 			odt.Close ();
 

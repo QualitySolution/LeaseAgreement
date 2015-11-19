@@ -59,22 +59,20 @@
       <HintPath>..\..\GammaBinding\GammaBinding\bin\Debug\GammaBinding.dll</HintPath>
     </Reference>
     <Reference Include="FluentNHibernate">
-      <HintPath>..\..\QSprojects\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
+      <HintPath>..\..\QSProjects\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\..\QSprojects\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+      <HintPath>..\..\QSProjects\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\QSProjects\packages\NLog.4.1.2\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cairo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <Reference Include="System.Drawing" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="rsvg2-sharp">
-      <HintPath>..\lib\rsvg2-sharp.dll</HintPath>
+    <Reference Include="Mono.Cairo" />
+    <Reference Include="NLog">
+      <HintPath>..\..\QSProjects\packages\NLog.4.2.0\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="rsvg2-sharp, Version=2.18.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -175,6 +173,7 @@
     <Compile Include="HibernateMapping\ReserveMap.cs" />
     <Compile Include="ViewWidgets\PolygonRightClickedEvent.cs" />
     <Compile Include="HibernateMapping\SteadMap.cs" />
+    <Compile Include="PlanRenderer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

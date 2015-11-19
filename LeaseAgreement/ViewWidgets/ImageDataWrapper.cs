@@ -25,7 +25,7 @@ namespace LeaseAgreement
 				bitmap.Dispose();
 				bitmap = swap;
 			}
-			bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0,0,bitmap.Width,bitmap.Height),System.Drawing.Imaging.ImageLockMode.ReadOnly,bitmap.PixelFormat);
+			bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0,0,bitmap.Width,bitmap.Height),System.Drawing.Imaging.ImageLockMode.ReadWrite,bitmap.PixelFormat);
 		}
 
 		private Bitmap ConvertToPixelFormat(Bitmap src,System.Drawing.Imaging.PixelFormat format){

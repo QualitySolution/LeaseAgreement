@@ -66,9 +66,9 @@ namespace LeaseAgreement
 				plan = value;
 				if (plan != null) {
 					comboBoxFloor.ItemsList = plan.Floors;
+					comboBoxFloor.Binding.AddBinding (editPolygon, p => p.Floor, w => w.SelectedItem);   
 					if (plan.Floors.Count > 0)
 						comboBoxFloor.SelectedItem = plan.Floors [0];
-					comboBoxFloor.Binding.AddBinding (editPolygon, p => p.Floor, w => w.SelectedItem);   
 				}
 				Sensitive = (plan != null);
 				OnPlanImageChanged ();
@@ -200,7 +200,6 @@ namespace LeaseAgreement
 		}
 
 		public void OnPlanImageChanged(){
-			imageSurface.Dispose ();
 			if ((plan!=null)&&(plan.Image != null)) {				
 				using (var dataStream = new MemoryStream (plan.Image)) {
 					if (plan.Filename.EndsWith (".svg")) {
@@ -216,9 +215,12 @@ namespace LeaseAgreement
 		}
 
 		public void SetSvg(Stream dataStream){
-			imageSurface.Dispose ();
+			if(imageSurface!=null) imageSurface.Dispose ();
 			imageSurface = null;
-			if(imageWrapper!=null) imageWrapper.Dispose ();
+			if (imageWrapper != null) {
+				imageWrapper.Dispose ();
+				imageWrapper = null;
+			}
 			byte[] data = new byte[dataStream.Length];
 			dataStream.Read(data,0,(int)dataStream.Length);
 			svg = new Rsvg.Handle (data);
@@ -228,7 +230,7 @@ namespace LeaseAgreement
 		}
 
 		private void SetImage(ImageDataWrapper data){			
-			imageSurface.Dispose ();
+			if(imageSurface!=null) imageSurface.Dispose ();
 			imageSurface = new ImageSurface (data.Pointer, Format.Argb32, data.Width, data.Height,data.Stride); 			
 			//gScale = MinScale;
 			scale=0;
@@ -484,7 +486,8 @@ namespace LeaseAgreement
 		public override void Dispose ()
 		{
 			Console.WriteLine ("PlanView disposed!");
-			imageWrapper.Dispose ();
+			if(imageWrapper!=null)
+				imageWrapper.Dispose ();
 			imageWrapper = null;
 			if(imageSurface!=null) imageSurface.Dispose ();
 			base.Dispose ();

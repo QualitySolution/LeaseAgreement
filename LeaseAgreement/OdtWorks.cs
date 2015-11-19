@@ -48,18 +48,9 @@ namespace LeaseAgreement
 			odtZip = new ZipFile (OdtStream);
 		}
 
-		public XmlDocument GetContentXML()
-		{
-			ZipEntry entry = odtZip.GetEntry ("content.xml");
-			Stream contentStream = odtZip.GetInputStream (entry);
-			XmlDocument content = new XmlDocument ();
-			content.Load (contentStream);
-			return content;
-		}
-
 		public void UpdateFields()
 		{
-			XmlDocument content = GetContentXML ();
+			XmlDocument content = GetXMLDocument("content.xml");
 			XmlNamespaceManager nsMgr = new XmlNamespaceManager(content.NameTable);
 			nsMgr.AddNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
 			nsMgr.AddNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
@@ -128,7 +119,6 @@ namespace LeaseAgreement
 						newFieldNode.SetAttribute ("name", "urn:oasis:names:tc:opendocument:xmlns:text:1.0", field.Name + ".Пропись");
 						fieldsDels.AppendChild (newFieldNode);
 					}
-
 				}
 			}
 
@@ -138,43 +128,133 @@ namespace LeaseAgreement
 		public void FillValues()
 		{
 			logger.Info ("Заполняем поля документа...");
-			XmlDocument content = GetContentXML ();
+			XmlDocument content = GetXMLDocument("content.xml");
 			XmlNamespaceManager nsMgr = new XmlNamespaceManager(content.NameTable);
 			nsMgr.AddNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
 			nsMgr.AddNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 
-			foreach(XmlNode node in content.SelectNodes ("/office:document-content/office:body/office:text/text:user-field-decls/text:user-field-decl", nsMgr))
-			{
+			foreach (XmlNode node in content.SelectNodes ("/office:document-content/office:body/office:text/text:user-field-decls/text:user-field-decl", nsMgr)) {
 				string fieldName = node.Attributes ["text:name"].Value;
-				PatternField field = DocInfo.Fields.Find (f =>  fieldName.StartsWith (f.Name));
-				if (field == null)
-				{
+				PatternField field = DocInfo.Fields.Find (f => fieldName.StartsWith (f.Name));
+				if (field == null) {
 					logger.Warn ("Поле {0} не найдено, поэтому пропущено.", fieldName);
 					continue;
 				}
 				if (field.Type == PatternFieldType.FDate) // && node.Attributes ["office:date-value"] != null)
 					node.Attributes ["office:string-value"].Value = field.value != DBNull.Value ? ((DateTime)field.value).ToLongDateString () : "";
 					//node.Attributes ["office:date-value"].Value = field.value != DBNull.Value ? XmlConvert.ToString ((DateTime)field.value, XmlDateTimeSerializationMode.Unspecified) : "";
-				else if (field.Type == PatternFieldType.FCurrency) 
-				{
-					if (fieldName.Replace (field.Name, "") == ".Число") 
-					{
+				else if (field.Type == PatternFieldType.FCurrency) {
+					if (fieldName.Replace (field.Name, "") == ".Число") {
 						((XmlElement)node).SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "currency");
 						((XmlElement)node).SetAttribute ("value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", XmlConvert.ToString ((decimal)field.value));
 						string curr = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
 						((XmlElement)node).SetAttribute ("currency", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", curr);
 					}
-					if (fieldName.Replace (field.Name, "") == ".Пропись") 
-					{
+					if (fieldName.Replace (field.Name, "") == ".Пропись") {
 						string val = RusCurrency.Str ((int)(decimal)field.value, true, "рубль", "рубля", "рублей", "", "", "");
 						node.Attributes ["office:string-value"].Value = val;
 					}
-				}
-				else
+				} else
 					node.Attributes ["office:string-value"].Value = field.value.ToString ();
-			}
-
+			}	
 			UpdateContentXML (content);
+		}
+
+		public double GetFrameAspectRatio(string frameName)
+		{
+			XmlDocument content = GetXMLDocument("content.xml");
+			var nodeList = content.GetElementsByTagName ("draw:frame");
+			foreach (XmlElement frameNode in nodeList) {
+				if (frameNode.Attributes ["draw:name"].Value == frameName) {
+					var heightAttr = frameNode.Attributes ["svg:height"];
+					var widthAttr = frameNode.Attributes ["svg:width"];
+					for(var frameChild = frameNode.FirstChild;frameChild!=null;frameChild=frameChild.NextSibling){
+						if(heightAttr==null) heightAttr = frameChild.Attributes ["fo:min-height"];
+						if(widthAttr ==null) widthAttr = frameChild.Attributes ["fo:min-width"];
+					}
+					double height = Convert.ToDouble (heightAttr.Value.Substring (0, heightAttr.Value.Length - 2));
+					double width = Convert.ToDouble (widthAttr.Value.Substring (0, widthAttr.Value.Length - 2));
+					return width/height;
+				}
+			}
+			return 1;
+		}
+
+		public void ReplaceFrameContent(string frameName, byte[] image, string path){
+			XmlDocument content = GetXMLDocument("content.xml");
+			XmlNamespaceManager nsMgr = new XmlNamespaceManager(content.NameTable);
+			nsMgr.AddNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+			nsMgr.AddNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+			nsMgr.AddNamespace ("fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+			nsMgr.AddNamespace ("xlink", "http://www.w3.org/1999/xlink");
+			nsMgr.AddNamespace ("draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
+			nsMgr.AddNamespace ("svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+			var nodeList = content.GetElementsByTagName ("draw:frame");
+			foreach (XmlElement frameNode in nodeList) {
+				if (frameNode.Attributes ["draw:name"].Value == frameName) {
+					var x = frameNode.Attributes ["svg:x"];
+					var y = frameNode.Attributes ["svg:y"];
+					var anchor = frameNode.Attributes ["text:anchor-type"];
+					var height = frameNode.Attributes ["svg:height"];
+					var width = frameNode.Attributes ["svg:width"];
+					for(var frameChild = frameNode.FirstChild;frameChild!=null;frameChild=frameChild.NextSibling){
+						if(height==null) height = frameChild.Attributes ["fo:min-height"];
+						if(width ==null) width = frameChild.Attributes ["fo:min-width"];
+						frameNode.RemoveChild (frameChild);
+					}
+
+
+					frameNode.SetAttribute ("anchor-type", nsMgr.LookupNamespace ("text"), anchor.Value);
+					frameNode.SetAttribute ("x", nsMgr.LookupNamespace ("svg"), x.Value);
+					frameNode.SetAttribute ("y", nsMgr.LookupNamespace ("svg"), y.Value);
+					frameNode.SetAttribute ("height", nsMgr.LookupNamespace ("svg"), height.Value);
+					frameNode.SetAttribute ("width", nsMgr.LookupNamespace ("svg"), width.Value);
+
+					XmlElement drawing = content.CreateElement ("draw:image",nsMgr.LookupNamespace("draw"));
+					drawing.SetAttribute ("href", nsMgr.LookupNamespace("xlink"), path);
+					drawing.SetAttribute ("show",nsMgr.LookupNamespace("xlink"),"embed");
+					drawing.SetAttribute ("type",nsMgr.LookupNamespace("xlink"), "simple");
+					drawing.SetAttribute ("actuate",nsMgr.LookupNamespace("xlink"), "onLoad");
+					frameNode.AppendChild (drawing);
+				}
+			}
+			UpdateContentXML (content);
+			AddFile (image, path);
+		}
+
+		public void AddFile(byte[] data, string path)
+		{
+			XmlDocument manifest = GetXMLDocument ("META-INF/manifest.xml");
+			XmlNamespaceManager nsManager = new XmlNamespaceManager (manifest.NameTable);
+			nsManager.AddNamespace ("manifest", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0");
+			XmlNode manifestNode = manifest.SelectSingleNode("/manifest:manifest",nsManager);
+			XmlElement fileEntry = manifest.CreateElement ("manifest", "file-entry", nsManager.LookupNamespace("manifest"));
+			fileEntry.SetAttribute ("full-path", nsManager.LookupNamespace ("manifest"),path);
+			fileEntry.SetAttribute ("media-type", nsManager.LookupNamespace ("manifest"), "image/png");
+			manifestNode.AppendChild(fileEntry);
+			using (var manifestDataStream = new MemoryStream ()) {
+				using (var fileStream = new MemoryStream (data)) {
+					odtZip.BeginUpdate ();
+					StreamStaticDataSource sds = new StreamStaticDataSource ();
+					sds.SetStream (fileStream);
+					odtZip.Add (sds, path);
+					manifest.Save (manifestDataStream);
+					StreamStaticDataSource manifestSDS = new StreamStaticDataSource ();
+					manifestSDS.SetStream (manifestDataStream);
+					odtZip.Add (manifestSDS, "META-INF/manifest.xml");
+					odtZip.CommitUpdate ();
+				}
+			}
+		
+		}
+
+		private XmlDocument GetXMLDocument(string path)
+		{
+			ZipEntry entry = odtZip.GetEntry (path);
+			Stream contentStream = odtZip.GetInputStream (entry);
+			XmlDocument document = new XmlDocument ();
+			document.Load (contentStream);
+			return document;
 		}
 
 		private void UpdateContentXML(XmlDocument content)

@@ -124,6 +124,25 @@ namespace LeaseAgreement
 
 		}
 
+		public virtual Rectangle GetBoundingBox()
+		{
+			double minX, maxX;
+			double minY, maxY;
+			minX = maxX = vertices [0].X;
+			minY = maxY = vertices [0].Y;
+			foreach (PointD p in vertices) {
+				if (p.X > maxX)
+					maxX = p.X;
+				if (p.Y > maxY)
+					maxY = p.Y;
+				if (p.X < minX)
+					minX = p.X;
+				if (p.Y < minY)
+					minY = p.Y;
+			}
+			return new Rectangle (minX, minY, maxX - minX, maxY - minY);
+		}
+
 		public virtual void drawDiags(Context cairo, double zoom){
 			cairo.LineWidth = 2 / zoom;
 			if (vertices.Count <= 3)
