@@ -540,8 +540,10 @@ namespace LeaseAgreement
 		{
 			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
 				if (floor != null) {
+					var placeIDs = floor.Polygons.Select (p => p.Place.Id).ToList ();
+					var relevantContractPlaces = uow.Session.QueryOver<ContractPlace> ().Where (cp => cp.Place.Id.IsIn (placeIDs)).List ();
 					foreach (var p in floor.Polygons) {
-						p.Place.UpdateStatus (uow);
+						p.Place.UpdateStatus (relevantContractPlaces);
 					}
 				}
 			}

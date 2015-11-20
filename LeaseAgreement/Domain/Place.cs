@@ -99,16 +99,16 @@ namespace LeaseAgreement.Domain
 			set{status=value;}
 		}
 
-		public virtual void UpdateStatus(IUnitOfWork uow){
+		public virtual void UpdateStatus(IList<ContractPlace> contractPlaces){
 			Contract contract=null;
 			DateTime today = DateTime.Now;
-			IList<ContractPlace> contractPlaces = uow.Session.QueryOver<ContractPlace> ().Where (cp => cp.Place.Id == Id)
-				.And (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).List();			
-			status = (contractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
-			if (contractPlaces.Count == 0) {
+			IList<ContractPlace> currentContractPlaces = contractPlaces.Where (cp => cp.Place.Id == Id)
+				.Where (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).ToList();			
+			status = (currentContractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
+			if (currentContractPlaces.Count == 0) {
 				status = PlaceStatus.Vacant;
 			} else {
-				contract = contractPlaces.Single ().Contract;
+				contract = currentContractPlaces.Single ().Contract;
 				if (contract.CancelDate.HasValue)
 					status = PlaceStatus.SoonToBeVacant;
 			}
