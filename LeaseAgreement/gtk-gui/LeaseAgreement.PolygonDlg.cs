@@ -115,8 +115,8 @@ namespace LeaseAgreement
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 404;
-			this.DefaultHeight = 395;
+			this.DefaultWidth = 786;
+			this.DefaultHeight = 498;
 			this.Show ();
 			this.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnKeyPressEvent);
 			this.planEntryReference.Changed += new global::System.EventHandler (this.OnPlanEntryReferenceChanged);
