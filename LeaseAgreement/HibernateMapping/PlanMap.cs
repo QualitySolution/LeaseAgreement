@@ -8,7 +8,7 @@ namespace LeaseAgreement
 		public PlanMap ()
 		{
 			Table ("plans");
-			Not.LazyLoad ();
+
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.Image).Column ("image").LazyLoad();
