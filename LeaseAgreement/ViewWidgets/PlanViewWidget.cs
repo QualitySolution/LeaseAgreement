@@ -197,9 +197,25 @@ namespace LeaseAgreement
 
 			scrollAdjX.Upper = CanvasWidth * gScale;
 			scrollAdjY.Upper = CanvasHeight * gScale;
+
+			scrollAdjX.Value = MathHelper.Clamp (scrollAdjX.Value, scrollAdjX.Lower, scrollAdjX.Upper - scrollAdjX.PageSize);
+			scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper - scrollAdjY.PageSize);
+
 		}
 
 		public void OnPlanImageChanged(){
+			if (imageSurface != null) {
+				imageSurface.Dispose ();
+				imageSurface = null;
+			}
+			if (imageWrapper != null){
+				imageWrapper.Dispose ();
+				imageWrapper = null;
+			}
+			if (svg != null) {
+				svg.Dispose ();
+				svg = null;
+			}
 			if ((plan!=null)&&(plan.Image != null)) {				
 				using (var dataStream = new MemoryStream (plan.Image)) {
 					if (plan.Filename.EndsWith (".svg")) {
@@ -215,12 +231,6 @@ namespace LeaseAgreement
 		}
 
 		public void SetSvg(Stream dataStream){
-			if(imageSurface!=null) imageSurface.Dispose ();
-			imageSurface = null;
-			if (imageWrapper != null) {
-				imageWrapper.Dispose ();
-				imageWrapper = null;
-			}
 			byte[] data = new byte[dataStream.Length];
 			dataStream.Read(data,0,(int)dataStream.Length);
 			svg = new Rsvg.Handle (data);
@@ -230,7 +240,6 @@ namespace LeaseAgreement
 		}
 
 		private void SetImage(ImageDataWrapper data){			
-			if(imageSurface!=null) imageSurface.Dispose ();
 			imageSurface = new ImageSurface (data.Pointer, Format.Argb32, data.Width, data.Height,data.Stride); 			
 			//gScale = MinScale;
 			scale=0;
@@ -239,10 +248,6 @@ namespace LeaseAgreement
 		}			
 
 		public void SetImage(Stream dataStream){
-			if (imageWrapper != null) {
-				imageWrapper.Dispose ();
-				imageWrapper = null;
-			}
 			imageWrapper = new ImageDataWrapper (dataStream,System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
 			SetImage (imageWrapper);
 		}
@@ -488,8 +493,10 @@ namespace LeaseAgreement
 			Console.WriteLine ("PlanView disposed!");
 			if(imageWrapper!=null)
 				imageWrapper.Dispose ();
-			imageWrapper = null;
-			if(imageSurface!=null) imageSurface.Dispose ();
+			if(imageSurface!=null) 
+				imageSurface.Dispose ();
+			if (svg != null)
+				svg.Dispose ();
 			base.Dispose ();
 		}
 			
