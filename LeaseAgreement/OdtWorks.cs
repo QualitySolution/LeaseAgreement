@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Zip;
 using NLog;
 using QSProjectsLib;
+using System.Globalization;
 
 namespace LeaseAgreement
 {
@@ -172,8 +173,8 @@ namespace LeaseAgreement
 						if(heightAttr==null) heightAttr = frameChild.Attributes ["fo:min-height"];
 						if(widthAttr ==null) widthAttr = frameChild.Attributes ["fo:min-width"];
 					}
-					double height = Convert.ToDouble (heightAttr.Value.Substring (0, heightAttr.Value.Length - 2));
-					double width = Convert.ToDouble (widthAttr.Value.Substring (0, widthAttr.Value.Length - 2));
+					double height = double.Parse (heightAttr.Value.Substring (0, heightAttr.Value.Length - 2),CultureInfo.InvariantCulture);
+					double width = double.Parse (widthAttr.Value.Substring (0, widthAttr.Value.Length - 2),CultureInfo.InvariantCulture);
 					return width/height;
 				}
 			}
