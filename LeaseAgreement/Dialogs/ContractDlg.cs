@@ -69,6 +69,29 @@ namespace LeaseAgreement
 			ConfigureDlg ();
 		}
 
+		public ContractDlg(Place place)
+		{
+			this.isNew = true;
+			this.Build ();
+			PrepareDlg ();
+			UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract> ();
+			subject = UoW.Root;
+			ConfigureDlg ();
+			var contractPlace = new ContractPlace {
+				Place = place
+			};
+			var contractPlaceDlg = new ContractEdit (new ContractPlace[]{contractPlace});
+			contractPlaceDlg.Show ();
+			if (((ResponseType)contractPlaceDlg.Run ()) == ResponseType.Ok) {
+				contractPlace.StartDate = contractPlaceDlg.StartDate;
+				contractPlace.EndDate = contractPlaceDlg.EndDate;
+			}
+			contractPlaceDlg.Destroy ();
+			Subject.AddLeassedPlace (contractPlace);
+			subject.StartDate = contractPlace.StartDate;
+			subject.EndDate = contractPlace.EndDate;
+		}
+
 		private void PrepareDlg()
 		{
 			deletedDocItems = new List<int> ();
@@ -424,6 +447,18 @@ namespace LeaseAgreement
 						return false;
 					}
 				}
+				if(subject.LeasedPlaces.Any(cp=>!cp.StartDate.HasValue||!cp.EndDate.HasValue)){
+					MessageDialog md = new MessageDialog (this, DialogFlags.Modal,
+					                                      MessageType.Error, 
+					                                      ButtonsType.Ok, "ошибка");
+					md.UseMarkup = false;
+					md.Text = "Не у всех мест заполнены даты начала/конца аренды";
+					md.Run ();
+					md.Destroy ();
+					trans.Rollback ();
+					return false;
+				}					
+
 				UoW.Save ();
 
 				if (contractWasNew) {
@@ -520,12 +555,12 @@ namespace LeaseAgreement
 				var problems = GetUnresolvablePlaces ();	
 				if (problems.Length > 0) {
 					ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату начала договора т.к. аренда " +
-					                             "следующих мест заканчивается до начала договора:");
+					                              "следующих мест заканчивается до начала договора:");
 					warning.Run ();
 					warning.Destroy ();
 					datepickerStart.DateOrNull = prevStartDate;
 				}
-			}
+			} 
 			TestCanSave ();
 		}
 
@@ -536,7 +571,7 @@ namespace LeaseAgreement
 				return;
 			}
 			if (!isNew) {
-				OnDateChanged ();
+				OnDateChanged ();	
 				var problems = GetUnresolvablePlaces ();	
 				if (problems.Length > 0) {
 					ContractEditWarning warning = new ContractEditWarning (problems, "Невозможно изменить дату окончани договора т.к. аренда " +
@@ -557,18 +592,7 @@ namespace LeaseAgreement
 			winLessee.Run ();
 			winLessee.Destroy ();
 		}
-
-		public bool AddPlace (Place place)
-		{
-			try {
-				Subject.AddLeassedPlace (new ContractPlace{
-					Place = place
-				});
-				return true;
-			} catch {
-				return false;
-			}
-		}
+			
 		protected void OnDateChanged(){
 			oldEnd = prevCancelDate.HasValue ? prevCancelDate.Value : prevEndDate.Value;
 			newEnd = datepickerCancel.DateOrNull.HasValue ? datepickerCancel.DateOrNull.Value : Subject.EndDate.Value;

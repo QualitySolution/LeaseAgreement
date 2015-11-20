@@ -320,9 +320,8 @@ namespace LeaseAgreement
 
 		protected void OnButtonNewContractClicked (object sender, EventArgs e)
 		{
-			ContractDlg winContract = new ContractDlg();
+			ContractDlg winContract = new ContractDlg(subject);
 			winContract.Show();
-			winContract.AddPlace (subject);
 			winContract.Run();
 			winContract.Destroy();
 			FillCurrentContract ();

@@ -66,10 +66,6 @@ namespace LeaseAgreement
 
 		public bool isDateValid ()
 		{
-			DateTime contractStart = contractPlaces [0].Contract.StartDate.Value;
-			DateTime contractEnd = (contractPlaces [0].Contract.CancelDate == null) ? contractPlaces [0].Contract.EndDate.Value 
-				: contractPlaces [0].Contract.CancelDate.Value;
-			
 			DateTime? maybeDateStart = datePickerStart.DateOrNull;
 			DateTime? maybeDateEnd = datePickerEnd.DateOrNull;
 			if (!((maybeDateStart.HasValue) && (maybeDateEnd.HasValue)))
@@ -77,19 +73,25 @@ namespace LeaseAgreement
 			
 			DateTime dateStart = datePickerStart.DateOrNull.Value;
 			DateTime dateEnd = datePickerEnd.DateOrNull.Value;
-			if (!(contractStart <= dateStart && dateEnd <= contractEnd))
-				return false;
-			if (dateStart >= dateEnd)
-				return false;
+			var contract = contractPlaces [0].Contract;
+			if (contract!= null && contract.StartDate.HasValue && contract.EndDate.HasValue) {
+				DateTime contractStart = contractPlaces [0].Contract.StartDate.Value;
+				DateTime contractEnd = (contractPlaces [0].Contract.CancelDate == null) ? contractPlaces [0].Contract.EndDate.Value 
+				: contractPlaces [0].Contract.CancelDate.Value;
+			
+				if (!(contractStart <= dateStart && dateEnd <= contractEnd))
+					return false;
+				if (dateStart >= dateEnd)
+					return false;
+			}
 			//контракты, которые пересекаются по времени
 			var notFreeQuery = UoW.Session.QueryOver<ContractPlace> ()
 				.Where (cp => cp.StartDate.Value < dateEnd && StartDate < cp.EndDate.Value);						
 			notFreeQuery.JoinQueryOver (cp => cp.Contract)
-						.Where (c => !c.Draft);
+				.Where (c => !c.Draft);
 			// исключая те, которые редактируем
 			notFreeQuery.Where (cp => !cp.Id.IsIn (contractPlaces.Select (p => p.Id).ToList ()));
 
-			var notFreeIDs = notFreeQuery.Select (cp => cp.Id).List<int> ();
 			// id выделенных мест
 			var selectedPlacesIDs = contractPlaces.Select (cp => cp.Place.Id).ToList ();
 			// контракты, которые пересекаются как по времени так и по месту
@@ -98,6 +100,8 @@ namespace LeaseAgreement
 				return false;		
 			return true;
 		}
+
+
 	}
 
 }

@@ -86,7 +86,7 @@ namespace LeaseAgreement
 			}
 		}
 
-		protected void OnButtonEditClicked ( object sende, EventArgs e)
+		protected void OnButtonEditClicked ( object sender, EventArgs e)
 		{
 			var contractPlaces = ytreeviewPlaces.GetSelectedObjects<ContractPlace> ();
 			var dlg = new ContractEdit (contractPlaces);
@@ -95,11 +95,6 @@ namespace LeaseAgreement
 				Array.ForEach(contractPlaces,(place) => {place.StartDate=dlg.StartDate;place.EndDate=dlg.EndDate;});
 			}
 			dlg.Destroy ();
-
-			foreach (var contractPlace in ytreeviewPlaces.GetSelectedObjects<ContractPlace> ()) 
-			{
-				
-			}
 		}
 
 		protected void OnRowActivated (object o, Gtk.RowActivatedArgs args)
