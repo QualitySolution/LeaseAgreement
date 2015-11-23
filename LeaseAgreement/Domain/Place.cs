@@ -114,11 +114,12 @@ namespace LeaseAgreement.Domain
 			}
 			if(Reserve!=null)
 				status = PlaceStatus.Reserved;
-			tooltip = Comment;
-			if (status==PlaceStatus.Full || status==PlaceStatus.SoonToBeVacant) {
-				tooltip+="Договор №"+contract.Number;
-				tooltip +="\n"+"Арендатор: " + contract.Lessee.FullName;		
-				string phone = contract.Lessee.Phone!=null ? contract.Lessee.Phone : "(не указан)";
+			tooltip = PlaceType.Name + "-" + PlaceNumber;
+			if(Comment!=String.Empty) tooltip += "\n" + Comment;
+			if (status == PlaceStatus.Full || status == PlaceStatus.SoonToBeVacant) {
+				tooltip += "\n"+"Договор №" + contract.Number;
+				tooltip += "\n" + "Арендатор: " + contract.Lessee.FullName;		
+				string phone = contract.Lessee.Phone != null ? contract.Lessee.Phone : "(не указан)";
 				tooltip += "\n" + "Телефон: " + phone; 
 			}
 			if (status == PlaceStatus.SoonToBeVacant) {
@@ -126,10 +127,10 @@ namespace LeaseAgreement.Domain
 			}
 			if(status==PlaceStatus.Vacant)
 			{
-				tooltip = "Место свободно";
+				tooltip += "\n"+"Место свободно";
 			}
 			if (status == PlaceStatus.Reserved) {
-				tooltip = "Зарезервировано до " + Reserve.Date.Value.ToShortDateString();
+				tooltip += "\n"+"Зарезервировано до " + Reserve.Date.Value.ToShortDateString();
 				if(Reserve.Comment!=string.Empty) tooltip +="\n"+ Reserve.Comment;
 			}
 			if (Tags.Count > 0) {
