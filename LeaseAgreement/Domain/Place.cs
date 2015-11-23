@@ -136,7 +136,7 @@ namespace LeaseAgreement.Domain
 				tooltip += "\n" + "Метки: ";
 				var sortedTagNames = Tags.Select(t=>t.Name).ToList ();
 				sortedTagNames.Sort ();
-				tooltip+=sortedTagNames.Aggregate ((result, next) => result + " " + next);
+				tooltip+=sortedTagNames.Aggregate ((result, next) => result + ", " + next);
 			}
 		}
 
