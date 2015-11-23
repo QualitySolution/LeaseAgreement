@@ -227,6 +227,7 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			buttonOpen1.Sensitive = false;
 			buttonDel.Sensitive = false;
 			buttonAdd.Sensitive = false;
+			buttonCopy.Visible = false;
 			newReserveButton.Visible = true;
 			break;
 		default:

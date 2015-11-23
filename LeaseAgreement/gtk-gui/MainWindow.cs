@@ -237,9 +237,9 @@ public partial class MainWindow
 	
 	private global::Gtk.Button buttonDel;
 	
-	private global::Gtk.Button newReserveButton;
-	
 	private global::Gtk.VSeparator vseparator2;
+	
+	private global::Gtk.Button newReserveButton;
 	
 	private global::Gtk.Button buttonRefreshTable;
 	
@@ -1239,21 +1239,21 @@ public partial class MainWindow
 		w100.Expand = false;
 		w100.Fill = false;
 		// Container child hbox17.Gtk.Box+BoxChild
+		this.vseparator2 = new global::Gtk.VSeparator ();
+		this.vseparator2.Name = "vseparator2";
+		this.hbox17.Add (this.vseparator2);
+		global::Gtk.Box.BoxChild w101 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.vseparator2]));
+		w101.Position = 4;
+		w101.Expand = false;
+		w101.Fill = false;
+		// Container child hbox17.Gtk.Box+BoxChild
 		this.newReserveButton = new global::Gtk.Button ();
 		this.newReserveButton.CanFocus = true;
 		this.newReserveButton.Name = "newReserveButton";
 		this.newReserveButton.UseUnderline = true;
 		this.newReserveButton.Label = global::Mono.Unix.Catalog.GetString ("Новый резерв");
 		this.hbox17.Add (this.newReserveButton);
-		global::Gtk.Box.BoxChild w101 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.newReserveButton]));
-		w101.Position = 4;
-		w101.Expand = false;
-		w101.Fill = false;
-		// Container child hbox17.Gtk.Box+BoxChild
-		this.vseparator2 = new global::Gtk.VSeparator ();
-		this.vseparator2.Name = "vseparator2";
-		this.hbox17.Add (this.vseparator2);
-		global::Gtk.Box.BoxChild w102 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.vseparator2]));
+		global::Gtk.Box.BoxChild w102 = ((global::Gtk.Box.BoxChild)(this.hbox17 [this.newReserveButton]));
 		w102.Position = 5;
 		w102.Expand = false;
 		w102.Fill = false;
