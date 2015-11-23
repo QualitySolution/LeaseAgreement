@@ -165,7 +165,6 @@
     <Compile Include="Dialogs\PolygonDlg.cs" />
     <Compile Include="gtk-gui\LeaseAgreement.PolygonDlg.cs" />
     <Compile Include="ViewWidgets\DrawingStyle.cs" />
-    <Compile Include="CairoExtension.cs" />
     <Compile Include="MainWinMap.cs" />
     <Compile Include="Domain\Floor.cs" />
     <Compile Include="HibernateMapping\FloorMap.cs" />
@@ -211,6 +210,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="CairoExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QSProjects\QSProjectsLib\QSProjectsLib.csproj">
