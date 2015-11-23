@@ -346,7 +346,7 @@ namespace LeaseAgreement
 			this.label9 = new global::Gtk.Label ();
 			this.label9.Name = "label9";
 			this.label9.Xalign = 1F;
-			this.label9.LabelProp = global::Mono.Unix.Catalog.GetString ("Расположение на карте:");
+			this.label9.LabelProp = global::Mono.Unix.Catalog.GetString ("Расположение на схеме:");
 			this.table2.Add (this.label9);
 			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.table2 [this.label9]));
 			w15.TopAttach = ((uint)(2));

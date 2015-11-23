@@ -2048,7 +2048,7 @@
                                   <widget class="Gtk.Label" id="label9">
                                     <property name="MemberName" />
                                     <property name="Xalign">1</property>
-                                    <property name="LabelProp" translatable="yes">Расположение на карте:</property>
+                                    <property name="LabelProp" translatable="yes">Расположение на схеме:</property>
                                   </widget>
                                   <packing>
                                     <property name="TopAttach">2</property>
