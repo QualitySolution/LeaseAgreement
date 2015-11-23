@@ -205,11 +205,16 @@ namespace LeaseAgreement
 					}
 
 
-					frameNode.SetAttribute ("anchor-type", nsMgr.LookupNamespace ("text"), anchor.Value);
-					frameNode.SetAttribute ("x", nsMgr.LookupNamespace ("svg"), x.Value);
-					frameNode.SetAttribute ("y", nsMgr.LookupNamespace ("svg"), y.Value);
-					frameNode.SetAttribute ("height", nsMgr.LookupNamespace ("svg"), height.Value);
-					frameNode.SetAttribute ("width", nsMgr.LookupNamespace ("svg"), width.Value);
+					if(anchor!=null) 
+						frameNode.SetAttribute ("anchor-type", nsMgr.LookupNamespace ("text"), anchor.Value);
+					if(x!=null) 
+						frameNode.SetAttribute ("x", nsMgr.LookupNamespace ("svg"), x.Value);
+					if(y!=null)
+						frameNode.SetAttribute ("y", nsMgr.LookupNamespace ("svg"), y.Value);
+					if(height!=null)
+						frameNode.SetAttribute ("height", nsMgr.LookupNamespace ("svg"), height.Value);
+					if(width!=null)
+						frameNode.SetAttribute ("width", nsMgr.LookupNamespace ("svg"), width.Value);
 
 					XmlElement drawing = content.CreateElement ("draw:image",nsMgr.LookupNamespace("draw"));
 					drawing.SetAttribute ("href", nsMgr.LookupNamespace("xlink"), path);
