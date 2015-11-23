@@ -212,7 +212,6 @@ namespace LeaseAgreement
 			this.DefaultWidth = 550;
 			this.DefaultHeight = 548;
 			this.Show ();
-			this.DestroyEvent += new global::Gtk.DestroyEventHandler (this.OnDestroyEvent);
 			this.spinbutton1.Changed += new global::System.EventHandler (this.OnSpinbutton1Changed);
 			this.nameEntry.Changed += new global::System.EventHandler (this.OnNameEntryChanged);
 			this.buttonUpload.Clicked += new global::System.EventHandler (this.OnButtonUploadClicked);

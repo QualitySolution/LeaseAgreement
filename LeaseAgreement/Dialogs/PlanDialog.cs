@@ -10,7 +10,7 @@ using NHibernate.Criterion;
 
 namespace LeaseAgreement
 {
-	public partial class PlanDialog : FakeTDIDialogGtkDialogBase
+	public partial class PlanDialog : Gtk.Dialog
 	{
 		protected int? id;
 		protected Plan plan;
@@ -86,9 +86,11 @@ namespace LeaseAgreement
 			Validate ();
 		}
 
-		protected void OnDestroyEvent(object sender, DestroyEventArgs args){
+		public override void Destroy()
+		{
 			UoW.Dispose ();
 			planViewWidget.Dispose ();
+			base.Destroy ();
 		}
 
 		protected void OnButtonUploadClicked (object sender, EventArgs e)
