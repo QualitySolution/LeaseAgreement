@@ -176,6 +176,7 @@
     <Compile Include="PlanRenderer.cs" />
     <Compile Include="Domain\Tag.cs" />
     <Compile Include="HibernateMapping\TagMap.cs" />
+    <Compile Include="ViewWidgets\BufferedSvgSurface.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

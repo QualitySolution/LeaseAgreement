@@ -25,7 +25,7 @@ namespace LeaseAgreement
 
 		private ImageSurface imageSurface;
 		private ImageDataWrapper imageWrapper;
-		private Rsvg.Handle svg;
+		private BufferedSvgSurface svg;
 
 
 		private Plan plan;
@@ -96,8 +96,9 @@ namespace LeaseAgreement
 		const double ZoomSpeedIncrement=1;
 		double scale=0;
 		double zoomSpeed=0;
-		const double MaxZoomSpeed=4;
+		const double MaxZoomSpeed=30;
 		const double ZoomMu = 0.35;
+		const int BufferHeight=5000;
 		const int TimeOutInterval = 20;
 		double MaxZoom{ get{ return Math.Log (100) / Math.Log (ZoomIncrement); }}
 		private Stopwatch stopwatch;
@@ -233,8 +234,7 @@ namespace LeaseAgreement
 		public void SetSvg(Stream dataStream){
 			byte[] data = new byte[dataStream.Length];
 			dataStream.Read(data,0,(int)dataStream.Length);
-			svg = new Rsvg.Handle (data);
-			svg.Dpi = 200;
+			svg = new BufferedSvgSurface(data,BufferHeight);
 			scale = 0;
 			ReconfigureScrollbars ();
 		}
@@ -295,8 +295,8 @@ namespace LeaseAgreement
 				if (imageSurface != null) {
 					cairo.SetSource (imageSurface);
 					cairo.Fill ();
-				} else {					
-					svg.RenderCairo (cairo);
+				} else {										
+					svg.Render(cairo,gScale);
 				}
 				if (floor != null) {
 					foreach (Polygon polygon in floor.Polygons) {
@@ -443,8 +443,9 @@ namespace LeaseAgreement
 		}
 
 		protected void OnButtonReleased(object o, ButtonReleaseEventArgs args){
-			if (isDragging && args.Event.Button == 1)
+			if (isDragging && args.Event.Button == 1) {
 				isDragging = false;
+			}
 			isDraggingVertex = false;
 		}
 
