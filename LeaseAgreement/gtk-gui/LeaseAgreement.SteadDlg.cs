@@ -38,7 +38,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Label label25;
 		
-		private global::Gtk.DataBindings.DataLabel labelId;
+		private global::Gamma.GtkWidgets.yLabel labelId;
 		
 		private global::Gtk.Button buttonCancel;
 		
@@ -274,16 +274,9 @@ namespace LeaseAgreement
 			w17.XOptions = ((global::Gtk.AttachOptions)(4));
 			w17.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.labelId = new global::Gtk.DataBindings.DataLabel ();
+			this.labelId = new global::Gamma.GtkWidgets.yLabel ();
 			this.labelId.Name = "labelId";
 			this.labelId.LabelProp = global::Mono.Unix.Catalog.GetString ("не определен");
-			this.labelId.InheritedDataSource = true;
-			this.labelId.Mappings = "Id";
-			this.labelId.InheritedBoundaryDataSource = false;
-			this.labelId.Important = false;
-			this.labelId.InheritedDataSource = true;
-			this.labelId.Mappings = "Id";
-			this.labelId.InheritedBoundaryDataSource = false;
 			this.table2.Add (this.labelId);
 			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.table2 [this.labelId]));
 			w18.LeftAttach = ((uint)(1));

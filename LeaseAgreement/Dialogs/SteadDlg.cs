@@ -21,7 +21,7 @@ namespace LeaseAgreement
 			this.Build ();
 			adaptorStead.Target = subject;
 			table2.DataSource = adaptorStead;
-			labelId.Adaptor.Converter = new IdToStringConverter();
+			labelId.Binding.AddBinding (subject, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
 			tracker = new QSHistoryLog.ObjectTracker<Stead> (subject);
 		}
 
@@ -42,6 +42,7 @@ namespace LeaseAgreement
 					rdr.Read();
 
 					subject.Name = rdr["name"].ToString();
+					labelId.Binding.RefreshFromSource();
 					subject.CadastralNum = rdr["cadastral"].ToString();
 					subject.ContractNum = rdr["contract_no"].ToString();
 					subject.ContractDate = DBWorks.GetDateTime (rdr, "contract_date", default(DateTime));

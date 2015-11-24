@@ -21,8 +21,9 @@ namespace LeaseAgreement
 
 			adaptorOrg.Target = subject;
 			table1.DataSource = adaptorOrg;
-			labelId.Adaptor.Converter = new IdToStringConverter ();
 			tracker = new QSHistoryLog.ObjectTracker<Organization> (subject);
+
+			labelId.Binding.AddBinding (subject, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
 
 			subject.SignatoryPost = "Генерального директора";
 			subject.SignatoryBaseOf = "Устава";
@@ -56,6 +57,7 @@ namespace LeaseAgreement
 					rdr.Read ();
 
 					subject.Id = rdr.GetInt32 ("id");
+					labelId.Binding.RefreshFromSource();
 					subject.Name = rdr ["name"].ToString ();
 					subject.FullName = rdr ["full_name"].ToString ();
 					subject.Phone = rdr ["phone"].ToString ();

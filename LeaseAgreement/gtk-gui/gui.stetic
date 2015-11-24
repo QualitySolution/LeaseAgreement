@@ -3026,17 +3026,10 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="Gtk.DataBindings.DataLabel" id="labelID">
+                              <widget class="Gamma.GtkWidgets.yLabel" id="labelID">
                                 <property name="MemberName" />
                                 <property name="LabelProp" translatable="yes">Не определён</property>
                                 <property name="Selectable">True</property>
-                                <property name="InheritedDataSource">True</property>
-                                <property name="Mappings">Id</property>
-                                <property name="InheritedBoundaryDataSource">False</property>
-                                <property name="Important">False</property>
-                                <property name="InheritedDataSource">True</property>
-                                <property name="Mappings">Id</property>
-                                <property name="InheritedBoundaryDataSource">False</property>
                               </widget>
                               <packing>
                                 <property name="LeftAttach">1</property>
@@ -5666,16 +5659,9 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.DataBindings.DataLabel" id="labelId">
+              <widget class="Gamma.GtkWidgets.yLabel" id="labelId">
                 <property name="MemberName" />
                 <property name="LabelProp" translatable="yes">Не задан</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Id</property>
-                <property name="InheritedBoundaryDataSource">False</property>
-                <property name="Important">False</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Id</property>
-                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="LeftAttach">1</property>
@@ -6091,16 +6077,9 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.DataBindings.DataLabel" id="labelId">
+              <widget class="Gamma.GtkWidgets.yLabel" id="labelId">
                 <property name="MemberName" />
                 <property name="LabelProp" translatable="yes">не определен</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Id</property>
-                <property name="InheritedBoundaryDataSource">False</property>
-                <property name="Important">False</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Id</property>
-                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="LeftAttach">1</property>
@@ -6259,17 +6238,10 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.DataBindings.DataLabel" id="labelId">
+              <widget class="Gamma.GtkWidgets.yLabel" id="labelId">
                 <property name="MemberName" />
                 <property name="Xalign">0</property>
                 <property name="LabelProp" translatable="yes">Не определен</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Id</property>
-                <property name="InheritedBoundaryDataSource">False</property>
-                <property name="Important">False</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Id</property>
-                <property name="InheritedBoundaryDataSource">False</property>
               </widget>
               <packing>
                 <property name="LeftAttach">1</property>

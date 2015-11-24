@@ -38,9 +38,10 @@ namespace LeaseAgreement
 
 			adaptor.Target = subject;
 			table1.DataSource = adaptor;
-			labelId.Adaptor.Converter = new IdToStringConverter ();
 			subject.Templates = new List<DocTemplate> ();
 			tracker = new QSHistoryLog.ObjectTracker<ContractType> (subject);
+
+			labelId.Binding.AddBinding (subject, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
 
 			deletedItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
@@ -81,6 +82,7 @@ namespace LeaseAgreement
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 					rdr.Read ();
 					subject.Id = rdr.GetInt32 ("id");
+					labelId.Binding.RefreshFromSource();
 					subject.Name = rdr ["name"].ToString ();
 				}
 

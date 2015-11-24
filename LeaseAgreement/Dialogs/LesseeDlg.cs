@@ -31,7 +31,8 @@ namespace LeaseAgreement
 			this.Build ();
 			adaptorLessee.Target = subject;
 			tableInfo.DataSource = adaptorLessee;
-			labelID.Adaptor.Converter = new IdToStringConverter ();
+
+			labelID.Binding.AddBinding (subject, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
 
 			subject.SignatoryPost = "Генерального директора";
 			subject.SignatoryBaseOf = "Устава";
@@ -113,6 +114,7 @@ namespace LeaseAgreement
 					rdr.Read ();
 					
 					subject.Id = rdr.GetInt32 ("id");
+					labelID.Binding.RefreshFromSource();
 					subject.Name = rdr ["name"].ToString ();
 					subject.FullName = rdr ["full_name"].ToString ();
 					subject.Phone = rdr ["phone"].ToString ();
