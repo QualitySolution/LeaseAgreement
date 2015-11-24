@@ -6,6 +6,7 @@
 !define MIN_NET_BUILD "*"
 !define NETInstaller "dotNetFx40_Full_setup.exe"
 !define PRODUCT_NAME "QS: Договора аренды"
+!define SHORTCUT_NAME "QS Договора аренды"
 !define MENU_DIR_NAME "Договора аренды"
 !define EXE_NAME "LeaseAgreement"
 
@@ -297,6 +298,12 @@ Section "${PRODUCT_NAME}" SecProgram
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
+
+  ; Delete files used before 1.3 version.
+  Delete "$INSTDIR\CustomFields.dll.config"
+  Delete "$INSTDIR\NClone.dll"
+  Delete "$INSTDIR\ObjectComparer.dll"
+
   
   ; Put file there
   File /r "Files\*.*"
@@ -372,7 +379,7 @@ Section "Ярлык на рабочий стол" SecDesktop
 
   SetShellVarContext all
   SetOutPath $INSTDIR
-  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXE_NAME}.exe" "" "$INSTDIR\${EXE_NAME}.exe" 0
+  CreateShortCut "$DESKTOP\${SHORTCUT_NAME}.lnk" "$INSTDIR\${EXE_NAME}.exe" "" "$INSTDIR\${EXE_NAME}.exe" 0
  
 SectionEnd
 
@@ -406,9 +413,15 @@ Section "Uninstall"
   Delete $INSTDIR\*
   Delete $INSTDIR\uninstall.exe
 
+  Delete $INSTDIR\Reports\*
+  RMDir $INSTDIR\Reports
+
+  Delete $INSTDIR\ru-RU\*
+  RMDir $INSTDIR\ru-RU
+
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\${MENU_DIR_NAME}\*.*"
-  Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+  Delete "$DESKTOP\${SHORTCUT_NAME}.lnk"
 
   ; Remove directories used
   RMDir "$SMPROGRAMS\${MENU_DIR_NAME}"
