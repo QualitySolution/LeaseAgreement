@@ -103,7 +103,7 @@ namespace LeaseAgreement.Domain
 			Contract contract=null;
 			DateTime today = DateTime.Now;
 			IList<ContractPlace> currentContractPlaces = contractPlaces.Where (cp => cp.Place.Id == Id)
-				.Where (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).ToList();			
+				.Where (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).Where(cp=>!cp.Contract.Draft).ToList();			
 			status = (currentContractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
 			if (currentContractPlaces.Count == 0) {
 				status = PlaceStatus.Vacant;
