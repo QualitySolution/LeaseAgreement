@@ -16,6 +16,7 @@ namespace LeaseAgreement
 		public DocPattern DocInfo;
 		private ZipFile odtZip;
 		private MemoryStream OdtStream;
+		private const string contentFileName = "content.xml";
 
 		public OdtWorks (byte[] odtfile)
 		{
@@ -51,7 +52,7 @@ namespace LeaseAgreement
 
 		public void UpdateFields()
 		{
-			XmlDocument content = GetXMLDocument("content.xml");
+			XmlDocument content = GetXMLDocument(contentFileName);
 			XmlNamespaceManager nsMgr = new XmlNamespaceManager(content.NameTable);
 			nsMgr.AddNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
 			nsMgr.AddNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
@@ -122,8 +123,7 @@ namespace LeaseAgreement
 					}
 				}
 			}
-
-			UpdateContentXML (content);
+			UpdateXmlDocument (content, contentFileName);
 		}
 
 		public void FillValues()
@@ -158,27 +158,19 @@ namespace LeaseAgreement
 				} else
 					node.Attributes ["office:string-value"].Value = field.value.ToString ();
 			}	
-			UpdateContentXML (content);
+			UpdateXmlDocument (content, contentFileName);
 		}
 
-		public double GetFrameAspectRatio(string frameName)
+		public LinkedList<XmlElement> GetXmlObjects(string nodeName,string attribute,string value)
 		{
-			XmlDocument content = GetXMLDocument("content.xml");
-			var nodeList = content.GetElementsByTagName ("draw:frame");
-			foreach (XmlElement frameNode in nodeList) {
-				if (frameNode.Attributes ["draw:name"].Value == frameName) {
-					var heightAttr = frameNode.Attributes ["svg:height"];
-					var widthAttr = frameNode.Attributes ["svg:width"];
-					for(var frameChild = frameNode.FirstChild;frameChild!=null;frameChild=frameChild.NextSibling){
-						if(heightAttr==null) heightAttr = frameChild.Attributes ["fo:min-height"];
-						if(widthAttr ==null) widthAttr = frameChild.Attributes ["fo:min-width"];
-					}
-					double height = double.Parse (heightAttr.Value.Substring (0, heightAttr.Value.Length - 2),CultureInfo.InvariantCulture);
-					double width = double.Parse (widthAttr.Value.Substring (0, widthAttr.Value.Length - 2),CultureInfo.InvariantCulture);
-					return width/height;
-				}
+			var result = new LinkedList<XmlElement> ();
+			XmlDocument content = GetXMLDocument (contentFileName);
+			var nodelist = content.GetElementsByTagName (nodeName);
+			foreach (XmlElement node in nodelist) {
+				if (node.Attributes [attribute].Value.StartsWith (value, true, CultureInfo.InvariantCulture))
+					result.AddLast (node);
 			}
-			return 1;
+			return result;
 		}
 
 		public void ReplaceFrameContent(string frameName, byte[] image, string path){
@@ -224,7 +216,7 @@ namespace LeaseAgreement
 					frameNode.AppendChild (drawing);
 				}
 			}
-			UpdateContentXML (content);
+			UpdateXmlDocument (content, contentFileName);
 			AddFile (image, path);
 		}
 
@@ -238,20 +230,14 @@ namespace LeaseAgreement
 			fileEntry.SetAttribute ("full-path", nsManager.LookupNamespace ("manifest"),path);
 			fileEntry.SetAttribute ("media-type", nsManager.LookupNamespace ("manifest"), "image/png");
 			manifestNode.AppendChild(fileEntry);
-			using (var manifestDataStream = new MemoryStream ()) {
-				using (var fileStream = new MemoryStream (data)) {
-					odtZip.BeginUpdate ();
-					StreamStaticDataSource sds = new StreamStaticDataSource ();
-					sds.SetStream (fileStream);
-					odtZip.Add (sds, path);
-					manifest.Save (manifestDataStream);
-					StreamStaticDataSource manifestSDS = new StreamStaticDataSource ();
-					manifestSDS.SetStream (manifestDataStream);
-					odtZip.Add (manifestSDS, "META-INF/manifest.xml");
-					odtZip.CommitUpdate ();
-				}
+			using (var fileStream = new MemoryStream (data)) {
+				odtZip.BeginUpdate ();
+				StreamStaticDataSource sds = new StreamStaticDataSource ();
+				sds.SetStream (fileStream);
+				odtZip.Add (sds, path);
+				odtZip.CommitUpdate ();
 			}
-		
+			UpdateXmlDocument (manifest, "META-INF/manifest.xml");
 		}
 
 		private XmlDocument GetXMLDocument(string path)
@@ -263,16 +249,16 @@ namespace LeaseAgreement
 			return document;
 		}
 
-		private void UpdateContentXML(XmlDocument content)
+		public void UpdateXmlDocument(XmlDocument document, string path)
 		{
 			using( MemoryStream outContentStream = new MemoryStream ()) {
-				content.Save (outContentStream);
+				document.Save (outContentStream);
 				odtZip.BeginUpdate ();
 
 				StreamStaticDataSource sds = new StreamStaticDataSource ();
 				sds.SetStream (outContentStream);
 
-				odtZip.Add (sds, "content.xml");
+				odtZip.Add (sds, path);
 				odtZip.CommitUpdate ();
 			}
 		}

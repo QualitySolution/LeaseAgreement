@@ -11,6 +11,7 @@ using QSProjectsLib;
 using QSOrmProject;
 using NHibernate.Criterion;
 using System.Collections;
+using System.Globalization;
 
 namespace LeaseAgreement
 {
@@ -747,6 +748,7 @@ namespace LeaseAgreement
 			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 			odt.DocInfo.LoadValuesFromDB (Subject.Id);
 			odt.FillValues ();
+
 			FillPlan (odt);
 			file = odt.GetArray ();
 			odt.Close ();
@@ -767,9 +769,23 @@ namespace LeaseAgreement
 					).List();
 				if (polygons.Count > 0) {
 					Plan plan = polygons [0].Floor.Plan;
-					double aspectRatio = odt.GetFrameAspectRatio ("Схема");
+					var frames = odt.GetXmlObjects ("draw:frame", "draw:name", "Схема");
 					using (var renderer = new PlanRenderer (plan)) {
-						odt.ReplaceFrameContent ("Схема", renderer.RenderToPng (polygons, aspectRatio), "Pictures/plan.png");			
+						foreach (var frame in frames) {
+							var heightAttr = frame.Attributes ["svg:height"];
+							var widthAttr = frame.Attributes ["svg:width"];
+							for (var frameChild = frame.FirstChild; frameChild != null; frameChild = frameChild.NextSibling) {
+								if (heightAttr == null)
+									heightAttr = frameChild.Attributes ["fo:min-height"];
+								if (widthAttr == null)
+									widthAttr = frameChild.Attributes ["fo:min-width"];
+							}
+							double height = double.Parse (heightAttr.Value.Substring (0, heightAttr.Value.Length - 2), CultureInfo.InvariantCulture);
+							double width = double.Parse (widthAttr.Value.Substring (0, widthAttr.Value.Length - 2), CultureInfo.InvariantCulture);
+							double aspectRatio = width / height;
+							string frameName = frame.Attributes ["draw:name"].Value;
+							odt.ReplaceFrameContent (frameName, renderer.RenderToPng (polygons, aspectRatio), "Pictures/"+frameName+".png");			
+						}
 					}
 				}
 			}
