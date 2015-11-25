@@ -74,8 +74,8 @@ namespace LeaseAgreement
 			double destWidth = destRect.Width;
 			double destHeight = destRect.Height;
 
-			double minWidth=width/20;
-			double minHeight=height/20;
+			double minWidth=width/5;
+			double minHeight=height/5;
 			double newHeight, newWidth;
 			newWidth = destWidth;
 			newHeight = destHeight;
