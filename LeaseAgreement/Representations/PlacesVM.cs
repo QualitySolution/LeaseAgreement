@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using NHibernate.Transform;
 using QSOrmProject.RepresentationModel;
-using Gtk.DataBindings;
 using LeaseAgreement.Domain;
 using Gamma.ColumnConfig;
 using NHibernate.Criterion;
 
 namespace LeaseAgreement.Representations
 {
-	public class PlacesVM : RepresentationModelEntityBase<Place, PlacesVMNode>, IRepresentationModelGamma
+	public class PlacesVM : RepresentationModelEntityBase<Place, PlacesVMNode>
 	{
 		public IPlacesVMFilter Filter {
 			get {
@@ -69,11 +68,7 @@ namespace LeaseAgreement.Representations
 			.AddColumn ("Организация").AddTextRenderer (node => node.Organigation)
 			.Finish ();
 
-		public override IMappingConfig TreeViewConfig {
-			get { throw new NotSupportedException (); }
-		}
-
-		public IColumnsConfig ColumnsConfig {
+		public override IColumnsConfig ColumnsConfig {
 			get {
 				return treeViewConfig;
 			}
