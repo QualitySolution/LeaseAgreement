@@ -765,10 +765,12 @@ namespace LeaseAgreement
 					UoW.Session.QueryOver<Polygon>().Where(
 						p=>p.Place.Id.IsIn(subject.LeasedPlaces.Select(cp=>cp.Place.Id).ToList())
 					).List();
-				Plan plan = polygons [0].Floor.Plan;
-				double aspectRatio = odt.GetFrameAspectRatio ("Схема");
-				using (var renderer = new PlanRenderer (plan)) {
-					odt.ReplaceFrameContent ("Схема", renderer.RenderToPng (polygons, aspectRatio), "Pictures/plan.png");			
+				if (polygons.Count > 0) {
+					Plan plan = polygons [0].Floor.Plan;
+					double aspectRatio = odt.GetFrameAspectRatio ("Схема");
+					using (var renderer = new PlanRenderer (plan)) {
+						odt.ReplaceFrameContent ("Схема", renderer.RenderToPng (polygons, aspectRatio), "Pictures/plan.png");			
+					}
 				}
 			}
 		}
