@@ -40,7 +40,7 @@ namespace LeaseAgreement
 
 		public void Dispose ()
 		{
-			buffer.Dispose ();
+			buffer.Destroy ();
 			svg.Dispose ();
 		}
 

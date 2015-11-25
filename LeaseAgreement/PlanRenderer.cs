@@ -26,7 +26,7 @@ namespace LeaseAgreement
 					svg.Dispose ();
 				if (surface != null) {
 					image.Dispose ();
-					surface.Dispose ();
+					surface.Destroy ();
 				}
 				using (var imageDataStream = new MemoryStream (plan.Image)) {
 					if (plan.Filename.EndsWith (".svg")) {
@@ -144,7 +144,7 @@ namespace LeaseAgreement
 				svg.Dispose ();
 			if (surface != null) {
 				image.Dispose ();
-				surface.Dispose ();
+				surface.Destroy ();
 			}
 		}
 		#endregion

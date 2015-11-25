@@ -206,7 +206,7 @@ namespace LeaseAgreement
 
 		public void OnPlanImageChanged(){
 			if (imageSurface != null) {
-				imageSurface.Dispose ();
+				imageSurface.Destroy ();
 				imageSurface = null;
 			}
 			if (imageWrapper != null){
@@ -495,7 +495,7 @@ namespace LeaseAgreement
 			if(imageWrapper!=null)
 				imageWrapper.Dispose ();
 			if(imageSurface!=null) 
-				imageSurface.Dispose ();
+				imageSurface.Destroy ();
 			if (svg != null)
 				svg.Dispose ();
 			base.Dispose ();
