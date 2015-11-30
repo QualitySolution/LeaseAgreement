@@ -368,7 +368,17 @@ namespace LeaseAgreement
 			Subject.Customs = customContracts.FieldsValues;
 			Subject.Files = attachmentFiles.AttachedFiles.ToList ();
 			tracker.TakeLast (Subject);
-			if (!tracker.Compare ()) {
+			var docsChanged = false;
+			if (DocPatterns.GetIterFirst (out iter)) {
+				do {
+					if ((bool)DocPatterns.GetValue (iter, (int)DocPatternCol.isDocPattern))
+					{
+						docsChanged=true;
+					}
+				} while(DocPatterns.IterNext (ref iter) && !docsChanged);
+			}
+
+			if (!(tracker.Compare () || docsChanged || deletedDocItems.Count>0)) {
 				logger.Info ("Нет изменений.");
 				return true;
 			}
@@ -922,6 +932,14 @@ namespace LeaseAgreement
 			} catch (Exception ex) {
 				logger.Warn (ex, "Ошибка при чтении файла!");
 			}
+		}
+		public override void Destroy ()
+		{
+			foreach (FileSystemWatcher watcher in watchers) {
+				watcher.EnableRaisingEvents = false;
+				watcher.Dispose ();
+			}				
+			base.Destroy ();
 		}
 
 		protected void OnYentryreferenceLesseeChanged (object sender, EventArgs e)
