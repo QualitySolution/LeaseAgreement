@@ -13,6 +13,8 @@ using LeaseAgreement.Domain;
 using NHibernate.Criterion;
 using System.Diagnostics;
 using System.Threading;
+using NHibernate.Transform;
+using System.Threading.Tasks;
 
 
 namespace LeaseAgreement
@@ -34,7 +36,8 @@ namespace LeaseAgreement
 			set{
 				editPolygon = value; 
 				comboBoxFloor.SelectedItem = editPolygon.Floor;
-			}}
+			}}		
+		public Polygon PolygonAtPointer{ get; private set;}
 		private Polygon editPolygon;
 		public Reserve CurrentReserve{ get; set;}
 		public int selectedVertexIndex;
@@ -44,6 +47,7 @@ namespace LeaseAgreement
 
 		private PointD mouseCoords;
 		private PlanViewMode mode;
+		private IList<Reserve> reserves;
 		/// <summary>
 		/// Задает режим работы виджета(отображение,редактирование,добавление)
 		/// При смене режима на режим добавления список вершин текущего полигона обнуляется.
@@ -80,7 +84,8 @@ namespace LeaseAgreement
 			get{ return floor; }
 			set{
 				floor = value;
-				UpdatePolygonInfo ();
+				if(floor!=null)
+					UpdatePolygons ();
 				drawingarea1.QueueDraw ();
 			}
 		}
@@ -434,7 +439,7 @@ namespace LeaseAgreement
 						if (floor != null) {
 							var clickedPolygon = floor.Polygons.FirstOrDefault (polygon => polygon.Contains (mouseCoords));
 							if (clickedPolygon != null && PolygonRightClicked!=null)
-								PolygonRightClicked (this, new PolygonRightClickedEventArgs (clickedPolygon));
+								PolygonRightClicked (this, clickedPolygon);
 						}
 					}
 				}
@@ -455,26 +460,26 @@ namespace LeaseAgreement
 				drawingarea1.QueueDraw ();
 			}
 			if (floor != null) {
-				this.HasTooltip = false;
+				//this.HasTooltip = false;
+				bool hasTooltip=false;
 				Reserve hightlightedReserve = null;
 				foreach (Polygon polygon in floor.Polygons) {					
 					if (polygon.Contains(mouseCoords))
-						hightlightedReserve = polygon.Place.Reserve; 
+						hightlightedReserve = reserves.SingleOrDefault(r=>r.Places.Any(p=>p.Id==polygon.Place.Id)); 
 				}
 				foreach (Polygon polygon in floor.Polygons) {
 					if (polygon == editPolygon) {
 						editPolygon.Hightlighted = true;
 					} else {
 						bool contains = polygon.Contains (mouseCoords);
-						bool highlighted = contains || (polygon.Place.Reserve == hightlightedReserve && hightlightedReserve!=null);
-
+						bool highlighted = contains || (reserves.SingleOrDefault(r=>r.Places.Any(p=>p.Id==polygon.Place.Id)) == hightlightedReserve && hightlightedReserve!=null);
 						if (highlighted ^ polygon.Hightlighted) {
 							drawingarea1.QueueDraw ();
 							polygon.Hightlighted = highlighted;
 						}
 						if (contains) {
-							this.TooltipText = polygon.Place.Tooltip;
-							this.HasTooltip = true;
+							PolygonAtPointer = polygon;
+							hasTooltip = true;
 						}
 					}
 				}
@@ -482,11 +487,79 @@ namespace LeaseAgreement
 					editPolygon.Vertices [selectedVertexIndex] = mouseCoords;
 					drawingarea1.QueueDraw ();
 				}
+				if (this.HasTooltip ^ hasTooltip)
+					this.HasTooltip = hasTooltip;
+				if (!this.HasTooltip)
+					TooltipText = "";
 			}
+
 			if (isDragging) {								
 				scrollAdjX.Value = MathHelper.Clamp (dragStartScrollX + (dragStartX - args.Event.X),scrollAdjX.Lower,scrollAdjX.Upper-scrollAdjX.PageSize);
 				scrollAdjY.Value = MathHelper.Clamp (dragStartScrollY + (dragStartY - args.Event.Y),scrollAdjY.Lower,scrollAdjY.Upper-scrollAdjY.PageSize);
 			}
+		}
+		private int tooltipX, tooltipY;
+
+		protected override bool OnQueryTooltip (int x, int y, bool keyboard_tooltip, Tooltip tooltip)
+		{			
+			if (tooltipX == x && tooltipY == y){
+				if (PolygonAtPointer.Tooltip == null) {
+					new Task (() => {
+						Gtk.Application.Invoke ((sender, e) => {	
+							if (PolygonAtPointer.Tooltip == null) {
+								this.TooltipText = "(Загрузка)";	
+								PolygonAtPointer.Tooltip = GetTooltip (PolygonAtPointer);
+							}
+							this.TooltipText = PolygonAtPointer.Tooltip;
+						});
+					}).Start ();
+				}else
+					this.TooltipText = PolygonAtPointer.Tooltip;				
+			}
+			tooltipY = y;
+			tooltipX = x;
+			return base.OnQueryTooltip (x, y, keyboard_tooltip, tooltip);
+		}
+
+		private string GetTooltip(Polygon polygon){
+			string tooltip;
+			using (var uow = UnitOfWorkFactory.CreateWithoutRoot()) {
+				var place = uow.Session.Get<Place> (polygon.Place.Id);
+				var contract = uow.Session.QueryOver<Contract> ().Where (c => !c.Draft)
+				.JoinQueryOver<ContractPlace> (c => c.LeasedPlaces)
+				.Where (cp => cp.StartDate <= DateTime.Today && cp.EndDate >= DateTime.Today)
+				.Where (cp => cp.Place.Id == place.Id).SingleOrDefault ();
+				tooltip = place.PlaceType.Name + "-" + place.PlaceNumber;
+				tooltip += "\n" + String.Format ("Площадь: {0}м²", place.Area);
+				if (place.Comment != String.Empty)
+					tooltip += "\n" + place.Comment;
+				if (polygon.Status == PlaceStatus.Full || polygon.Status == PlaceStatus.SoonToBeVacant) {
+					tooltip += "\n" + "Договор №" + contract.Number;
+					tooltip += "\n" + "Арендатор: " + contract.Lessee.FullName;		
+					string phone = contract.Lessee.Phone != null ? contract.Lessee.Phone : "(не указан)";
+					tooltip += "\n" + "Телефон: " + phone; 
+				}
+				if (polygon.Status == PlaceStatus.SoonToBeVacant) {
+					tooltip += "\n" + "Договор до: " + contract.CancelDate.Value.ToShortDateString ();
+				}
+				if (polygon.Status == PlaceStatus.Vacant) {
+					tooltip += "\n" + "Место свободно";
+				}
+				if (polygon.Status == PlaceStatus.Reserved) {
+					Reserve reserve = reserves.Single (r => r.Places.Any (p => p.Id == polygon.Place.Id));
+					tooltip += "\n" + "Зарезервировано до " + reserve.Date.Value.ToShortDateString ();
+					if (reserve.Comment != string.Empty)
+						tooltip += "\n" + reserve.Comment;
+				}
+				if (place.Tags.Count > 0) {
+					tooltip += "\n" + "Метки: ";
+					var sortedTagNames = place.Tags.Select (t => t.Name).ToList ();
+					sortedTagNames.Sort ();
+					tooltip += sortedTagNames.Aggregate ((result, next) => result + ", " + next);
+				}
+		
+			}
+			return tooltip;
 		}
 
 		public override void Dispose ()
@@ -537,24 +610,42 @@ namespace LeaseAgreement
 			}
 		}
 
-		public void UpdatePolygonInfo ()
-		{
-			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
-				if (floor != null) {
-					var placeIDs = floor.Polygons.Select (p => p.Place.Id).ToList ();
-					var relevantContractPlaces = uow.Session.QueryOver<ContractPlace> ().Where (cp => cp.Place.Id.IsIn (placeIDs)).List ();
-					foreach (var p in floor.Polygons) {
-						p.Place.UpdateStatus (relevantContractPlaces);
-					}
-				}
-			}
-		}
-
 		public void UpdatePolygons()
 		{
 			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
 				floor.Polygons = uow.Session.QueryOver<Polygon> ().Where(p=>p.Floor.Id==floor.Id).List ();
-				UpdatePolygonInfo ();
+				var placeIDs = floor.Polygons.Select (p => p.Place.Id).ToList ();
+				Contract contractAlias = null;
+
+				var relevantContractPlaces = uow.Session.QueryOver<ContractPlace> ()
+					.Where (cp => cp.Place.Id.IsIn (placeIDs))
+					.Where(cp=>cp.StartDate <= DateTime.Today && cp.EndDate >= DateTime.Today)
+					.JoinQueryOver<Contract> (cp => cp.Contract, () => contractAlias)
+					.Where (c=>!c.Draft)
+					.List();
+
+				reserves = uow.Session.QueryOver<Reserve> ().Where (r => r.Date > DateTime.Today)
+					.JoinQueryOver<Place> (r => r.Places, NHibernate.SqlCommand.JoinType.LeftOuterJoin)
+					.JoinQueryOver<Polygon> (p => p.Polygon)
+					.Where (p => p.Floor == floor)
+					.TransformUsing (Transformers.DistinctRootEntity)
+					.List();
+
+				foreach (var polygon in floor.Polygons) {
+					IList<ContractPlace> currentContractPlaces = relevantContractPlaces.Where (cp => cp.Place.Id == polygon.Place.Id)
+						.Where (cp => (cp.StartDate.Value < DateTime.Today) && (DateTime.Today< cp.EndDate.Value))
+						.Where(cp=>!cp.Contract.Draft).ToList();			
+					polygon.Status = (currentContractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
+					if (currentContractPlaces.Count == 0) {
+						polygon.Status = PlaceStatus.Vacant;
+					} else {
+						var contract = currentContractPlaces.Single ().Contract;
+						if (contract.CancelDate.HasValue)
+							polygon.Status = PlaceStatus.SoonToBeVacant;
+					}
+					if (reserves.Any (r => r.Places.Any (place => place.Id == polygon.Place.Id)))
+						polygon.Status = PlaceStatus.Reserved;	
+				}
 				drawingarea1.QueueDraw ();
 			}
 		}

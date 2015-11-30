@@ -128,7 +128,7 @@ namespace LeaseAgreement
 				}
 				Floor floor = polygons [0].Floor;
 				foreach (Polygon polygon in floor.Polygons) {
-					polygon.Place.Status = polygons.Any (p => p.Id == polygon.Id) ? PlaceStatus.Full : PlaceStatus.Vacant;
+					polygon.Status = polygons.Any (p => p.Id == polygon.Id) ? PlaceStatus.Full : PlaceStatus.Vacant;
 					polygon.draw (cairo, DrawingStyle.OdtStyle, 1, !plan.HasLabels, false);
 				}
 				dest.WriteToPng (TempFilePath);

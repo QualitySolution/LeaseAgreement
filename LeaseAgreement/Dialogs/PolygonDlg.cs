@@ -22,6 +22,7 @@ namespace LeaseAgreement
 			this.Build ();
 			UoW = UnitOfWorkFactory.CreateWithNewRoot<Polygon> ();
 			UoW.Root.Place = place;
+			place.Polygon = UoW.Root;
 			Configure ();
 		}
 

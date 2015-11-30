@@ -14,8 +14,8 @@ namespace LeaseAgreement
 
 			Id (x => x.Id).Column("id").GeneratedBy.Native();
 			References (x => x.Floor).Column ("floor_id");
-			References (x => x.Place).Column ("place_id");
-			Map (x => x.Points).Column ("vertices");
+			References (x => x.Place).Column ("place_id").Unique ();
+			Map (x => x.Points).Column ("vertices").Not.LazyLoad ();
 
 		}
 	}

@@ -8,7 +8,7 @@ namespace LeaseAgreement
 		public FloorMap ()
 		{
 			Table ("floors");
-			Not.LazyLoad ();
+		
 			Id (x => x.Id).Column ("id");
 			Map (x => x.Name).Column ("name");
 			References (x => x.Plan).Column ("plan_id");

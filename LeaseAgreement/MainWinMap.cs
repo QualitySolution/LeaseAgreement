@@ -128,7 +128,8 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 				dropDown.Append (removeFromReserve);
 				removeFromReserve.Show ();
 			}else{
-				if (place.Status == PlaceStatus.Vacant) {
+				Polygon polygon = planviewwidget1.Floor.Polygons.Single (p => p.Place.Id == place.Id);
+				if (polygon.Status == PlaceStatus.Vacant) {
 					addToReserve = new MenuItem ("Добавить в резерв");
 					addToReserve.Activated += (s, args) => {
 						planviewwidget1.CurrentReserve.Places.Add (place);
@@ -139,10 +140,14 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 				}
 			}
 		} else {
-			if (place.Reserve != null) {
+			Reserve reserve;
+			using (var tempUoW = UnitOfWorkFactory.CreateWithoutRoot ()) {
+				reserve = tempUoW.Session.QueryOver<Reserve> ().Where(r=>r.Date>DateTime.Today).JoinQueryOver<Place>(r=>r.Places).Where(p=>p.Id==place.Id).SingleOrDefault ();
+			}
+			if (reserve!= null) {
 				openReserve = new MenuItem ("Открыть резерв");
 				openReserve.Activated += (s, args) => {					
-					uow = UnitOfWorkFactory.CreateForRoot<Reserve>(place.Reserve.Id);
+					uow = UnitOfWorkFactory.CreateForRoot<Reserve>(reserve.Id);
 					planviewwidget1.CurrentReserve = uow.Root;
 					reserveDeleteButton.Sensitive=true;
 					OnReserveChanged (this, null);
@@ -154,9 +159,13 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 		dropDown.Popup ();
 	}
 
-	protected void OnPolygonRightClicked(object sender, PolygonRightClickedEventArgs polygonArgs)
+	protected void OnPolygonRightClicked(object sender, Polygon polygon)
 	{
-		OnPlaceRightClicked (polygonArgs.Polygon.Place);
+		using(var tempuow = UnitOfWorkFactory.CreateWithoutRoot()){
+			Place place = tempuow.Session.Get<Place> (polygon.Place.Id);
+			OnPlaceRightClicked (place);
+		}
+
 	}
 
 	protected void ValidateReserve()

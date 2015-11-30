@@ -38,6 +38,18 @@ namespace LeaseAgreement
 			set{ SetField(ref place, value, () =>Place);}
 		}
 
+		PlaceStatus status = PlaceStatus.Vacant;
+		public virtual PlaceStatus Status {
+			get{return status;}
+			set{status=value;}
+		}
+
+		volatile string tooltip;
+		public virtual string Tooltip{
+			get{ return tooltip; }
+			set{ tooltip = value; }
+		}
+
 		public virtual bool Hightlighted{ get; set;}
 
 		public virtual void FixVertexOrder()
@@ -79,7 +91,7 @@ namespace LeaseAgreement
 			cairo.StrokePreserve ();
 
 			Cairo.Color fillColor;
-			switch(Place.Status){
+			switch(Status){
 			case PlaceStatus.Full:
 				fillColor = style.PolygonFullColor;
 				break;

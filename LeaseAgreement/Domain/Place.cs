@@ -70,7 +70,7 @@ namespace LeaseAgreement.Domain
 			set { SetField(ref customs, value, () => Customs);}
 		}
 
-		public string Title {
+		public virtual string Title {
 			get { return PlaceType != null && !String.IsNullOrEmpty (PlaceNumber)  
 				? String.Format ("Место {0}-{1}", PlaceType.Name, PlaceNumber)
 					: String.Empty ;}
@@ -82,73 +82,15 @@ namespace LeaseAgreement.Domain
 			protected set{ SetField (ref tags, value, () => Tags); }
 		}
 
-		IList<Reserve> reserves;
-		public virtual IList<Reserve> Reserves{
-			get{ return reserves; } 
-			protected set{ SetField (ref reserves, value, () => Reserves); }
+		Polygon polygon;
+		public virtual Polygon Polygon{
+			get{ return polygon; }
+			set{ SetField (ref polygon, value, () => Polygon);}
 		}
-
-		[IgnoreHistoryTrace]
-		public virtual Reserve Reserve{
-			get{ return Reserves.SingleOrDefault (r => r.Date.Value > DateTime.Now); }
-		}
-
-		PlaceStatus status = PlaceStatus.Vacant;
-		public virtual PlaceStatus Status {
-			get{return status;}
-			set{status=value;}
-		}
-
-		public virtual void UpdateStatus(IList<ContractPlace> contractPlaces){
-			Contract contract=null;
-			DateTime today = DateTime.Now;
-			IList<ContractPlace> currentContractPlaces = contractPlaces.Where (cp => cp.Place.Id == Id)
-				.Where (cp => (cp.StartDate.Value < today) && (today< cp.EndDate.Value)).Where(cp=>!cp.Contract.Draft).ToList();			
-			status = (currentContractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
-			if (currentContractPlaces.Count == 0) {
-				status = PlaceStatus.Vacant;
-			} else {
-				contract = currentContractPlaces.Single ().Contract;
-				if (contract.CancelDate.HasValue)
-					status = PlaceStatus.SoonToBeVacant;
-			}
-			if(Reserve!=null)
-				status = PlaceStatus.Reserved;
-			tooltip = PlaceType.Name + "-" + PlaceNumber;
-			if(Comment!=String.Empty) tooltip += "\n" + Comment;
-			if (status == PlaceStatus.Full || status == PlaceStatus.SoonToBeVacant) {
-				tooltip += "\n"+"Договор №" + contract.Number;
-				tooltip += "\n" + "Арендатор: " + contract.Lessee.FullName;		
-				string phone = contract.Lessee.Phone != null ? contract.Lessee.Phone : "(не указан)";
-				tooltip += "\n" + "Телефон: " + phone; 
-			}
-			if (status == PlaceStatus.SoonToBeVacant) {
-				tooltip += "\n" + "Договор до: " + contract.CancelDate.Value.ToShortDateString();
-			}
-			if(status==PlaceStatus.Vacant)
-			{
-				tooltip += "\n"+"Место свободно";
-			}
-			if (status == PlaceStatus.Reserved) {
-				tooltip += "\n"+"Зарезервировано до " + Reserve.Date.Value.ToShortDateString();
-				if(Reserve.Comment!=string.Empty) tooltip +="\n"+ Reserve.Comment;
-			}
-			if (Tags.Count > 0) {
-				tooltip += "\n" + "Метки: ";
-				var sortedTagNames = Tags.Select(t=>t.Name).ToList ();
-				sortedTagNames.Sort ();
-				tooltip+=sortedTagNames.Aggregate ((result, next) => result + ", " + next);
-			}
-		}
-
-		string tooltip;
-		public virtual string Tooltip{ 
-			get{ return tooltip;} 
-		}
+			
 
 		public Place ()
 		{
-			reserves = new List<Reserve> ();
 			tags = new List<Tag> ();
 		}
 			

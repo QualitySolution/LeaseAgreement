@@ -52,7 +52,10 @@ namespace LeaseAgreement
 			this.Title = subject.Title;
 			TestCanSave();
 			UpdateHistory();
-			var reserve = subject.Reserve;
+			var reserve = UoW.Session.QueryOver<Reserve> ()
+				.Where (r => r.Date > DateTime.Today)
+				.JoinQueryOver<Place>(r=>r.Places).Where(p=>p.Id==subject.Id)
+				.SingleOrDefault ();
 			reserveFrame.Visible = reserve != null;
 			if (reserve != null) {
 				reserveTextView.Buffer.Text = "Зарезервировано до: " + reserve.Date.Value.ToShortDateString () + "\n" + reserve.Comment;
@@ -330,10 +333,7 @@ namespace LeaseAgreement
 		protected void OnButtonMapClicked (object sender, EventArgs e)
 		{	
 			PolygonDlg dlg;
-			Polygon polygon = null;
-			using (var tempUoW = UnitOfWorkFactory.CreateWithoutRoot()) {
-				polygon = tempUoW.Session.QueryOver<Polygon> ().Where (p => p.Place.Id == subject.Id).List ().FirstOrDefault ();
-			}
+			Polygon polygon = subject.Polygon;
 			if (polygon != null) {
 				dlg = new PolygonDlg (polygon);
 			} else {

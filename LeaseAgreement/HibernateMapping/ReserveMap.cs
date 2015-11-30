@@ -13,7 +13,7 @@ namespace LeaseAgreement.HMap
 			Id (x => x.Id).Column ("id");
 			Map (x => x.Comment).Column ("comment");
 			Map (x => x.Date).Column ("date");
-			HasManyToMany (x => x.Places).Table ("reserve_items").Cascade.None ().ChildKeyColumn ("place_id").Not.LazyLoad();
+			HasManyToMany (x => x.Places).Table ("reserve_items").ChildKeyColumn ("place_id");
 		}
 	}
 }
