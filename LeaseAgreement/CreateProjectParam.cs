@@ -265,7 +265,7 @@ namespace LeaseAgreement
 
 			OrmMain.ClassMappingList = new List<IOrmObjectMapping> {
 				new OrmObjectMapping<Lessee> (typeof(LesseeDlg), "{LeaseAgreement.Domain.Lessee} Name[Название];"),
-				OrmObjectMapping<Plan>.Create().Dialog<PlanDialog>().SimpleDisplay().Column("Название", p=>p.Name).End()
+				OrmObjectMapping<Plan>.Create().Dialog<PlanDialog>().DefaultTableView().Column("Название", p=>p.Name).End()
 			};
 		}
 	}
