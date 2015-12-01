@@ -129,6 +129,7 @@ namespace LeaseAgreement
 			this.Name = "LeaseAgreement.PlaceDlg";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Новое место");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.DefaultWidth = 1030;
 			// Internal child LeaseAgreement.PlaceDlg.VBox
 			global::Gtk.VBox w1 = this.VBox;
 			w1.Name = "dialog1_VBox";
@@ -169,7 +170,7 @@ namespace LeaseAgreement
 			this.buttonMap.CanFocus = true;
 			this.buttonMap.Name = "buttonMap";
 			this.buttonMap.UseUnderline = true;
-			this.buttonMap.Label = global::Mono.Unix.Catalog.GetString ("Открыть");
+			this.buttonMap.Label = global::Mono.Unix.Catalog.GetString ("Изменить");
 			this.table2.Add (this.buttonMap);
 			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table2 [this.buttonMap]));
 			w2.TopAttach = ((uint)(2));
@@ -630,6 +631,7 @@ namespace LeaseAgreement
 			this.GtkAlignment6 = new global::Gtk.Alignment (0F, 0F, 1F, 1F);
 			this.GtkAlignment6.Name = "GtkAlignment6";
 			this.GtkAlignment6.LeftPadding = ((uint)(12));
+			this.GtkAlignment6.RightPadding = ((uint)(12));
 			// Container child GtkAlignment6.Gtk.Container+ContainerChild
 			this.GtkScrolledWindow2 = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow2.Name = "GtkScrolledWindow2";
@@ -720,7 +722,6 @@ namespace LeaseAgreement
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 930;
 			this.DefaultHeight = 483;
 			this.Show ();
 			this.comboPType.Changed += new global::System.EventHandler (this.OnComboPTypeChanged);

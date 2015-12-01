@@ -1712,10 +1712,11 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.PlaceDlg" design-size="930 483">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.PlaceDlg" design-size="1010 483">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новое место</property>
     <property name="WindowPosition">CenterOnParent</property>
+    <property name="DefaultWidth">1030</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
     <child internal-child="VBox">
@@ -1762,7 +1763,7 @@
                                     <property name="Sensitive">False</property>
                                     <property name="CanFocus">True</property>
                                     <property name="Type">TextOnly</property>
-                                    <property name="Label" translatable="yes">Открыть</property>
+                                    <property name="Label" translatable="yes">Изменить</property>
                                     <property name="UseUnderline">True</property>
                                     <signal name="Clicked" handler="OnButtonMapClicked" />
                                   </widget>
@@ -2484,6 +2485,7 @@
                         <property name="Xalign">0</property>
                         <property name="Yalign">0</property>
                         <property name="LeftPadding">12</property>
+                        <property name="RightPadding">12</property>
                         <child>
                           <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow2">
                             <property name="MemberName" />
