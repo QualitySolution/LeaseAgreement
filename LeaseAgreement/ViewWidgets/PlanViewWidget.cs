@@ -305,7 +305,7 @@ namespace LeaseAgreement
 				}
 				if (floor != null) {
 					foreach (Polygon polygon in floor.Polygons) {
-						if (polygon != editPolygon) {
+						if (polygon.Id != editPolygon.Id) {
 							bool selected = CurrentReserve!=null && CurrentReserve.Places.Any(p=>p.Id==polygon.Place.Id);
 							polygon.draw (cairo, style, gScale,!plan.HasLabels, selected);
 						}
@@ -468,16 +468,16 @@ namespace LeaseAgreement
 						hightlightedReserve = reserves.SingleOrDefault(r=>r.Places.Any(p=>p.Id==polygon.Place.Id)); 
 				}
 				foreach (Polygon polygon in floor.Polygons) {
-					if (polygon == editPolygon) {
+					if (polygon.Id == editPolygon.Id) {
 						editPolygon.Hightlighted = true;
 					} else {
-						bool contains = polygon.Contains (mouseCoords);
-						bool highlighted = contains || (reserves.SingleOrDefault(r=>r.Places.Any(p=>p.Id==polygon.Place.Id)) == hightlightedReserve && hightlightedReserve!=null);
+						bool containsPointer = polygon.Contains (mouseCoords);
+						bool highlighted = containsPointer || (reserves.SingleOrDefault(r=>r.Places.Any(p=>p.Id==polygon.Place.Id)) == hightlightedReserve && hightlightedReserve!=null);
 						if (highlighted ^ polygon.Hightlighted) {
 							drawingarea1.QueueDraw ();
 							polygon.Hightlighted = highlighted;
 						}
-						if (contains) {
+						if (containsPointer) {
 							PolygonAtPointer = polygon;
 							hasTooltip = true;
 						}

@@ -11,18 +11,19 @@ namespace LeaseAgreement
 {
 	public partial class PolygonDlg : FakeTDIDialogGtkDialogBase
 	{
-		private IUnitOfWorkGeneric<Polygon> UoW;
+		private IUnitOfWork UoW;
 		public Polygon Polygon{ get{ return polygon;}}
 		private Polygon polygon;
 		private bool initialized;
-		private Plan plan;
 
 		public PolygonDlg (Place place)
 		{
 			this.Build ();
-			UoW = UnitOfWorkFactory.CreateWithNewRoot<Polygon> ();
-			UoW.Root.Place = place;
-			place.Polygon = UoW.Root;
+			UoW = UnitOfWorkFactory.CreateWithoutRoot ();
+			polygon = UnitOfWorkFactory.CreateWithoutRoot ().Session.QueryOver<Polygon> ().Where (p => p.Place.Id == place.Id).SingleOrDefault ();
+			if (polygon == null)
+				polygon = new Polygon ();
+			polygon.Place = place;
 			Configure ();
 		}
 
@@ -35,7 +36,6 @@ namespace LeaseAgreement
 			
 		public void Configure()
 		{			
-			polygon = UoW.Root;
 			planviewwidget1.CurrentPolygon = polygon;
 			planEntryReference.ItemsQuery = QueryOver.Of<Plan> ();
 			planEntryReference.SubjectType = typeof(Plan);
@@ -66,9 +66,11 @@ namespace LeaseAgreement
 		public void OnButtonOkClicked(object sender, EventArgs args)
 		{
 			if (polygon.Vertices.Count == 0) {
-				polygon.Floor.Polygons.Remove (polygon);
+				UoW.Delete<Polygon> (polygon);
+			} else {	
+				UoW.Save(polygon);
 			}
-			UoW.Save ();
+			UoW.Commit ();
 		}
 
 		protected void OnButtonDeleteClicked (object sender, EventArgs e)

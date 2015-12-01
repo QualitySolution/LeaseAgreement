@@ -334,11 +334,7 @@ namespace LeaseAgreement
 		{	
 			PolygonDlg dlg;
 			Polygon polygon = subject.Polygon;
-			if (polygon != null) {
-				dlg = new PolygonDlg (polygon);
-			} else {
-				dlg = new PolygonDlg (subject);
-			}
+			dlg = new PolygonDlg (subject);
 			dlg.Show();
 			dlg.Run ();
 			dlg.Destroy();
