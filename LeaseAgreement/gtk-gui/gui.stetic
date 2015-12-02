@@ -4058,6 +4058,7 @@
                       <widget class="Gtk.DataBindings.DataEntry" id="entryNumber">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
+                        <property name="Events">FocusChangeMask</property>
                         <property name="IsEditable">True</property>
                         <property name="MaxLength">20</property>
                         <property name="InvisibleChar">•</property>
@@ -4069,6 +4070,7 @@
                         <property name="InheritedBoundaryDataSource">False</property>
                         <signal name="Changed" handler="OnEntryNumberChanged" />
                         <signal name="Activated" handler="OnEntryActivated" />
+                        <signal name="FocusOutEvent" handler="OnEntryNumberFocusOutEvent" />
                       </widget>
                       <packing>
                         <property name="LeftAttach">1</property>

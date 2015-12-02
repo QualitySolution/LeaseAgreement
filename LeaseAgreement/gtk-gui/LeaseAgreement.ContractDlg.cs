@@ -223,6 +223,7 @@ namespace LeaseAgreement
 			// Container child table2.Gtk.Table+TableChild
 			this.entryNumber = new global::Gtk.DataBindings.DataEntry ();
 			this.entryNumber.CanFocus = true;
+			this.entryNumber.Events = ((global::Gdk.EventMask)(16384));
 			this.entryNumber.Name = "entryNumber";
 			this.entryNumber.IsEditable = true;
 			this.entryNumber.MaxLength = 20;
@@ -672,6 +673,7 @@ namespace LeaseAgreement
 			this.yentryreferenceLessee.Changed += new global::System.EventHandler (this.OnYentryreferenceLesseeChanged);
 			this.entryNumber.Changed += new global::System.EventHandler (this.OnEntryNumberChanged);
 			this.entryNumber.Activated += new global::System.EventHandler (this.OnEntryActivated);
+			this.entryNumber.FocusOutEvent += new global::Gtk.FocusOutEventHandler (this.OnEntryNumberFocusOutEvent);
 			this.comboOrg.Changed += new global::System.EventHandler (this.OnComboOrgChanged);
 			this.comboContractType.Changed += new global::System.EventHandler (this.OnComboContractTypeChanged);
 			this.datepickerStart.DateChanged += new global::System.EventHandler (this.OnDatepickerStartDateChanged);

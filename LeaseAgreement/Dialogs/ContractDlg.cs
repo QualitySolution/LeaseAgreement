@@ -38,6 +38,7 @@ namespace LeaseAgreement
 		private DateTime newStart;
 		private DateTime oldStart;
 		private bool isNew;
+		private bool warnedAboutExistingDraft;
 
 
 		protected Contract Subject {
@@ -345,8 +346,15 @@ namespace LeaseAgreement
 			return DateCorrectok && DateCancelok;
 		}
 
+		private bool DraftExists(){
+			return UoW.Session.QueryOver<Contract> ()
+				.Where (contract => contract.Draft 
+				        && contract.Number.IsLike (subject.Number, MatchMode.Exact)).RowCount()>0;			
+		}
+
 		protected void OnEntryNumberChanged (object sender, EventArgs e)
 		{
+			warnedAboutExistingDraft = false;
 			TestCanSave ();
 		}
 
@@ -945,6 +953,19 @@ namespace LeaseAgreement
 		protected void OnYentryreferenceLesseeChanged (object sender, EventArgs e)
 		{
 			TestCanSave ();
+		}
+
+		protected void OnEntryNumberFocusOutEvent (object o, FocusOutEventArgs args)
+		{
+			if (DraftExists()&&!warnedAboutExistingDraft) {
+				MessageDialog md = new MessageDialog (this, DialogFlags.DestroyWithParent,
+				                                      MessageType.Warning, 
+				                                      ButtonsType.Ok, 
+				                                      "Черновик с номером договора \""+subject.Number+"\" уже существует!");
+				md.Run ();
+				md.Destroy ();
+				warnedAboutExistingDraft = true;
+			}
 		}
 
 	}
