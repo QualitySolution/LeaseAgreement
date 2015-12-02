@@ -7493,113 +7493,236 @@
     <property name="WidthRequest">400</property>
     <property name="HeightRequest">300</property>
     <property name="Visible">False</property>
-    <property name="Sensitive">False</property>
+    <signal name="Shown" handler="OnShown" />
     <child>
-      <widget class="Gtk.Table" id="table1">
+      <widget class="Gtk.VBox" id="vbox2">
         <property name="MemberName" />
-        <property name="NRows">3</property>
-        <property name="NColumns">2</property>
-        <property name="RowSpacing">6</property>
-        <property name="ColumnSpacing">6</property>
+        <property name="Spacing">6</property>
         <child>
-          <placeholder />
-        </child>
-        <child>
-          <placeholder />
-        </child>
-        <child>
-          <widget class="Gamma.Widgets.ySpecComboBox" id="comboBoxFloor">
+          <widget class="Gtk.HBox" id="hbox2">
             <property name="MemberName" />
-            <property name="IsTextCombo">False</property>
-            <property name="Items" translatable="yes" />
-            <property name="AddIfNotExist">False</property>
-            <property name="ShowSpecialStateAll">False</property>
-            <property name="ShowSpecialStateNot">True</property>
-            <signal name="Changed" handler="OnComboBoxFloorChanged" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Label" id="labelFloor">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Этаж:</property>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gamma.Widgets.ySpecComboBox" id="comboBoxFloor">
+                <property name="MemberName" />
+                <property name="IsTextCombo">False</property>
+                <property name="Items" translatable="yes" />
+                <property name="AddIfNotExist">False</property>
+                <property name="ShowSpecialStateAll">False</property>
+                <property name="ShowSpecialStateNot">True</property>
+                <signal name="Changed" handler="OnComboBoxFloorChanged" />
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.ToggleButton" id="togglebuttonLegend">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Type">TextOnly</property>
+                <property name="Label" translatable="yes">Легенда</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Toggled" handler="OnTogglebuttonLegendToggled" />
+              </widget>
+              <packing>
+                <property name="PackType">End</property>
+                <property name="Position">2</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
+            <property name="Position">0</property>
             <property name="AutoSize">True</property>
-            <property name="XOptions">Fill</property>
-            <property name="YOptions">Fill</property>
-            <property name="XExpand">False</property>
-            <property name="XFill">True</property>
-            <property name="XShrink">False</property>
-            <property name="YExpand">False</property>
-            <property name="YFill">True</property>
-            <property name="YShrink">False</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
         <child>
-          <widget class="Gtk.DrawingArea" id="drawingarea1">
+          <widget class="Gtk.VBox" id="vboxLegend">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Events">PointerMotionMask, ButtonPressMask, ButtonReleaseMask, KeyPressMask, ScrollMask</property>
-            <signal name="ExposeEvent" handler="OnDrawingAreaExposed" />
-            <signal name="ScrollEvent" handler="OnDrawingAreaScroll" />
-            <signal name="SizeAllocated" handler="OnDrawingAreaSizeAllocated" />
-            <signal name="ButtonPressEvent" handler="OnButtonPressed" />
-            <signal name="ButtonReleaseEvent" handler="OnButtonReleased" />
-            <signal name="MotionNotifyEvent" handler="OnPointerMotion" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.HSeparator" id="hseparator1">
+                <property name="MemberName" />
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">False</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.HBox" id="hboxLegendLabels">
+                <property name="MemberName" />
+                <property name="Visible">False</property>
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Label" id="labelVacant">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Свободно</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="labelSoonToBeVacant">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Скоро освободится</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="labelFull">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Занято</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">2</property>
+                    <property name="AutoSize">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="labelReserved">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Зарезервировано</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">3</property>
+                    <property name="AutoSize">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
-            <property name="TopAttach">1</property>
-            <property name="BottomAttach">2</property>
+            <property name="Position">1</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Table" id="table1">
+            <property name="MemberName" />
+            <property name="NRows">2</property>
+            <property name="NColumns">2</property>
+            <property name="RowSpacing">6</property>
+            <property name="ColumnSpacing">6</property>
+            <child>
+              <placeholder />
+            </child>
+            <child>
+              <widget class="Gtk.DrawingArea" id="drawingarea1">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Events">PointerMotionMask, ButtonPressMask, ButtonReleaseMask, KeyPressMask, ScrollMask</property>
+                <signal name="ExposeEvent" handler="OnDrawingAreaExposed" />
+                <signal name="ScrollEvent" handler="OnDrawingAreaScroll" />
+                <signal name="SizeAllocated" handler="OnDrawingAreaSizeAllocated" />
+                <signal name="ButtonPressEvent" handler="OnButtonPressed" />
+                <signal name="ButtonReleaseEvent" handler="OnButtonReleased" />
+                <signal name="MotionNotifyEvent" handler="OnPointerMotion" />
+              </widget>
+              <packing>
+                <property name="AutoSize">False</property>
+                <property name="XExpand">True</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">True</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.HScrollbar" id="hscrollbar1">
+                <property name="MemberName" />
+                <property name="Upper">100</property>
+                <property name="PageIncrement">10</property>
+                <property name="PageSize">10</property>
+                <property name="StepIncrement">1</property>
+                <property name="Value">20</property>
+                <signal name="ValueChanged" handler="OnHscrollbar1ValueChanged" />
+              </widget>
+              <packing>
+                <property name="TopAttach">1</property>
+                <property name="BottomAttach">2</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.VScrollbar" id="vscrollbar1">
+                <property name="MemberName" />
+                <property name="Upper">100</property>
+                <property name="PageIncrement">10</property>
+                <property name="PageSize">10</property>
+                <property name="StepIncrement">1</property>
+                <signal name="ValueChanged" handler="OnVscrollbar1ValueChanged" />
+              </widget>
+              <packing>
+                <property name="LeftAttach">1</property>
+                <property name="RightAttach">2</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">2</property>
             <property name="AutoSize">False</property>
-            <property name="XExpand">True</property>
-            <property name="XFill">True</property>
-            <property name="XShrink">False</property>
-            <property name="YExpand">True</property>
-            <property name="YFill">True</property>
-            <property name="YShrink">False</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.HScrollbar" id="hscrollbar1">
-            <property name="MemberName" />
-            <property name="Upper">100</property>
-            <property name="PageIncrement">10</property>
-            <property name="PageSize">10</property>
-            <property name="StepIncrement">1</property>
-            <property name="Value">20</property>
-            <signal name="ValueChanged" handler="OnHscrollbar1ValueChanged" />
-          </widget>
-          <packing>
-            <property name="TopAttach">2</property>
-            <property name="BottomAttach">3</property>
-            <property name="AutoSize">True</property>
-            <property name="XOptions">Fill</property>
-            <property name="YOptions">Fill</property>
-            <property name="XExpand">False</property>
-            <property name="XFill">True</property>
-            <property name="XShrink">False</property>
-            <property name="YExpand">False</property>
-            <property name="YFill">True</property>
-            <property name="YShrink">False</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.VScrollbar" id="vscrollbar1">
-            <property name="MemberName" />
-            <property name="Upper">100</property>
-            <property name="PageIncrement">10</property>
-            <property name="PageSize">10</property>
-            <property name="StepIncrement">1</property>
-            <signal name="ValueChanged" handler="OnVscrollbar1ValueChanged" />
-          </widget>
-          <packing>
-            <property name="TopAttach">1</property>
-            <property name="BottomAttach">2</property>
-            <property name="LeftAttach">1</property>
-            <property name="RightAttach">2</property>
-            <property name="AutoSize">True</property>
-            <property name="XOptions">Fill</property>
-            <property name="YOptions">Fill</property>
-            <property name="XExpand">False</property>
-            <property name="XFill">True</property>
-            <property name="XShrink">False</property>
-            <property name="YExpand">False</property>
-            <property name="YFill">True</property>
-            <property name="YShrink">False</property>
           </packing>
         </child>
       </widget>

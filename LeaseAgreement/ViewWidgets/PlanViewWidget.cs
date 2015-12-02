@@ -123,17 +123,13 @@ namespace LeaseAgreement
 			this.Build ();
 			Mode = PlanViewMode.View;
 			editPolygon = new Polygon ();
-			scrollAdjX = new Adjustment (0, 0, 0, 20, 0, 0);
-			scrollAdjY = new Adjustment (0, 0, 0, 20, 0, 0);
-			hscrollbar1.Adjustment = scrollAdjX;
-			vscrollbar1.Adjustment = scrollAdjY;
+			CreateScrollbars ();
 			imageSurface = GenerateStub ();
-			//gScale = MinScale;
-			scale=0;
 			ReconfigureScrollbars();
 			GLib.Timeout.Add (TimeOutInterval, OnTimeout);
 			stopwatch = new Stopwatch ();
 			stopwatch.Start ();
+			SetupLegend ();
 		}			
 
 		public bool OnTimeout(){
@@ -189,6 +185,46 @@ namespace LeaseAgreement
 			cairo.ShowText ("Загрузите подложку");
 			cairo.Dispose ();
 			return stub;
+		}
+
+		private void CreateScrollbars(){
+			scrollAdjX = new Adjustment (0, 0, 0, 20, 0, 0);
+			scrollAdjY = new Adjustment (0, 0, 0, 20, 0, 0);
+			hscrollbar1.Adjustment = scrollAdjX;
+			vscrollbar1.Adjustment = scrollAdjY;
+		}
+
+		private void SetupLegend(){
+			Gdk.Color bgGdkColor = drawingarea1.Style.Background (StateType.Normal);
+			Cairo.Color bgColor = new Cairo.Color (((double)bgGdkColor.Red)/0xffff, ((double)bgGdkColor.Green)/0xffff, ((double)bgGdkColor.Blue)/0xffff);
+			labelVacant.LabelProp = String.Format ("<span background=\"{0}\"><b>Свободно</b></span>",
+			                                       CairoColorToHtml (BlendColors(style.PolygonVacantColor,bgColor)));
+			labelSoonToBeVacant.LabelProp = String.Format ("<span background=\"{0}\"><b>Скоро освободится</b></span>",
+			                                               CairoColorToHtml (BlendColors(style.PolygonSoonToBeVacantColor,bgColor)));
+			labelFull.LabelProp = String.Format ("<span background=\"{0}\"><b>Занято</b></span>",
+			                                     CairoColorToHtml (BlendColors(style.PolygonFullColor,bgColor)));
+			labelReserved.LabelProp = String.Format ("<span background=\"{0}\"><b>Зарезервировано</b></span>",
+			                                         CairoColorToHtml (BlendColors(style.PolygonReservedColor,bgColor)));		
+		}
+
+
+
+		private Cairo.Color BlendColors(Cairo.Color source, Cairo.Color dest){
+			double a = source.A + dest.A *(1 - source.A);
+			Func<double,double,double> operatorOver = (xA,xB)=>(xA*source.A + xB*dest.B*(1-source.A))/a;
+			double r = operatorOver (source.R, dest.R);
+			double g = operatorOver (source.G, dest.G);
+			double b = operatorOver (source.B, dest.B);
+			return new Cairo.Color (r, g, b, a);
+		}
+
+		private string CairoColorToHtml(Cairo.Color color){
+			return ColorTranslator.ToHtml(System.Drawing.Color.FromArgb (
+				(int)(color.A*0xff), 
+				(int)(color.R*0xff), 
+				(int)(color.G*0xff), 
+				(int)(color.B*0xff)
+			));
 		}
 
 		private void ReconfigureScrollbars(){
@@ -649,6 +685,17 @@ namespace LeaseAgreement
 				drawingarea1.QueueDraw ();
 			}
 		}
+
+		protected void OnTogglebuttonLegendToggled (object sender, EventArgs e)
+		{
+			vboxLegend.Visible = togglebuttonLegend.Active;
+		}
+
+		protected void OnShown (object sender, EventArgs e)
+		{
+			vboxLegend.Visible = false;
+		}
+
 	}
 
 	public enum PlanViewMode{
