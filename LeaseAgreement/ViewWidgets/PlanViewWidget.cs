@@ -669,7 +669,7 @@ namespace LeaseAgreement
 
 				foreach (var polygon in floor.Polygons) {
 					IList<ContractPlace> currentContractPlaces = relevantContractPlaces.Where (cp => cp.Place.Id == polygon.Place.Id)
-						.Where (cp => (cp.StartDate.Value < DateTime.Today) && (DateTime.Today< cp.EndDate.Value))
+						.Where (cp => (cp.StartDate.Value <= DateTime.Today) && (DateTime.Today<= cp.EndDate.Value))
 						.Where(cp=>!cp.Contract.Draft).ToList();			
 					polygon.Status = (currentContractPlaces.Count > 0) ? PlaceStatus.Full : PlaceStatus.Vacant;
 					if (currentContractPlaces.Count == 0) {
