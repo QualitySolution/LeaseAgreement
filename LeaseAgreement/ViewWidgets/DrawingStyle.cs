@@ -48,7 +48,7 @@ namespace LeaseAgreement
 			SelectedPolygonColor = new Cairo.Color(0.8,0.3,0,0.8),
 			PolygonHighlightedColor = new Cairo.Color(0,0.5,0.3,0.8),
 			PolygonHighlightedTint = new Cairo.Color(0,0.5,0.3,0.8),
-			PolygonVacantColor = new Cairo.Color(0.8,0.9,0.8,0.8),
+			PolygonVacantColor = new Cairo.Color(0,0.5,0.3,0.8),
 			PolygonFullColor = new Cairo.Color(0,0.5,0.3,0.8),
 			PolygonReservedColor = new Cairo.Color(0.7,0.15,0.15,0.8),
 			PolygonSoonToBeVacantColor = new Cairo.Color(0.3,0.3,0.8,0.8),
