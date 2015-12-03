@@ -10,6 +10,7 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 	Gtk.ListStore PlacesListStore;
 	Gtk.TreeModelFilter Placefilter;
 	Gtk.TreeModelSort PlaceSort;
+	Gdk.Pixbuf mapIcon;
 
 	private enum PlaceCol {
 		id,
@@ -20,7 +21,8 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		lessee_id,
 		org,
 		org_id,
-		area
+		area,
+		icon
 	}
 
 	void PreparePlaces()
@@ -29,11 +31,14 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		ComboWorks.ComboFillReference(comboPlaceType,"place_types", ComboWorks.ListMode.WithAll, false);
 		ComboWorks.ComboFillReference(comboPlaceOrg,"organizations", ComboWorks.ListMode.WithAll, false);
 
+		mapIcon = new Gdk.Pixbuf(System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.map.png");
+
 		//Создаем таблицу "Места"
 		PlacesListStore = new Gtk.ListStore (typeof(int), typeof (int), typeof (string),typeof (string),
 		                                     typeof (string), typeof (int), 
-		                                     typeof (string), typeof (int), typeof (decimal));
-
+		                                     typeof (string), typeof (int), typeof (decimal),typeof(Gdk.Pixbuf));
+		
+		treeviewPlaces.AppendColumn("", new Gtk.CellRendererPixbuf (), "pixbuf", (int)PlaceCol.icon);
 		treeviewPlaces.AppendColumn ("Тип", new Gtk.CellRendererText (), "text", (int)PlaceCol.type_place);
 		treeviewPlaces.AppendColumn ("Номер", new Gtk.CellRendererText (), "text", (int)PlaceCol.place_no);
 		treeviewPlaces.AppendColumn ("Площадь", new Gtk.CellRendererText (), RenderAreaCellLayout);
@@ -46,11 +51,11 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		PlaceSort.SetSortFunc ((int)PlaceCol.place_no, PlaceNumberSortFunction);
 		PlaceSort.SetSortFunc ((int)PlaceCol.area, AreaSortFunction);
 		treeviewPlaces.Model = PlaceSort;
-		treeviewPlaces.Columns [0].SortColumnId = (int)PlaceCol.type_place;
-		treeviewPlaces.Columns [1].SortColumnId = (int)PlaceCol.place_no;
-		treeviewPlaces.Columns [2].SortColumnId = (int)PlaceCol.area;
-		treeviewPlaces.Columns [3].SortColumnId = (int)PlaceCol.lessee;
-		treeviewPlaces.Columns [4].SortColumnId = (int)PlaceCol.org;
+		treeviewPlaces.Columns [1].SortColumnId = (int)PlaceCol.type_place;
+		treeviewPlaces.Columns [2].SortColumnId = (int)PlaceCol.place_no;
+		treeviewPlaces.Columns [3].SortColumnId = (int)PlaceCol.area;
+		treeviewPlaces.Columns [4].SortColumnId = (int)PlaceCol.lessee;
+		treeviewPlaces.Columns [5].SortColumnId = (int)PlaceCol.org;
 		treeviewPlaces.ShowAll();
 	}
 
@@ -78,12 +83,13 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		TreeIter iter;
 		
 		string sql = "SELECT places.*, place_types.name as type, contracts.lessee_id as lessee_id, lessees.name as lessee, " +
-			"organizations.name as organization FROM places " +
+			"organizations.name as organization, polygons.id as polygon_id FROM places " +
 				"LEFT JOIN place_types ON places.type_id = place_types.id " +
 				"LEFT JOIN organizations ON places.org_id = organizations.id " +
 			"LEFT JOIN current_leased_places ON current_leased_places.place_id = places.id " +
 			"LEFT JOIN contracts ON current_leased_places.contract_id = contracts.id " +
-			"LEFT JOIN lessees ON contracts.lessee_id = lessees.id";
+			"LEFT JOIN lessees ON contracts.lessee_id = lessees.id "+
+			"LEFT JOIN polygons ON polygons.place_id = places.id";
 		bool WhereExist = false;
 		if(comboPlaceType.GetActiveIter(out iter) && comboPlaceType.Active != 0)
 		{
@@ -105,16 +111,28 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		{
 			PlacesListStore.Clear ();
 			while (rdr.Read ()) 
-			{
-				PlacesListStore.AppendValues (rdr.GetInt32 ("id"),
-											rdr.GetInt32 ("type_id"),
-				                            rdr ["type"].ToString (),
-				                            rdr ["place_no"].ToString (),
-				                            rdr ["lessee"].ToString (),
-				                              DBWorks.GetInt (rdr, "lessee_id", -1),
-				                            rdr ["organization"].ToString (),
-				                              DBWorks.GetInt (rdr, "org_id", -1),
-				                              DBWorks.GetDecimal (rdr, "area", 0)
+			{			
+				int id = rdr.GetInt32 ("id");
+				int typeId = rdr.GetInt32 ("type_id");
+				string placeType = rdr ["type"].ToString ();
+				string placeNumber = rdr ["place_no"].ToString ();
+				string lessee = rdr ["lessee"].ToString ();
+				int lesseeId = DBWorks.GetInt (rdr, "lessee_id", -1);
+				string organization = rdr ["organization"].ToString ();
+				int organizationId = DBWorks.GetInt (rdr, "org_id", -1);
+				decimal area = DBWorks.GetDecimal (rdr, "area", 0);
+				int polygonId = DBWorks.GetInt(rdr,"polygon_id",-1);
+				Gdk.Pixbuf icon = polygonId!=-1 ? mapIcon : null;
+				PlacesListStore.AppendValues (id,
+											typeId,
+				                            placeType,
+				                            placeNumber,
+				                            lessee,
+				                              lesseeId,
+				                            organization,
+				                              organizationId,
+				                              area,
+				                              icon
 				                             );
 			}
 		}
@@ -139,7 +157,7 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		bool filterLes = true;
 		string cellvalue;
 		
-		if(model.GetValue (iter, 1) == null)
+		if(model.GetValue (iter, (int)PlaceCol.type_place_id) == null)
 			return false;
 		
 		if (entryPlaceNum.Text != "" && model.GetValue (iter, (int)PlaceCol.place_no) != null)
@@ -160,7 +178,7 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 	{
 		string oa = (string) model.GetValue(a, (int)PlaceCol.place_no);
 		string ob = (string) model.GetValue(b, (int)PlaceCol.place_no);
-
+	
 		return StringWorks.NaturalStringComparer.Compare (oa, ob);
 	}
 

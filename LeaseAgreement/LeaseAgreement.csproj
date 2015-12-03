@@ -92,6 +92,7 @@
     <EmbeddedResource Include="icons\state-now.png" />
     <EmbeddedResource Include="icons\state-soon.png" />
     <EmbeddedResource Include="Updates\1.1.1.sql" />
+    <EmbeddedResource Include="icons\map.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
