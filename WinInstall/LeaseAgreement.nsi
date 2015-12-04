@@ -1,6 +1,6 @@
 
 ;--------------------------------
-!define PRODUCT_VERSION "1.3.1.1"
+!define PRODUCT_VERSION "1.3.2"
 !define MIN_NET_MAJOR "4"
 !define MIN_NET_MINOR "0"
 !define MIN_NET_BUILD "*"
@@ -322,7 +322,7 @@ Section "${PRODUCT_NAME}" SecProgram
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\${MENU_DIR_NAME}"
   CreateShortCut "$SMPROGRAMS\${MENU_DIR_NAME}\Удаление.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\${MENU_DIR_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXE_NAME}.exe" "" "$INSTDIR\${EXE_NAME}.exe" 0
+  CreateShortCut "$SMPROGRAMS\${MENU_DIR_NAME}\${SHORTCUT_NAME}.lnk" "$INSTDIR\${EXE_NAME}.exe" "" "$INSTDIR\${EXE_NAME}.exe" 0
   ; CreateShortCut "$SMPROGRAMS\${MENU_DIR_NAME}\Документация.lnk" "$INSTDIR\bazar_ru.pdf"
   
 SectionEnd
