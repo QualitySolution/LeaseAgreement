@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using LeaseAgreement;
 using QSProjectsLib;
 using QSOrmProject;
+using LeaseAgreement.Domain;
 
 public partial class MainWindow : FakeTDITabGtkWindowBase
 {
@@ -197,7 +198,33 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 
 	protected virtual void OnTreeviewPlacesRowActivated (object o, Gtk.RowActivatedArgs args)
 	{
-		OnButtonViewClicked(o,EventArgs.Empty);
+		var column = args.Column;
+		if (treeviewPlaces.Columns [0] == column) {
+			TreeIter iter;
+			treeviewPlaces.Selection.GetSelected (out iter);
+			if (treeviewPlaces.Model.GetValue (iter, (int)PlaceCol.icon) != null) {
+				int id = Convert.ToInt32 (PlaceSort.GetValue (iter, (int)PlaceCol.id));
+				OnPlaceIconClicked (id);
+			}
+		}else
+			OnButtonViewClicked(o,EventArgs.Empty);
+	}
+
+	protected void OnPlaceIconClicked(int placeID){
+		notebookMain.CurrentPage = 3;
+		using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
+			var place = uow.Session.Get<Place> (placeID);
+			var currentPlan = entryreferencePlan.Subject;
+			var placePlan = place.Polygon.Floor.Plan;
+			var placeFloor = place.Polygon.Floor;
+			if(currentPlan==null
+			   || (currentPlan as Plan).Id!=placePlan.Id)
+				entryreferencePlan.Subject = placePlan;
+			if (planviewwidget1.Floor.Id != placeFloor.Id) {
+				planviewwidget1.Floor = placeFloor;
+			}
+			planviewwidget1.LookAtPlace (place.Id);
+		}
 	}
 
 	protected virtual void OnEntryPlaceLessChanged (object sender, System.EventArgs e)

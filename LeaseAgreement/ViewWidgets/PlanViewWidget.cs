@@ -105,12 +105,14 @@ namespace LeaseAgreement
 		const double ZoomMu = 0.35;
 		const int BufferHeight=5000;
 		const int TimeOutInterval = 20;
-		double MaxZoom{ get{ return Math.Log (100) / Math.Log (ZoomIncrement); }}
+		double MaxScale{ get{ return InverseScaleFunction (100*MinScale); }}
 		private Stopwatch stopwatch;
 
-		double scaleFunction(double s)
-		{
+		double scaleFunction(double s){
 			return Math.Pow(ZoomIncrement,s)*MinScale;
+		}
+		double InverseScaleFunction(double zoom){
+			return Math.Log (zoom/MinScale) / Math.Log (ZoomIncrement);
 		}
 		double gScale{
 			get{return scaleFunction (scale);}
@@ -157,7 +159,7 @@ namespace LeaseAgreement
 				double viewPortWidth = drawingarea1.Allocation.Width;
 				double viewPortHeight = drawingarea1.Allocation.Height;
 
-				scale = MathHelper.Clamp (scale + zoomSpeed * delta, 0, MaxZoom);
+				scale = MathHelper.Clamp (scale + zoomSpeed * delta, 0, MaxScale);
 				scrollAdjX.Upper = CanvasWidth * gScale;
 				scrollAdjY.Upper = CanvasHeight * gScale;
 				scrollAdjX.Upper = MathHelper.Clamp (scrollAdjX.Upper, scrollAdjX.Lower, scrollAdjX.Upper);
@@ -694,6 +696,26 @@ namespace LeaseAgreement
 		protected void OnShown (object sender, EventArgs e)
 		{
 			vboxLegend.Visible = false;
+		}
+
+		public void LookAtPlace(int placeId){
+			var polygonToShow = floor.Polygons.Single (polygon => polygon.Place.Id == placeId);
+			var polygonAABB = polygonToShow.GetBoundingBox ();
+			double screenWidth = drawingarea1.Allocation.Width;
+			double screenHeight = drawingarea1.Allocation.Height;
+			double requiredWidth = screenWidth / 2;
+			double requiredHeight = screenHeight / 2;
+			double requiredScale = Math.Min (requiredWidth / polygonAABB.Width, requiredHeight / polygonAABB.Height);
+
+			scale = MathHelper.Clamp(InverseScaleFunction (requiredScale),0,MaxScale);
+			scrollAdjX.Upper = CanvasWidth * gScale;
+			scrollAdjY.Upper = CanvasHeight * gScale;
+			scrollAdjX.Upper = MathHelper.Clamp (scrollAdjX.Upper, scrollAdjX.Lower, scrollAdjX.Upper);
+			scrollAdjY.Upper = MathHelper.Clamp (scrollAdjY.Upper, scrollAdjY.Lower, scrollAdjY.Upper);
+			scrollAdjX.Value = (polygonAABB.X+polygonAABB.Width/2) * gScale-screenWidth/2;
+			scrollAdjY.Value = (polygonAABB.Y+polygonAABB.Height/2) * gScale-screenHeight/2;
+			scrollAdjX.Value = MathHelper.Clamp (scrollAdjX.Value, scrollAdjX.Lower, scrollAdjX.Upper);
+			scrollAdjY.Value = MathHelper.Clamp (scrollAdjY.Value, scrollAdjY.Lower, scrollAdjY.Upper);
 		}
 
 	}
