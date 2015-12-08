@@ -544,11 +544,13 @@ namespace LeaseAgreement
 			if (tooltipX == x && tooltipY == y){
 				if (PolygonAtPointer.Tooltip == null) {
 					new Task (() => {
-						Gtk.Application.Invoke ((sender, e) => {	
+						Gtk.Application.Invoke((sender,e)=>{
 							if (PolygonAtPointer.Tooltip == null) {
 								this.TooltipText = "(Загрузка)";	
-								PolygonAtPointer.Tooltip = GetTooltip (PolygonAtPointer);
 							}
+						});
+						PolygonAtPointer.Tooltip = GetTooltip (PolygonAtPointer);
+						Gtk.Application.Invoke ((sender, e) => {	
 							this.TooltipText = PolygonAtPointer.Tooltip;
 						});
 					}).Start ();
