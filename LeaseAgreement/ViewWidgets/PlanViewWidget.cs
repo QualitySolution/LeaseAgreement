@@ -37,6 +37,7 @@ namespace LeaseAgreement
 				editPolygon = value; 
 				comboBoxFloor.SelectedItem = editPolygon.Floor;
 			}}		
+		private IList<Polygon> currentFloorPolygons;
 		public Polygon PolygonAtPointer{ get; private set;}
 		private Polygon editPolygon;
 		public Reserve CurrentReserve{ get; set;}
@@ -342,7 +343,7 @@ namespace LeaseAgreement
 					svg.Render(cairo,gScale);
 				}
 				if (floor != null) {
-					foreach (Polygon polygon in floor.Polygons) {
+					foreach (Polygon polygon in currentFloorPolygons) {
 						if (polygon.Id != editPolygon.Id) {
 							bool selected = CurrentReserve!=null && CurrentReserve.Places.Any(p=>p.Id==polygon.Place.Id);
 							polygon.draw (cairo, style, gScale,!plan.HasLabels, selected);
@@ -475,7 +476,7 @@ namespace LeaseAgreement
 					}
 					if (Mode == PlanViewMode.View) {
 						if (floor != null) {
-							var clickedPolygon = floor.Polygons.FirstOrDefault (polygon => polygon.Contains (mouseCoords));
+							var clickedPolygon = currentFloorPolygons.FirstOrDefault (polygon => polygon.Contains (mouseCoords));
 							if (clickedPolygon != null && PolygonRightClicked!=null)
 								PolygonRightClicked (this, clickedPolygon);
 						}
@@ -501,11 +502,11 @@ namespace LeaseAgreement
 				//this.HasTooltip = false;
 				bool hasTooltip=false;
 				Reserve hightlightedReserve = null;
-				foreach (Polygon polygon in floor.Polygons) {					
+				foreach (Polygon polygon in currentFloorPolygons) {					
 					if (polygon.Contains(mouseCoords))
 						hightlightedReserve = reserves.SingleOrDefault(r=>r.Places.Any(p=>p.Id==polygon.Place.Id)); 
 				}
-				foreach (Polygon polygon in floor.Polygons) {
+				foreach (Polygon polygon in currentFloorPolygons) {
 					if (polygon.Id == editPolygon.Id) {
 						editPolygon.Hightlighted = true;
 					} else {
@@ -651,10 +652,9 @@ namespace LeaseAgreement
 		public void UpdatePolygons()
 		{
 			using (var uow = UnitOfWorkFactory.CreateWithoutRoot ()) {
-				floor.Polygons = uow.Session.QueryOver<Polygon> ().Where(p=>p.Floor.Id==floor.Id).List ();
-				var placeIDs = floor.Polygons.Select (p => p.Place.Id).ToList ();
+				currentFloorPolygons = uow.Session.QueryOver<Polygon> ().Where(p=>p.Floor.Id==floor.Id).List ();
+				var placeIDs = currentFloorPolygons.Select (p => p.Place.Id).ToList ();
 				Contract contractAlias = null;
-
 				var relevantContractPlaces = uow.Session.QueryOver<ContractPlace> ()
 					.Where (cp => cp.Place.Id.IsIn (placeIDs))
 					.Where(cp=>cp.StartDate <= DateTime.Today && cp.EndDate >= DateTime.Today)
@@ -669,7 +669,7 @@ namespace LeaseAgreement
 					.TransformUsing (Transformers.DistinctRootEntity)
 					.List();
 
-				foreach (var polygon in floor.Polygons) {
+				foreach (var polygon in currentFloorPolygons) {
 					IList<ContractPlace> currentContractPlaces = relevantContractPlaces.Where (cp => cp.Place.Id == polygon.Place.Id)
 						.Where (cp => (cp.StartDate.Value <= DateTime.Today) && (DateTime.Today<= cp.EndDate.Value))
 						.Where(cp=>!cp.Contract.Draft).ToList();			
@@ -699,7 +699,7 @@ namespace LeaseAgreement
 		}
 
 		public void LookAtPlace(int placeId){
-			var polygonToShow = floor.Polygons.Single (polygon => polygon.Place.Id == placeId);
+			var polygonToShow = currentFloorPolygons.Single (polygon => polygon.Place.Id == placeId);
 			var polygonAABB = polygonToShow.GetBoundingBox ();
 			double screenWidth = drawingarea1.Allocation.Width;
 			double screenHeight = drawingarea1.Allocation.Height;
