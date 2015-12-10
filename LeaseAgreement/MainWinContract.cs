@@ -249,7 +249,10 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 	private void RenderContractEndDateColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
 		DateTime date = (DateTime) model.GetValue (iter, (int)ContractCol.end_date);
-		(cell as Gtk.CellRendererText).Text = date.ToShortDateString ();
+		var active = (bool) model.GetValue (iter, (int)ContractCol.active);
+		var cellRendererText = (cell as Gtk.CellRendererText);
+		cellRendererText.Foreground=date.Subtract(DateTime.Today).Days<=30 && active ? "#ff0000" :"#000000";
+		cellRendererText.Text =  date.ToShortDateString();
 	}
 
 	private void RenderContractStartDateColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
