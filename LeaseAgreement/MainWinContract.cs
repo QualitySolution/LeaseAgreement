@@ -115,8 +115,8 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		if(comboContractState.Active == 4)
 			sql.AddAsList ("(IFNULL(contracts.cancel_date, contracts.end_date) >= CURDATE() OR draft = '1')");
 
-		if(check30daysContracts.Active)
-			sql.AddAsList ("contracts.end_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)");
+		if (check30daysContracts.Active)
+			sql.AddAsList ("IFNULL(contracts.cancel_date,contracts.end_date) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)");
 
 		sql.Add (" GROUP BY contracts.id");
 
