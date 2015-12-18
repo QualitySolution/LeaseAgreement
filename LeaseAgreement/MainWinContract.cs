@@ -11,6 +11,9 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 	Gtk.TreeModelFilter Contractfilter;
 	Gtk.TreeModelSort ContractSort;
 	Gdk.Pixbuf stateNow, stateSoon, stateDraft, stateArchive;
+	Gdk.Color gdkRed = new Gdk.Color (0xff,0x99,0x99);
+	Gdk.Color gdkWhite = new Gdk.Color(0xff,0xff,0xff);
+	Gdk.Color gdkYellow = new Gdk.Color(0xff,0xff,0x66);
 
 	private enum ContractCol{
 		id,
@@ -24,7 +27,8 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		lessee,
 		start_date,
 		end_date,
-		state_pixbuf
+		state_pixbuf,
+		draft
 	}
 
 	void PrepareContract()
@@ -52,17 +56,17 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		                                       typeof (string),	//9 - lesse
 		                                       typeof (DateTime),	//10 start date
 		                                       typeof (DateTime),	//11 - end date
-		                                       typeof (Gdk.Pixbuf)
-		                                       );
-		
-		treeviewContract.AppendColumn("Статус", new Gtk.CellRendererPixbuf (), "pixbuf", (int)ContractCol.state_pixbuf);
-		treeviewContract.AppendColumn("Номер", new Gtk.CellRendererText (), "text", (int)ContractCol.number);
-		treeviewContract.AppendColumn("Организация", new Gtk.CellRendererText (), "text", (int)ContractCol.org);
-		treeviewContract.AppendColumn("Арендатор", new Gtk.CellRendererText (), "text", (int)ContractCol.lessee);
-		treeviewContract.AppendColumn("Дата начала", new Gtk.CellRendererText (), RenderContractStartDateColumn);
-		treeviewContract.AppendColumn("Дата окончания", new Gtk.CellRendererText (), RenderContractEndDateColumn);
-		treeviewContract.AppendColumn("Количество мест", new Gtk.CellRendererText (), "text", (int)ContractCol.place_count);
-		treeviewContract.AppendColumn("Места", new Gtk.CellRendererText (), "text", (int)ContractCol.places_names);
+		                                       typeof (Gdk.Pixbuf), //12 - icon
+		                                       typeof (bool) //13 - draft
+		                                       );		
+		treeviewContract.AppendColumn("Статус", new Gtk.CellRendererPixbuf (), GetPixBufCellDataFunction(ContractCol.state_pixbuf));
+		treeviewContract.AppendColumn("Номер", new Gtk.CellRendererText (), GetTextCellDataFunction(ContractCol.number));
+		treeviewContract.AppendColumn ("Организация", new Gtk.CellRendererText (), GetTextCellDataFunction (ContractCol.org));
+		treeviewContract.AppendColumn ("Арендатор", new Gtk.CellRendererText (), GetTextCellDataFunction (ContractCol.lessee));
+		treeviewContract.AppendColumn("Дата начала", new Gtk.CellRendererText (), GetDateCellDataFunction(ContractCol.start_date));
+		treeviewContract.AppendColumn("Дата окончания", new Gtk.CellRendererText (), GetDateCellDataFunction(ContractCol.end_date));
+		treeviewContract.AppendColumn("Количество мест", new Gtk.CellRendererText (), GetTextCellDataFunction(ContractCol.place_count));
+		treeviewContract.AppendColumn("Места", new Gtk.CellRendererText (), GetTextCellDataFunction(ContractCol.places_names));
 
 		Contractfilter = new Gtk.TreeModelFilter (ContractListStore, null);
 		Contractfilter.VisibleFunc = new Gtk.TreeModelFilterVisibleFunc (FilterTreeContract);
@@ -152,7 +156,8 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 				endDate = rdr.GetDateTime ("end_date");
 			}
 			Gdk.Pixbuf stateIcon;
-			if (rdr.GetBoolean ("draft"))
+			bool draft = rdr.GetBoolean ("draft");
+			if (draft)
 				stateIcon = stateDraft;
 			else if (endDate < DateTime.Today)
 				stateIcon = stateArchive;
@@ -171,7 +176,8 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 			                             rdr["lessee"].ToString(),
 			                               rdr.GetDateTime ("start_date"),
 			                               endDate,
-			                               stateIcon
+			                               stateIcon,
+			                               draft
 			                              );
 		}
 		rdr.Close();
@@ -245,21 +251,41 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		return oa.CompareTo(ob);
 	}
 
-
-	private void RenderContractEndDateColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+	private TreeCellDataFunc GetPixBufCellDataFunction(ContractCol column)
 	{
-		DateTime date = (DateTime) model.GetValue (iter, (int)ContractCol.end_date);
-		var active = (bool) model.GetValue (iter, (int)ContractCol.active);
-		var cellRendererText = (cell as Gtk.CellRendererText);
-		cellRendererText.Foreground=date.Subtract(DateTime.Today).Days<=30 && active ? "#ff0000" :"#000000";
-		cellRendererText.Text =  date.ToShortDateString();
+		return delegate(TreeViewColumn tree_column, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
+			Gdk.Pixbuf pixbuf = tree_model.GetValue (iter, (int)column) as Gdk.Pixbuf;
+			cell.CellBackgroundGdk = GetContractRowColor (tree_model, iter);
+			(cell as CellRendererPixbuf).Pixbuf = pixbuf;
+		};
 	}
 
-	private void RenderContractStartDateColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+	private TreeCellDataFunc GetDateCellDataFunction(ContractCol column)
 	{
-		DateTime date = (DateTime) model.GetValue (iter, (int)ContractCol.start_date);
-		(cell as Gtk.CellRendererText).Text = date.ToShortDateString ();
+		return delegate(TreeViewColumn tree_column, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
+			DateTime date = (DateTime)tree_model.GetValue (iter, (int)column);
+			cell.CellBackgroundGdk = GetContractRowColor (tree_model, iter);
+			(cell as Gtk.CellRendererText).Text = date.ToShortDateString ();
+		};
 	}
+
+	private TreeCellDataFunc GetTextCellDataFunction(ContractCol column){		
+		return delegate (TreeViewColumn tree_column, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
+			cell.CellBackgroundGdk = GetContractRowColor (tree_model, iter);
+			(cell as CellRendererText).Text = tree_model.GetValue (iter, (int)column).ToString ();
+		};
+	}
+
+	private Gdk.Color GetContractRowColor(TreeModel model, TreeIter iter)
+	{
+		DateTime endDate = (DateTime) model.GetValue (iter, (int)ContractCol.end_date);
+		var isDraft = (bool)model.GetValue (iter, (int)ContractCol.draft);		 
+		if(isDraft) 
+			return gdkYellow;
+		else
+			return endDate.Subtract (DateTime.Today).Days <= 30 ? gdkRed : gdkWhite;
+	}
+		
 
 	protected void OnComboContractOrgChanged (object sender, EventArgs e)
 	{
