@@ -145,14 +145,15 @@ namespace LeaseAgreement
 					node.Attributes ["office:string-value"].Value = field.value != DBNull.Value ? ((DateTime)field.value).ToLongDateString () : "";
 					//node.Attributes ["office:date-value"].Value = field.value != DBNull.Value ? XmlConvert.ToString ((DateTime)field.value, XmlDateTimeSerializationMode.Unspecified) : "";
 				else if (field.Type == PatternFieldType.FCurrency) {
-					if (fieldName.Replace (field.Name, "") == ".Число") {
+					decimal value = field.value != DBNull.Value ? (decimal)field.value : Decimal.Zero;
+					if (fieldName.Replace (field.Name, "") == ".Число") {						
 						((XmlElement)node).SetAttribute ("value-type", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "currency");
-						((XmlElement)node).SetAttribute ("value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", XmlConvert.ToString ((decimal)field.value));
+						((XmlElement)node).SetAttribute ("value", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", XmlConvert.ToString (value));
 						string curr = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
 						((XmlElement)node).SetAttribute ("currency", "urn:oasis:names:tc:opendocument:xmlns:office:1.0", curr);
 					}
-					if (fieldName.Replace (field.Name, "") == ".Пропись") {
-						string val = RusCurrency.Str ((int)(decimal)field.value, true, "рубль", "рубля", "рублей", "", "", "");
+					if (fieldName.Replace (field.Name, "") == ".Пропись") {						
+						string val = RusCurrency.Str ((int)value, true, "рубль", "рубля", "рублей", "", "", "");
 						node.Attributes ["office:string-value"].Value = val;
 					}
 				} else
