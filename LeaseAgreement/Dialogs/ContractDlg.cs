@@ -929,14 +929,15 @@ namespace LeaseAgreement
 						file = ms.ToArray ();
 					}
 				}
-
-				TreeIter iter;
-				if (ListStoreWorks.SearchListStore (DocPatterns, name, (int)DocPatternCol.name, out iter)) {
-					DocPatterns.SetValue (iter, (int)DocPatternCol.size, file.Length);
-					DocPatterns.SetValue (iter, (int)DocPatternCol.file, file);
-					DocPatterns.SetValue (iter, (int)DocPatternCol.fileChanged, true);
-					DocPatterns.SetValue (iter, (int)DocPatternCol.isDocPattern, true);
-				}
+				Gtk.Application.Invoke((sender,args)=>{
+					TreeIter iter;
+					if (ListStoreWorks.SearchListStore (DocPatterns, name, (int)DocPatternCol.name, out iter)) {
+						DocPatterns.SetValue (iter, (int)DocPatternCol.size, file.Length);
+						DocPatterns.SetValue (iter, (int)DocPatternCol.file, file);
+						DocPatterns.SetValue (iter, (int)DocPatternCol.fileChanged, true);
+						DocPatterns.SetValue (iter, (int)DocPatternCol.isDocPattern, true);
+					}
+				});
 			} catch (Exception ex) {
 				logger.Warn (ex, "Ошибка при чтении файла!");
 			}
