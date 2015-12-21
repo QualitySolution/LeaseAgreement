@@ -280,10 +280,12 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 	{
 		DateTime endDate = (DateTime) model.GetValue (iter, (int)ContractCol.end_date);
 		var isDraft = (bool)model.GetValue (iter, (int)ContractCol.draft);		 
-		if(isDraft) 
+		if (isDraft)
 			return gdkYellow;
-		else
-			return endDate.Subtract (DateTime.Today).Days <= 30 ? gdkRed : gdkWhite;
+		else {
+			int daysUntilEnd = endDate.Subtract (DateTime.Today).Days;
+			return daysUntilEnd >= 0 && daysUntilEnd <= 30  ? gdkRed : gdkWhite;
+		}
 	}
 		
 
