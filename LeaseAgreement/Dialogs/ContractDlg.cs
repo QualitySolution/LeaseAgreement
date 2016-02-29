@@ -477,7 +477,22 @@ namespace LeaseAgreement
 					trans.Rollback ();
 					return false;
 				}					
-
+				if(!Subject.Draft){
+					var overbookedPlaces = GetOverbookedPlaces();
+					if(overbookedPlaces.Count>0)
+					{
+						string reasonMessage;
+						var commaSeparatedPlaceNames = String.Join(",",overbookedPlaces.Select(place=>place.Title));
+						if(overbookedPlaces.Count>1){
+							reasonMessage = String.Format("места {0} уже сдаются в указанный период",commaSeparatedPlaceNames);
+						}
+						else
+							reasonMessage = String.Format("место {0} уже сдается в указанный период",commaSeparatedPlaceNames);
+						MessageDialogWorks.RunErrorDialog(String.Format("Невозможно сохранить договор т.к. {0}",reasonMessage));
+						trans.Rollback();
+						return false;
+					}
+				}
 				UoW.Save ();
 
 				if (contractWasNew) {
@@ -678,6 +693,24 @@ namespace LeaseAgreement
 					changes.Add(new DateChange(cp,changeStart,changeEnd));
 			}
 			return changes;					    
+		}
+
+		protected List<Place> GetOverbookedPlaces(){
+			var overbookedPlaces = new List<Place> ();
+			ContractPlace contractPlaceAlias = null;
+			foreach (var contractPlace in Subject.LeasedPlaces) {
+				var isOverbooked = UoW.Session.QueryOver<Contract> ()
+					.Where (contract => !contract.Draft)
+					.Where (contract => contract.Id != Subject.Id)
+					.JoinAlias (contract => contract.LeasedPlaces, () => contractPlaceAlias)
+					.Where (() => contractPlaceAlias.Place.Id == contractPlace.Place.Id)
+					.Where (() => (contractPlaceAlias.EndDate > contractPlace.StartDate && contractPlaceAlias.StartDate < contractPlace.EndDate)
+					        || (contractPlaceAlias.StartDate < contractPlace.EndDate && contractPlaceAlias.EndDate > contractPlace.StartDate))
+					.RowCount () > 0;
+				if (isOverbooked)
+					overbookedPlaces.Add (contractPlace.Place);
+			}
+			return overbookedPlaces;
 		}
 
 		protected void OnDatepickerCancelDateChanged (object sender, EventArgs e)
