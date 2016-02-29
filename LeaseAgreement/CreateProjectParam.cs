@@ -56,7 +56,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(Place),
 				TableName = "places",
 				ObjectsName = "Места",
-				ObjectName = "место",
 				SqlSelect = "SELECT place_types.name as type, place_no, area, type_id, places.id as id FROM places " +
 					"LEFT JOIN place_types ON places.type_id = place_types.id ",
 				DisplayString = "Место {0}-{1} с площадью {2} кв.м.",
@@ -70,7 +69,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(Contract),
 				TableName = "contracts",
 				ObjectsName = "Договора",
-				ObjectName = "договор",
 				SqlSelect = "SELECT number, sign_date, lessees.name as lessee, contracts.id as id FROM contracts " +
 					"LEFT JOIN lessees ON lessees.id = lessee_id ",
 				DisplayString = "Договор №{0} от {1:d} с арендатором {2}",
@@ -95,7 +93,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(Lessee),
 				TableName = "lessees",
 				ObjectsName = "Арендаторы",
-				ObjectName = "арендатора",
 				SqlSelect = "SELECT name, id FROM lessees ",
 				DisplayString = "Арендатор {0}",
 				DeleteItems = new List<DeleteDependenceInfo> {
@@ -107,7 +104,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(DocPattern),
 				TableName = "doc_patterns",
 				ObjectsName = "Шаблоны документов",
-				ObjectName = "шаблон",
 				SqlSelect = "SELECT name, id FROM doc_patterns ",
 				DisplayString = "Шаблон <{0}>",
 				ClearItems = new List<ClearDependenceInfo> {
@@ -118,7 +114,6 @@ namespace LeaseAgreement
 			DeleteConfig.AddDeleteInfo (new DeleteInfo {
 				TableName = "files",
 				ObjectsName = "Файлы",
-				ObjectName = "файл",
 				SqlSelect = "SELECT name, id FROM files ",
 				DisplayString = "Фаил <{0}>",
 			});
@@ -127,7 +122,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(ContractType),
 				TableName = "contract_types",
 				ObjectsName = "Типы договоров",
-				ObjectName = "тип договора",
 				SqlSelect = "SELECT name, id FROM contract_types ",
 				DisplayString = "{0}",
 				DeleteItems = new List<DeleteDependenceInfo> {
@@ -142,7 +136,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(Stead),
 				TableName = "stead",
 				ObjectsName = "Земельные участки",
-				ObjectName = "земельный участок",
 				SqlSelect = "SELECT name, id, address FROM stead ",
 				DisplayString = "{0} {2}",
 				ClearItems = new List<ClearDependenceInfo> {
@@ -150,10 +143,9 @@ namespace LeaseAgreement
 				}
 			});
 
-			DeleteConfig.AddDeleteInfo (new DeleteInfo {
+			DeleteConfig.AddDeleteInfo (new DeleteInfo {				
 				TableName = "contract_docs",
 				ObjectsName = "Документы",
-				ObjectName = "измененый документа",
 				SqlSelect = "SELECT name, id FROM contract_docs ",
 				DisplayString = "Документ <{0}>"
 			});
@@ -162,7 +154,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(ContractCategory),
 				TableName = "contract_category",
 				ObjectsName = "Категории договоров",
-				ObjectName = "категория",
 				SqlSelect = "SELECT name, id FROM contract_category ",
 				DisplayString = "{0}",
 				ClearItems = new List<ClearDependenceInfo> {
@@ -174,7 +165,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(Organization),
 				TableName = "organizations",
 				ObjectsName = "Организации",
-				ObjectName = "организацию",
 				SqlSelect = "SELECT name, id FROM organizations ",
 				DisplayString = "{0}",
 				DeleteItems = new List<DeleteDependenceInfo> {
@@ -189,7 +179,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(PlaceType),
 				TableName = "place_types",
 				ObjectsName = "Типы мест",
-				ObjectName = "тип места",
 				SqlSelect = "SELECT name, description, id FROM place_types ",
 				DisplayString = "{0} - {1}",
 				DeleteItems = new List<DeleteDependenceInfo> {
@@ -201,7 +190,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(User),
 				TableName = "users",
 				ObjectsName = "Пользователи",
-				ObjectName = "пользователя",
 				SqlSelect = "SELECT name, id FROM users ",
 				DisplayString = "{0}",
 				ClearItems = new List<ClearDependenceInfo> {
@@ -214,7 +202,6 @@ namespace LeaseAgreement
 				ObjectClass = typeof(QSHistoryLog.HistoryChangeSet),
 				TableName = "history_changeset",
 				ObjectsName = "Журнал действий",
-				ObjectName = "действие пользователя",
 				SqlSelect = "SELECT datetime, object_title, id FROM history_changeset ",
 				DisplayString = "Изменено {1} в {0}"
 			});
@@ -264,8 +251,8 @@ namespace LeaseAgreement
 			});
 
 			OrmMain.ClassMappingList = new List<IOrmObjectMapping> {
-				new OrmObjectMapping<Lessee> (typeof(LesseeDlg), "{LeaseAgreement.Domain.Lessee} Name[Название];"),
-				OrmObjectMapping<Plan>.Create().Dialog<PlanDialog>().DefaultTableView().Column("Название", p=>p.Name).End()
+				OrmObjectMapping<Lessee>.Create().Dialog<LesseeDlg>().DefaultTableView().SearchColumn("Название", p=>p.Name).End(),
+				OrmObjectMapping<Plan>.Create().Dialog<PlanDialog>().DefaultTableView().SearchColumn("Название", p=>p.Name).End()
 			};
 		}
 	}
