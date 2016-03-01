@@ -806,7 +806,8 @@ namespace LeaseAgreement
 
 			logger.Info ("Сохраняем временный файл...");
 			string TempFilePath = System.IO.Path.Combine (System.IO.Path.GetTempPath (), (string)DocPatterns.GetValue (iter, (int)DocPatternCol.name) + ".odt");
-			System.IO.File.SetAttributes (TempFilePath, FileAttributes.Normal);
+			if(System.IO.File.Exists(TempFilePath))
+				System.IO.File.SetAttributes (TempFilePath, FileAttributes.Normal);
 			System.IO.File.WriteAllBytes (TempFilePath, file);
 			System.IO.File.SetAttributes (TempFilePath, FileAttributes.ReadOnly);
 			logger.Info ("Открываем файл во внешнем приложении...");
