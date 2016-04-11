@@ -10,7 +10,6 @@ using NLog;
 using QSProjectsLib;
 using QSOrmProject;
 using NHibernate.Criterion;
-using System.Collections;
 using System.Globalization;
 
 namespace LeaseAgreement
@@ -27,6 +26,7 @@ namespace LeaseAgreement
 		private ListStore DocPatterns;
 		private List<int> deletedDocItems;
 		private List<FileSystemWatcher> watchers;
+		private List<string> tempfiles = new List<string> ();
 
 		private IList<User> userList;
 
@@ -810,6 +810,10 @@ namespace LeaseAgreement
 				System.IO.File.SetAttributes (TempFilePath, FileAttributes.Normal);
 			System.IO.File.WriteAllBytes (TempFilePath, file);
 			System.IO.File.SetAttributes (TempFilePath, FileAttributes.ReadOnly);
+
+			if(!tempfiles.Contains (TempFilePath)) //Сохраняем список созданных файлов, чтобы удалить при закрытии диалога.
+				tempfiles.Add (TempFilePath);
+
 			logger.Info ("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start (TempFilePath);
 		}
@@ -934,6 +938,10 @@ namespace LeaseAgreement
 			}
 			System.IO.File.SetAttributes (tempFilePath, FileAttributes.Normal);
 			System.IO.File.WriteAllBytes (tempFilePath, file);
+
+			if(!tempfiles.Contains (tempFilePath)) //Сохраняем список созданных файлов, чтобы удалить при закрытии диалога.
+				tempfiles.Add (tempFilePath);
+
 			logger.Info ("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start (tempFilePath);
 			MakeWatcher (tempDir, tempFile);
@@ -1005,5 +1013,15 @@ namespace LeaseAgreement
 			}
 		}
 
+		protected override void OnDestroyed ()
+		{
+			foreach(var file in tempfiles)
+			{
+				logger.Info ("Удаляем временный файл {0}", file);
+				File.Delete (file);
+			}
+
+			base.OnDestroyed ();
+		}
 	}
 }

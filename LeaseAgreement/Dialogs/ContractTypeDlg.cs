@@ -15,6 +15,7 @@ namespace LeaseAgreement
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
 		private List<int> deletedItems;
+		private List<string> tempfiles = new List<string> ();
 		private List<FileSystemWatcher> watchers;
 		private bool NewItem = true;
 		private ContractType subject = new ContractType ();
@@ -301,6 +302,10 @@ namespace LeaseAgreement
 			}
 
 			File.WriteAllBytes (tempFilePath, file);
+
+			if(!tempfiles.Contains (tempFilePath)) //Сохраняем список созданных файлов, чтобы удалить при закрытии диалога.
+				tempfiles.Add (tempFilePath);
+			
 			logger.Info ("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start (tempFilePath);
 			MakeWatcher (tempDir, tempFile);
@@ -352,6 +357,17 @@ namespace LeaseAgreement
 			} catch (Exception ex) {
 				logger.Warn (ex, "Ошибка при чтении файла!");
 			}
+		}
+
+		protected override void OnDestroyed ()
+		{
+			foreach(var file in tempfiles)
+			{
+				logger.Info ("Удаляем временный файл {0}", file);
+				File.Delete (file);
+			}
+
+			base.OnDestroyed ();
 		}
 	}
 }
