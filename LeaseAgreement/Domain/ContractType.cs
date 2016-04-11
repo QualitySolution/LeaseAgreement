@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using QSHistoryLog;
 using QSOrmProject;
 using QSProjectsLib;
+using System.Data.Bindings.Collections.Generic;
 
 namespace LeaseAgreement.Domain
 {
@@ -28,6 +29,18 @@ namespace LeaseAgreement.Domain
 		public virtual List<DocTemplate> Templates {
 			get { return templates; }
 			set { SetField (ref templates, value, () => Templates); }
+		}
+
+		[IgnoreHistoryClone]
+		GenericObservableList<DocTemplate> observableTemplates;
+		//FIXME Кослыль пока не разберемся как научить hibernate работать с обновляемыми списками.
+		[IgnoreHistoryTrace]
+		public GenericObservableList<DocTemplate> ObservableTemplates {
+			get {
+				if (observableTemplates == null)
+					observableTemplates = new GenericObservableList<DocTemplate> (Templates);
+				return observableTemplates;
+			}
 		}
 
 		public ContractType ()

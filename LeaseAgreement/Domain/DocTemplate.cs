@@ -2,6 +2,7 @@
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using QSHistoryLog;
+using QSProjectsLib;
 
 namespace LeaseAgreement.Domain
 {
@@ -21,23 +22,35 @@ namespace LeaseAgreement.Domain
 		uint size = 0;
 
 		[Display (Name = "Размер")]
+		[PropertyChangedAlso("SizeText")]
 		public virtual uint Size {
 			get { return size; }
 			set { SetField (ref size, value, () => Size); }
 		}
 
+		[IgnoreHistoryClone]
+		byte[] file;
 
+		[Display (Name = "Файл")]
+		[IgnoreHistoryTrace]
+		public virtual byte[] File {
+			get { return file; }
+			set { SetField (ref file, value, () => File); }
+		}
+			
 		public bool IsChanged { get; set; }
 
-		public DocTemplate (int id, string name, uint size)
-		{
-			Id = id;
-			Name = name;
-			Size = size;
-			IsChanged = false;
+		[IgnoreHistoryTrace]
+		public string SizeText{
+			get{
+				return Size > 0 ? StringWorks.BytesToIECUnitsString ((uint)Size) : String.Empty;
+			}
 		}
 
-		public DocTemplate() {}
+		public DocTemplate ()
+		{
+			IsChanged = false;
+		}
 	}
 }
 

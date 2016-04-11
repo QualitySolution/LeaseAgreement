@@ -6164,28 +6164,18 @@
         <property name="MemberName" />
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.DataBindings.DataTable" id="table1">
+          <widget class="Gtk.Table" id="table1">
             <property name="MemberName" />
             <property name="NRows">2</property>
             <property name="NColumns">2</property>
             <property name="RowSpacing">6</property>
             <property name="ColumnSpacing">6</property>
-            <property name="InheritedDataSource">False</property>
-            <property name="InheritedBoundaryDataSource">False</property>
-            <property name="InheritedDataSource">False</property>
-            <property name="InheritedBoundaryDataSource">False</property>
             <child>
-              <widget class="Gtk.DataBindings.DataEntry" id="entryName">
+              <widget class="Gamma.GtkWidgets.yEntry" id="entryName">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Name</property>
-                <property name="InheritedBoundaryDataSource">False</property>
-                <property name="InheritedDataSource">True</property>
-                <property name="Mappings">Name</property>
-                <property name="InheritedBoundaryDataSource">False</property>
                 <signal name="Changed" handler="OnEntryNameChanged" />
               </widget>
               <packing>
@@ -6288,11 +6278,10 @@
             <property name="MemberName" />
             <property name="ShadowType">In</property>
             <child>
-              <widget class="Gtk.TreeView" id="treeviewPatterns">
+              <widget class="Gamma.GtkWidgets.yTreeView" id="treeviewPatterns">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>
-                <signal name="CursorChanged" handler="OnTreeviewPatternsCursorChanged" />
                 <signal name="RowActivated" handler="OnTreeviewPatternsRowActivated" />
               </widget>
             </child>

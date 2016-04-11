@@ -4,9 +4,9 @@ namespace LeaseAgreement
 {
 	public partial class ContractTypeDlg
 	{
-		private global::Gtk.DataBindings.DataTable table1;
+		private global::Gtk.Table table1;
 		
-		private global::Gtk.DataBindings.DataEntry entryName;
+		private global::Gamma.GtkWidgets.yEntry entryName;
 		
 		private global::Gtk.Label label2;
 		
@@ -18,7 +18,7 @@ namespace LeaseAgreement
 		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		
-		private global::Gtk.TreeView treeviewPatterns;
+		private global::Gamma.GtkWidgets.yTreeView treeviewPatterns;
 		
 		private global::Gtk.HBox hbox1;
 		
@@ -46,26 +46,16 @@ namespace LeaseAgreement
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.table1 = new global::Gtk.DataBindings.DataTable (((uint)(2)), ((uint)(2)), false);
+			this.table1 = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
 			this.table1.Name = "table1";
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(6));
-			this.table1.InheritedDataSource = false;
-			this.table1.InheritedBoundaryDataSource = false;
-			this.table1.InheritedDataSource = false;
-			this.table1.InheritedBoundaryDataSource = false;
 			// Container child table1.Gtk.Table+TableChild
-			this.entryName = new global::Gtk.DataBindings.DataEntry ();
+			this.entryName = new global::Gamma.GtkWidgets.yEntry ();
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;
 			this.entryName.InvisibleChar = '●';
-			this.entryName.InheritedDataSource = true;
-			this.entryName.Mappings = "Name";
-			this.entryName.InheritedBoundaryDataSource = false;
-			this.entryName.InheritedDataSource = true;
-			this.entryName.Mappings = "Name";
-			this.entryName.InheritedBoundaryDataSource = false;
 			this.table1.Add (this.entryName);
 			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table1 [this.entryName]));
 			w2.TopAttach = ((uint)(1));
@@ -125,7 +115,7 @@ namespace LeaseAgreement
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.treeviewPatterns = new global::Gtk.TreeView ();
+			this.treeviewPatterns = new global::Gamma.GtkWidgets.yTreeView ();
 			this.treeviewPatterns.CanFocus = true;
 			this.treeviewPatterns.Name = "treeviewPatterns";
 			this.GtkScrolledWindow.Add (this.treeviewPatterns);
@@ -241,7 +231,6 @@ namespace LeaseAgreement
 			this.DefaultHeight = 300;
 			this.Show ();
 			this.entryName.Changed += new global::System.EventHandler (this.OnEntryNameChanged);
-			this.treeviewPatterns.CursorChanged += new global::System.EventHandler (this.OnTreeviewPatternsCursorChanged);
 			this.treeviewPatterns.RowActivated += new global::Gtk.RowActivatedHandler (this.OnTreeviewPatternsRowActivated);
 			this.buttonNew.Clicked += new global::System.EventHandler (this.OnButtonNewClicked);
 			this.buttonFromDoc.Clicked += new global::System.EventHandler (this.OnButtonFromDocClicked);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Bindings;
 using System.IO;
 using Gtk;
 using LeaseAgreement.Domain;
@@ -8,6 +7,7 @@ using MySql.Data.MySqlClient;
 using NLog;
 using QSOrmProject;
 using QSProjectsLib;
+using Gamma.GtkWidgets;
 
 namespace LeaseAgreement
 {
@@ -17,60 +17,42 @@ namespace LeaseAgreement
 		private List<int> deletedItems;
 		private List<FileSystemWatcher> watchers;
 		private bool NewItem = true;
-		int ItemId;
-		private ListStore PatternsStore;
 		private ContractType subject = new ContractType ();
-		private Adaptor adaptor = new Adaptor ();
 		private QSHistoryLog.ObjectTracker<ContractType> tracker;
-
-		enum PatternsCol
-		{
-			id,
-			name,
-			size,
-			file,
-			fileChanged
-		}
 
 		public ContractTypeDlg ()
 		{
 			this.Build ();
 
-			adaptor.Target = subject;
-			table1.DataSource = adaptor;
 			subject.Templates = new List<DocTemplate> ();
 			tracker = new QSHistoryLog.ObjectTracker<ContractType> (subject);
 
 			labelId.Binding.AddBinding (subject, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
+			entryName.Binding.AddBinding (subject, e => e.Name, w => w.Text).InitializeFromSource ();
 
 			deletedItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
-			PatternsStore = new ListStore (typeof(int), typeof(string), typeof(uint), typeof(byte[]), typeof(bool));
 
-			Gtk.TreeViewColumn ColumnName = new Gtk.TreeViewColumn ();
-			ColumnName.Title = "Название документа";
-			Gtk.CellRendererText CellName = new Gtk.CellRendererText ();
-			//CellName.WrapMode = Pango.WrapMode.WordChar;
-			//CellName.WrapWidth = 500;
-			CellName.Editable = true;
-			CellName.Edited += OnNameColumnEdited;
-			ColumnName.MaxWidth = 500;
-			ColumnName.PackStart (CellName, true);
-			ColumnName.AddAttribute (CellName, "text", (int)PatternsCol.name);
+			treeviewPatterns.ColumnsConfig = ColumnsConfigFactory.Create<DocTemplate> ()
+				.AddColumn ("Название документа").AddTextRenderer (x => x.Name).Editable ()
+				.AddColumn ("Размер шаблона").AddTextRenderer (x => x.SizeText)
+				.AddColumn ("Статус").AddTextRenderer (x => x.IsChanged ? "изменен" : String.Empty)
+				.Finish ();
 
-			treeviewPatterns.AppendColumn (ColumnName);
-			treeviewPatterns.AppendColumn ("Размер шаблона", new Gtk.CellRendererText (), RenderSizeColumn);
-			treeviewPatterns.AppendColumn ("", new Gtk.CellRendererText (), RenderFileChangedColumn);
-
-			treeviewPatterns.Model = PatternsStore;
+			treeviewPatterns.ItemsDataSource = subject.ObservableTemplates;
+			treeviewPatterns.Selection.Changed += TreeviewPatterns_Selection_Changed;
 			treeviewPatterns.ShowAll ();
 
 			TestCanSave ();
 		}
 
+		void TreeviewPatterns_Selection_Changed (object sender, EventArgs e)
+		{
+			buttonOpen.Sensitive = buttonDel.Sensitive = treeviewPatterns.Selection.CountSelectedRows () == 1;
+		}
+
 		public void Fill (int id)
 		{
-			ItemId = id;
 			NewItem = false;
 
 			logger.Info ("Запрос типа договора №{0}...", id);
@@ -89,22 +71,18 @@ namespace LeaseAgreement
 				logger.Info ("Загружаем список шаблонов {0}", entryName.Text);
 				sql = "SELECT id, name, size, pattern FROM doc_patterns WHERE contract_type_id = @contract_type_id ";
 				cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB);
-				cmd.Parameters.AddWithValue ("@contract_type_id", ItemId);
+				cmd.Parameters.AddWithValue ("@contract_type_id", subject.Id);
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 					while (rdr.Read ()) {
 						byte[] file = new byte[rdr.GetInt32 ("size")];
 						rdr.GetBytes (rdr.GetOrdinal ("pattern"), 0, file, 0, rdr.GetInt32 ("size"));
 
-						PatternsStore.AppendValues (rdr.GetInt32 ("id"),
-						                            rdr.GetString ("name"),
-						                            rdr.GetUInt32 ("size"),
-						                            file,
-						                            false
-						);
-						//В случае если произойдет чудо - раскомментировать.
-						subject.Templates.Add (new DocTemplate (rdr.GetInt32 ("id"),
-						                                        rdr.GetString ("name"),
-						                                        rdr.GetUInt32 ("size")));
+						subject.ObservableTemplates.Add (new DocTemplate {
+							Id = rdr.GetInt32 ("id"),
+							Name = rdr.GetString ("name"),
+							Size = rdr.GetUInt32 ("size"),
+							File = file
+						});
 					}
 				}
 				tracker.TakeFirst (subject);
@@ -119,7 +97,7 @@ namespace LeaseAgreement
 
 		protected	void TestCanSave ()
 		{
-			bool Nameok = subject.Name != "";
+			bool Nameok = !String.IsNullOrWhiteSpace (subject.Name);
 			buttonOk.Sensitive = Nameok;
 		}
 
@@ -150,24 +128,24 @@ namespace LeaseAgreement
 
 				cmd.ExecuteNonQuery ();
 				if (NewItem)
-					ItemId = (int)cmd.LastInsertedId;
+					subject.Id = (int)cmd.LastInsertedId;
 
 				logger.Info ("Записывем изменения списке шаблонов...");
-				foreach (object[] row in PatternsStore) {
-					if ((int)row [(int)PatternsCol.id] > 0)
+				foreach (var template in subject.Templates) 
+				{
+					if (template.Id > 0)
 						sql = String.Format ("UPDATE doc_patterns SET name = @name {0} WHERE id = @id", 
-						                     (bool)row [(int)PatternsCol.fileChanged] ? ", size = @size, pattern = @pattern" : "");
+						                     template.IsChanged ? ", size = @size, pattern = @pattern" : "");
 					else
 						sql = "INSERT INTO doc_patterns (name, contract_type_id, size, pattern) " +
 						"VALUES (@name, @contract_type_id, @size, @pattern)";
 					cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB, trans);
-					cmd.Parameters.AddWithValue ("@name", row [(int)PatternsCol.name]);
-					cmd.Parameters.AddWithValue ("@contract_type_id", ItemId);
-					cmd.Parameters.AddWithValue ("@id", row [(int)PatternsCol.id]);
-					if ((bool)row [(int)PatternsCol.fileChanged]) {
-						byte[] file = (byte[])row [(int)PatternsCol.file];
-						cmd.Parameters.AddWithValue ("@size", (uint)file.LongLength);
-						cmd.Parameters.AddWithValue ("@pattern", file);
+					cmd.Parameters.AddWithValue ("@name", template.Name);
+					cmd.Parameters.AddWithValue ("@contract_type_id", subject.Id);
+					cmd.Parameters.AddWithValue ("@id", template.Id);
+					if (template.IsChanged) {
+						cmd.Parameters.AddWithValue ("@size", template.File.LongLength);
+						cmd.Parameters.AddWithValue ("@pattern", template.File);
 					}
 					try {
 						cmd.ExecuteNonQuery ();
@@ -220,48 +198,15 @@ namespace LeaseAgreement
 			TestCanSave ();
 		}
 
-		private void RenderSizeColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
-		{
-			uint size = (uint)model.GetValue (iter, (int)PatternsCol.size);
-
-			(cell as CellRendererText).Text = size > 0 ? StringWorks.BytesToIECUnitsString ((uint)size) : "";
-		}
-
-		private void RenderFileChangedColumn (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
-		{
-			bool changed = (bool)model.GetValue (iter, (int)PatternsCol.fileChanged);
-
-			(cell as CellRendererText).Text = changed ? "изменен" : "";
-		}
-
-		void OnNameColumnEdited (object o, EditedArgs args)
-		{
-			TreeIter iter;
-			if (!PatternsStore.GetIterFromString (out iter, args.Path))
-				return;
-			if (args.NewText == null) {
-				logger.Warn ("newtext is empty");
-				return;
-			}
-
-			PatternsStore.SetValue (iter, (int)PatternsCol.name, args.NewText);
-
-			//В случае если произойдет чудо - раскомментировать.
-			subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).Name = args.NewText;
-		}
-
 		protected void OnButtonDelClicked (object sender, EventArgs e)
 		{
-			TreeIter iter;
-			treeviewPatterns.Selection.GetSelected (out iter);
+			var template = treeviewPatterns.GetSelectedObject<DocTemplate> ();
 
-			if ((int)PatternsStore.GetValue (iter, (int)PatternsCol.id) > 0) {
-				deletedItems.Add ((int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
+			if (template.Id > 0) {
+				deletedItems.Add (template.Id);
 			}
-			//В случае если произойдет чудо - раскомментировать.
-			subject.Templates.RemoveAll (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id));
-			PatternsStore.Remove (ref iter);
-			OnTreeviewPatternsCursorChanged (null, EventArgs.Empty);
+
+			subject.ObservableTemplates.Remove (template);
 		}
 
 		protected void OnButtonNewClicked (object sender, EventArgs e)
@@ -275,14 +220,13 @@ namespace LeaseAgreement
 			odt.UpdateFields ();
 			byte[] file = odt.GetArray ();
 
-			PatternsStore.AppendValues (-1,
-			                            "Новый шаблон",
-			                            (uint)file.LongLength,
-			                            file,
-			                            true
-			);
-			//В случае если произойдет чудо - раскомментировать.
-			subject.Templates.Add (new DocTemplate (-1, "Новый шаблон", (uint)file.LongLength));
+			subject.ObservableTemplates.Add (new DocTemplate {
+				Id = -1,
+				Name = "Новый шаблон",
+				Size = (uint)file.LongLength,
+				File = file,
+				IsChanged = true
+			});
 			odt.Close ();
 		}
 
@@ -318,14 +262,14 @@ namespace LeaseAgreement
 				odt.UpdateFields ();
 				byte[] file = odt.GetArray ();
 	
-				PatternsStore.AppendValues (-1,
-				                            System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename),
-				                            (uint)file.LongLength,
-				                            file,
-				                            true
-				);
-				//В случае, если произойдет чудо - раскомментировать
-				subject.Templates.Add (new DocTemplate (-1, System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename), (uint)file.LongLength));
+				subject.ObservableTemplates.Add (new DocTemplate {
+					Id = -1,
+					Name = System.IO.Path.GetFileNameWithoutExtension (Chooser.Filename),
+					Size = (uint)file.LongLength,
+					File = file,
+					IsChanged = true
+				});
+
 				odt.Close ();
 				logger.Info ("Ok");
 			}
@@ -335,21 +279,19 @@ namespace LeaseAgreement
 
 		protected void OnButtonOpenClicked (object sender, EventArgs e)
 		{
-			TreeIter iter;
-			treeviewPatterns.Selection.GetSelected (out iter);
+			var template = treeviewPatterns.GetSelectedObject<DocTemplate> ();
 
 			logger.Info ("Сохраняем временный файл...");
-			byte[] file = (byte[])PatternsStore.GetValue (iter, (int)PatternsCol.file);
 			OdtWorks odt;
-			odt = new OdtWorks (file);
+			odt = new OdtWorks (template.File);
 			odt.DocInfo = DocPattern.Load ("LeaseAgreement.Patterns.Contract.xml");
 			odt.DocInfo.AppedCustomFields (QSCustomFields.CFMain.Tables);
 			odt.UpdateFields ();
-			file = odt.GetArray ();
+			var file = odt.GetArray ();
 			odt.Close ();
 
 			string tempDir = System.IO.Path.GetTempPath ();
-			string tempFile = (string)PatternsStore.GetValue (iter, (int)PatternsCol.name) + ".odt";
+			string tempFile = template.Name + ".odt";
 			string tempFilePath = System.IO.Path.Combine (tempDir, tempFile);
 			//Если уже есть наблюдатель на файл удаляем его.
 			foreach (FileSystemWatcher watcher in watchers.FindAll (w => w.Filter == tempFile)) {
@@ -362,11 +304,6 @@ namespace LeaseAgreement
 			logger.Info ("Открываем файл во внешнем приложении...");
 			System.Diagnostics.Process.Start (tempFilePath);
 			MakeWatcher (tempDir, tempFile);
-		}
-
-		protected void OnTreeviewPatternsCursorChanged (object sender, EventArgs e)
-		{
-			buttonOpen.Sensitive = buttonDel.Sensitive = treeviewPatterns.Selection.CountSelectedRows () == 1;
 		}
 
 		protected void OnTreeviewPatternsRowActivated (object o, RowActivatedArgs args)
@@ -401,16 +338,17 @@ namespace LeaseAgreement
 						file = ms.ToArray ();
 					}
 				}
+					
+				var template = subject.Templates.Find (x => x.Name == name);
 
-				TreeIter iter;
-				if (ListStoreWorks.SearchListStore (PatternsStore, name, (int)PatternsCol.name, out iter)) {
-					PatternsStore.SetValue (iter, (int)PatternsCol.size, (uint)file.LongLength);
-					PatternsStore.SetValue (iter, (int)PatternsCol.file, file);
-					PatternsStore.SetValue (iter, (int)PatternsCol.fileChanged, true);
-					//В случае, если произойдет чудо - раскомментировать
-					subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).IsChanged = true;
-					subject.Templates.Find (m => m.Id == (int)PatternsStore.GetValue (iter, (int)PatternsCol.id)).Size = (uint)file.LongLength;
+				if (template != null) 
+				{
+					template.IsChanged = true;
+					template.Size = (uint)file.LongLength;
+					template.File = file;
 				}
+				else
+					logger.Error ("Файл на котором стоял наблюдатель не найден среди шаблонов.");
 			} catch (Exception ex) {
 				logger.Warn (ex, "Ошибка при чтении файла!");
 			}
