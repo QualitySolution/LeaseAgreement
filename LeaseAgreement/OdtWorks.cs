@@ -253,7 +253,13 @@ namespace LeaseAgreement
 		public void UpdateXmlDocument(XmlDocument document, string path)
 		{
 			using( MemoryStream outContentStream = new MemoryStream ()) {
-				document.Save (outContentStream);
+				XmlWriterSettings xmlSettings = new XmlWriterSettings();
+				xmlSettings.Indent = false;
+				xmlSettings.NewLineChars = String.Empty;
+
+				using (XmlWriter xmlWriter = XmlWriter.Create (outContentStream, xmlSettings))
+					document.Save (xmlWriter);
+
 				odtZip.BeginUpdate ();
 
 				StreamStaticDataSource sds = new StreamStaticDataSource ();
