@@ -301,6 +301,9 @@ namespace LeaseAgreement
 				watchers.Remove (watcher);
 			}
 
+			if (File.Exists (tempFilePath))
+				File.SetAttributes (tempFilePath, FileAttributes.Normal);
+
 			File.WriteAllBytes (tempFilePath, file);
 
 			if(!tempfiles.Contains (tempFilePath)) //Сохраняем список созданных файлов, чтобы удалить при закрытии диалога.

@@ -1017,8 +1017,13 @@ namespace LeaseAgreement
 		{
 			foreach(var file in tempfiles)
 			{
-				logger.Info ("Удаляем временный файл {0}", file);
-				File.Delete (file);
+				if(File.Exists (file))
+				{
+					logger.Info ("Удаляем временный файл {0}", file);
+					//Снимаем установленный атрибут только на чтение если есть.
+					File.SetAttributes (file, FileAttributes.Normal);
+					File.Delete (file);
+				}
 			}
 
 			base.OnDestroyed ();
