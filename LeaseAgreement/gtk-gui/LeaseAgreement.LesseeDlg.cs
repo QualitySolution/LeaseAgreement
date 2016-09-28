@@ -144,6 +144,10 @@ namespace LeaseAgreement
 		
 		private global::Gtk.Label label20;
 		
+		private global::QSAttachment.Attachment attachmentFiles;
+		
+		private global::Gtk.Label label22;
+		
 		private global::Gtk.Button buttonCancel;
 		
 		private global::Gtk.Button buttonOk;
@@ -925,15 +929,28 @@ namespace LeaseAgreement
 			this.label20.LabelProp = global::Mono.Unix.Catalog.GetString ("Договора");
 			this.notebookMain.SetTabLabel (this.vboxContracts, this.label20);
 			this.label20.ShowAll ();
+			// Container child notebookMain.Gtk.Notebook+NotebookChild
+			this.attachmentFiles = new global::QSAttachment.Attachment ();
+			this.attachmentFiles.Events = ((global::Gdk.EventMask)(256));
+			this.attachmentFiles.Name = "attachmentFiles";
+			this.notebookMain.Add (this.attachmentFiles);
+			global::Gtk.Notebook.NotebookChild w63 = ((global::Gtk.Notebook.NotebookChild)(this.notebookMain [this.attachmentFiles]));
+			w63.Position = 3;
+			// Notebook tab
+			this.label22 = new global::Gtk.Label ();
+			this.label22.Name = "label22";
+			this.label22.LabelProp = global::Mono.Unix.Catalog.GetString ("Файлы");
+			this.notebookMain.SetTabLabel (this.attachmentFiles, this.label22);
+			this.label22.ShowAll ();
 			w1.Add (this.notebookMain);
-			global::Gtk.Box.BoxChild w63 = ((global::Gtk.Box.BoxChild)(w1 [this.notebookMain]));
-			w63.Position = 0;
+			global::Gtk.Box.BoxChild w64 = ((global::Gtk.Box.BoxChild)(w1 [this.notebookMain]));
+			w64.Position = 0;
 			// Internal child LeaseAgreement.LesseeDlg.ActionArea
-			global::Gtk.HButtonBox w64 = this.ActionArea;
-			w64.Name = "dialog1_ActionArea";
-			w64.Spacing = 10;
-			w64.BorderWidth = ((uint)(5));
-			w64.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w65 = this.ActionArea;
+			w65.Name = "dialog1_ActionArea";
+			w65.Spacing = 10;
+			w65.BorderWidth = ((uint)(5));
+			w65.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
@@ -943,9 +960,9 @@ namespace LeaseAgreement
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = "gtk-cancel";
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w65 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w64 [this.buttonCancel]));
-			w65.Expand = false;
-			w65.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w66 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w65 [this.buttonCancel]));
+			w66.Expand = false;
+			w66.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.CanDefault = true;
@@ -954,16 +971,16 @@ namespace LeaseAgreement
 			this.buttonOk.UseStock = true;
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = "gtk-ok";
-			w64.Add (this.buttonOk);
-			global::Gtk.ButtonBox.ButtonBoxChild w66 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w64 [this.buttonOk]));
-			w66.Position = 1;
-			w66.Expand = false;
-			w66.Fill = false;
+			w65.Add (this.buttonOk);
+			global::Gtk.ButtonBox.ButtonBoxChild w67 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w65 [this.buttonOk]));
+			w67.Position = 1;
+			w67.Expand = false;
+			w67.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 798;
-			this.DefaultHeight = 535;
+			this.DefaultWidth = 864;
+			this.DefaultHeight = 488;
 			this.Show ();
 			this.entryName.Changed += new global::System.EventHandler (this.OnEntryNameChanged);
 			this.checkActiveContracts.Toggled += new global::System.EventHandler (this.OnCheckActiveContractsToggled);

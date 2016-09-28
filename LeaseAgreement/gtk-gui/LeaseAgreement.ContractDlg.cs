@@ -125,7 +125,7 @@ namespace LeaseAgreement
 			this.notebookMain = new global::Gtk.Notebook ();
 			this.notebookMain.CanFocus = true;
 			this.notebookMain.Name = "notebookMain";
-			this.notebookMain.CurrentPage = 0;
+			this.notebookMain.CurrentPage = 4;
 			this.notebookMain.TabPos = ((global::Gtk.PositionType)(0));
 			// Container child notebookMain.Gtk.Notebook+NotebookChild
 			this.hboxInfo = new global::Gtk.HBox ();
@@ -167,6 +167,7 @@ namespace LeaseAgreement
 			this.comboCategory = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboCategory.Name = "comboCategory";
 			this.comboCategory.AddIfNotExist = false;
+			this.comboCategory.DefaultFirst = false;
 			this.comboCategory.ShowSpecialStateAll = false;
 			this.comboCategory.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboCategory);
@@ -181,6 +182,7 @@ namespace LeaseAgreement
 			this.comboContractType = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboContractType.Name = "comboContractType";
 			this.comboContractType.AddIfNotExist = false;
+			this.comboContractType.DefaultFirst = false;
 			this.comboContractType.ShowSpecialStateAll = false;
 			this.comboContractType.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboContractType);
@@ -195,6 +197,7 @@ namespace LeaseAgreement
 			this.comboOrg = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboOrg.Name = "comboOrg";
 			this.comboOrg.AddIfNotExist = false;
+			this.comboOrg.DefaultFirst = false;
 			this.comboOrg.ShowSpecialStateAll = false;
 			this.comboOrg.ShowSpecialStateNot = true;
 			this.table2.Add (this.comboOrg);
@@ -209,6 +212,7 @@ namespace LeaseAgreement
 			this.datepickerSign = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerSign.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerSign.Name = "datepickerSign";
+			this.datepickerSign.WithTime = false;
 			this.datepickerSign.Date = new global::System.DateTime (0);
 			this.datepickerSign.IsEditable = true;
 			this.datepickerSign.AutoSeparation = true;
@@ -351,6 +355,7 @@ namespace LeaseAgreement
 			this.comboResponsible = new global::Gamma.Widgets.ySpecComboBox ();
 			this.comboResponsible.Name = "comboResponsible";
 			this.comboResponsible.AddIfNotExist = true;
+			this.comboResponsible.DefaultFirst = false;
 			this.comboResponsible.ShowSpecialStateAll = false;
 			this.comboResponsible.ShowSpecialStateNot = false;
 			this.table3.Add (this.comboResponsible);
@@ -362,6 +367,7 @@ namespace LeaseAgreement
 			this.datepickerCancel = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerCancel.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerCancel.Name = "datepickerCancel";
+			this.datepickerCancel.WithTime = false;
 			this.datepickerCancel.Date = new global::System.DateTime (0);
 			this.datepickerCancel.IsEditable = true;
 			this.datepickerCancel.AutoSeparation = true;
@@ -377,6 +383,7 @@ namespace LeaseAgreement
 			this.datepickerEnd = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerEnd.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerEnd.Name = "datepickerEnd";
+			this.datepickerEnd.WithTime = false;
 			this.datepickerEnd.Date = new global::System.DateTime (0);
 			this.datepickerEnd.IsEditable = true;
 			this.datepickerEnd.AutoSeparation = true;
@@ -392,6 +399,7 @@ namespace LeaseAgreement
 			this.datepickerStart = new global::Gamma.Widgets.yDatePicker ();
 			this.datepickerStart.Events = ((global::Gdk.EventMask)(256));
 			this.datepickerStart.Name = "datepickerStart";
+			this.datepickerStart.WithTime = false;
 			this.datepickerStart.Date = new global::System.DateTime (0);
 			this.datepickerStart.IsEditable = true;
 			this.datepickerStart.AutoSeparation = true;

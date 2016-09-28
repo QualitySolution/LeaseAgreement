@@ -1,10 +1,10 @@
 ﻿using System;
-using QSOrmProject;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using QSAttachment;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Bindings.Collections.Generic;
+using QSAttachment;
 using QSHistoryLog;
+using QSOrmProject;
 
 namespace LeaseAgreement.Domain
 {

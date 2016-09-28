@@ -1,5 +1,6 @@
 using System;
 using System.Data.Bindings;
+using System.Linq;
 using Gtk;
 using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
@@ -20,6 +21,15 @@ namespace LeaseAgreement
 		Gtk.ListStore ContractsListStore;
 				
 		AccelGroup grup;
+
+		protected Lessee Subject {
+			get {
+				return subject;
+			}
+			set {
+				subject = value;
+			}
+		}
 
 		public LesseeDlg (Lessee entity) : this()
 		{
@@ -76,8 +86,18 @@ namespace LeaseAgreement
 			box.ShowAll ();
 			notebookMain.SetTabLabel (vboxContracts, box);
 
+			img = new Image (System.Reflection.Assembly.GetExecutingAssembly (), "LeaseAgreement.icons.mail-attachment.png");
+			textLable = new Label ("Файлы");
+			box = new VBox ();
+			box.Add (img);
+			box.Add (textLable);
+			box.ShowAll ();
+			notebookMain.SetTabLabel (attachmentFiles, box);
+
 			grup = new AccelGroup ();
 			this.AddAccelGroup (grup);
+
+			attachmentFiles.AttachToTable = "lessees";
 									
 			//Создаем таблицу "Договора"
 			ContractsListStore = new Gtk.ListStore (typeof(int), typeof(bool), typeof(string), typeof(string), typeof(string),
@@ -95,7 +115,7 @@ namespace LeaseAgreement
 			treeviewContracts.ShowAll ();
 
 			customLessee.UsedTable = QSCustomFields.CFMain.GetTableByName ("lessees");
-			subject.Customs = customLessee.FieldsValues;
+			ConfigureDlg ();
 			tracker = new QSHistoryLog.ObjectTracker<Lessee> (subject);
 		}
 
@@ -134,7 +154,10 @@ namespace LeaseAgreement
 					subject.Comments = rdr ["comments"].ToString ();
 				}
 				customLessee.LoadDataFromDB (id);
-				subject.Customs = customLessee.FieldsValues;
+				attachmentFiles.ItemId = Subject.Id;
+				attachmentFiles.UpdateFileList (false);
+
+				ConfigureDlg ();
 				tracker.TakeFirst (subject);
 
 				logger.Info ("Ok");
@@ -147,7 +170,13 @@ namespace LeaseAgreement
 			UpdateContracts ();
 		}
 
-		protected	void TestCanSave ()
+		private void ConfigureDlg()
+		{
+			Subject.Customs = customLessee.FieldsValues;
+			Subject.Files = attachmentFiles.AttachedFiles.ToList ();
+		}
+
+		protected void TestCanSave ()
 		{
 			bool Nameok = !String.IsNullOrEmpty (subject.Name);
 			buttonOk.Sensitive = Nameok;
@@ -156,6 +185,7 @@ namespace LeaseAgreement
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
 			subject.Customs = customLessee.FieldsValues;
+			Subject.Files = attachmentFiles.AttachedFiles.ToList ();
 			tracker.TakeLast (subject);
 			if (!tracker.Compare ()) {
 				logger.Info ("Нет изменений.");
@@ -202,8 +232,10 @@ namespace LeaseAgreement
 				cmd.ExecuteNonQuery ();
 
 				if (newItem)
-					tracker.ObjectId = customLessee.ObjectId = subject.Id = (int)cmd.LastInsertedId;
+					attachmentFiles.ItemId = tracker.ObjectId = customLessee.ObjectId = subject.Id = (int)cmd.LastInsertedId;
 				customLessee.SaveToDB (trans);
+				attachmentFiles.SaveChanges (trans);
+
 				tracker.SaveChangeSet (trans);
 
 				trans.Commit ();

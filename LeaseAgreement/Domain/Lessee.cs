@@ -1,8 +1,10 @@
 ﻿using System;
-using QSOrmProject;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MySql.Data.MySqlClient;
+using QSAttachment;
+using QSHistoryLog;
+using QSOrmProject;
 using QSProjectsLib;
 
 namespace LeaseAgreement.Domain
@@ -153,6 +155,15 @@ namespace LeaseAgreement.Domain
 		public virtual Dictionary<string, object> Customs {
 			get { return customs;}
 			set { SetField(ref customs, value, () => Customs);}
+		}
+
+		[HistoryDeepCloneItems]
+		List<AttachedFile> files;
+
+		[Display (Name = "Файлы")]
+		public virtual List<AttachedFile> Files {
+			get { return files; }
+			set { SetField (ref files, value, () => Files); }
 		}
 
 		public Lessee ()

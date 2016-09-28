@@ -1354,6 +1354,7 @@
                       <widget class="QSOrmProject.DataDatePicker" id="reserveDatePicker">
                         <property name="MemberName" />
                         <property name="Events">ButtonPressMask</property>
+                        <property name="WithTime">False</property>
                         <property name="Date">0</property>
                         <property name="IsEditable">True</property>
                         <property name="AutoSeparation">False</property>
@@ -2613,7 +2614,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LeaseAgreement.LesseeDlg" design-size="798 535">
+  <widget class="Gtk.Dialog" id="LeaseAgreement.LesseeDlg" design-size="864 488">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Новый арендатор</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -3836,6 +3837,24 @@
                 <property name="type">tab</property>
               </packing>
             </child>
+            <child>
+              <widget class="QSAttachment.Attachment" id="attachmentFiles">
+                <property name="MemberName" />
+                <property name="Events">ButtonPressMask</property>
+              </widget>
+              <packing>
+                <property name="Position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="label22">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Файлы</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">0</property>
@@ -3903,7 +3922,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">0</property>
+            <property name="CurrentPage">4</property>
             <property name="TabPos">Left</property>
             <child>
               <widget class="Gtk.HBox" id="hboxInfo">
@@ -3959,6 +3978,7 @@
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
                         <property name="AddIfNotExist">False</property>
+                        <property name="DefaultFirst">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                       </widget>
@@ -3984,6 +4004,7 @@
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
                         <property name="AddIfNotExist">False</property>
+                        <property name="DefaultFirst">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboContractTypeChanged" />
@@ -4010,6 +4031,7 @@
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
                         <property name="AddIfNotExist">False</property>
+                        <property name="DefaultFirst">False</property>
                         <property name="ShowSpecialStateAll">False</property>
                         <property name="ShowSpecialStateNot">True</property>
                         <signal name="Changed" handler="OnComboOrgChanged" />
@@ -4034,6 +4056,7 @@
                       <widget class="Gamma.Widgets.yDatePicker" id="datepickerSign">
                         <property name="MemberName" />
                         <property name="Events">ButtonPressMask</property>
+                        <property name="WithTime">False</property>
                         <property name="Date">0</property>
                         <property name="IsEditable">True</property>
                         <property name="AutoSeparation">True</property>
@@ -4277,6 +4300,7 @@
                             <property name="IsTextCombo">False</property>
                             <property name="Items" translatable="yes" />
                             <property name="AddIfNotExist">True</property>
+                            <property name="DefaultFirst">False</property>
                             <property name="ShowSpecialStateAll">False</property>
                             <property name="ShowSpecialStateNot">False</property>
                           </widget>
@@ -4297,6 +4321,7 @@
                           <widget class="Gamma.Widgets.yDatePicker" id="datepickerCancel">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
+                            <property name="WithTime">False</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
@@ -4322,6 +4347,7 @@
                           <widget class="Gamma.Widgets.yDatePicker" id="datepickerEnd">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
+                            <property name="WithTime">False</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
@@ -4347,6 +4373,7 @@
                           <widget class="Gamma.Widgets.yDatePicker" id="datepickerStart">
                             <property name="MemberName" />
                             <property name="Events">ButtonPressMask</property>
+                            <property name="WithTime">False</property>
                             <property name="Date">0</property>
                             <property name="IsEditable">True</property>
                             <property name="AutoSeparation">True</property>
@@ -5931,6 +5958,7 @@
                   <widget class="QSOrmProject.DataDatePicker" id="dateContractDate">
                     <property name="MemberName" />
                     <property name="Events">ButtonPressMask</property>
+                    <property name="WithTime">False</property>
                     <property name="Date">0</property>
                     <property name="IsEditable">True</property>
                     <property name="AutoSeparation">True</property>
@@ -6444,6 +6472,7 @@
               <widget class="Gamma.Widgets.yDatePicker" id="datePickerEnd">
                 <property name="MemberName" />
                 <property name="Events">ButtonPressMask</property>
+                <property name="WithTime">False</property>
                 <property name="Date">0</property>
                 <property name="IsEditable">True</property>
                 <property name="AutoSeparation">False</property>
@@ -6469,6 +6498,7 @@
               <widget class="Gamma.Widgets.yDatePicker" id="datePickerStart">
                 <property name="MemberName" />
                 <property name="Events">ButtonPressMask</property>
+                <property name="WithTime">False</property>
                 <property name="Date">0</property>
                 <property name="IsEditable">True</property>
                 <property name="AutoSeparation">False</property>
@@ -6775,6 +6805,7 @@
               <widget class="Gamma.Widgets.yDatePicker" id="dateStart">
                 <property name="MemberName" />
                 <property name="Events">ButtonPressMask</property>
+                <property name="WithTime">False</property>
                 <property name="Date">0</property>
                 <property name="IsEditable">True</property>
                 <property name="AutoSeparation">True</property>
@@ -6801,6 +6832,7 @@
               <widget class="Gamma.Widgets.yDatePicker" id="dateEnd">
                 <property name="MemberName" />
                 <property name="Events">ButtonPressMask</property>
+                <property name="WithTime">False</property>
                 <property name="Date">0</property>
                 <property name="IsEditable">True</property>
                 <property name="AutoSeparation">True</property>
@@ -6987,6 +7019,7 @@
               <widget class="Gamma.Widgets.yDatePicker" id="datePickerEnd">
                 <property name="MemberName" />
                 <property name="Events">ButtonPressMask</property>
+                <property name="WithTime">False</property>
                 <property name="Date">0</property>
                 <property name="IsEditable">True</property>
                 <property name="AutoSeparation">False</property>
@@ -7011,6 +7044,7 @@
               <widget class="Gamma.Widgets.yDatePicker" id="datePickerStart">
                 <property name="MemberName" />
                 <property name="Events">ButtonPressMask</property>
+                <property name="WithTime">False</property>
                 <property name="Date">0</property>
                 <property name="IsEditable">True</property>
                 <property name="AutoSeparation">False</property>
@@ -7511,6 +7545,7 @@
                 <property name="IsTextCombo">False</property>
                 <property name="Items" translatable="yes" />
                 <property name="AddIfNotExist">False</property>
+                <property name="DefaultFirst">False</property>
                 <property name="ShowSpecialStateAll">False</property>
                 <property name="ShowSpecialStateNot">True</property>
                 <signal name="Changed" handler="OnComboBoxFloorChanged" />
