@@ -122,6 +122,9 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		if (check30daysContracts.Active)
 			sql.AddAsList ("IFNULL(contracts.cancel_date,contracts.end_date) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)");
 
+		if (checkNewContracts.Active)
+			sql.AddAsList ("contracts.start_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 14 DAY) AND DATE_ADD(CURDATE(), INTERVAL 1 DAY)");
+
 		sql.Add (" GROUP BY contracts.id");
 
 		logger.Debug (sql.Text);
@@ -356,6 +359,11 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 	}
 
 	protected void OnComboContractCategoryChanged(object sender, EventArgs e)
+	{
+		UpdateContract ();
+	}
+
+	protected void OnCheckNewContractsToggled(object sender, EventArgs e)
 	{
 		UpdateContract ();
 	}

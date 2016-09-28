@@ -60,7 +60,7 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 		planviewwidget1.CurrentReserve.PropertyChanged += OnReserveChanged;
 		OnReserveChanged (this, null);
 		reserveDeleteButton.Sensitive = false;
-		vbox4.Visible = true;
+		vbox6.Visible = true;
 	}
 
 	protected void OnReserveChanged(object sender, EventArgs args)
@@ -75,7 +75,7 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 			}
 			reserveTreeView.Model = model;
 		}
-		vbox4.Visible = reserve != null;
+		vbox6.Visible = reserve != null;
 		ValidateReserve ();
 	}
 
@@ -86,13 +86,13 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 		uow.Dispose ();
 		UpdateMap ();
 		planviewwidget1.CurrentReserve = null;
-		vbox4.Visible = false;
+		vbox6.Visible = false;
 	}
 
 	protected void OnReserveCancelButtonClicked(object sender, EventArgs args){
 		planviewwidget1.CurrentReserve = null;
 		uow.Dispose ();
-		vbox4.Visible = false;
+		vbox6.Visible = false;
 	}
 
 	protected void OnReserveDatePickerChanged(object sender, EventArgs args)
@@ -180,7 +180,7 @@ public partial class MainWindow: FakeTDITabGtkWindowBase
 		uow.Commit ();
 		uow.Dispose ();
 		UpdateMap ();
-		vbox4.Visible = false;
+		vbox6.Visible = false;
 	}
 
 }

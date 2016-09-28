@@ -221,7 +221,7 @@
           <widget class="Gtk.Notebook" id="notebookMain">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">3</property>
+            <property name="CurrentPage">2</property>
             <signal name="SwitchPage" handler="OnNotebookMainSwitchPage" />
             <child>
               <widget class="Gtk.VBox" id="vbox2">
@@ -1203,22 +1203,20 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="Gtk.HBox" id="hbox28">
+                          <widget class="Gtk.CheckButton" id="checkNewContracts">
                             <property name="MemberName" />
-                            <property name="Spacing">6</property>
-                            <child>
-                              <placeholder />
-                            </child>
-                            <child>
-                              <placeholder />
-                            </child>
-                            <child>
-                              <placeholder />
-                            </child>
+                            <property name="CanFocus">True</property>
+                            <property name="Label" translatable="yes">Только новые(за последние 14 дней)</property>
+                            <property name="DrawIndicator">True</property>
+                            <property name="HasLabel">True</property>
+                            <property name="UseUnderline">True</property>
+                            <signal name="Toggled" handler="OnCheckNewContractsToggled" />
                           </widget>
                           <packing>
                             <property name="Position">2</property>
                             <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
                           </packing>
                         </child>
                       </widget>
@@ -1334,7 +1332,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="Gtk.VBox" id="vbox4">
+                  <widget class="Gtk.VBox" id="vbox6">
                     <property name="MemberName" />
                     <property name="Visible">False</property>
                     <property name="Spacing">6</property>
