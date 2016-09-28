@@ -506,4 +506,6 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		dialog.Run ();
 		dialog.Destroy ();
 	}
+
+
 }
