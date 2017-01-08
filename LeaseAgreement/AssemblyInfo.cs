@@ -10,7 +10,7 @@ using QSProjectsLib;
 [assembly: AssemblyEdition ("gpl")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("Quality Solution")]
-[assembly: AssemblyCopyright ("Quality Solution 2016")]
+[assembly: AssemblyCopyright ("Quality Solution 2017")]
 [assembly: AssemblyLogoIcon ("LeaseAgreement.icons.logo.png")]
 [assembly: AssemblySupport ("", true, "MySQL")]
 [assembly: AssemblyAppWebsite ("http://develop.qsolution.ru/")]
