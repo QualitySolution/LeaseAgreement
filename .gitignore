@@ -8,3 +8,11 @@ bin/
 obj/
 
 packages/*
+
+#Workbench Backup Files
+base/*.mwb.bak
+
+#Project Specific
+WinInstall/*
+!*.nsi
+!*.sh
