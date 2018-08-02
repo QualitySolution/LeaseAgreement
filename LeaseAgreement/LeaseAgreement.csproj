@@ -14,6 +14,7 @@
     <ReleaseVersion>1.0</ReleaseVersion>
     <ApplicationIcon>icons\logo.ico</ApplicationIcon>
     <UseMSBuildEngine>False</UseMSBuildEngine>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>True</DebugSymbols>
@@ -62,16 +63,31 @@
       <HintPath>..\..\QSProjects\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="Mono.Cairo" />
+    <Reference Include="rsvg2-sharp, Version=2.18.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="NLog">
+      <HintPath>..\..\QSProjects\packages\NLog.4.4.1\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\QSProjects\packages\MySql.Data.6.9.9\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>bin\Debug\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>bin\Debug\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="GammaBinding">
+      <HintPath>..\..\GammaBinding\GammaBinding\bin\Debug\GammaBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cairo" />
-    <Reference Include="NLog">
-      <HintPath>..\..\QSProjects\packages\NLog.4.2.3\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="rsvg2-sharp, Version=2.18.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="MySql.Data">
-      <HintPath>..\..\QSProjects\packages\MySql.Data.6.9.7\lib\net40\MySql.Data.dll</HintPath>
+    <Reference Include="GammaBinding">
+      <HintPath>..\..\GammaBinding\GammaBinding\bin\Debug\GammaBinding.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -177,12 +193,16 @@
     <Compile Include="Domain\Tag.cs" />
     <Compile Include="HibernateMapping\TagMap.cs" />
     <Compile Include="ViewWidgets\BufferedSvgSurface.cs" />
+    <Compile Include="Widgets\yCompanyName.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
         <Deployment.LinuxDeployData generateScript="False" scriptName="newaprashka" />
+        <Policies>
+          <DotNetNamingPolicy ResourceNamePolicy="FileFormatDefault" DirectoryNamespaceAssociation="PrefixedHierarchical" />
+        </Policies>
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
@@ -197,6 +217,7 @@
     <Folder Include="ServiceDialogs\" />
     <Folder Include="Representations\" />
     <Folder Include="Repository\" />
+    <Folder Include="Widgets\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
@@ -211,8 +232,8 @@
     <None Include="hibernate.cfg.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
     <None Include="CairoExtension.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QSProjects\QSProjectsLib\QSProjectsLib.csproj">
@@ -258,6 +279,10 @@
     <ProjectReference Include="..\..\QSProjects\QSTDI\QSTDI.csproj">
       <Project>{4B35C969-8C74-440F-8189-57047C9215FD}</Project>
       <Name>QSTDI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\QSProjects\QSExtraGammaWidgets\QSExtraGammaWidgets.csproj">
+      <Project>{3DCDD84A-20D0-4939-BE25-58B19F3961F2}</Project>
+      <Name>QSExtraGammaWidgets</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
