@@ -11,22 +11,42 @@ namespace LeaseAgreement
 	{
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 		private bool NewItem = true;
-		private Organization subject = new Organization ();
-		private Adaptor adaptorOrg = new Adaptor ();
+		private Organization Entity = new Organization ();
 		private QSHistoryLog.ObjectTracker<Organization> tracker;
 
 		public OrganizationDlg ()
 		{
 			this.Build ();
 
-			adaptorOrg.Target = subject;
-			table1.DataSource = adaptorOrg;
-			tracker = new QSHistoryLog.ObjectTracker<Organization> (subject);
+			tracker = new QSHistoryLog.ObjectTracker<Organization> (Entity);
 
-			labelId.Binding.AddBinding (subject, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
+			Entity.SignatoryPost = "Генерального директора";
+			Entity.SignatoryBaseOf = "Устава";
 
-			subject.SignatoryPost = "Генерального директора";
-			subject.SignatoryBaseOf = "Устава";
+			ConfigureDlg ();
+		}
+
+		private void ConfigureDlg ()
+		{
+			labelId.Binding.AddBinding (Entity, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
+
+			entryEmail.Binding.AddBinding (Entity, e => e.Email, w => w.Text).InitializeFromSource ();
+			entryFullName.Binding.AddBinding (Entity, e => e.FullName, w => w.Text).InitializeFromSource ();
+			entryINN.Binding.AddBinding (Entity, e => e.INN, w => w.Text).InitializeFromSource ();
+			entryKPP.Binding.AddBinding (Entity, e => e.KPP, w => w.Text).InitializeFromSource ();
+			entryName.Binding.AddBinding (Entity, e => e.Name, w => w.Text).InitializeFromSource ();
+			entryOGRN.Binding.AddBinding (Entity, e => e.OGRN, w => w.Text).InitializeFromSource ();
+			entryPhone.Binding.AddBinding (Entity, e => e.Phone, w => w.Text).InitializeFromSource ();
+			textviewAddress.Binding.AddBinding (Entity, e => e.Address, w => w.Buffer.Text).InitializeFromSource ();
+			textviewJurAddress.Binding.AddBinding (Entity, e => e.JurAddress, w => w.Buffer.Text).InitializeFromSource ();
+			entryBaseOf.Binding.AddBinding (Entity, e => e.SignatoryBaseOf, w => w.Text).InitializeFromSource ();
+			entryFIO.Binding.AddBinding (Entity, e => e.SignatoryFIO, w => w.Text).InitializeFromSource ();
+			entryPost.Binding.AddBinding (Entity, e => e.SignatoryPost, w => w.Text).InitializeFromSource ();
+
+			entryAccount.Binding.AddBinding (Entity, e => e.Account, w => w.Text).InitializeFromSource ();
+			entryBank.Binding.AddBinding (Entity, e => e.Bank, w => w.Text).InitializeFromSource ();
+			entryBIK.Binding.AddBinding (Entity, e => e.Bik, w => w.Text).InitializeFromSource ();
+			entryCorAccount.Binding.AddBinding (Entity, e => e.CorAccount, w => w.Text).InitializeFromSource ();
 
 			entryName.FullNameEntry = entryFullName;
 
@@ -56,29 +76,29 @@ namespace LeaseAgreement
 				using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 					rdr.Read ();
 
-					subject.Id = rdr.GetInt32 ("id");
+					Entity.Id = rdr.GetInt32 ("id");
 					labelId.Binding.RefreshFromSource();
-					subject.Name = rdr ["name"].ToString ();
-					subject.FullName = rdr ["full_name"].ToString ();
-					subject.Phone = rdr ["phone"].ToString ();
-					subject.Email = rdr ["email"].ToString ();
-					subject.INN = rdr ["INN"].ToString ();
-					subject.KPP = rdr ["KPP"].ToString ();
-					subject.OGRN = rdr ["OGRN"].ToString ();
-					subject.SignatoryFIO = rdr ["signatory_FIO"].ToString ();
-					subject.SignatoryPost = rdr ["signatory_post"].ToString ();
-					subject.SignatoryBaseOf = rdr ["basis_of"].ToString ();
-					subject.Account = rdr ["account"].ToString ();
-					subject.Bik = rdr ["bik"].ToString ();
-					subject.Bank = rdr ["bank"].ToString ();
-					subject.CorAccount = rdr ["cor_account"].ToString ();
+					Entity.Name = rdr ["name"].ToString ();
+					Entity.FullName = rdr ["full_name"].ToString ();
+					Entity.Phone = rdr ["phone"].ToString ();
+					Entity.Email = rdr ["email"].ToString ();
+					Entity.INN = rdr ["INN"].ToString ();
+					Entity.KPP = rdr ["KPP"].ToString ();
+					Entity.OGRN = rdr ["OGRN"].ToString ();
+					Entity.SignatoryFIO = rdr ["signatory_FIO"].ToString ();
+					Entity.SignatoryPost = rdr ["signatory_post"].ToString ();
+					Entity.SignatoryBaseOf = rdr ["basis_of"].ToString ();
+					Entity.Account = rdr ["account"].ToString ();
+					Entity.Bik = rdr ["bik"].ToString ();
+					Entity.Bank = rdr ["bank"].ToString ();
+					Entity.CorAccount = rdr ["cor_account"].ToString ();
 
-					subject.Address = rdr ["address"].ToString ();
-					subject.JurAddress = rdr ["jur_address"].ToString ();
+					Entity.Address = rdr ["address"].ToString ();
+					Entity.JurAddress = rdr ["jur_address"].ToString ();
 				}
-				tracker.TakeFirst (subject);
+				tracker.TakeFirst (Entity);
 				logger.Info ("Ok");
-				this.Title = subject.Name;
+				this.Title = Entity.Name;
 			} catch (Exception ex) {
 				logger.Error (ex, "Ошибка получения информации о организации!");
 				QSMain.ErrorMessage (this, ex);
@@ -88,13 +108,13 @@ namespace LeaseAgreement
 
 		protected	void TestCanSave ()
 		{
-			bool Nameok = !String.IsNullOrEmpty (subject.Name);
+			bool Nameok = !String.IsNullOrEmpty (Entity.Name);
 			buttonOk.Sensitive = Nameok;
 		}
 
 		protected virtual void OnButtonOkClicked (object sender, System.EventArgs e)
 		{
-			tracker.TakeLast (subject);
+			tracker.TakeLast (Entity);
 			if (!tracker.Compare ()) {
 				logger.Info ("Нет изменений.");
 				Respond (Gtk.ResponseType.Reject);
@@ -120,23 +140,23 @@ namespace LeaseAgreement
 			try {
 				MySqlCommand cmd = new MySqlCommand (sql, (MySqlConnection)QSMain.ConnectionDB, trans);
 
-				cmd.Parameters.AddWithValue ("@id", subject.Id);
-				cmd.Parameters.AddWithValue ("@name", subject.Name);
-				cmd.Parameters.AddWithValue ("@full_name", DBWorks.ValueOrNull (subject.FullName != "", subject.FullName));
-				cmd.Parameters.AddWithValue ("@phone", DBWorks.ValueOrNull (subject.Phone != "", subject.Phone));
-				cmd.Parameters.AddWithValue ("@email", DBWorks.ValueOrNull (subject.Email != "", subject.Email));
-				cmd.Parameters.AddWithValue ("@INN", DBWorks.ValueOrNull (subject.INN != "", subject.INN));
-				cmd.Parameters.AddWithValue ("@KPP", DBWorks.ValueOrNull (subject.KPP != "", subject.KPP));
-				cmd.Parameters.AddWithValue ("@OGRN", DBWorks.ValueOrNull (subject.OGRN != "", subject.OGRN));
-				cmd.Parameters.AddWithValue ("@signatory_FIO", DBWorks.ValueOrNull (subject.SignatoryFIO != "", subject.SignatoryFIO));
-				cmd.Parameters.AddWithValue ("@signatory_post", DBWorks.ValueOrNull (subject.SignatoryPost != "", subject.SignatoryPost));
-				cmd.Parameters.AddWithValue ("@basis_of", DBWorks.ValueOrNull (subject.SignatoryBaseOf != "", subject.SignatoryBaseOf));
-				cmd.Parameters.AddWithValue ("@bik", DBWorks.ValueOrNull (subject.Bik != "", subject.Bik));
-				cmd.Parameters.AddWithValue ("@account", DBWorks.ValueOrNull (subject.Account != "", subject.Account));
-				cmd.Parameters.AddWithValue ("@bank", DBWorks.ValueOrNull (subject.Bank != "", subject.Bank));
-				cmd.Parameters.AddWithValue ("@cor_account", DBWorks.ValueOrNull (subject.CorAccount != "", subject.CorAccount));
-				cmd.Parameters.AddWithValue ("@address", DBWorks.ValueOrNull (subject.Address != "", subject.Address));
-				cmd.Parameters.AddWithValue ("@jur_address", DBWorks.ValueOrNull (subject.JurAddress != "", subject.JurAddress));
+				cmd.Parameters.AddWithValue ("@id", Entity.Id);
+				cmd.Parameters.AddWithValue ("@name", Entity.Name);
+				cmd.Parameters.AddWithValue ("@full_name", DBWorks.ValueOrNull (Entity.FullName != "", Entity.FullName));
+				cmd.Parameters.AddWithValue ("@phone", DBWorks.ValueOrNull (Entity.Phone != "", Entity.Phone));
+				cmd.Parameters.AddWithValue ("@email", DBWorks.ValueOrNull (Entity.Email != "", Entity.Email));
+				cmd.Parameters.AddWithValue ("@INN", DBWorks.ValueOrNull (Entity.INN != "", Entity.INN));
+				cmd.Parameters.AddWithValue ("@KPP", DBWorks.ValueOrNull (Entity.KPP != "", Entity.KPP));
+				cmd.Parameters.AddWithValue ("@OGRN", DBWorks.ValueOrNull (Entity.OGRN != "", Entity.OGRN));
+				cmd.Parameters.AddWithValue ("@signatory_FIO", DBWorks.ValueOrNull (Entity.SignatoryFIO != "", Entity.SignatoryFIO));
+				cmd.Parameters.AddWithValue ("@signatory_post", DBWorks.ValueOrNull (Entity.SignatoryPost != "", Entity.SignatoryPost));
+				cmd.Parameters.AddWithValue ("@basis_of", DBWorks.ValueOrNull (Entity.SignatoryBaseOf != "", Entity.SignatoryBaseOf));
+				cmd.Parameters.AddWithValue ("@bik", DBWorks.ValueOrNull (Entity.Bik != "", Entity.Bik));
+				cmd.Parameters.AddWithValue ("@account", DBWorks.ValueOrNull (Entity.Account != "", Entity.Account));
+				cmd.Parameters.AddWithValue ("@bank", DBWorks.ValueOrNull (Entity.Bank != "", Entity.Bank));
+				cmd.Parameters.AddWithValue ("@cor_account", DBWorks.ValueOrNull (Entity.CorAccount != "", Entity.CorAccount));
+				cmd.Parameters.AddWithValue ("@address", DBWorks.ValueOrNull (Entity.Address != "", Entity.Address));
+				cmd.Parameters.AddWithValue ("@jur_address", DBWorks.ValueOrNull (Entity.JurAddress != "", Entity.JurAddress));
 
 				cmd.ExecuteNonQuery ();
 

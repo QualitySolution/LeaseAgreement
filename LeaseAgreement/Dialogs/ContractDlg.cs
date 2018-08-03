@@ -17,8 +17,7 @@ namespace LeaseAgreement
 	public partial class ContractDlg : FakeTDIDialogGtkDialogBase
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger ();
-		private Contract subject;
-		private Adaptor adaptorContract = new Adaptor ();
+		private Contract Entity;
 		private QSHistoryLog.ObjectTracker<Contract> tracker = new QSHistoryLog.ObjectTracker<Contract> ();
 
 		private IUnitOfWorkGeneric<Contract> UoW;
@@ -43,10 +42,10 @@ namespace LeaseAgreement
 
 		protected Contract Subject {
 			get {
-				return subject;
+				return Entity;
 			}
 			set {
-				subject = value;
+				Entity = value;
 			}
 		}
 
@@ -77,7 +76,7 @@ namespace LeaseAgreement
 			this.Build ();
 			PrepareDlg ();
 			UoW = UnitOfWorkFactory.CreateWithNewRoot<Contract> ();
-			subject = UoW.Root;
+			Entity = UoW.Root;
 			ConfigureDlg ();
 			var contractPlace = new ContractPlace {
 				Place = place
@@ -90,8 +89,8 @@ namespace LeaseAgreement
 			}
 			contractPlaceDlg.Destroy ();
 			Subject.AddLeassedPlace (contractPlace);
-			subject.StartDate = contractPlace.StartDate;
-			subject.EndDate = contractPlace.EndDate;
+			Entity.StartDate = contractPlace.StartDate;
+			Entity.EndDate = contractPlace.EndDate;
 		}
 
 		private void PrepareDlg()
@@ -99,7 +98,6 @@ namespace LeaseAgreement
 			deletedDocItems = new List<int> ();
 			watchers = new List<FileSystemWatcher> ();
 			DocPatterns = new ListStore (typeof(int), typeof(int), typeof(string), typeof(bool), typeof(int), typeof(byte[]), typeof(bool));
-			table2.DataSource = table3.DataSource = textComments.DataSource = adaptorContract;
 
 			customContracts.UsedTable = QSCustomFields.CFMain.GetTableByName ("contracts");
 			attachmentFiles.AttachToTable = "contracts";
@@ -152,8 +150,6 @@ namespace LeaseAgreement
 			prevStartDate = Subject.StartDate;
 			prevEndDate = Subject.EndDate;
 
-			adaptorContract.Target = Subject;
-
 			comboOrg.ItemsList = Organization.LoadList ();
 			comboCategory.ItemsList = ContractCategory.LoadList ();
 			comboContractType.ItemsList = ContractType.LoadList ();
@@ -173,6 +169,9 @@ namespace LeaseAgreement
 			datepickerStart.Binding.AddBinding (Subject, s => s.StartDate, w => w.DateOrNull).InitializeFromSource ();
 			datepickerEnd.Binding.AddBinding (Subject, s => s.EndDate, w => w.DateOrNull).InitializeFromSource ();
 			datepickerCancel.Binding.AddBinding (Subject, s => s.CancelDate, w => w.DateOrNull).InitializeFromSource ();
+			checkDraft.Binding.AddBinding (Entity, e => e.Draft, w => w.Active).InitializeFromSource ();
+			entryNumber.Binding.AddBinding (Entity, e => e.Number, w => w.Text).InitializeFromSource ();
+			textComments.Binding.AddBinding (Entity, e => e.Comments, w => w.Buffer.Text).InitializeFromSource ();
 
 			Subject.Customs = customContracts.FieldsValues;
 			Subject.Files = attachmentFiles.AttachedFiles.ToList ();
@@ -349,7 +348,7 @@ namespace LeaseAgreement
 		private bool DraftExists(){
 			return UoW.Session.QueryOver<Contract> ()
 				.Where (contract => contract.Draft 
-				        && contract.Number.IsLike (subject.Number, MatchMode.Exact)).RowCount()>0;			
+				        && contract.Number.IsLike (Entity.Number, MatchMode.Exact)).RowCount()>0;			
 		}
 
 		protected void OnEntryNumberChanged (object sender, EventArgs e)
@@ -466,7 +465,7 @@ namespace LeaseAgreement
 						return false;
 					}
 				}
-				if(subject.LeasedPlaces.Any(cp=>!cp.StartDate.HasValue||!cp.EndDate.HasValue)){
+				if(Entity.LeasedPlaces.Any(cp=>!cp.StartDate.HasValue||!cp.EndDate.HasValue)){
 					MessageDialog md = new MessageDialog (this, DialogFlags.Modal,
 					                                      MessageType.Error, 
 					                                      ButtonsType.Ok, "ошибка");
@@ -820,10 +819,10 @@ namespace LeaseAgreement
 
 		private void FillPlan(OdtWorks odt)
 		{
-			if (subject.LeasedPlaces.Count > 0) {
+			if (Entity.LeasedPlaces.Count > 0) {
 				IList<Polygon> polygons = 
 					UoW.Session.QueryOver<Polygon>().Where(
-						p=>p.Place.Id.IsIn(subject.LeasedPlaces.Select(cp=>cp.Place.Id).ToList())
+						p=>p.Place.Id.IsIn(Entity.LeasedPlaces.Select(cp=>cp.Place.Id).ToList())
 					).List();
 				if (polygons.Count > 0) {
 					Plan plan = polygons [0].Floor.Plan;
@@ -1006,7 +1005,7 @@ namespace LeaseAgreement
 				MessageDialog md = new MessageDialog (this, DialogFlags.DestroyWithParent,
 				                                      MessageType.Warning, 
 				                                      ButtonsType.Ok, 
-				                                      "Черновик с номером договора \""+subject.Number+"\" уже существует!");
+				                                      "Черновик с номером договора \""+Entity.Number+"\" уже существует!");
 				md.Run ();
 				md.Destroy ();
 				warnedAboutExistingDraft = true;

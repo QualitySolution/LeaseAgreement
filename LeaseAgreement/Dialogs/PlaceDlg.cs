@@ -1,12 +1,11 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Data.Bindings;
+using System.Linq;
 using Gtk;
 using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
-using QSProjectsLib;
 using QSOrmProject;
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {
@@ -14,8 +13,7 @@ namespace LeaseAgreement
 	{
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 		private bool newItem = true;
-		private Place subject = new Place();
-		private Adaptor adaptorPlace = new Adaptor();
+		private Place Entity = new Place();
 		private QSHistoryLog.ObjectTracker<Place> tracker;
 		private IUnitOfWorkGeneric<Place> UoW;
 		private List<Tag> tagList;
@@ -45,16 +43,16 @@ namespace LeaseAgreement
 			buttonNewContract.Sensitive = true;
 			buttonMap.Sensitive = true;
 			FillCurrentContract ();
-			customPlace.LoadDataFromDB (subject.Id);
-			subject.Customs = customPlace.FieldsValues;
-			tracker.TakeFirst (subject);
+			customPlace.LoadDataFromDB (Entity.Id);
+			Entity.Customs = customPlace.FieldsValues;
+			tracker.TakeFirst (Entity);
 			logger.Info("Ok");
-			this.Title = subject.Title;
+			this.Title = Entity.Title;
 			TestCanSave();
 			UpdateHistory();
 			var reserve = UoW.Session.QueryOver<Reserve> ()
 				.Where (r => r.Date > DateTime.Today)
-				.JoinQueryOver<Place>(r=>r.Places).Where(p=>p.Id==subject.Id)
+				.JoinQueryOver<Place>(r=>r.Places).Where(p=>p.Id==Entity.Id)
 				.SingleOrDefault ();
 			reserveFrame.Visible = reserve != null;
 			if (reserve != null) {
@@ -65,18 +63,15 @@ namespace LeaseAgreement
 		protected void OnTagCellToggled(object sender, ToggledArgs args){
 			int tagIndex = Convert.ToInt32(args.Path);
 			Tag toggledTag = tagList[tagIndex];
-			if(subject.Tags.Contains(toggledTag)) 
-				subject.Tags.Remove(toggledTag);
+			if(Entity.Tags.Contains(toggledTag)) 
+				Entity.Tags.Remove(toggledTag);
 			else 
-				subject.Tags.Add(toggledTag);
+				Entity.Tags.Add(toggledTag);
 		}
 
 		private void ConfigureDlg()
 		{
-			subject = UoW.Root;
-			adaptorPlace.Target = subject;
-			table2.DataSource = adaptorPlace;
-			textviewComments.DataSource = adaptorPlace;
+			Entity = UoW.Root;
 			tagList = UoW.Session.QueryOver<Tag> ().List ().ToList ();
 			var tagNameCell = new CellRendererText ();
 			var tagToggleCell = new CellRendererToggle ();
@@ -86,10 +81,9 @@ namespace LeaseAgreement
 			                         tagToggleCell,
 			                         delegate(TreeViewColumn tree_column, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
 				Tag tag = tree_model.GetValue (iter, 0) as Tag;
-				bool active = subject.Tags.Any (t => t.Id == tag.Id);
+				bool active = Entity.Tags.Any (t => t.Id == tag.Id);
 				(cell as CellRendererToggle).Active = active;
 			});
-				
 
 			var nameColumn = new TreeViewColumn ();
 			nameColumn.Title = "Название";
@@ -105,9 +99,18 @@ namespace LeaseAgreement
 				model.AppendValues (tag);
 			tagTreeView.Model = model;
 
-			comboPType.ItemsDataSource = UoW.Session.QueryOver<PlaceType> ().List ().ToList();
-			comboStead.ItemsDataSource = UoW.Session.QueryOver<Stead> ().List ().ToList();
-			comboOrg.ItemsDataSource = UoW.Session.QueryOver<Organization> ().List ().ToList();
+			comboPType.ItemsList = UoW.Session.QueryOver<PlaceType> ().List ();
+			comboStead.ItemsList = UoW.Session.QueryOver<Stead> ().List ();
+			comboOrg.ItemsList = UoW.Session.QueryOver<Organization> ().List ();
+
+			comboPType.Binding.AddBinding (Entity, e => e.PlaceType, w => w.SelectedItem).InitializeFromSource ();
+			entryNumber.Binding.AddBinding (Entity, e => e.PlaceNumber, w => w.Text).InitializeFromSource ();
+			entryName.Binding.AddBinding (Entity, e => e.Name, w => w.Text).InitializeFromSource ();
+			comboStead.Binding.AddBinding (Entity, e => e.Stead, w => w.SelectedItem).InitializeFromSource ();
+			comboOrg.Binding.AddBinding (Entity, e => e.Organization, w => w.SelectedItem).InitializeFromSource ();
+			spinArea.Binding.AddBinding (Entity, e => e.Area, w => w.ValueAsDecimal).InitializeFromSource ();
+			textviewComments.Binding.AddBinding (Entity, e => e.Comment, w => w.Buffer.Text).InitializeFromSource ();
+
 			grup = new AccelGroup ();
 			this.AddAccelGroup(grup);
 
@@ -134,8 +137,8 @@ namespace LeaseAgreement
 			treeviewHistory.ShowAll();
 
 			customPlace.UsedTable = QSCustomFields.CFMain.GetTableByName ("places");
-			subject.Customs = customPlace.FieldsValues;
-			tracker = new QSHistoryLog.ObjectTracker<Place> (subject);
+			Entity.Customs = customPlace.FieldsValues;
+			tracker = new QSHistoryLog.ObjectTracker<Place> (Entity);
 		}
 			
 		void FillCurrentContract()
@@ -148,7 +151,7 @@ namespace LeaseAgreement
 				"LEFT JOIN lessees ON contracts.lessee_id = lessees.id " +
 				"WHERE current_leased_places.place_id = @place_id ";
 			MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
-			cmd.Parameters.AddWithValue("@place_id", subject.Id);
+			cmd.Parameters.AddWithValue("@place_id", Entity.Id);
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) 
 			{
 				ContractId = -1;
@@ -205,8 +208,8 @@ namespace LeaseAgreement
 		
 		protected	void TestCanSave ()
 		{
-			bool Numok = subject.PlaceNumber != "";
-			bool typeok = subject.PlaceType != null;
+			bool Numok = Entity.PlaceNumber != "";
+			bool typeok = Entity.PlaceType != null;
 			buttonOk.Sensitive = Numok && typeok;
 		}
 		
@@ -227,7 +230,7 @@ namespace LeaseAgreement
 				"WHERE place_id = @place_id AND contracts.draft = '0'";
 	        MySqlCommand cmd = new MySqlCommand(sql, QSMain.connectionDB);
 			
-			cmd.Parameters.AddWithValue("@place_id", subject.Id);
+			cmd.Parameters.AddWithValue("@place_id", Entity.Id);
 			
 			using (MySqlDataReader rdr = cmd.ExecuteReader ()) {
 				HistoryStore.Clear ();
@@ -323,7 +326,7 @@ namespace LeaseAgreement
 
 		protected void OnButtonNewContractClicked (object sender, EventArgs e)
 		{
-			ContractDlg winContract = new ContractDlg(subject);
+			ContractDlg winContract = new ContractDlg(Entity);
 			winContract.Show();
 			winContract.Run();
 			winContract.Destroy();
@@ -333,8 +336,8 @@ namespace LeaseAgreement
 		protected void OnButtonMapClicked (object sender, EventArgs e)
 		{	
 			PolygonDlg dlg;
-			Polygon polygon = subject.Polygon;
-			dlg = new PolygonDlg (subject);
+			Polygon polygon = Entity.Polygon;
+			dlg = new PolygonDlg (Entity);
 			dlg.Show();
 			dlg.Run ();
 			dlg.Destroy();

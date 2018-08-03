@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Linq;
-using QSOrmProject;
 using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
 using Gtk;
-using LeaseAgreement.Domain;
-using NHibernate.Criterion;
+using QSOrmProject;
 
 namespace LeaseAgreement
 {
@@ -29,8 +24,11 @@ namespace LeaseAgreement
 			Configure ();
 		}
 
-		public void Configure(){		
-			checkButtonHasLabels.DataSource = plan;
+		public void Configure(){
+
+			checkButtonHasLabels.Binding.AddBinding (plan, p => p.HasLabels, w => w.Active).InitializeFromSource ();
+			nameEntry.Binding.AddBinding (plan, p => p.Name, w => w.Text).InitializeFromSource ();
+
 			int minFloor = plan.Floors.Count;
 			for (int i = plan.Floors.Count; i > 0; i--) {
 				if (plan.Floors [i-1].Polygons.Count == 0)
@@ -66,14 +64,12 @@ namespace LeaseAgreement
 			UoW = UnitOfWorkFactory.CreateForRoot<Plan> (id);
 			plan = UoW.Root;
 			Title = plan.Name;
-			nameEntry.Text = plan.Name;
 			planViewWidget.Plan=plan;
 			Configure ();
 		}
 
 		protected void OnButtonOkClicked (object sender, EventArgs e)
 		{
-			plan.Name = nameEntry.Text;
 			UoW.Save ();
 		}
 

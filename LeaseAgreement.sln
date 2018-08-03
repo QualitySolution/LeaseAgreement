@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QSBugReporting", "..\QSProj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QSMachineConfig", "..\QSProjects\QSMachineConfig\QSMachineConfig.csproj", "{769710D2-BF98-4120-9E07-67BD740CFA1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QSExtraGammaWidgets", "..\QSProjects\QSExtraGammaWidgets\QSExtraGammaWidgets.csproj", "{3DCDD84A-20D0-4939-BE25-58B19F3961F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -121,6 +123,10 @@ Global
 		{F8E01CD3-8BDD-403B-8264-0ED24AC3FA21}.Debug|x86.Build.0 = Debug|x86
 		{F8E01CD3-8BDD-403B-8264-0ED24AC3FA21}.Release|x86.ActiveCfg = Release|x86
 		{F8E01CD3-8BDD-403B-8264-0ED24AC3FA21}.Release|x86.Build.0 = Release|x86
+		{3DCDD84A-20D0-4939-BE25-58B19F3961F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3DCDD84A-20D0-4939-BE25-58B19F3961F2}.Debug|x86.Build.0 = Debug|Any CPU
+		{3DCDD84A-20D0-4939-BE25-58B19F3961F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{3DCDD84A-20D0-4939-BE25-58B19F3961F2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8D85E430-325A-4532-A123-BF28F9644DB4} = {11A3E8C6-A49F-447C-9CE6-32DF62ECCDA6}
@@ -141,41 +147,44 @@ Global
 		{6D755374-6EAF-44B6-8C6C-6FE5E5AB3432} = {6720A773-5385-49A3-85A1-B0FB1DC23913}
 		{F8E01CD3-8BDD-403B-8264-0ED24AC3FA21} = {6720A773-5385-49A3-85A1-B0FB1DC23913}
 		{769710D2-BF98-4120-9E07-67BD740CFA1D} = {6720A773-5385-49A3-85A1-B0FB1DC23913}
+		{3DCDD84A-20D0-4939-BE25-58B19F3961F2} = {6720A773-5385-49A3-85A1-B0FB1DC23913}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
 		$0.TextStylePolicy = $1
-		$1.FileWidth = 120
-		$1.TabsToSpaces = False
-		$1.inheritsSet = VisualStudio
-		$1.inheritsScope = text/plain
 		$1.scope = text/plain
 		$0.TextStylePolicy = $2
-		$2.FileWidth = 120
-		$2.TabsToSpaces = False
 		$2.NoTabsAfterNonTabs = True
-		$2.inheritsSet = VisualStudio
-		$2.inheritsScope = text/plain
 		$2.scope = text/x-csharp
 		$0.CSharpFormattingPolicy = $3
 		$3.AlignToFirstMethodCallArgument = True
 		$3.AlignToFirstIndexerArgument = True
-		$3.inheritsSet = Mono
-		$3.inheritsScope = text/x-csharp
 		$3.scope = text/x-csharp
+		$3.IndentSwitchSection = False
+		$3.NewLinesForBracesInProperties = False
+		$3.NewLinesForBracesInAccessors = False
+		$3.NewLinesForBracesInAnonymousMethods = False
+		$3.NewLinesForBracesInControlBlocks = False
+		$3.NewLinesForBracesInAnonymousTypes = False
+		$3.NewLinesForBracesInObjectCollectionArrayInitializers = False
+		$3.NewLinesForBracesInLambdaExpressionBody = False
+		$3.NewLineForElse = False
+		$3.NewLineForCatch = False
+		$3.NewLineForFinally = False
+		$3.NewLineForMembersInObjectInit = False
+		$3.NewLineForMembersInAnonymousTypes = False
+		$3.NewLineForClausesInQuery = False
+		$3.SpacingAfterMethodDeclarationName = True
+		$3.SpaceAfterMethodCallName = True
+		$3.SpaceBeforeOpenSquareBracket = True
 		$0.StandardHeader = $4
-		$4.Text = 
-		$4.IncludeInNewFiles = True
 		$0.VersionControlPolicy = $5
-		$5.inheritsSet = Mono
 		$0.ChangeLogPolicy = $6
 		$6.UpdateMode = None
 		$6.MessageStyle = $7
 		$7.LineAlign = 0
 		$6.inheritsSet = Mono
 		$0.DotNetNamingPolicy = $8
-		$8.DirectoryNamespaceAssociation = None
-		$8.ResourceNamePolicy = FileFormatDefault
 		$0.NameConventionPolicy = $9
 		$9.Rules = $10
 		$10.NamingRule = $11
@@ -304,8 +313,6 @@ Global
 		$32.inheritsSet = null
 		$32.scope = application/xml
 		$0.XmlFormattingPolicy = $33
-		$33.inheritsSet = Mono
-		$33.inheritsScope = application/xml
 		$33.scope = application/xml
 		version = 1.0
 	EndGlobalSection

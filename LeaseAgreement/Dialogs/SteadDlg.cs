@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Bindings;
 using LeaseAgreement.Domain;
 using MySql.Data.MySqlClient;
 using NLog;
@@ -12,22 +11,26 @@ namespace LeaseAgreement
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private bool NewItem = true;
-		private Stead subject = new Stead();
-		private Adaptor adaptorStead = new Adaptor();
+		private Stead Entity = new Stead();
 		private QSHistoryLog.ObjectTracker<Stead> tracker;
 
 		public SteadDlg ()
 		{
 			this.Build ();
-			adaptorStead.Target = subject;
-			table2.DataSource = adaptorStead;
-			labelId.Binding.AddBinding (subject, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
-			tracker = new QSHistoryLog.ObjectTracker<Stead> (subject);
+			labelId.Binding.AddBinding (Entity, e => e.Id, w => w.LabelProp, new IdToStringConverter ()).InitializeFromSource ();
+			entryName.Binding.AddBinding (Entity, e => e.Name, w => w.Text).InitializeFromSource ();
+			entryCadastral.Binding.AddBinding (Entity, e => e.CadastralNum, w => w.Text).InitializeFromSource ();
+			entryContractNo.Binding.AddBinding (Entity, e => e.ContractNum, w => w.Text).InitializeFromSource ();
+			dateContractDate.Binding.AddBinding (Entity, e => e.ContractDate, w => w.Date).InitializeFromSource ();
+			entryOwner.Binding.AddBinding (Entity, e => e.Owner, w => w.Text).InitializeFromSource ();
+			textviewAddress.Binding.AddBinding (Entity, e => e.Address, w => w.Buffer.Text).InitializeFromSource ();
+
+			tracker = new QSHistoryLog.ObjectTracker<Stead> (Entity);
 		}
 
 		public void Fill(int id)
 		{
-			subject.Id = id;
+			Entity.Id = id;
 			NewItem = false;
 
 			logger.Info("Запрос земельного участка №{0}...", id);
@@ -41,17 +44,17 @@ namespace LeaseAgreement
 				{
 					rdr.Read();
 
-					subject.Name = rdr["name"].ToString();
+					Entity.Name = rdr["name"].ToString();
 					labelId.Binding.RefreshFromSource();
-					subject.CadastralNum = rdr["cadastral"].ToString();
-					subject.ContractNum = rdr["contract_no"].ToString();
-					subject.ContractDate = DBWorks.GetDateTime (rdr, "contract_date", default(DateTime));
-					subject.Owner = rdr["contractor"].ToString();
-					subject.Address = rdr["address"].ToString();
+					Entity.CadastralNum = rdr["cadastral"].ToString();
+					Entity.ContractNum = rdr["contract_no"].ToString();
+					Entity.ContractDate = DBWorks.GetDateTime (rdr, "contract_date", default(DateTime));
+					Entity.Owner = rdr["contractor"].ToString();
+					Entity.Address = rdr["address"].ToString();
 				}
-				tracker.TakeFirst (subject);
+				tracker.TakeFirst (Entity);
 				logger.Info("Ok");
-				this.Title = subject.Name;
+				this.Title = Entity.Name;
 			}
 			catch (Exception ex)
 			{
@@ -63,7 +66,7 @@ namespace LeaseAgreement
 
 		protected	void TestCanSave ()
 		{
-			bool Nameok = subject.Name != "";
+			bool Nameok = Entity.Name != "";
 			buttonOk.Sensitive = Nameok;
 		}
 
@@ -81,7 +84,7 @@ namespace LeaseAgreement
 					"contractor = @contractor, address = @address " +
 					"WHERE id = @id";
 			}
-			tracker.TakeLast (subject);
+			tracker.TakeLast (Entity);
 			if(!tracker.Compare ())
 			{
 				logger.Info ("Нет изменений.");
@@ -94,13 +97,13 @@ namespace LeaseAgreement
 			{
 				MySqlCommand cmd = new MySqlCommand(sql, (MySqlConnection)QSMain.ConnectionDB, trans);
 
-				cmd.Parameters.AddWithValue("@id", subject.Id);
-				cmd.Parameters.AddWithValue("@name", subject.Name);
-				cmd.Parameters.AddWithValue("@cadastral", DBWorks.ValueOrNull (subject.CadastralNum != "", subject.CadastralNum));
-				cmd.Parameters.AddWithValue("@contract_no", DBWorks.ValueOrNull (subject.ContractNum != "", subject.ContractNum));
-				cmd.Parameters.AddWithValue("@contract_date", DBWorks.ValueOrNull (!dateContractDate.IsEmpty, subject.ContractDate));
-				cmd.Parameters.AddWithValue("@contractor", DBWorks.ValueOrNull (subject.Owner != "", subject.Owner));
-				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (subject.Address != "", subject.Address));
+				cmd.Parameters.AddWithValue("@id", Entity.Id);
+				cmd.Parameters.AddWithValue("@name", Entity.Name);
+				cmd.Parameters.AddWithValue("@cadastral", DBWorks.ValueOrNull (Entity.CadastralNum != "", Entity.CadastralNum));
+				cmd.Parameters.AddWithValue("@contract_no", DBWorks.ValueOrNull (Entity.ContractNum != "", Entity.ContractNum));
+				cmd.Parameters.AddWithValue("@contract_date", DBWorks.ValueOrNull (!dateContractDate.IsEmpty, Entity.ContractDate));
+				cmd.Parameters.AddWithValue("@contractor", DBWorks.ValueOrNull (Entity.Owner != "", Entity.Owner));
+				cmd.Parameters.AddWithValue("@address", DBWorks.ValueOrNull (Entity.Address != "", Entity.Address));
 
 				cmd.ExecuteNonQuery();
 

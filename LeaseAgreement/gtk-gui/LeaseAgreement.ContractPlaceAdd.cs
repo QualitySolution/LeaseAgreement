@@ -5,167 +5,169 @@ namespace LeaseAgreement
 	public partial class ContractPlaceAdd
 	{
 		private global::Gtk.HBox hbox1;
-		
+
 		private global::Gtk.Label label2;
-		
+
 		private global::Gamma.Widgets.yDatePicker dateStart;
-		
+
 		private global::Gtk.Label label3;
-		
+
 		private global::Gamma.Widgets.yDatePicker dateEnd;
-		
+
 		private global::Gtk.Label label1;
-		
+
 		private global::Gtk.CheckButton checkWithDraft;
-		
+
 		private global::Gtk.HBox hbox4;
-		
+
 		private global::Gtk.Label label4;
-		
+
 		private global::Gtk.Entry entrySearch;
-		
+
 		private global::Gtk.Button buttonClean;
-		
+
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
-		
+
 		private global::QSOrmProject.RepresentationTreeView ytreeviewPlaces;
-		
+
 		private global::Gtk.Button buttonCancel;
-		
+
 		private global::Gtk.Button buttonOk;
 
-		protected virtual void Build ()
+		protected virtual void Build()
 		{
-			global::Stetic.Gui.Initialize (this);
+			global::Stetic.Gui.Initialize(this);
 			// Widget LeaseAgreement.ContractPlaceAdd
 			this.Name = "LeaseAgreement.ContractPlaceAdd";
-			this.Title = global::Mono.Unix.Catalog.GetString ("Выберите места для добавления");
+			this.Title = global::Mono.Unix.Catalog.GetString("Выберите места для добавления");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.ContractPlaceAdd.VBox
 			global::Gtk.VBox w1 = this.VBox;
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.hbox1 = new global::Gtk.HBox ();
+			this.hbox1 = new global::Gtk.HBox();
 			this.hbox1.Name = "hbox1";
 			this.hbox1.Spacing = 6;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.label2 = new global::Gtk.Label ();
+			this.label2 = new global::Gtk.Label();
 			this.label2.Name = "label2";
-			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("Аренда с:");
-			this.hbox1.Add (this.label2);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.label2]));
+			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString("Аренда с:");
+			this.hbox1.Add(this.label2);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.label2]));
 			w2.Position = 0;
 			w2.Expand = false;
 			w2.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.dateStart = new global::Gamma.Widgets.yDatePicker ();
+			this.dateStart = new global::Gamma.Widgets.yDatePicker();
 			this.dateStart.Events = ((global::Gdk.EventMask)(256));
 			this.dateStart.Name = "dateStart";
-			this.dateStart.Date = new global::System.DateTime (0);
+			this.dateStart.WithTime = false;
+			this.dateStart.Date = new global::System.DateTime(0);
 			this.dateStart.IsEditable = true;
 			this.dateStart.AutoSeparation = true;
-			this.hbox1.Add (this.dateStart);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.dateStart]));
+			this.hbox1.Add(this.dateStart);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.dateStart]));
 			w3.Position = 1;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.label3 = new global::Gtk.Label ();
+			this.label3 = new global::Gtk.Label();
 			this.label3.Name = "label3";
-			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("по:");
-			this.hbox1.Add (this.label3);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.label3]));
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString("по:");
+			this.hbox1.Add(this.label3);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.label3]));
 			w4.Position = 2;
 			w4.Expand = false;
 			w4.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.dateEnd = new global::Gamma.Widgets.yDatePicker ();
+			this.dateEnd = new global::Gamma.Widgets.yDatePicker();
 			this.dateEnd.Events = ((global::Gdk.EventMask)(256));
 			this.dateEnd.Name = "dateEnd";
-			this.dateEnd.Date = new global::System.DateTime (0);
+			this.dateEnd.WithTime = false;
+			this.dateEnd.Date = new global::System.DateTime(0);
 			this.dateEnd.IsEditable = true;
 			this.dateEnd.AutoSeparation = true;
-			this.hbox1.Add (this.dateEnd);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.dateEnd]));
+			this.hbox1.Add(this.dateEnd);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.dateEnd]));
 			w5.Position = 3;
-			w1.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox1]));
+			w1.Add(this.hbox1);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(w1[this.hbox1]));
 			w6.Position = 0;
 			w6.Expand = false;
 			w6.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.label1 = new global::Gtk.Label ();
+			this.label1 = new global::Gtk.Label();
 			this.label1.Name = "label1";
-			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("В списке отображаются только свободные места, в указанный период.");
-			w1.Add (this.label1);
-			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(w1 [this.label1]));
+			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString("В списке отображаются только свободные места, в указанный период.");
+			w1.Add(this.label1);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(w1[this.label1]));
 			w7.Position = 1;
 			w7.Expand = false;
 			w7.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.checkWithDraft = new global::Gtk.CheckButton ();
+			this.checkWithDraft = new global::Gtk.CheckButton();
 			this.checkWithDraft.CanFocus = true;
 			this.checkWithDraft.Name = "checkWithDraft";
-			this.checkWithDraft.Label = global::Mono.Unix.Catalog.GetString ("Учитывая черновики договоров");
+			this.checkWithDraft.Label = global::Mono.Unix.Catalog.GetString("Учитывая черновики договоров");
 			this.checkWithDraft.Active = true;
 			this.checkWithDraft.DrawIndicator = true;
 			this.checkWithDraft.UseUnderline = true;
-			w1.Add (this.checkWithDraft);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(w1 [this.checkWithDraft]));
+			w1.Add(this.checkWithDraft);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(w1[this.checkWithDraft]));
 			w8.Position = 2;
 			w8.Expand = false;
 			w8.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.hbox4 = new global::Gtk.HBox ();
+			this.hbox4 = new global::Gtk.HBox();
 			this.hbox4.Name = "hbox4";
 			this.hbox4.Spacing = 6;
 			// Container child hbox4.Gtk.Box+BoxChild
-			this.label4 = new global::Gtk.Label ();
+			this.label4 = new global::Gtk.Label();
 			this.label4.Name = "label4";
-			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Поиск:");
-			this.hbox4.Add (this.label4);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.label4]));
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString("Поиск:");
+			this.hbox4.Add(this.label4);
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.label4]));
 			w9.Position = 0;
 			w9.Expand = false;
 			w9.Fill = false;
 			// Container child hbox4.Gtk.Box+BoxChild
-			this.entrySearch = new global::Gtk.Entry ();
+			this.entrySearch = new global::Gtk.Entry();
 			this.entrySearch.CanFocus = true;
 			this.entrySearch.Name = "entrySearch";
 			this.entrySearch.IsEditable = true;
 			this.entrySearch.InvisibleChar = '●';
-			this.hbox4.Add (this.entrySearch);
-			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.entrySearch]));
+			this.hbox4.Add(this.entrySearch);
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.entrySearch]));
 			w10.Position = 1;
 			// Container child hbox4.Gtk.Box+BoxChild
-			this.buttonClean = new global::Gtk.Button ();
+			this.buttonClean = new global::Gtk.Button();
 			this.buttonClean.TooltipMarkup = "Очистить";
 			this.buttonClean.CanFocus = true;
 			this.buttonClean.Name = "buttonClean";
 			this.buttonClean.UseUnderline = true;
-			global::Gtk.Image w11 = new global::Gtk.Image ();
-			w11.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-clear", global::Gtk.IconSize.Menu);
+			global::Gtk.Image w11 = new global::Gtk.Image();
+			w11.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-clear", global::Gtk.IconSize.Menu);
 			this.buttonClean.Image = w11;
-			this.hbox4.Add (this.buttonClean);
-			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.buttonClean]));
+			this.hbox4.Add(this.buttonClean);
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.buttonClean]));
 			w12.Position = 2;
 			w12.Expand = false;
 			w12.Fill = false;
-			w1.Add (this.hbox4);
-			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox4]));
+			w1.Add(this.hbox4);
+			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(w1[this.hbox4]));
 			w13.Position = 3;
 			w13.Expand = false;
 			w13.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
+			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.ytreeviewPlaces = new global::QSOrmProject.RepresentationTreeView ();
+			this.ytreeviewPlaces = new global::QSOrmProject.RepresentationTreeView();
 			this.ytreeviewPlaces.CanFocus = true;
 			this.ytreeviewPlaces.Name = "ytreeviewPlaces";
-			this.GtkScrolledWindow.Add (this.ytreeviewPlaces);
-			w1.Add (this.GtkScrolledWindow);
-			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(w1 [this.GtkScrolledWindow]));
+			this.GtkScrolledWindow.Add(this.ytreeviewPlaces);
+			w1.Add(this.GtkScrolledWindow);
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(w1[this.GtkScrolledWindow]));
 			w15.Position = 4;
 			// Internal child LeaseAgreement.ContractPlaceAdd.ActionArea
 			global::Gtk.HButtonBox w16 = this.ActionArea;
@@ -174,41 +176,42 @@ namespace LeaseAgreement
 			w16.BorderWidth = ((uint)(5));
 			w16.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.buttonCancel = new global::Gtk.Button ();
+			this.buttonCancel = new global::Gtk.Button();
 			this.buttonCancel.CanDefault = true;
 			this.buttonCancel.CanFocus = true;
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.UseStock = true;
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = "gtk-cancel";
-			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w17 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16 [this.buttonCancel]));
+			this.AddActionWidget(this.buttonCancel, -6);
+			global::Gtk.ButtonBox.ButtonBoxChild w17 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16[this.buttonCancel]));
 			w17.Expand = false;
 			w17.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.buttonOk = new global::Gtk.Button ();
+			this.buttonOk = new global::Gtk.Button();
 			this.buttonOk.CanDefault = true;
 			this.buttonOk.CanFocus = true;
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.UseStock = true;
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = "gtk-ok";
-			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w18 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16 [this.buttonOk]));
+			this.AddActionWidget(this.buttonOk, -5);
+			global::Gtk.ButtonBox.ButtonBoxChild w18 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16[this.buttonOk]));
 			w18.Position = 1;
 			w18.Expand = false;
 			w18.Fill = false;
-			if ((this.Child != null)) {
-				this.Child.ShowAll ();
+			if ((this.Child != null))
+			{
+				this.Child.ShowAll();
 			}
 			this.DefaultWidth = 592;
 			this.DefaultHeight = 394;
-			this.Show ();
-			this.dateStart.DateChanged += new global::System.EventHandler (this.OnDateStartDateChanged);
-			this.dateEnd.DateChanged += new global::System.EventHandler (this.OnDateEndDateChanged);
-			this.checkWithDraft.Clicked += new global::System.EventHandler (this.OnCheckWithDraftClicked);
-			this.entrySearch.Changed += new global::System.EventHandler (this.OnEntrySearchChanged);
-			this.buttonClean.Clicked += new global::System.EventHandler (this.OnButtonCleanClicked);
+			this.Show();
+			this.dateStart.DateChanged += new global::System.EventHandler(this.OnDateStartDateChanged);
+			this.dateEnd.DateChanged += new global::System.EventHandler(this.OnDateEndDateChanged);
+			this.checkWithDraft.Clicked += new global::System.EventHandler(this.OnCheckWithDraftClicked);
+			this.entrySearch.Changed += new global::System.EventHandler(this.OnEntrySearchChanged);
+			this.buttonClean.Clicked += new global::System.EventHandler(this.OnButtonCleanClicked);
 		}
 	}
 }

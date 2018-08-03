@@ -5,79 +5,79 @@ namespace LeaseAgreement
 	public partial class PolygonDlg
 	{
 		private global::QSOrmProject.EntryReference planEntryReference;
-		
+
 		private global::LeaseAgreement.PlanViewWidget planviewwidget1;
-		
+
 		private global::Gtk.HBox hbox2;
-		
+
 		private global::Gtk.Button buttonDelete;
-		
+
 		private global::Gtk.Button buttonDeletePolygon;
-		
+
 		private global::Gtk.Button buttonCancel;
-		
+
 		private global::Gtk.Button buttonOk;
 
-		protected virtual void Build ()
+		protected virtual void Build()
 		{
-			global::Stetic.Gui.Initialize (this);
+			global::Stetic.Gui.Initialize(this);
 			// Widget LeaseAgreement.PolygonDlg
 			this.Events = ((global::Gdk.EventMask)(1024));
 			this.Name = "LeaseAgreement.PolygonDlg";
-			this.Title = global::Mono.Unix.Catalog.GetString ("Место на карте");
+			this.Title = global::Mono.Unix.Catalog.GetString("Место на карте");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LeaseAgreement.PolygonDlg.VBox
 			global::Gtk.VBox w1 = this.VBox;
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.planEntryReference = new global::QSOrmProject.EntryReference ();
+			this.planEntryReference = new global::QSOrmProject.EntryReference();
 			this.planEntryReference.Events = ((global::Gdk.EventMask)(256));
 			this.planEntryReference.Name = "planEntryReference";
-			w1.Add (this.planEntryReference);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(w1 [this.planEntryReference]));
+			w1.Add(this.planEntryReference);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(w1[this.planEntryReference]));
 			w2.Position = 0;
 			w2.Expand = false;
 			w2.Fill = false;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.planviewwidget1 = new global::LeaseAgreement.PlanViewWidget ();
+			this.planviewwidget1 = new global::LeaseAgreement.PlanViewWidget();
 			this.planviewwidget1.WidthRequest = 400;
 			this.planviewwidget1.HeightRequest = 300;
 			this.planviewwidget1.Sensitive = false;
 			this.planviewwidget1.Events = ((global::Gdk.EventMask)(256));
 			this.planviewwidget1.Name = "planviewwidget1";
 			this.planviewwidget1.VisibleWindow = false;
-			w1.Add (this.planviewwidget1);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(w1 [this.planviewwidget1]));
+			w1.Add(this.planviewwidget1);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(w1[this.planviewwidget1]));
 			w3.Position = 1;
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.hbox2 = new global::Gtk.HBox ();
+			this.hbox2 = new global::Gtk.HBox();
 			this.hbox2.Name = "hbox2";
 			this.hbox2.Spacing = 6;
 			// Container child hbox2.Gtk.Box+BoxChild
-			this.buttonDelete = new global::Gtk.Button ();
+			this.buttonDelete = new global::Gtk.Button();
 			this.buttonDelete.CanFocus = true;
 			this.buttonDelete.Name = "buttonDelete";
 			this.buttonDelete.UseUnderline = true;
-			this.buttonDelete.Label = global::Mono.Unix.Catalog.GetString ("Удалить вершину");
-			this.hbox2.Add (this.buttonDelete);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonDelete]));
+			this.buttonDelete.Label = global::Mono.Unix.Catalog.GetString("Удалить вершину");
+			this.hbox2.Add(this.buttonDelete);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.buttonDelete]));
 			w4.Position = 0;
 			w4.Expand = false;
 			w4.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
-			this.buttonDeletePolygon = new global::Gtk.Button ();
+			this.buttonDeletePolygon = new global::Gtk.Button();
 			this.buttonDeletePolygon.CanFocus = true;
 			this.buttonDeletePolygon.Name = "buttonDeletePolygon";
 			this.buttonDeletePolygon.UseUnderline = true;
-			this.buttonDeletePolygon.Label = global::Mono.Unix.Catalog.GetString ("Удалить площадь");
-			this.hbox2.Add (this.buttonDeletePolygon);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonDeletePolygon]));
+			this.buttonDeletePolygon.Label = global::Mono.Unix.Catalog.GetString("Удалить площадь");
+			this.hbox2.Add(this.buttonDeletePolygon);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.buttonDeletePolygon]));
 			w5.Position = 1;
 			w5.Expand = false;
 			w5.Fill = false;
-			w1.Add (this.hbox2);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox2]));
+			w1.Add(this.hbox2);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(w1[this.hbox2]));
 			w6.Position = 2;
 			w6.Expand = false;
 			w6.Fill = false;
@@ -88,41 +88,42 @@ namespace LeaseAgreement
 			w7.BorderWidth = ((uint)(5));
 			w7.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.buttonCancel = new global::Gtk.Button ();
+			this.buttonCancel = new global::Gtk.Button();
 			this.buttonCancel.CanDefault = true;
 			this.buttonCancel.CanFocus = true;
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.UseStock = true;
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = "gtk-cancel";
-			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w8 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w7 [this.buttonCancel]));
+			this.AddActionWidget(this.buttonCancel, -6);
+			global::Gtk.ButtonBox.ButtonBoxChild w8 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w7[this.buttonCancel]));
 			w8.Expand = false;
 			w8.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.buttonOk = new global::Gtk.Button ();
+			this.buttonOk = new global::Gtk.Button();
 			this.buttonOk.CanDefault = true;
 			this.buttonOk.CanFocus = true;
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.UseStock = true;
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = "gtk-ok";
-			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w9 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w7 [this.buttonOk]));
+			this.AddActionWidget(this.buttonOk, -5);
+			global::Gtk.ButtonBox.ButtonBoxChild w9 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w7[this.buttonOk]));
 			w9.Position = 1;
 			w9.Expand = false;
 			w9.Fill = false;
-			if ((this.Child != null)) {
-				this.Child.ShowAll ();
+			if ((this.Child != null))
+			{
+				this.Child.ShowAll();
 			}
 			this.DefaultWidth = 786;
 			this.DefaultHeight = 498;
-			this.Show ();
-			this.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnKeyPressEvent);
-			this.planEntryReference.Changed += new global::System.EventHandler (this.OnPlanEntryReferenceChanged);
-			this.buttonDelete.Clicked += new global::System.EventHandler (this.OnButtonDeleteClicked);
-			this.buttonDeletePolygon.Clicked += new global::System.EventHandler (this.OnButtonDeletePolygonClicked);
-			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkClicked);
+			this.Show();
+			this.KeyPressEvent += new global::Gtk.KeyPressEventHandler(this.OnKeyPressEvent);
+			this.planEntryReference.Changed += new global::System.EventHandler(this.OnPlanEntryReferenceChanged);
+			this.buttonDelete.Clicked += new global::System.EventHandler(this.OnButtonDeleteClicked);
+			this.buttonDeletePolygon.Clicked += new global::System.EventHandler(this.OnButtonDeletePolygonClicked);
+			this.buttonOk.Clicked += new global::System.EventHandler(this.OnButtonOkClicked);
 		}
 	}
 }

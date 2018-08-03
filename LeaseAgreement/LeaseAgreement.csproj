@@ -71,9 +71,6 @@
     <Reference Include="MySql.Data">
       <HintPath>..\..\QSProjects\packages\MySql.Data.6.9.9\lib\net40\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>bin\Debug\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>bin\Debug\NLog.dll</HintPath>
     </Reference>

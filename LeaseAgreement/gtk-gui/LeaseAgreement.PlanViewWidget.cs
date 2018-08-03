@@ -5,210 +5,212 @@ namespace LeaseAgreement
 	public partial class PlanViewWidget
 	{
 		private global::Gtk.VBox vbox2;
-		
+
 		private global::Gtk.HBox hbox2;
-		
+
 		private global::Gtk.Label labelFloor;
-		
+
 		private global::Gamma.Widgets.ySpecComboBox comboBoxFloor;
-		
+
 		private global::Gtk.ToggleButton togglebuttonLegend;
-		
+
 		private global::Gtk.VBox vboxLegend;
-		
+
 		private global::Gtk.HSeparator hseparator1;
-		
+
 		private global::Gtk.HBox hboxLegendLabels;
-		
+
 		private global::Gtk.Label labelVacant;
-		
+
 		private global::Gtk.Label labelSoonToBeVacant;
-		
+
 		private global::Gtk.Label labelFull;
-		
+
 		private global::Gtk.Label labelReserved;
-		
+
 		private global::Gtk.Table table1;
-		
+
 		private global::Gtk.DrawingArea drawingarea1;
-		
+
 		private global::Gtk.HScrollbar hscrollbar1;
-		
+
 		private global::Gtk.VScrollbar vscrollbar1;
 
-		protected virtual void Build ()
+		protected virtual void Build()
 		{
-			global::Stetic.Gui.Initialize (this);
+			global::Stetic.Gui.Initialize(this);
 			// Widget LeaseAgreement.PlanViewWidget
-			global::Stetic.BinContainer.Attach (this);
+			global::Stetic.BinContainer.Attach(this);
 			this.WidthRequest = 400;
 			this.HeightRequest = 300;
 			this.Name = "LeaseAgreement.PlanViewWidget";
 			// Container child LeaseAgreement.PlanViewWidget.Gtk.Container+ContainerChild
-			this.vbox2 = new global::Gtk.VBox ();
+			this.vbox2 = new global::Gtk.VBox();
 			this.vbox2.Name = "vbox2";
 			this.vbox2.Spacing = 6;
 			// Container child vbox2.Gtk.Box+BoxChild
-			this.hbox2 = new global::Gtk.HBox ();
+			this.hbox2 = new global::Gtk.HBox();
 			this.hbox2.Name = "hbox2";
 			this.hbox2.Spacing = 6;
 			// Container child hbox2.Gtk.Box+BoxChild
-			this.labelFloor = new global::Gtk.Label ();
+			this.labelFloor = new global::Gtk.Label();
 			this.labelFloor.Name = "labelFloor";
-			this.labelFloor.LabelProp = global::Mono.Unix.Catalog.GetString ("Этаж:");
-			this.hbox2.Add (this.labelFloor);
-			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.labelFloor]));
+			this.labelFloor.LabelProp = global::Mono.Unix.Catalog.GetString("Этаж:");
+			this.hbox2.Add(this.labelFloor);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.labelFloor]));
 			w1.Position = 0;
 			w1.Expand = false;
 			w1.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
-			this.comboBoxFloor = new global::Gamma.Widgets.ySpecComboBox ();
+			this.comboBoxFloor = new global::Gamma.Widgets.ySpecComboBox();
 			this.comboBoxFloor.Name = "comboBoxFloor";
 			this.comboBoxFloor.AddIfNotExist = false;
+			this.comboBoxFloor.DefaultFirst = false;
 			this.comboBoxFloor.ShowSpecialStateAll = false;
 			this.comboBoxFloor.ShowSpecialStateNot = true;
-			this.hbox2.Add (this.comboBoxFloor);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.comboBoxFloor]));
+			this.hbox2.Add(this.comboBoxFloor);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.comboBoxFloor]));
 			w2.Position = 1;
 			w2.Expand = false;
 			w2.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
-			this.togglebuttonLegend = new global::Gtk.ToggleButton ();
+			this.togglebuttonLegend = new global::Gtk.ToggleButton();
 			this.togglebuttonLegend.CanFocus = true;
 			this.togglebuttonLegend.Name = "togglebuttonLegend";
 			this.togglebuttonLegend.UseUnderline = true;
-			this.togglebuttonLegend.Label = global::Mono.Unix.Catalog.GetString ("Легенда");
-			this.hbox2.Add (this.togglebuttonLegend);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.togglebuttonLegend]));
+			this.togglebuttonLegend.Label = global::Mono.Unix.Catalog.GetString("Легенда");
+			this.hbox2.Add(this.togglebuttonLegend);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.togglebuttonLegend]));
 			w3.PackType = ((global::Gtk.PackType)(1));
 			w3.Position = 2;
 			w3.Expand = false;
 			w3.Fill = false;
-			this.vbox2.Add (this.hbox2);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox2]));
+			this.vbox2.Add(this.hbox2);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hbox2]));
 			w4.Position = 0;
 			w4.Expand = false;
 			w4.Fill = false;
 			// Container child vbox2.Gtk.Box+BoxChild
-			this.vboxLegend = new global::Gtk.VBox ();
+			this.vboxLegend = new global::Gtk.VBox();
 			this.vboxLegend.Name = "vboxLegend";
 			this.vboxLegend.Spacing = 6;
 			// Container child vboxLegend.Gtk.Box+BoxChild
-			this.hseparator1 = new global::Gtk.HSeparator ();
+			this.hseparator1 = new global::Gtk.HSeparator();
 			this.hseparator1.Name = "hseparator1";
-			this.vboxLegend.Add (this.hseparator1);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vboxLegend [this.hseparator1]));
+			this.vboxLegend.Add(this.hseparator1);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vboxLegend[this.hseparator1]));
 			w5.Position = 0;
 			w5.Expand = false;
 			w5.Fill = false;
 			// Container child vboxLegend.Gtk.Box+BoxChild
-			this.hboxLegendLabels = new global::Gtk.HBox ();
+			this.hboxLegendLabels = new global::Gtk.HBox();
 			this.hboxLegendLabels.Name = "hboxLegendLabels";
 			this.hboxLegendLabels.Spacing = 6;
 			// Container child hboxLegendLabels.Gtk.Box+BoxChild
-			this.labelVacant = new global::Gtk.Label ();
+			this.labelVacant = new global::Gtk.Label();
 			this.labelVacant.Name = "labelVacant";
-			this.labelVacant.LabelProp = global::Mono.Unix.Catalog.GetString ("Свободно");
+			this.labelVacant.LabelProp = global::Mono.Unix.Catalog.GetString("Свободно");
 			this.labelVacant.UseMarkup = true;
-			this.hboxLegendLabels.Add (this.labelVacant);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels [this.labelVacant]));
+			this.hboxLegendLabels.Add(this.labelVacant);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels[this.labelVacant]));
 			w6.Position = 0;
 			w6.Fill = false;
 			// Container child hboxLegendLabels.Gtk.Box+BoxChild
-			this.labelSoonToBeVacant = new global::Gtk.Label ();
+			this.labelSoonToBeVacant = new global::Gtk.Label();
 			this.labelSoonToBeVacant.Name = "labelSoonToBeVacant";
-			this.labelSoonToBeVacant.LabelProp = global::Mono.Unix.Catalog.GetString ("Скоро освободится");
+			this.labelSoonToBeVacant.LabelProp = global::Mono.Unix.Catalog.GetString("Скоро освободится");
 			this.labelSoonToBeVacant.UseMarkup = true;
-			this.hboxLegendLabels.Add (this.labelSoonToBeVacant);
-			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels [this.labelSoonToBeVacant]));
+			this.hboxLegendLabels.Add(this.labelSoonToBeVacant);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels[this.labelSoonToBeVacant]));
 			w7.Position = 1;
 			w7.Fill = false;
 			// Container child hboxLegendLabels.Gtk.Box+BoxChild
-			this.labelFull = new global::Gtk.Label ();
+			this.labelFull = new global::Gtk.Label();
 			this.labelFull.Name = "labelFull";
-			this.labelFull.LabelProp = global::Mono.Unix.Catalog.GetString ("Занято");
+			this.labelFull.LabelProp = global::Mono.Unix.Catalog.GetString("Занято");
 			this.labelFull.UseMarkup = true;
-			this.hboxLegendLabels.Add (this.labelFull);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels [this.labelFull]));
+			this.hboxLegendLabels.Add(this.labelFull);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels[this.labelFull]));
 			w8.Position = 2;
 			w8.Fill = false;
 			// Container child hboxLegendLabels.Gtk.Box+BoxChild
-			this.labelReserved = new global::Gtk.Label ();
+			this.labelReserved = new global::Gtk.Label();
 			this.labelReserved.Name = "labelReserved";
-			this.labelReserved.LabelProp = global::Mono.Unix.Catalog.GetString ("Зарезервировано");
+			this.labelReserved.LabelProp = global::Mono.Unix.Catalog.GetString("Зарезервировано");
 			this.labelReserved.UseMarkup = true;
-			this.hboxLegendLabels.Add (this.labelReserved);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels [this.labelReserved]));
+			this.hboxLegendLabels.Add(this.labelReserved);
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hboxLegendLabels[this.labelReserved]));
 			w9.Position = 3;
 			w9.Fill = false;
-			this.vboxLegend.Add (this.hboxLegendLabels);
-			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vboxLegend [this.hboxLegendLabels]));
+			this.vboxLegend.Add(this.hboxLegendLabels);
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vboxLegend[this.hboxLegendLabels]));
 			w10.Position = 1;
 			w10.Expand = false;
 			w10.Fill = false;
-			this.vbox2.Add (this.vboxLegend);
-			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.vboxLegend]));
+			this.vbox2.Add(this.vboxLegend);
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.vboxLegend]));
 			w11.Position = 1;
 			w11.Expand = false;
 			w11.Fill = false;
 			// Container child vbox2.Gtk.Box+BoxChild
-			this.table1 = new global::Gtk.Table (((uint)(2)), ((uint)(2)), false);
+			this.table1 = new global::Gtk.Table(((uint)(2)), ((uint)(2)), false);
 			this.table1.Name = "table1";
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(6));
 			// Container child table1.Gtk.Table+TableChild
-			this.drawingarea1 = new global::Gtk.DrawingArea ();
+			this.drawingarea1 = new global::Gtk.DrawingArea();
 			this.drawingarea1.CanFocus = true;
 			this.drawingarea1.Events = ((global::Gdk.EventMask)(2098948));
 			this.drawingarea1.Name = "drawingarea1";
-			this.table1.Add (this.drawingarea1);
+			this.table1.Add(this.drawingarea1);
 			// Container child table1.Gtk.Table+TableChild
-			this.hscrollbar1 = new global::Gtk.HScrollbar (null);
+			this.hscrollbar1 = new global::Gtk.HScrollbar(null);
 			this.hscrollbar1.Name = "hscrollbar1";
-			this.hscrollbar1.Adjustment.Upper = 100;
-			this.hscrollbar1.Adjustment.PageIncrement = 10;
-			this.hscrollbar1.Adjustment.PageSize = 10;
-			this.hscrollbar1.Adjustment.StepIncrement = 1;
-			this.hscrollbar1.Adjustment.Value = 20;
-			this.table1.Add (this.hscrollbar1);
-			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.table1 [this.hscrollbar1]));
+			this.hscrollbar1.Adjustment.Upper = 100D;
+			this.hscrollbar1.Adjustment.PageIncrement = 10D;
+			this.hscrollbar1.Adjustment.PageSize = 10D;
+			this.hscrollbar1.Adjustment.StepIncrement = 1D;
+			this.hscrollbar1.Adjustment.Value = 20D;
+			this.table1.Add(this.hscrollbar1);
+			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.table1[this.hscrollbar1]));
 			w13.TopAttach = ((uint)(1));
 			w13.BottomAttach = ((uint)(2));
 			w13.XOptions = ((global::Gtk.AttachOptions)(4));
 			w13.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.vscrollbar1 = new global::Gtk.VScrollbar (null);
+			this.vscrollbar1 = new global::Gtk.VScrollbar(null);
 			this.vscrollbar1.Name = "vscrollbar1";
-			this.vscrollbar1.Adjustment.Upper = 100;
-			this.vscrollbar1.Adjustment.PageIncrement = 10;
-			this.vscrollbar1.Adjustment.PageSize = 10;
-			this.vscrollbar1.Adjustment.StepIncrement = 1;
-			this.table1.Add (this.vscrollbar1);
-			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.table1 [this.vscrollbar1]));
+			this.vscrollbar1.Adjustment.Upper = 100D;
+			this.vscrollbar1.Adjustment.PageIncrement = 10D;
+			this.vscrollbar1.Adjustment.PageSize = 10D;
+			this.vscrollbar1.Adjustment.StepIncrement = 1D;
+			this.table1.Add(this.vscrollbar1);
+			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.table1[this.vscrollbar1]));
 			w14.LeftAttach = ((uint)(1));
 			w14.RightAttach = ((uint)(2));
 			w14.XOptions = ((global::Gtk.AttachOptions)(4));
 			w14.YOptions = ((global::Gtk.AttachOptions)(4));
-			this.vbox2.Add (this.table1);
-			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.table1]));
+			this.vbox2.Add(this.table1);
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.table1]));
 			w15.Position = 2;
-			this.Add (this.vbox2);
-			if ((this.Child != null)) {
-				this.Child.ShowAll ();
+			this.Add(this.vbox2);
+			if ((this.Child != null))
+			{
+				this.Child.ShowAll();
 			}
-			this.hboxLegendLabels.Hide ();
-			this.Hide ();
-			this.Shown += new global::System.EventHandler (this.OnShown);
-			this.comboBoxFloor.Changed += new global::System.EventHandler (this.OnComboBoxFloorChanged);
-			this.togglebuttonLegend.Toggled += new global::System.EventHandler (this.OnTogglebuttonLegendToggled);
-			this.vscrollbar1.ValueChanged += new global::System.EventHandler (this.OnVscrollbar1ValueChanged);
-			this.hscrollbar1.ValueChanged += new global::System.EventHandler (this.OnHscrollbar1ValueChanged);
-			this.drawingarea1.ExposeEvent += new global::Gtk.ExposeEventHandler (this.OnDrawingAreaExposed);
-			this.drawingarea1.ScrollEvent += new global::Gtk.ScrollEventHandler (this.OnDrawingAreaScroll);
-			this.drawingarea1.SizeAllocated += new global::Gtk.SizeAllocatedHandler (this.OnDrawingAreaSizeAllocated);
-			this.drawingarea1.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnButtonPressed);
-			this.drawingarea1.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler (this.OnButtonReleased);
-			this.drawingarea1.MotionNotifyEvent += new global::Gtk.MotionNotifyEventHandler (this.OnPointerMotion);
+			this.hboxLegendLabels.Hide();
+			this.Hide();
+			this.Shown += new global::System.EventHandler(this.OnShown);
+			this.comboBoxFloor.Changed += new global::System.EventHandler(this.OnComboBoxFloorChanged);
+			this.togglebuttonLegend.Toggled += new global::System.EventHandler(this.OnTogglebuttonLegendToggled);
+			this.vscrollbar1.ValueChanged += new global::System.EventHandler(this.OnVscrollbar1ValueChanged);
+			this.hscrollbar1.ValueChanged += new global::System.EventHandler(this.OnHscrollbar1ValueChanged);
+			this.drawingarea1.ExposeEvent += new global::Gtk.ExposeEventHandler(this.OnDrawingAreaExposed);
+			this.drawingarea1.ScrollEvent += new global::Gtk.ScrollEventHandler(this.OnDrawingAreaScroll);
+			this.drawingarea1.SizeAllocated += new global::Gtk.SizeAllocatedHandler(this.OnDrawingAreaSizeAllocated);
+			this.drawingarea1.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler(this.OnButtonPressed);
+			this.drawingarea1.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler(this.OnButtonReleased);
+			this.drawingarea1.MotionNotifyEvent += new global::Gtk.MotionNotifyEventHandler(this.OnPointerMotion);
 		}
 	}
 }

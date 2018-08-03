@@ -5,125 +5,126 @@ namespace LeaseAgreement
 	public partial class ContractPlacesView
 	{
 		private global::Gtk.VBox vbox2;
-		
+
 		private global::Gtk.HBox hbox2;
-		
+
 		private global::Gtk.CheckButton checkShowExpired;
-		
+
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
-		
+
 		private global::Gamma.GtkWidgets.yTreeView ytreeviewPlaces;
-		
+
 		private global::Gtk.HBox hbox1;
-		
+
 		private global::Gtk.Button buttonAdd;
-		
+
 		private global::Gtk.Button buttonEdit;
-		
+
 		private global::Gtk.Button buttonDel;
 
-		protected virtual void Build ()
+		protected virtual void Build()
 		{
-			global::Stetic.Gui.Initialize (this);
+			global::Stetic.Gui.Initialize(this);
 			// Widget LeaseAgreement.ContractPlacesView
-			global::Stetic.BinContainer.Attach (this);
+			global::Stetic.BinContainer.Attach(this);
 			this.Name = "LeaseAgreement.ContractPlacesView";
 			// Container child LeaseAgreement.ContractPlacesView.Gtk.Container+ContainerChild
-			this.vbox2 = new global::Gtk.VBox ();
+			this.vbox2 = new global::Gtk.VBox();
 			this.vbox2.Name = "vbox2";
 			this.vbox2.Spacing = 6;
 			// Container child vbox2.Gtk.Box+BoxChild
-			this.hbox2 = new global::Gtk.HBox ();
+			this.hbox2 = new global::Gtk.HBox();
 			this.hbox2.Name = "hbox2";
 			this.hbox2.Spacing = 6;
 			// Container child hbox2.Gtk.Box+BoxChild
-			this.checkShowExpired = new global::Gtk.CheckButton ();
+			this.checkShowExpired = new global::Gtk.CheckButton();
 			this.checkShowExpired.CanFocus = true;
 			this.checkShowExpired.Name = "checkShowExpired";
-			this.checkShowExpired.Label = global::Mono.Unix.Catalog.GetString ("Показывать истёкшие");
+			this.checkShowExpired.Label = global::Mono.Unix.Catalog.GetString("Показывать истёкшие");
 			this.checkShowExpired.DrawIndicator = true;
 			this.checkShowExpired.UseUnderline = true;
-			this.hbox2.Add (this.checkShowExpired);
-			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.checkShowExpired]));
+			this.hbox2.Add(this.checkShowExpired);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.checkShowExpired]));
 			w1.PackType = ((global::Gtk.PackType)(1));
 			w1.Position = 2;
-			this.vbox2.Add (this.hbox2);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox2]));
+			this.vbox2.Add(this.hbox2);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hbox2]));
 			w2.Position = 0;
 			w2.Expand = false;
 			w2.Fill = false;
 			// Container child vbox2.Gtk.Box+BoxChild
-			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
+			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.ytreeviewPlaces = new global::Gamma.GtkWidgets.yTreeView ();
+			this.ytreeviewPlaces = new global::Gamma.GtkWidgets.yTreeView();
 			this.ytreeviewPlaces.CanFocus = true;
 			this.ytreeviewPlaces.Name = "ytreeviewPlaces";
-			this.GtkScrolledWindow.Add (this.ytreeviewPlaces);
-			this.vbox2.Add (this.GtkScrolledWindow);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
+			this.GtkScrolledWindow.Add(this.ytreeviewPlaces);
+			this.vbox2.Add(this.GtkScrolledWindow);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.GtkScrolledWindow]));
 			w4.Position = 1;
 			// Container child vbox2.Gtk.Box+BoxChild
-			this.hbox1 = new global::Gtk.HBox ();
+			this.hbox1 = new global::Gtk.HBox();
 			this.hbox1.Name = "hbox1";
 			this.hbox1.Spacing = 6;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.buttonAdd = new global::Gtk.Button ();
+			this.buttonAdd = new global::Gtk.Button();
 			this.buttonAdd.CanFocus = true;
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.UseUnderline = true;
-			this.buttonAdd.Label = global::Mono.Unix.Catalog.GetString ("Добавить места");
-			global::Gtk.Image w5 = new global::Gtk.Image ();
-			w5.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-add", global::Gtk.IconSize.Menu);
+			this.buttonAdd.Label = global::Mono.Unix.Catalog.GetString("Добавить места");
+			global::Gtk.Image w5 = new global::Gtk.Image();
+			w5.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-add", global::Gtk.IconSize.Menu);
 			this.buttonAdd.Image = w5;
-			this.hbox1.Add (this.buttonAdd);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonAdd]));
+			this.hbox1.Add(this.buttonAdd);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.buttonAdd]));
 			w6.Position = 0;
 			w6.Expand = false;
 			w6.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.buttonEdit = new global::Gtk.Button ();
+			this.buttonEdit = new global::Gtk.Button();
 			this.buttonEdit.CanFocus = true;
 			this.buttonEdit.Name = "buttonEdit";
 			this.buttonEdit.UseUnderline = true;
-			this.buttonEdit.Label = global::Mono.Unix.Catalog.GetString ("Изменить");
-			global::Gtk.Image w7 = new global::Gtk.Image ();
-			w7.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-edit", global::Gtk.IconSize.Button);
+			this.buttonEdit.Label = global::Mono.Unix.Catalog.GetString("Изменить");
+			global::Gtk.Image w7 = new global::Gtk.Image();
+			w7.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-edit", global::Gtk.IconSize.Button);
 			this.buttonEdit.Image = w7;
-			this.hbox1.Add (this.buttonEdit);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonEdit]));
+			this.hbox1.Add(this.buttonEdit);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.buttonEdit]));
 			w8.Position = 1;
 			w8.Expand = false;
 			w8.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.buttonDel = new global::Gtk.Button ();
+			this.buttonDel = new global::Gtk.Button();
 			this.buttonDel.CanFocus = true;
 			this.buttonDel.Name = "buttonDel";
 			this.buttonDel.UseUnderline = true;
-			this.buttonDel.Label = global::Mono.Unix.Catalog.GetString ("Удалить");
-			global::Gtk.Image w9 = new global::Gtk.Image ();
-			w9.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-delete", global::Gtk.IconSize.Menu);
+			this.buttonDel.Label = global::Mono.Unix.Catalog.GetString("Удалить");
+			global::Gtk.Image w9 = new global::Gtk.Image();
+			w9.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-delete", global::Gtk.IconSize.Menu);
 			this.buttonDel.Image = w9;
-			this.hbox1.Add (this.buttonDel);
-			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonDel]));
+			this.hbox1.Add(this.buttonDel);
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.buttonDel]));
 			w10.Position = 2;
 			w10.Expand = false;
 			w10.Fill = false;
-			this.vbox2.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+			this.vbox2.Add(this.hbox1);
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hbox1]));
 			w11.Position = 2;
 			w11.Expand = false;
 			w11.Fill = false;
-			this.Add (this.vbox2);
-			if ((this.Child != null)) {
-				this.Child.ShowAll ();
+			this.Add(this.vbox2);
+			if ((this.Child != null))
+			{
+				this.Child.ShowAll();
 			}
-			this.Hide ();
-			this.ytreeviewPlaces.RowActivated += new global::Gtk.RowActivatedHandler (this.OnRowActivated);
-			this.buttonAdd.Clicked += new global::System.EventHandler (this.OnButtonAddClicked);
-			this.buttonEdit.Clicked += new global::System.EventHandler (this.OnButtonEditClicked);
-			this.buttonDel.Clicked += new global::System.EventHandler (this.OnButtonDelClicked);
+			this.Hide();
+			this.ytreeviewPlaces.RowActivated += new global::Gtk.RowActivatedHandler(this.OnRowActivated);
+			this.buttonAdd.Clicked += new global::System.EventHandler(this.OnButtonAddClicked);
+			this.buttonEdit.Clicked += new global::System.EventHandler(this.OnButtonEditClicked);
+			this.buttonDel.Clicked += new global::System.EventHandler(this.OnButtonDelClicked);
 		}
 	}
 }
