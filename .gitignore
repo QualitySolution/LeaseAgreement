@@ -2,11 +2,11 @@
 *.userprefs
 *.usertasks
 *~
+.vs/
 
 #Mono Project Files
 bin/
 obj/
-
 packages/*
 
 #Workbench Backup Files
