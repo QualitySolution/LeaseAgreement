@@ -77,10 +77,6 @@ namespace LeaseAgreement
 			QSCustomFields.CFMain.LoadTablesFields ();
 		}
 
-		public static void MinorDBVersionChange ()
-		{
-		}
-
 		public static void ComboPlaceNoFill (ComboBox combo, int Type_id)
 		{   //Заполняем комбобокс Номерами мест
 			try {

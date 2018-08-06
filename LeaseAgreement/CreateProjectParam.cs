@@ -14,12 +14,12 @@ namespace LeaseAgreement
 		{
 			QSMain.ProjectPermission = new Dictionary<string, UserPermission> ();
 
+			//Настраиваем обновления
 			QSUpdater.DB.DBUpdater.AddMicroUpdate (
-				new Version (1, 1),
-				new Version (1, 1, 1),
-				"LeaseAgreement.Updates.1.1.1.sql");
-			//QSMain.ProjectPermission.Add ("edit_slips", new UserPermission("edit_slips", "Изменение кассы задним числом",
-			//                                                             "Пользователь может изменять или добавлять кассовые документы задним числом."));
+				new Version (1, 3),
+				new Version (1, 3, 10),
+				"LeaseAgreement.SQL.Update.1.3.10.sql");
+
 			QSCustomFields.CFMain.Tables = new List<QSCustomFields.CFTable> {
 				new QSCustomFields.CFTable ("lessees", "Арендатор"),
 				new QSCustomFields.CFTable ("contracts", "Договор"),

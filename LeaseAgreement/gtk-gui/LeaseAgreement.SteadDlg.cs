@@ -80,6 +80,7 @@ namespace LeaseAgreement
 			this.entryName.CanFocus = true;
 			this.entryName.Name = "entryName";
 			this.entryName.IsEditable = true;
+			this.entryName.MaxLength = 45;
 			this.entryName.InvisibleChar = '●';
 			this.table2.Add(this.entryName);
 			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table2[this.entryName]));
@@ -94,6 +95,7 @@ namespace LeaseAgreement
 			this.entryOwner.CanFocus = true;
 			this.entryOwner.Name = "entryOwner";
 			this.entryOwner.IsEditable = true;
+			this.entryOwner.MaxLength = 100;
 			this.entryOwner.InvisibleChar = '●';
 			this.table2.Add(this.entryOwner);
 			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table2[this.entryOwner]));
@@ -137,6 +139,7 @@ namespace LeaseAgreement
 			this.entryContractNo.CanFocus = true;
 			this.entryContractNo.Name = "entryContractNo";
 			this.entryContractNo.IsEditable = true;
+			this.entryContractNo.MaxLength = 25;
 			this.entryContractNo.InvisibleChar = '●';
 			this.hbox1.Add(this.entryContractNo);
 			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.entryContractNo]));

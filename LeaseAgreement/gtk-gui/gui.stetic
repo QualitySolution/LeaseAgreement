@@ -4126,7 +4126,7 @@
                     <child>
                       <widget class="Gtk.Table" id="table3">
                         <property name="MemberName" />
-                        <property name="NRows">4</property>
+                        <property name="NRows">5</property>
                         <property name="NColumns">2</property>
                         <property name="RowSpacing">6</property>
                         <property name="ColumnSpacing">6</property>
@@ -4164,8 +4164,8 @@
                             <signal name="DateChanged" handler="OnDatepickerCancelDateChanged" />
                           </widget>
                           <packing>
-                            <property name="TopAttach">3</property>
-                            <property name="BottomAttach">4</property>
+                            <property name="TopAttach">4</property>
+                            <property name="BottomAttach">5</property>
                             <property name="LeftAttach">1</property>
                             <property name="RightAttach">2</property>
                             <property name="AutoSize">True</property>
@@ -4232,6 +4232,26 @@
                           </packing>
                         </child>
                         <child>
+                          <widget class="Gtk.Label" id="label1">
+                            <property name="MemberName" />
+                            <property name="Xalign">1</property>
+                            <property name="LabelProp" translatable="yes">Дата передачи:</property>
+                          </widget>
+                          <packing>
+                            <property name="TopAttach">3</property>
+                            <property name="BottomAttach">4</property>
+                            <property name="AutoSize">True</property>
+                            <property name="XOptions">Fill</property>
+                            <property name="YOptions">Fill</property>
+                            <property name="XExpand">False</property>
+                            <property name="XFill">True</property>
+                            <property name="XShrink">False</property>
+                            <property name="YExpand">False</property>
+                            <property name="YFill">True</property>
+                            <property name="YShrink">False</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="Gtk.Label" id="label11">
                             <property name="MemberName" />
                             <property name="Xalign">1</property>
@@ -4280,8 +4300,8 @@
                             <property name="LabelProp" translatable="yes">Дата расторжения:</property>
                           </widget>
                           <packing>
-                            <property name="TopAttach">3</property>
-                            <property name="BottomAttach">4</property>
+                            <property name="TopAttach">4</property>
+                            <property name="BottomAttach">5</property>
                             <property name="AutoSize">True</property>
                             <property name="XOptions">Fill</property>
                             <property name="YOptions">Fill</property>
@@ -4300,6 +4320,31 @@
                             <property name="LabelProp" translatable="yes">Ответственный:</property>
                           </widget>
                           <packing>
+                            <property name="AutoSize">True</property>
+                            <property name="XOptions">Fill</property>
+                            <property name="YOptions">Fill</property>
+                            <property name="XExpand">False</property>
+                            <property name="XFill">True</property>
+                            <property name="XShrink">False</property>
+                            <property name="YExpand">False</property>
+                            <property name="YFill">True</property>
+                            <property name="YShrink">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="Gamma.Widgets.yDatePicker" id="ydateTransfer">
+                            <property name="MemberName" />
+                            <property name="Events">ButtonPressMask</property>
+                            <property name="WithTime">False</property>
+                            <property name="Date">0</property>
+                            <property name="IsEditable">True</property>
+                            <property name="AutoSeparation">True</property>
+                          </widget>
+                          <packing>
+                            <property name="TopAttach">3</property>
+                            <property name="BottomAttach">4</property>
+                            <property name="LeftAttach">1</property>
+                            <property name="RightAttach">2</property>
                             <property name="AutoSize">True</property>
                             <property name="XOptions">Fill</property>
                             <property name="YOptions">Fill</property>
@@ -4474,7 +4519,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="Gtk.Button" id="buttonEdit">
+                      <widget class="Gtk.Button" id="buttonEditDoc">
                         <property name="MemberName" />
                         <property name="Sensitive">False</property>
                         <property name="Tooltip" translatable="yes">Редактировать шаблон только для этого договора.</property>
@@ -4488,8 +4533,6 @@
                       <packing>
                         <property name="Position">1</property>
                         <property name="AutoSize">True</property>
-                        <property name="Expand">False</property>
-                        <property name="Fill">False</property>
                       </packing>
                     </child>
                     <child>
@@ -5538,6 +5581,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">45</property>
                 <property name="InvisibleChar">●</property>
                 <signal name="Changed" handler="OnEntryNameChanged" />
               </widget>
@@ -5562,6 +5606,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">100</property>
                 <property name="InvisibleChar">●</property>
               </widget>
               <packing>
@@ -5629,6 +5674,7 @@
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
                     <property name="IsEditable">True</property>
+                    <property name="MaxLength">25</property>
                     <property name="InvisibleChar">●</property>
                   </widget>
                   <packing>

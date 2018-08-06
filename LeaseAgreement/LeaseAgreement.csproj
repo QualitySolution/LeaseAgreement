@@ -104,8 +104,8 @@
     <EmbeddedResource Include="icons\state-draft.png" />
     <EmbeddedResource Include="icons\state-now.png" />
     <EmbeddedResource Include="icons\state-soon.png" />
-    <EmbeddedResource Include="Updates\1.1.1.sql" />
     <EmbeddedResource Include="icons\map.png" />
+    <EmbeddedResource Include="SQL\Update.1.3.10.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
@@ -208,13 +208,13 @@
     <Folder Include="Patterns\" />
     <Folder Include="Reports\" />
     <Folder Include="Domain\" />
-    <Folder Include="Updates\" />
     <Folder Include="ViewWidgets\" />
     <Folder Include="HibernateMapping\" />
     <Folder Include="ServiceDialogs\" />
     <Folder Include="Representations\" />
     <Folder Include="Repository\" />
     <Folder Include="Widgets\" />
+    <Folder Include="SQL\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

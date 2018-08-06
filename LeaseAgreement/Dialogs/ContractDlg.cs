@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Bindings;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -169,6 +168,7 @@ namespace LeaseAgreement
 			datepickerStart.Binding.AddBinding (Subject, s => s.StartDate, w => w.DateOrNull).InitializeFromSource ();
 			datepickerEnd.Binding.AddBinding (Subject, s => s.EndDate, w => w.DateOrNull).InitializeFromSource ();
 			datepickerCancel.Binding.AddBinding (Subject, s => s.CancelDate, w => w.DateOrNull).InitializeFromSource ();
+			ydateTransfer.Binding.AddBinding (Entity, e => e.TransferDate, w => w.DateOrNull).InitializeFromSource ();
 			checkDraft.Binding.AddBinding (Entity, e => e.Draft, w => w.Active).InitializeFromSource ();
 			entryNumber.Binding.AddBinding (Entity, e => e.Number, w => w.Text).InitializeFromSource ();
 			textComments.Binding.AddBinding (Entity, e => e.Comments, w => w.Buffer.Text).InitializeFromSource ();
@@ -891,7 +891,7 @@ namespace LeaseAgreement
 		protected void OnTreeviewDocsCursorChanged (object sender, EventArgs e)
 		{
 			bool selected = treeviewDocs.Selection.CountSelectedRows () == 1;
-			buttonPrint.Sensitive = buttonEdit.Sensitive = selected;
+			buttonPrint.Sensitive = buttonEditDoc.Sensitive = selected;
 
 			if (selected) {
 				TreeIter iter;

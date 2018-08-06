@@ -16,6 +16,7 @@ namespace LeaseAgreement.HMap
 			Map (x => x.Number).Column ("number");
 			Map (x => x.SignDate).Column ("sign_date");
 			Map (x => x.StartDate).Column ("start_date");
+			Map (x => x.TransferDate).Column ("transfer_date ");
 			Map (x => x.EndDate).Column ("end_date");
 			Map (x => x.CancelDate).Column ("cancel_date");
 			References (x => x.Lessee).Column ("lessee_id");

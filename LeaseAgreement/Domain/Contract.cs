@@ -68,6 +68,14 @@ namespace LeaseAgreement.Domain
 			set { SetField (ref startDate, value, () => StartDate); }
 		}
 
+		private DateTime? transferDate;
+
+		[Display (Name = "Дата передачи")]
+		public virtual DateTime? TransferDate {
+			get { return transferDate; }
+			set { SetField (ref transferDate, value, () => TransferDate); }
+		}
+
 		DateTime? endDate;
 		[Display(Name = "Дата окончания")]
 		public virtual DateTime? EndDate {

@@ -26,18 +26,11 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		Reference.RunReferenceItemDlg += OnRunReferenceItemDialog;
 		QSMain.ReferenceUpdated += OnReferenceUpdate;
 
-		MainSupport.LoadBaseParameters ();
-		if (!MainSupport.CheckVersion (this)) {//Проверяем версию базы
-			CheckUpdate.StartCheckUpdateThread (UpdaterFlags.ShowAnyway | UpdaterFlags.UpdateRequired);
-			this.Destroy ();
-			this.Dispose ();
-			return;
-		}
-
 		QSMain.CheckServer (this); // Проверяем настройки сервера
-		MainClass.MinorDBVersionChange (); // При необходимости корректируем базу.
+		MainSupport.LoadBaseParameters ();
+		MainUpdater.RunCheckVersion (true, true, true);
+
 		MainClass.CreateDatabaseParam ();
-		QSUpdater.DB.DBUpdater.CheckMicroUpdates ();
 
 		if (QSMain.User.Login == "root") {
 			string Message = "Вы зашли в программу под администратором базы данных. У вас есть только возможность создавать других пользователей.";
@@ -80,7 +73,6 @@ public partial class MainWindow : FakeTDITabGtkWindowBase
 		ConfigureMap ();
 		notebookMain.CurrentPage = 0;
 		UpdatePlaces ();
-		CheckUpdate.StartCheckUpdateThread (UpdaterFlags.StartInThread);
 	}
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
