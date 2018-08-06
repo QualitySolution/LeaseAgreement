@@ -10,7 +10,7 @@ obj/
 packages/*
 
 #Workbench Backup Files
-base/*.mwb.bak
+Bases/*.mwb.bak
 
 #Project Specific
 WinInstall/*
