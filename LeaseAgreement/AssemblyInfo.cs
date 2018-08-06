@@ -10,7 +10,7 @@ using QSProjectsLib;
 [assembly: AssemblyEdition ("gpl")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("Quality Solution")]
-[assembly: AssemblyCopyright ("Quality Solution 2017")]
+[assembly: AssemblyCopyright ("Quality Solution 2018")]
 [assembly: AssemblyLogoIcon ("LeaseAgreement.icons.logo.png")]
 [assembly: AssemblySupport ("", true, "MySQL")]
 [assembly: AssemblyAppWebsite ("http://develop.qsolution.ru/")]
@@ -23,7 +23,7 @@ using QSProjectsLib;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion ("1.3.9")]
+[assembly: AssemblyVersion ("1.3.10")]
 
 // The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.
