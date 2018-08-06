@@ -15,7 +15,7 @@ using System.Diagnostics;
 using System.Threading;
 using NHibernate.Transform;
 using System.Threading.Tasks;
-
+using QSProjectsLib;
 
 namespace LeaseAgreement
 {
@@ -679,10 +679,14 @@ namespace LeaseAgreement
 					if (currentContractPlaces.Count == 0) {
 						polygon.Status = PlaceStatus.Vacant;
 					} else {
-						var contract = currentContractPlaces.Single ().Contract;
+						var contract = currentContractPlaces.First().Contract;
 						if (contract.CancelDate.HasValue)
 							polygon.Status = PlaceStatus.SoonToBeVacant;
 					}
+					if (currentContractPlaces.Count > 1)
+						MessageDialogWorks.RunWarningDialog ($"Для места {polygon.Place.Title} активно более одного договора:\n" + 
+						                                     String.Join("\n", currentContractPlaces.Select(cp => $"— {cp.Contract.Title} ({cp.StartDate:d}-{cp.EndDate:d})" )));
+
 					if (reserves.Any (r => r.Places.Any (place => place.Id == polygon.Place.Id)))
 						polygon.Status = PlaceStatus.Reserved;	
 				}
