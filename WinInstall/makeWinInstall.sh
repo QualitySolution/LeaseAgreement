@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ProjectName="LeaseAgreement"
 BinDir=../$ProjectName/bin/Debug
