@@ -59,20 +59,11 @@
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\QSProjects\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\QSProjects\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="Mono.Cairo" />
     <Reference Include="rsvg2-sharp, Version=2.18.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="NLog">
-      <HintPath>..\..\QSProjects\packages\NLog.4.4.1\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\QSProjects\packages\MySql.Data.6.9.9\lib\net40\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>bin\Debug\NLog.dll</HintPath>
     </Reference>
     <Reference Include="GammaBinding">
       <HintPath>..\..\GammaBinding\GammaBinding\bin\Debug\GammaBinding.dll</HintPath>
@@ -85,6 +76,12 @@
     </Reference>
     <Reference Include="GammaBinding">
       <HintPath>..\..\GammaBinding\GammaBinding\bin\Debug\GammaBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\QSProjects\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\QSProjects\packages\NLog.4.4.11\lib\net45\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +228,7 @@
     </None>
     <None Include="CairoExtension.cs" />
     <None Include="packages.config" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QSProjects\QSProjectsLib\QSProjectsLib.csproj">
